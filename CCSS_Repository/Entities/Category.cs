@@ -17,5 +17,6 @@ namespace CCSS_Repository.Entities
         public string Description { get; set; }
 
         public ICollection<EventCategory> EventCategorys { get; set; } = new List<EventCategory>();
+        public ICollection<Character> Characters { get; set; } = new List<Character>(); 
     }
 }
