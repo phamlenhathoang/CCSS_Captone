@@ -16,6 +16,13 @@ namespace CCSS_Repository.Entities
         public string ImageUrl { get; set; }
         public DateTime CreateDate { get; set; }    
         public DateTime? UpdateDate { get; set; }
+
+        [ForeignKey("AccountId")]
+        public string AccountId { get; set; }
         public Account Account { get; set; }
+
+        [ForeignKey("CharacterId")]
+        public string CharacterId { get; set; }
+        public Character Character { get; set; }
     }
 }

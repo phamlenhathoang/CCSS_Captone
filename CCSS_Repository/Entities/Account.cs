@@ -31,8 +31,9 @@ namespace CCSS_Repository.Entities
         [ForeignKey("RoleId")]
         public string RoleId { get; set; }
         public Role Role { get; set; }
-        [ForeignKey("ImageId")]
-        public string ImageId { get; set; }
+
         public Image Image { get; set; }
+
+        public ICollection<AccountTask> AccountTasks { get; set; } = new List<AccountTask>();   
     }
 }
