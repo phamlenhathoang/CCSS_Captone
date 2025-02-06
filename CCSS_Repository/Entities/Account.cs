@@ -32,8 +32,10 @@ namespace CCSS_Repository.Entities
         public string RoleId { get; set; }
         public Role Role { get; set; }
 
+        public Contract Contract { get; set; }
         public Image Image { get; set; }
 
         public ICollection<AccountTask> AccountTasks { get; set; } = new List<AccountTask>();   
+        public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
     }
 }

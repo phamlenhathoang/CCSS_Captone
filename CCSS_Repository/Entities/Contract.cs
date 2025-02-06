@@ -30,5 +30,7 @@ namespace CCSS_Repository.Entities
         public string Name { get; set; }
         public int Deposit {  get; set; }   
         public double Amount { get; set; }  
+
+        public Payment Payment { get; set; }
     }
 }

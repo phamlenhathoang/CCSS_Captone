@@ -18,11 +18,11 @@ namespace CCSS_Repository.Entities
         public DateTime? UpdateDate { get; set; }
 
         [ForeignKey("AccountId")]
-        public string AccountId { get; set; }
+        public string? AccountId { get; set; }
         public Account Account { get; set; }
 
         [ForeignKey("CharacterId")]
-        public string CharacterId { get; set; }
+        public string? CharacterId { get; set; }
         public Character Character { get; set; }
     }
 }

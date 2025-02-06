@@ -1,4 +1,4 @@
-﻿namespace CCSS_Repository
+﻿namespace CCSS_Service
 {
     public class Class1
     {
