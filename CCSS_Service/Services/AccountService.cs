@@ -16,16 +16,19 @@ namespace CCSS_Service.Services
     public interface IAccountService
     {
         Task<string> Login(string email, string password);
+        Task<string> Register(string email, string password);   
     }
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository accountRepository;
+        private readonly IRefreshTokenRepository refreshTokenRepository;    
         private readonly IConfiguration _configuration;
 
-        public AccountService(IAccountRepository accountRepository, IConfiguration configuration)
+        public AccountService(IAccountRepository accountRepository, IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository)
         {
             this.accountRepository = accountRepository;
-            this._configuration = configuration;
+            this.refreshTokenRepository = refreshTokenRepository;
+            _configuration = configuration;
         }
         public async Task<string> Login(string email, string password)
         {
@@ -55,7 +58,38 @@ namespace CCSS_Service.Services
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 };
                 var jwtToken = jwtHandler.CreateToken(tokenDes);
+                RefreshToken refreshToken = new RefreshToken
+                {
+                    AccountId = account.AccountId,
+                    CreatedAt = DateTime.UtcNow,    
+                    ExpiresAt = DateTime.UtcNow.AddHours(1),
+                    IsUsed = false,
+                    Token = jwtHandler.WriteToken(jwtToken),
+                    RefreshTokenValue = null,
+                };
+                bool result = await refreshTokenRepository.AddRefreshToken(refreshToken);
+                if (!result)
+                {
+                    throw new Exception("Cannot save refresh token !!!");
+                }
                 return jwtHandler.WriteToken(jwtToken);
+            }
+        }
+
+        public async Task<string> Register(string email, string password)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                throw new Exception("Email and password cannot null!!!");
+            }
+            var checkEmail = await accountRepository.GetAccount(email, null);
+            if (checkEmail != null)
+            {
+                throw new Exception("Email existed!!!");
+            }
+            else
+            {
+
             }
         }
     }

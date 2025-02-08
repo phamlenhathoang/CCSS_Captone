@@ -21,9 +21,19 @@ namespace CCSS_Repository.Repositories
         {
             _dbContext = dbContext;
         }
-        public Task<Account> GetAccount(string email, string password)
+
+        public async Task<Account> GetAccount(string email, string? password = null)
         {
-            return _dbContext.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email && a.Password == password);
+            var query = _dbContext.Accounts.Include(a => a.Role).AsQueryable();
+
+            query = query.Where(a => a.Email == email);
+
+            if (!string.IsNullOrEmpty(password))
+            {
+                query = query.Where(a => a.Password == password);
+            }
+
+            return await query.FirstOrDefaultAsync();
         }
     }
 }

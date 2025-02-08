@@ -29,5 +29,19 @@ namespace CCSS_Captone.Controllers
                 throw new Exception(ex.Message);
             }
         }
+
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromQuery][Required] string email, [FromQuery][Required] string password)
+        {
+            try
+            {
+                var result = await accountService.Login(email, password);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

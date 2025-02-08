@@ -15,13 +15,13 @@ namespace CCSS_Repository.Entities
         public string AccountId { get; set; } = Guid.NewGuid().ToString();
         [Required]
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Số điện thoại phải có đúng 10 chữ số.")]
-        public int Phone {  get; set; }
+        public int? Phone {  get; set; }
         public DateTime? Birthday { get; set; }
-        public bool Gender { get; set; }
+        public bool? Gender { get; set; }
         public string? Address { get; set; }
         [Required]
         public string Email {  get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public string? Description { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
@@ -30,6 +30,7 @@ namespace CCSS_Repository.Entities
         public string Password { get; set; }
         [ForeignKey("RoleId")]
         public string RoleId { get; set; }
+        public string Code { get; set; }
         public Role Role { get; set; }
 
         public Contract Contract { get; set; }
@@ -37,5 +38,6 @@ namespace CCSS_Repository.Entities
 
         public ICollection<AccountTask> AccountTasks { get; set; } = new List<AccountTask>();   
         public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+        public RefreshToken RefreshToken { get; set; }
     }
 }

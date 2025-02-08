@@ -27,6 +27,7 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -102,6 +103,11 @@ namespace CCSS_Repository.Entities
                 .HasOne(p => p.Contract)
                 .WithOne(c => c.Payment)
                 .HasForeignKey<Payment>(p => p.ContractId);
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(p => p.Account)
+                .WithOne(c => c.RefreshToken)
+                .HasForeignKey<RefreshToken>(p => p.AccountId);
 
             base.OnModelCreating(modelBuilder);
         }
