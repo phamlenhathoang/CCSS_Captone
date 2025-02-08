@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCSS_Repository.Migrations
 {
     [DbContext(typeof(CCSSDBContext))]
-    [Migration("20250206075004_CCSS_migration_1")]
-    partial class CCSS_migration_1
+    [Migration("20250208095740_CCSS_Migration_1")]
+    partial class CCSS_Migration_1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,6 +75,36 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Account");
+
+                    b.HasData(
+                        new
+                        {
+                            AccountId = "account1",
+                            Address = "123 Admin Street",
+                            Birthday = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 39, 936, DateTimeKind.Utc).AddTicks(8141),
+                            Email = "admin@example.com",
+                            Gender = true,
+                            IsActive = true,
+                            Name = "Admin User",
+                            Password = "$2a$11$pwYMx3B/cQ1gqUfdXWWDwePJR3Z61S4evCMSegbd.x4ZXP0tquzji",
+                            Phone = 1234567890,
+                            RoleId = "1"
+                        },
+                        new
+                        {
+                            AccountId = "account2",
+                            Address = "456 User Lane",
+                            Birthday = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 62, DateTimeKind.Utc).AddTicks(7068),
+                            Email = "user@example.com",
+                            Gender = false,
+                            IsActive = true,
+                            Name = "Regular User",
+                            Password = "$2a$11$mVJVBp4KkdxnK9DstzSuxuixNj0.b54OO4O4grG.3SnNJ/CX587Fm",
+                            Phone = 987654321,
+                            RoleId = "2"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.AccountTask", b =>
@@ -97,6 +127,20 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("TaskId");
 
                     b.ToTable("AccountTask");
+
+                    b.HasData(
+                        new
+                        {
+                            AccountTaskId = "accountTask1",
+                            AccountId = "account1",
+                            TaskId = "task1"
+                        },
+                        new
+                        {
+                            AccountTaskId = "accountTask2",
+                            AccountId = "account2",
+                            TaskId = "task2"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Category", b =>
@@ -115,6 +159,20 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = "category1",
+                            Description = "This is Category 1",
+                            Name = "Category 1"
+                        },
+                        new
+                        {
+                            CategoryId = "category2",
+                            Description = "This is Category 2",
+                            Name = "Category 2"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Character", b =>
@@ -152,6 +210,28 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Character");
+
+                    b.HasData(
+                        new
+                        {
+                            CharacterId = "character1",
+                            CategoryId = "category1",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8412),
+                            Description = "Description for Character 1",
+                            IsActive = "true",
+                            Name = "Character 1",
+                            Price = 100.5
+                        },
+                        new
+                        {
+                            CharacterId = "character2",
+                            CategoryId = "category2",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8415),
+                            Description = "Description for Character 2",
+                            IsActive = "true",
+                            Name = "Character 2",
+                            Price = 200.75
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Contract", b =>
@@ -202,6 +282,34 @@ namespace CCSS_Repository.Migrations
                         .IsUnique();
 
                     b.ToTable("Contract");
+
+                    b.HasData(
+                        new
+                        {
+                            ContractId = "contract1",
+                            AccountId = "account1",
+                            Amount = 400.0,
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8749),
+                            Deposit = 100,
+                            Description = "Contract for Event 1",
+                            EventId = "event1",
+                            Name = "Contract 1",
+                            Price = 500.0,
+                            Signature = true
+                        },
+                        new
+                        {
+                            ContractId = "contract2",
+                            AccountId = "account2",
+                            Amount = 600.0,
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8754),
+                            Deposit = 200,
+                            Description = "Contract for Event 2",
+                            EventId = "event2",
+                            Name = "Contract 2",
+                            Price = 800.0,
+                            Signature = false
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Event", b =>
@@ -233,6 +341,27 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("EventId");
 
                     b.ToTable("Event");
+
+                    b.HasData(
+                        new
+                        {
+                            EventId = "event1",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8482),
+                            Description = "This is event 1",
+                            Name = "Event 1",
+                            Status = 1,
+                            Type = "Conference"
+                        },
+                        new
+                        {
+                            EventId = "event2",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8632),
+                            Description = "This is event 2",
+                            Name = "Event 2",
+                            Status = 2,
+                            Type = "Workshop",
+                            UpdateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8632)
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.EventCategory", b =>
@@ -261,6 +390,22 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("EventId");
 
                     b.ToTable("EventCategory");
+
+                    b.HasData(
+                        new
+                        {
+                            EventCategoryId = "eventcategory1",
+                            CategoryId = "category1",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8702),
+                            EventId = "event1"
+                        },
+                        new
+                        {
+                            EventCategoryId = "eventcategory2",
+                            CategoryId = "category2",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8707),
+                            EventId = "event2"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Feedback", b =>
@@ -290,6 +435,24 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("AccountId");
 
                     b.ToTable("Feedback");
+
+                    b.HasData(
+                        new
+                        {
+                            FeedbackId = "feedback1",
+                            AccountId = "account1",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8826),
+                            Description = "Great service, highly recommended!",
+                            Star = 5
+                        },
+                        new
+                        {
+                            FeedbackId = "feedback2",
+                            AccountId = "account2",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8828),
+                            Description = "Good service, but there's room for improvement.",
+                            Star = 4
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Image", b =>
@@ -322,6 +485,36 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("CharacterId");
 
                     b.ToTable("Image");
+
+                    b.HasData(
+                        new
+                        {
+                            ImageId = "image1",
+                            AccountId = "account1",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8858),
+                            ImageUrl = "https://example.com/image1.jpg"
+                        },
+                        new
+                        {
+                            ImageId = "image2",
+                            AccountId = "account2",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8860),
+                            ImageUrl = "https://example.com/image2.jpg"
+                        },
+                        new
+                        {
+                            ImageId = "image3",
+                            CharacterId = "character1",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8863),
+                            ImageUrl = "https://example.com/image3.jpg"
+                        },
+                        new
+                        {
+                            ImageId = "image4",
+                            CharacterId = "character2",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8865),
+                            ImageUrl = "https://example.com/image4.jpg"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Payment", b =>
@@ -353,6 +546,26 @@ namespace CCSS_Repository.Migrations
                         .IsUnique();
 
                     b.ToTable("Payment");
+
+                    b.HasData(
+                        new
+                        {
+                            PaymentId = "payment1",
+                            ContractId = "contract1",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8988),
+                            Status = 1,
+                            TransactionId = "TXN123456",
+                            Type = "Credit Card"
+                        },
+                        new
+                        {
+                            PaymentId = "payment2",
+                            ContractId = "contract2",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8991),
+                            Status = 0,
+                            TransactionId = "TXN789012",
+                            Type = "Bank Transfer"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Role", b =>
@@ -369,6 +582,20 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("RoleId");
 
                     b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = "1",
+                            Description = "Administrator role",
+                            RoleName = 1
+                        },
+                        new
+                        {
+                            RoleId = "2",
+                            Description = "Regular user role",
+                            RoleName = 2
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Task", b =>
@@ -400,6 +627,28 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("TaskId");
 
                     b.ToTable("Task");
+
+                    b.HasData(
+                        new
+                        {
+                            TaskId = "task1",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(6739),
+                            Description = "This is task 1",
+                            IsActive = true,
+                            Location = "Location 1",
+                            Name = "Task 1",
+                            UpdateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(6746)
+                        },
+                        new
+                        {
+                            TaskId = "task2",
+                            CreateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(6761),
+                            Description = "This is task 2",
+                            IsActive = true,
+                            Location = "Location 2",
+                            Name = "Task 2",
+                            UpdateDate = new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8016)
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Account", b =>
