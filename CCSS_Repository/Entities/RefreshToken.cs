@@ -17,7 +17,7 @@ namespace CCSS_Repository.Entities
         [ForeignKey("AccountId")]
         public string AccountId { get; set; }
         public Account Account { get; set; }
-
+        public string JwtId { get; set; }
         public bool IsUsed { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime ExpiresAt { get; set; }

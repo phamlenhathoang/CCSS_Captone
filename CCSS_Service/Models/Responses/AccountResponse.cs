@@ -7,12 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CCSS_Service.Models.Response
+namespace CCSS_Service.Models.Responses
 {
     public class AccountResponse
     {
         public string AccountId { get; set; } = Guid.NewGuid().ToString();
-     
         public int Phone { get; set; }
         public DateTime? Birthday { get; set; }
         public bool Gender { get; set; }

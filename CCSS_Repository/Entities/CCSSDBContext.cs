@@ -29,16 +29,19 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory()) // Đặt thư mục gốc
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Nạp tệp appsettings.json
-                .Build();
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    var configuration = new ConfigurationBuilder()
+        //        .SetBasePath(Directory.GetCurrentDirectory()) // Đặt thư mục gốc
+        //        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Nạp tệp appsettings.json
+        //        .Build();
 
-            var connectionString = configuration.GetConnectionString("DefaultConnection"); // Lấy chuỗi kết nối
-            optionsBuilder.UseSqlServer(connectionString); // Sử dụng chuỗi kết nối
-        }
+        //    var connectionString = configuration.GetConnectionString("DefaultConnection"); // Lấy chuỗi kết nối
+        //    optionsBuilder.UseSqlServer(connectionString); // Sử dụng chuỗi kết nối
+        //}
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+     => optionsBuilder.UseSqlServer("Server=localhost;Database=CCSSDB;Uid=sa;Password=12345;MultipleActiveResultSets=true;TrustServerCertificate=True");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
