@@ -1,5 +1,12 @@
 using CCSS_Repository.Entities;
+using CCSS_Repository.Repositories;
+using CCSS_Service.Models;
+using CCSS_Service.Profiles;
+using CCSS_Service.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,10 +17,16 @@ builder.Services.AddDbContext<CCSSDBContext>(options =>
 
 //Repositories
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-
+builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
+builder.Services.AddAutoMapper(typeof(accountprofile), 
+                                typeof(CharacterProfile),
+                                typeof(CategoryProfile),
+                                typeof(ContractProfile),
+                                typeof(ImageProfile));
 
 //Services
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ICharacterService, CharacterService>();
 
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];

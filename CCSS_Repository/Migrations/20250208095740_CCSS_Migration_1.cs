@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace CCSS_Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class CCSS_migration_1 : Migration
+    public partial class CCSS_Migration_1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -277,6 +279,116 @@ namespace CCSS_Repository.Migrations
                         principalTable: "Contract",
                         principalColumn: "ContractId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Category",
+                columns: new[] { "CategoryId", "Description", "Name" },
+                values: new object[,]
+                {
+                    { "category1", "This is Category 1", "Category 1" },
+                    { "category2", "This is Category 2", "Category 2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Event",
+                columns: new[] { "EventId", "CreateDate", "Description", "Name", "Status", "Type", "UpdateDate" },
+                values: new object[,]
+                {
+                    { "event1", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8482), "This is event 1", "Event 1", 1, "Conference", null },
+                    { "event2", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8632), "This is event 2", "Event 2", 2, "Workshop", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8632) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Role",
+                columns: new[] { "RoleId", "Description", "RoleName" },
+                values: new object[,]
+                {
+                    { "1", "Administrator role", 1 },
+                    { "2", "Regular user role", 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Task",
+                columns: new[] { "TaskId", "CreateDate", "Description", "IsActive", "Location", "Name", "UpdateDate" },
+                values: new object[,]
+                {
+                    { "task1", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(6739), "This is task 1", true, "Location 1", "Task 1", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(6746) },
+                    { "task2", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(6761), "This is task 2", true, "Location 2", "Task 2", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8016) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Account",
+                columns: new[] { "AccountId", "Address", "Birthday", "CreateDate", "Description", "Email", "Gender", "IsActive", "Name", "Password", "Phone", "RoleId", "UpdateDate" },
+                values: new object[,]
+                {
+                    { "account1", "123 Admin Street", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 8, 9, 57, 39, 936, DateTimeKind.Utc).AddTicks(8141), null, "admin@example.com", true, true, "Admin User", "$2a$11$pwYMx3B/cQ1gqUfdXWWDwePJR3Z61S4evCMSegbd.x4ZXP0tquzji", 1234567890, "1", null },
+                    { "account2", "456 User Lane", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 8, 9, 57, 40, 62, DateTimeKind.Utc).AddTicks(7068), null, "user@example.com", false, true, "Regular User", "$2a$11$mVJVBp4KkdxnK9DstzSuxuixNj0.b54OO4O4grG.3SnNJ/CX587Fm", 987654321, "2", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Character",
+                columns: new[] { "CharacterId", "CategoryId", "CreateDate", "Description", "IsActive", "Name", "Price", "UpdateDate" },
+                values: new object[,]
+                {
+                    { "character1", "category1", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8412), "Description for Character 1", "true", "Character 1", 100.5, null },
+                    { "character2", "category2", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8415), "Description for Character 2", "true", "Character 2", 200.75, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "EventCategory",
+                columns: new[] { "EventCategoryId", "CategoryId", "CreateDate", "EventId", "UpdateDate" },
+                values: new object[,]
+                {
+                    { "eventcategory1", "category1", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8702), "event1", null },
+                    { "eventcategory2", "category2", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8707), "event2", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AccountTask",
+                columns: new[] { "AccountTaskId", "AccountId", "TaskId" },
+                values: new object[,]
+                {
+                    { "accountTask1", "account1", "task1" },
+                    { "accountTask2", "account2", "task2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Contract",
+                columns: new[] { "ContractId", "AccountId", "Amount", "CreateDate", "Deposit", "Description", "EventId", "Name", "Price", "Signature", "UpdateDate" },
+                values: new object[,]
+                {
+                    { "contract1", "account1", 400.0, new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8749), 100, "Contract for Event 1", "event1", "Contract 1", 500.0, true, null },
+                    { "contract2", "account2", 600.0, new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8754), 200, "Contract for Event 2", "event2", "Contract 2", 800.0, false, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Feedback",
+                columns: new[] { "FeedbackId", "AccountId", "CreateDate", "Description", "Star", "UpdateDate" },
+                values: new object[,]
+                {
+                    { "feedback1", "account1", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8826), "Great service, highly recommended!", 5, null },
+                    { "feedback2", "account2", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8828), "Good service, but there's room for improvement.", 4, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Image",
+                columns: new[] { "ImageId", "AccountId", "CharacterId", "CreateDate", "ImageUrl", "UpdateDate" },
+                values: new object[,]
+                {
+                    { "image1", "account1", null, new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8858), "https://example.com/image1.jpg", null },
+                    { "image2", "account2", null, new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8860), "https://example.com/image2.jpg", null },
+                    { "image3", null, "character1", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8863), "https://example.com/image3.jpg", null },
+                    { "image4", null, "character2", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8865), "https://example.com/image4.jpg", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Payment",
+                columns: new[] { "PaymentId", "ContractId", "CreateDate", "Status", "TransactionId", "Type" },
+                values: new object[,]
+                {
+                    { "payment1", "contract1", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8988), 1, "TXN123456", "Credit Card" },
+                    { "payment2", "contract2", new DateTime(2025, 2, 8, 9, 57, 40, 190, DateTimeKind.Utc).AddTicks(8991), 0, "TXN789012", "Bank Transfer" }
                 });
 
             migrationBuilder.CreateIndex(
