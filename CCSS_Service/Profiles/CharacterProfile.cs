@@ -16,6 +16,7 @@ namespace CCSS_Service.Profiles
         {
             CreateMap<Character, CharacterResponse>(). ReverseMap();
             CreateMap<CharacterRequest, Character>().ReverseMap();
+            CreateMap<Contract, ContractResponse>(). ReverseMap();
         }
     }
 }
