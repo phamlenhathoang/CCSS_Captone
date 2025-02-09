@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Models.Request;
 using CCSS_Service.Models.Response;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,13 @@ namespace CCSS_Service.Services
     {
         Task<List<Contract>> GetAll(string searchterm);
         Task<Contract> GetContractbyId(string contractId);
-        Task AddContract(ContractResponse contractResponse);
-        Task UpdateContract(ContractResponse contractResponse);
+        Task<string> AddContract(ContractResponse contractResponse);
+        Task<string> UpdateContract(string contractId, ContractRequest contractRequest);
         Task DeleteContract(string contractId);
     }
 
 
-    public class ContractServices: IContractServices
+    public class ContractServices : IContractServices
     {
         private readonly IContractRepository _contractRepository;
         private readonly IMapper _mapper;
@@ -43,17 +44,48 @@ namespace CCSS_Service.Services
             return await _contractRepository.GetContractById(contractId);
         }
 
-        public async Task AddContract(ContractResponse contractResponse)
+        public async Task<string> AddContract(ContractResponse contractResponse)
         {
-             await _contractRepository.AddContract(_mapper.Map<Contract>(contractResponse));
+            if (contractResponse == null)
+            {
+                throw new Exception("Data is null");
+
+            }
+            var contract = new Contract()
+            {
+                ContractId = Guid.NewGuid().ToString(),
+                AccountId = contractResponse.AccountId,
+                EventId = contractResponse.EventId,
+                Name = contractResponse.Name,
+                Description = contractResponse.Description,
+                CreateDate = DateTime.Now,
+                UpdateDate = null,
+                Price = contractResponse.Price,
+                Deposit = contractResponse.Deposit,
+                Amount = contractResponse.Amount,
+            };
+            await _contractRepository.AddContract(contract);
+            return "Create Contract Success";
         }
 
-        public async Task UpdateContract(ContractResponse contractResponse)
+        public async Task<string> UpdateContract(string contractId, ContractRequest contractRequest)
         {
-            await _contractRepository.UpdateContract(_mapper.Map<Contract>(contractResponse));
+            var contract = await _contractRepository.GetContractById(contractId);
+            if (contract == null)
+            {
+                return "This contract is not existed";
+            }
+            contract.Name = contractRequest.Name;
+            contract.Description = contractRequest.Description;
+            contract.UpdateDate = DateTime.Now;
+            contract.Price = contractRequest.Price;
+            contract.Deposit = contractRequest.Deposit;
+            contract.Amount = contractRequest.Amount;
+            await _contractRepository.UpdateContract(contract);
+            return "Update contract Success";
         }
 
-        public async Task DeleteContract( string contractId)
+        public async Task DeleteContract(string contractId)
         {
             await _contractRepository.DeleteContract(contractId);
         }
