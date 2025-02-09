@@ -29,19 +29,19 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    var configuration = new ConfigurationBuilder()
-        //        .SetBasePath(Directory.GetCurrentDirectory()) // Đặt thư mục gốc
-        //        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Nạp tệp appsettings.json
-        //        .Build();
-
-        //    var connectionString = configuration.GetConnectionString("DefaultConnection"); // Lấy chuỗi kết nối
-        //    optionsBuilder.UseSqlServer(connectionString); // Sử dụng chuỗi kết nối
-        //}
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-     => optionsBuilder.UseSqlServer("Server=localhost;Database=CCSSDB;Uid=sa;Password=12345;MultipleActiveResultSets=true;TrustServerCertificate=True");
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory()) // Đặt thư mục gốc
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Nạp tệp appsettings.json
+                .Build();
+
+            var connectionString = configuration.GetConnectionString("DefaultConnection"); // Lấy chuỗi kết nối
+            optionsBuilder.UseSqlServer(connectionString); // Sử dụng chuỗi kết nối
+        }
+
+        //   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //=> optionsBuilder.UseSqlServer("Server=localhost;Database=CCSSDB;Uid=sa;Password=12345;MultipleActiveResultSets=true;TrustServerCertificate=True");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -108,8 +108,11 @@ namespace CCSS_Repository.Entities
                 .HasForeignKey<Payment>(p => p.ContractId);
             // Seed data for Roles
             modelBuilder.Entity<Role>().HasData(
-       new Role { RoleId = "1", RoleName = (RoleEnum)1, Description = "Administrator role" },
-       new Role { RoleId = "2", RoleName = (RoleEnum)2, Description = "Regular user role" }
+       new Role { RoleId = "1", RoleName = RoleEnum.Admin, Description = "Admin" },
+       new Role { RoleId = "2", RoleName = RoleEnum.Manager, Description = "Manager" },
+       new Role { RoleId = "3", RoleName = RoleEnum.Customer, Description = "Customer" },
+       new Role { RoleId = "4", RoleName = RoleEnum.Cosplayer, Description = "Cosplayer" },
+       new Role { RoleId = "5", RoleName = RoleEnum.Consultant, Description = "Consultant" }
    );
 
             // Seed data cho bảng Account
@@ -126,7 +129,8 @@ namespace CCSS_Repository.Entities
                     CreateDate = DateTime.UtcNow,
                     IsActive = true,
                     Password = BCrypt.Net.BCrypt.HashPassword("password123"), // hashed password
-                    RoleId = "1"
+                    RoleId = "1",
+                    Code = "123456"
                 },
                 new Account
                 {
@@ -140,7 +144,8 @@ namespace CCSS_Repository.Entities
                     CreateDate = DateTime.UtcNow,
                     IsActive = true,
                     Password = BCrypt.Net.BCrypt.HashPassword("password456"), // hashed password
-                    RoleId = "2"
+                    RoleId = "2",
+                    Code = "123456"
                 }
             );
 

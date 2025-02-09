@@ -42,7 +42,7 @@ namespace CCSS_Service.Services
         }
         public async Task<string> Login(string email, string password)
         {
-            var account = await accountRepository.GetAccountByEmailAndPassword(email, HashPassword(password));
+            var account = await accountRepository.GetAccountByEmailAndPassword(email, BCrypt.Net.BCrypt.HashPassword(password));
             if (account == null)
             {
                 return "Email or password wrong";
@@ -108,17 +108,6 @@ namespace CCSS_Service.Services
             return code;
         }
 
-        public static string HashPassword(string password)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] bytes = Encoding.UTF8.GetBytes(password);
-                byte[] hashBytes = sha256.ComputeHash(bytes);
-
-                return Convert.ToBase64String(hashBytes);
-            }
-        }
-
         public async Task<string> Register(AccountLoginRequest accountLogin, string role)
         {
             if (string.IsNullOrEmpty(accountLogin.Email) || string.IsNullOrEmpty(accountLogin.Password) || string.IsNullOrEmpty(role))
@@ -137,7 +126,7 @@ namespace CCSS_Service.Services
                 account.CreateDate = DateTime.UtcNow;
                 account.IsActive = false;
                 account.Code = GenerateCode();
-                account.Password = HashPassword(account.Password);  
+                account.Password = BCrypt.Net.BCrypt.HashPassword(account.Password);  
                 if (role.ToLower() == RoleEnum.Customer.ToString().ToLower()) 
                 {
                     account.RoleId = "3";
@@ -211,7 +200,7 @@ namespace CCSS_Service.Services
             }
             if (!string.IsNullOrEmpty(newPassword))
             {
-                checkAccount.Password = HashPassword(newPassword);
+                checkAccount.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
                 bool result = await accountRepository.UpdateAcount(checkAccount);
                 if (!result)
                 {
