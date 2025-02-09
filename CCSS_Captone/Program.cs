@@ -19,6 +19,12 @@ builder.Services.AddDbContext<CCSSDBContext>(options =>
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();  
 
+builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
+builder.Services.AddAutoMapper(typeof(accountprofile), 
+                                typeof(CharacterProfile),
+                                typeof(CategoryProfile),
+                                typeof(ContractProfile),
+                                typeof(ImageProfile));
 
 //Services
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -26,6 +32,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 //Mapper
 builder.Services.AddAutoMapper(typeof(AccountProfile));
+builder.Services.AddScoped<ICharacterService, CharacterService>();
 
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];

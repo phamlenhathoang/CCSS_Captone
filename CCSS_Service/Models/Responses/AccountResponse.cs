@@ -25,7 +25,9 @@ namespace CCSS_Service.Models.Responses
         public string Password { get; set; }
         public string RoleId { get; set; }
         //public RoleRespone Role { get; set; }
-        //public ContractRespone Contract { get; set; }
-        //public ImageRespone Image { get; set; }
+        public ContractResponse Contract { get; set; }
+        public ImageResponse Image { get; set; }
     }
+    
+
 }
