@@ -20,19 +20,22 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();  
 builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
 builder.Services.AddScoped<IContractRepository, ContractRepository>();
+builder.Services.AddScoped<IEventRepsository, EventRepository>();
 
 //Services
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<IContractServices, ContractServices>();
+builder.Services.AddScoped<IEventService, EventService>();
 
 //Mapper
 builder.Services.AddAutoMapper(typeof(AccountProfile),
                                 typeof(CharacterProfile),
                                 typeof(CategoryProfile),
                                 typeof(ContractProfile),
-                                typeof(ImageProfile));
+                                typeof(ImageProfile),
+                                typeof(EventProfile));
 
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];

@@ -71,6 +71,24 @@ namespace CCSS_Captone.Controllers
             {
                 throw new Exception(ex.Message);
             }
-        } 
+        }
+
+        [HttpGet("export-text-pdf")]
+        public IActionResult ExportTextPdf(string contractCode, string fullName, string eventName)
+        {
+            var fileBytes = accountService.GeneratePdf(contractCode, fullName, eventName);
+            string fileName = "Contract_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".pdf";
+
+            return File(fileBytes, "application/pdf", fileName);
+        }
+
+        [HttpGet]
+        public IActionResult GetContractHtml()
+        {
+            var pdfContent = accountService.ConvertHtmlToPdf("<h1>Hello, world!</h1>\r\n    <p>This is a test HTML content for generating a PDF.</p>\r\n    <p>Make sure to enable JavaScript and load images if needed.</p>");
+            var htmlContent = System.Text.Encoding.UTF8.GetString(pdfContent); // Chuyển byte[] thành string
+            return Content(htmlContent, "text/html");
+        }
+
     }
 }

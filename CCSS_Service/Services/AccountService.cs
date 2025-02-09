@@ -3,17 +3,17 @@ using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
 using CCSS_Service.Models;
 using CCSS_Service.Models.Requests;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using iText.IO.Font;
+using iText.Kernel.Font;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
+using NReco.PdfGenerator;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CCSS_Service.Services
 {
@@ -22,12 +22,14 @@ namespace CCSS_Service.Services
         Task<string> Login(string email, string password);
         Task<string> Register(AccountLoginRequest accountLogin, string role);   
         Task<string> CodeValidation(string email, string code);
-        Task<string> ForgotPassword(string email, string? newPassword, string? code); 
+        Task<string> ForgotPassword(string email, string? newPassword, string? code);
+        byte[] GeneratePdf(string contractCode, string fullName, string eventName);
+        byte[] ConvertHtmlToPdf(string htmlContent);
     }
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository accountRepository;
-        private readonly IRefreshTokenRepository refreshTokenRepository;    
+        private readonly IRefreshTokenRepository refreshTokenRepository;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
         private IMapper _mapper;
@@ -90,7 +92,7 @@ namespace CCSS_Service.Services
                     bool result = await refreshTokenRepository.AddRefreshToken(refreshToken);
                     if (!result)
                     {
-                       return "Cannot save refresh token !!!";
+                        return "Cannot save refresh token !!!";
                     }
                     return jwtHandler.WriteToken(jwtToken);
                 }
@@ -122,12 +124,12 @@ namespace CCSS_Service.Services
             else
             {
                 Account account = _mapper.Map<Account>(accountLogin);
-                account.AccountId = Guid.NewGuid().ToString();  
+                account.AccountId = Guid.NewGuid().ToString();
                 account.CreateDate = DateTime.UtcNow;
                 account.IsActive = false;
                 account.Code = GenerateCode();
-                account.Password = BCrypt.Net.BCrypt.HashPassword(account.Password);  
-                if (role.ToLower() == RoleEnum.Customer.ToString().ToLower()) 
+                account.Password = BCrypt.Net.BCrypt.HashPassword(account.Password);
+                if (role.ToLower() == RoleEnum.Customer.ToString().ToLower())
                 {
                     account.RoleId = "3";
                 }
@@ -148,7 +150,7 @@ namespace CCSS_Service.Services
         public async Task<string> CodeValidation(string email, string code)
         {
             var checkAccount = await accountRepository.GetAccountByEmailAndCode(email, code);
-            if (checkAccount == null) 
+            if (checkAccount == null)
             {
                 throw new Exception("Code does not exist");
             }
@@ -156,7 +158,7 @@ namespace CCSS_Service.Services
             {
                 checkAccount.IsActive = true;
                 bool result = await accountRepository.UpdateAcount(checkAccount);
-                if (!result) 
+                if (!result)
                 {
                     return "Can not save account";
                 }
@@ -170,7 +172,7 @@ namespace CCSS_Service.Services
             if (!string.IsNullOrEmpty(code))
             {
                 checkAccount = await accountRepository.GetAccountByEmailAndCode(email, code);
-                if(checkAccount == null)
+                if (checkAccount == null)
                 {
                     return "Code does not exist ";
                 }
@@ -180,7 +182,7 @@ namespace CCSS_Service.Services
                 checkAccount = await accountRepository.GetAccountByEmail(email);
                 if (checkAccount == null)
                 {
-                    return"Email does not exist ";
+                    return "Email does not exist ";
                 }
             }
             if (string.IsNullOrEmpty(code))
@@ -189,7 +191,7 @@ namespace CCSS_Service.Services
                 bool result = await accountRepository.UpdateAcount(checkAccount);
                 if (!result)
                 {
-                    return "Can not save account" ;
+                    return "Can not save account";
                 }
                 await _emailService.SendEmailAsync(email, "Confirm your account", $"Here is your code: {checkAccount.Code}. Please enter this code to authenticate your account.", true);
                 return "Please enter code";
@@ -209,6 +211,54 @@ namespace CCSS_Service.Services
                 return "Success";
             }
             return null;
+        }
+
+        public byte[] GeneratePdf(string contractCode, string fullName, string eventName)
+        {
+            using (var stream = new MemoryStream())
+            {
+                var writer = new PdfWriter(stream, new WriterProperties().SetPdfVersion(PdfVersion.PDF_1_7));
+                var pdf = new PdfDocument(writer);
+                var document = new Document(pdf);
+                string fontPath = "D:\\Captone\\time\\font-times-new-roman\\font-times-new-roman.ttf"; // Đảm bảo thay thế đúng đường dẫn font TTF
+                PdfFont boldFont = PdfFontFactory.CreateFont(fontPath, PdfEncodings.IDENTITY_H);
+                PdfFont normalFont = PdfFontFactory.CreateFont(fontPath, PdfEncodings.IDENTITY_H);
+
+                // Thêm tiêu đề
+                document.Add(new Paragraph($"Hợp đồng: {contractCode}")
+                    .SetFont(boldFont)
+                    .SetFontSize(16)
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+
+                // Thêm thông tin khách hàng và sự kiện
+                document.Add(new Paragraph($"Họ tên: {fullName}")
+                    .SetFont(normalFont)
+                    .SetFontSize(12)
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT));
+
+                document.Add(new Paragraph($"Sự kiện: {eventName}")
+                    .SetFont(normalFont)
+                    .SetFontSize(12)
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT));
+
+                // Thêm nội dung chi tiết hợp đồng
+                document.Add(new Paragraph("Đây là hợp đồng tham gia sự kiện.")
+                    .SetFont(normalFont)
+                    .SetFontSize(12)
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.JUSTIFIED));
+
+                document.Close();
+
+                return stream.ToArray();
+            }
+        }
+        public byte[] ConvertHtmlToPdf(string htmlContent)
+        {
+            var converter = new HtmlToPdfConverter();
+            
+            var pdf = converter.GeneratePdf(htmlContent);
+
+            return pdf;
         }
     }
 }
