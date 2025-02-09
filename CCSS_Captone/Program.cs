@@ -19,12 +19,13 @@ builder.Services.AddDbContext<CCSSDBContext>(options =>
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();  
 builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
-
+builder.Services.AddScoped<IContractRepository, ContractRepository>();
 
 //Services
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
+builder.Services.AddScoped<IContractServices, ContractServices>();
 
 //Mapper
 builder.Services.AddAutoMapper(typeof(AccountProfile),
