@@ -29,6 +29,7 @@ namespace CCSS_Repository.Entities
     {
         Pending,
         InProgress,
-        Complete
+        Complete,
+        Cancel
     }
 }
