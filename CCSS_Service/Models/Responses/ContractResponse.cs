@@ -11,7 +11,7 @@ namespace CCSS_Service.Models.Response
 {
     public class ContractResponse
     {
-        public string ContractId { get; set; } = Guid.NewGuid().ToString();
+        //public string ContractId { get; set; } = Guid.NewGuid().ToString();
 
       
         public string AccountId { get; set; }
@@ -22,8 +22,8 @@ namespace CCSS_Service.Models.Response
         //public Event Event { get; set; }
 
         public string Description { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime? UpdateDate { get; set; }
+        //public DateTime CreateDate { get; set; }
+        //public DateTime? UpdateDate { get; set; }
         public double Price { get; set; }
         public bool Signature { get; set; }
         public string Name { get; set; }
