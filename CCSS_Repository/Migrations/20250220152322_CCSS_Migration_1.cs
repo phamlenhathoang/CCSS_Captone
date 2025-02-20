@@ -16,8 +16,8 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -29,15 +29,15 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     EventId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EventName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    EventName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreateBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CreateBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -49,9 +49,9 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     PackageId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PackageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false)
+                    PackageName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -63,13 +63,13 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -81,8 +81,8 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleName = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    RoleName = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,10 +94,10 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     CharacterId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CharacterName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CharacterName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -116,16 +116,18 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Phone = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    OnTask = table.Column<bool>(type: "bit", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Phone = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    OnTask = table.Column<bool>(type: "bit", nullable: true),
+                    Leader = table.Column<bool>(type: "bit", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TaskQuantity = table.Column<int>(type: "int", nullable: true),
                     RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -166,12 +168,12 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     ImageId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EventId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CharacterId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    EventId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CharacterId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -239,18 +241,20 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     ContractId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ContractName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContractCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    Amount = table.Column<double>(type: "float", nullable: false),
-                    Signature = table.Column<bool>(type: "bit", nullable: false),
-                    Deposit = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ContractName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContractCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    Amount = table.Column<double>(type: "float", nullable: true),
+                    Signature = table.Column<bool>(type: "bit", nullable: true),
+                    Deposit = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CharacterQuantity = table.Column<int>(type: "int", nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PackageId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    PackageId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -272,14 +276,14 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     RefreshTokenId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RefreshTokenValue = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RefreshTokenCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JwtId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
-                    IsRevoked = table.Column<bool>(type: "bit", nullable: false),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    RefreshTokenValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    JwtId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: true),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: true),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -296,10 +300,10 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     TicketId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    EventId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    EventId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -344,7 +348,7 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     OrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CartId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    CartId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -362,7 +366,8 @@ namespace CCSS_Repository.Migrations
                 {
                     ContractCharacterId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ContracId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CharacterId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    CharacterId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -384,11 +389,11 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     FeedbackId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Star = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Star = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ContractId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ContractId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -405,16 +410,18 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     TaskId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TaskName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TaskName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    EventId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ContractId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: true),
+                    EventId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ContractId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -441,14 +448,14 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     PaymentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<double>(type: "float", nullable: false),
-                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatAt = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TicketId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ContractId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true),
+                    Amount = table.Column<double>(type: "float", nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatAt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TicketId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ContractId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -540,7 +547,8 @@ namespace CCSS_Repository.Migrations
                 name: "IX_Feedback_ContractId",
                 table: "Feedback",
                 column: "ContractId",
-                unique: true);
+                unique: true,
+                filter: "[ContractId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Image_CharacterId",
@@ -561,7 +569,8 @@ namespace CCSS_Repository.Migrations
                 name: "IX_Order_CartId",
                 table: "Order",
                 column: "CartId",
-                unique: true);
+                unique: true,
+                filter: "[CartId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payment_ContractId",
@@ -572,19 +581,22 @@ namespace CCSS_Repository.Migrations
                 name: "IX_Payment_OrderId",
                 table: "Payment",
                 column: "OrderId",
-                unique: true);
+                unique: true,
+                filter: "[OrderId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payment_TicketId",
                 table: "Payment",
                 column: "TicketId",
-                unique: true);
+                unique: true,
+                filter: "[TicketId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshToken_AccountId",
                 table: "RefreshToken",
                 column: "AccountId",
-                unique: true);
+                unique: true,
+                filter: "[AccountId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Task_AccountId",
@@ -610,7 +622,8 @@ namespace CCSS_Repository.Migrations
                 name: "IX_Ticket_EventId",
                 table: "Ticket",
                 column: "EventId",
-                unique: true);
+                unique: true,
+                filter: "[EventId] IS NOT NULL");
         }
 
         /// <inheritdoc />

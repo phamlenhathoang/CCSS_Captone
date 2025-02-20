@@ -48,4 +48,11 @@ namespace CCSS_Repository.Entities
         Completed,
         Cancel
     }
+
+    public enum ContractDescription
+    {
+        RentCostumes,
+        RentCosplayer,
+        CreateEvent
+    }
 }
