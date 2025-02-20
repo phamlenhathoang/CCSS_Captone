@@ -20,6 +20,6 @@ namespace CCSS_Repository.Entities
 
         [ForeignKey("ContractId")]
         public string ContractId { get; set; }
-        public virtual Contract Contract { get; set; }
+        public Contract Contract { get; set; }
     }
 }

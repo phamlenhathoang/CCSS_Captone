@@ -17,7 +17,8 @@ namespace CCSS_Repository.Entities
         public string TaskId { get; set; } = Guid.NewGuid().ToString();
         [ForeignKey("AccountId")]
         public string AccountId { get; set; }
-        public virtual Account Account { get; set; }    
+        public  Account Account { get; set; }    
+
         public string TaskName { get; set; }
         public string Location { get; set; }
         public string Description { get; set; }
@@ -28,11 +29,11 @@ namespace CCSS_Repository.Entities
 
         [ForeignKey("EventId")]
         public string EventId { get; set; }
-        public virtual Event Event { get; set; }
+        public Event Event { get; set; }
 
         [ForeignKey("ContractId")]
         public string ContractId { get; set; }
-        public virtual Contract Contract { get; set; }
+        public Contract Contract { get; set; }
 
     }
 

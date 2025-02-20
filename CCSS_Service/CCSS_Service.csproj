@@ -31,7 +31,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Profile\" />
-	  <Folder Include="Services\" />
+	  <Folder Include="Model\Requests\" />
 	</ItemGroup>
 </Project>

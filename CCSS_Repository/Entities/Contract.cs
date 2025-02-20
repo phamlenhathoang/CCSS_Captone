@@ -17,7 +17,8 @@ namespace CCSS_Repository.Entities
 
         [ForeignKey("AccountId")]
         public string AccountId { get; set; }
-        public virtual Account Account { get; set; }
+        public Account Account { get; set; }
+
         public string ContractName { get; set; }
         public string ContractCode { get; set; }    
         public string Description { get; set; }
@@ -30,11 +31,11 @@ namespace CCSS_Repository.Entities
         public DateTime EndDate { get; set; }
         [ForeignKey("PackageId")]
         public string PackageId { get; set; }
-        public virtual Package Package { get; set; }
-        public virtual Feedback Feedback { get; set; }
-        public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
-        public virtual ICollection<ContractCharacter> ContractCharacters { get; set; } = new List<ContractCharacter>();
-        public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
+        public Package Package { get; set; }
+        public Feedback Feedback { get; set; }
+        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+        public ICollection<ContractCharacter> ContractCharacters { get; set; } = new List<ContractCharacter>();
+        public ICollection<Task> Tasks { get; set; } = new List<Task>();
         
     }
 
