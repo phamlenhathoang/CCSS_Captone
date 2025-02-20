@@ -17,9 +17,9 @@ namespace CCSS_Repository.Entities
 
         [ForeignKey("AccountId")]
         public string AccountId { get; set; }   
-        public virtual Account Account { get; set; }
+        public Account Account { get; set; }
         public double TotalPrice { get; set; }
-        public virtual Order Order { get; set; }
-        public virtual ICollection<CartProduct> CartProducts { get; set; } = new List<CartProduct>();   
+        public Order Order { get; set; }
+        public ICollection<CartProduct> CartProducts { get; set; } = new List<CartProduct>();   
     }
 }

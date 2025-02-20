@@ -20,14 +20,14 @@ namespace CCSS_Repository.Entities
 
         [ForeignKey("ProductId")]
         public string ProductId { get; set; }
-        public virtual Product Product { get; set; }
+        public Product Product { get; set; }
 
         [ForeignKey("EventId")]
         public string EventId { get; set; }
-        public virtual Event Event { get; set; }
+        public Event Event { get; set; }
 
         [ForeignKey("CharacterId")]
         public string CharacterId { get; set; }
-        public virtual Character Character { get; set; }
+        public Character Character { get; set; }
     }
 }

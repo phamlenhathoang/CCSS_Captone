@@ -22,12 +22,12 @@ namespace CCSS_Repository.Entities
 
         [ForeignKey("OrderId")]
         public string OrderId { get; set; }
-        public virtual Order Order { get; set; }
-        public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+        public Order Order { get; set; }
+        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
         [ForeignKey("ContractId")]
         public string ContractId { get; set; }
-        public virtual Contract Contract { get; set; }
+        public Contract Contract { get; set; }
     }
 
     public enum PaymentStatus

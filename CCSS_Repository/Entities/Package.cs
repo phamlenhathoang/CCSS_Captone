@@ -16,6 +16,6 @@ namespace CCSS_Repository.Entities
         public string PackageName { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }
-        public virtual ICollection<Contract> Contracts { get; set; } = new List<Contract>();
+        public ICollection<Contract> Contracts { get; set; } = new List<Contract>();
     }
 }

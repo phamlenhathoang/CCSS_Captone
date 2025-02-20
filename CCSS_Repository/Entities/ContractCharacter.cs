@@ -15,9 +15,9 @@ namespace CCSS_Repository.Entities
         public string ContractCharacterId { get; set; } = Guid.NewGuid().ToString();
         [ForeignKey("ContractId")]
         public string ContracId { get; set; }   
-        public virtual Contract Contract { get; set; }
+        public Contract Contract { get; set; }
         [ForeignKey("CharacterId")]
         public string CharacterId { get; set; }
-        public virtual Character Character { get; set; } 
+        public Character Character { get; set; } 
     }
 }

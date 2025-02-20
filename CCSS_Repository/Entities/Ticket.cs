@@ -17,16 +17,16 @@ namespace CCSS_Repository.Entities
 
         [ForeignKey("AccountId")]
         public string AccountId { get; set; }    
-        public virtual Account Account { get; set; }    
+        public Account Account { get; set; }    
         public int Quantity { get; set; }
         public double Price { get; set; }
 
         [ForeignKey("PaymentId")]
         public string PaymentId { get; set; }
-        public virtual Payment Payment { get; set; }
+        public Payment Payment { get; set; }
 
         [ForeignKey("EventId")]
         public string EventId { get; set; }
-        public virtual Event Event { get; set; }
+        public Event Event { get; set; }
     }
 }

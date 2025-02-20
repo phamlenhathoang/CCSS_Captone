@@ -23,7 +23,7 @@ namespace CCSS_Repository.Entities
 
         [ForeignKey("AccountId")]
         public string AccountId { get; set; }
-        public virtual Account Account { get; set; }    
+        public Account Account { get; set; }    
 
     }
 }

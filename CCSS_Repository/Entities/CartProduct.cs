@@ -16,10 +16,10 @@ namespace CCSS_Repository.Entities
 
         [ForeignKey("ProductId")]
         public string ProductId { get; set; }
-        public virtual Product Product { get; set; }
+        public Product Product { get; set; }
 
         [ForeignKey("CartId")]
         public string CartId { get; set; }
-        public virtual Cart Cart { get; set; }
+        public Cart Cart { get; set; }
     }
 }

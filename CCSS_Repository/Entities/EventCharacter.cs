@@ -16,10 +16,10 @@ namespace CCSS_Repository.Entities
 
         [ForeignKey("EventId")]
         public string EventId { get; set; }
-        public virtual Event Event { get; set; } 
+        public Event Event { get; set; } 
 
         [ForeignKey("CharacterId")]
         public string CharacterId { get; set; }
-        public virtual Character Character { get; set; } 
+        public Character Character { get; set; } 
     }
 }

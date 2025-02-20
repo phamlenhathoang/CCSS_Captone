@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCSS_Repository.Migrations
 {
     [DbContext(typeof(CCSSDbContext))]
-    [Migration("20250219051657_CCSS_Migration_1")]
+    [Migration("20250220070224_CCSS_Migration_1")]
     partial class CCSS_Migration_1
     {
         /// <inheritdoc />

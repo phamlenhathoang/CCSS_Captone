@@ -20,7 +20,7 @@ namespace CCSS_Repository.Entities
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public bool IsActive { get; set; }
-        public virtual ICollection<CartProduct> CartProducts { get; set; } = new List<CartProduct>();   
-        public virtual ICollection<Image> Images { get; set; } = new List<Image>();
+        public ICollection<CartProduct> CartProducts { get; set; } = new List<CartProduct>();   
+        public ICollection<Image> Images { get; set; } = new List<Image>();
     }
 }
