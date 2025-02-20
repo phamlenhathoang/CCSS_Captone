@@ -23,7 +23,10 @@ namespace CCSS_Repository.Entities
         [ForeignKey("OrderId")]
         public string OrderId { get; set; }
         public Order Order { get; set; }
-        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+
+        [ForeignKey("TicketId")]
+        public string TicketId { get; set; }
+        public Ticket Ticket { get; set; }
 
         [ForeignKey("ContractId")]
         public string ContractId { get; set; }
@@ -33,5 +36,7 @@ namespace CCSS_Repository.Entities
     public enum PaymentStatus
     {
         Pending,
+        Complete,
+        Cancel
     }
 }

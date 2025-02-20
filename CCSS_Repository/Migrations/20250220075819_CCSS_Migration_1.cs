@@ -45,18 +45,6 @@ namespace CCSS_Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order",
-                columns: table => new
-                {
-                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CartId = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Order", x => x.OrderId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Package",
                 columns: table => new
                 {
@@ -106,7 +94,7 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     CharacterId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CategoryId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CharacterName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
@@ -117,11 +105,10 @@ namespace CCSS_Repository.Migrations
                 {
                     table.PrimaryKey("PK_Character", x => x.CharacterId);
                     table.ForeignKey(
-                        name: "FK_Character_Category_CharacterId",
-                        column: x => x.CharacterId,
+                        name: "FK_Character_Category_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Category",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CategoryId");
                 });
 
             migrationBuilder.CreateTable(
@@ -148,8 +135,7 @@ namespace CCSS_Repository.Migrations
                         name: "FK_Account_Role_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Role",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -167,14 +153,12 @@ namespace CCSS_Repository.Migrations
                         name: "FK_EventCharacter_Character_CharacterId",
                         column: x => x.CharacterId,
                         principalTable: "Character",
-                        principalColumn: "CharacterId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CharacterId");
                     table.ForeignKey(
                         name: "FK_EventCharacter_Event_EventId",
                         column: x => x.EventId,
                         principalTable: "Event",
-                        principalColumn: "EventId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EventId");
                 });
 
             migrationBuilder.CreateTable(
@@ -196,20 +180,17 @@ namespace CCSS_Repository.Migrations
                         name: "FK_Image_Character_CharacterId",
                         column: x => x.CharacterId,
                         principalTable: "Character",
-                        principalColumn: "CharacterId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CharacterId");
                     table.ForeignKey(
                         name: "FK_Image_Event_EventId",
                         column: x => x.EventId,
                         principalTable: "Event",
-                        principalColumn: "EventId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EventId");
                     table.ForeignKey(
                         name: "FK_Image_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProductId");
                 });
 
             migrationBuilder.CreateTable(
@@ -217,24 +198,22 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     AccountCategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AccountId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AccountCategory", x => x.AccountCategoryId);
                     table.ForeignKey(
-                        name: "FK_AccountCategory_Account_AccountCategoryId",
-                        column: x => x.AccountCategoryId,
+                        name: "FK_AccountCategory_Account_AccountId",
+                        column: x => x.AccountId,
                         principalTable: "Account",
-                        principalColumn: "AccountId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AccountId");
                     table.ForeignKey(
-                        name: "FK_AccountCategory_Category_AccountCategoryId",
-                        column: x => x.AccountCategoryId,
+                        name: "FK_AccountCategory_Category_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Category",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CategoryId");
                 });
 
             migrationBuilder.CreateTable(
@@ -252,14 +231,7 @@ namespace CCSS_Repository.Migrations
                         name: "FK_Cart_Account_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Account",
-                        principalColumn: "AccountId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cart_Order_CartId",
-                        column: x => x.CartId,
-                        principalTable: "Order",
-                        principalColumn: "OrderId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AccountId");
                 });
 
             migrationBuilder.CreateTable(
@@ -267,7 +239,7 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     ContractId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AccountId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ContractName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContractCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -278,22 +250,21 @@ namespace CCSS_Repository.Migrations
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PackageId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PackageId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Contract", x => x.ContractId);
                     table.ForeignKey(
-                        name: "FK_Contract_Account_ContractId",
-                        column: x => x.ContractId,
+                        name: "FK_Contract_Account_AccountId",
+                        column: x => x.AccountId,
                         principalTable: "Account",
                         principalColumn: "AccountId");
                     table.ForeignKey(
-                        name: "FK_Contract_Package_ContractId",
-                        column: x => x.ContractId,
+                        name: "FK_Contract_Package_PackageId",
+                        column: x => x.PackageId,
                         principalTable: "Package",
-                        principalColumn: "PackageId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "PackageId");
                 });
 
             migrationBuilder.CreateTable(
@@ -317,8 +288,32 @@ namespace CCSS_Repository.Migrations
                         name: "FK_RefreshToken_Account_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Account",
-                        principalColumn: "AccountId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AccountId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ticket",
+                columns: table => new
+                {
+                    TicketId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    EventId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ticket", x => x.TicketId);
+                    table.ForeignKey(
+                        name: "FK_Ticket_Account_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Account",
+                        principalColumn: "AccountId");
+                    table.ForeignKey(
+                        name: "FK_Ticket_Event_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Event",
+                        principalColumn: "EventId");
                 });
 
             migrationBuilder.CreateTable(
@@ -326,24 +321,39 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     CartProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProductId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CartId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CartId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CartProduct", x => x.CartProductId);
                     table.ForeignKey(
-                        name: "FK_CartProduct_Cart_CartProductId",
-                        column: x => x.CartProductId,
+                        name: "FK_CartProduct_Cart_CartId",
+                        column: x => x.CartId,
                         principalTable: "Cart",
-                        principalColumn: "CartId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CartId");
                     table.ForeignKey(
-                        name: "FK_CartProduct_Product_CartProductId",
-                        column: x => x.CartProductId,
+                        name: "FK_CartProduct_Product_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProductId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CartId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.OrderId);
+                    table.ForeignKey(
+                        name: "FK_Order_Cart_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Cart",
+                        principalColumn: "CartId");
                 });
 
             migrationBuilder.CreateTable(
@@ -351,7 +361,7 @@ namespace CCSS_Repository.Migrations
                 columns: table => new
                 {
                     ContractCharacterId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ContracId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContracId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CharacterId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -361,14 +371,12 @@ namespace CCSS_Repository.Migrations
                         name: "FK_ContractCharacter_Character_CharacterId",
                         column: x => x.CharacterId,
                         principalTable: "Character",
-                        principalColumn: "CharacterId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CharacterId");
                     table.ForeignKey(
-                        name: "FK_ContractCharacter_Contract_ContractCharacterId",
-                        column: x => x.ContractCharacterId,
+                        name: "FK_ContractCharacter_Contract_ContracId",
+                        column: x => x.ContracId,
                         principalTable: "Contract",
-                        principalColumn: "ContractId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ContractId");
                 });
 
             migrationBuilder.CreateTable(
@@ -389,38 +397,7 @@ namespace CCSS_Repository.Migrations
                         name: "FK_Feedback_Contract_ContractId",
                         column: x => x.ContractId,
                         principalTable: "Contract",
-                        principalColumn: "ContractId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Payment",
-                columns: table => new
-                {
-                    PaymentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<double>(type: "float", nullable: false),
-                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatAt = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ContractId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Payment", x => x.PaymentId);
-                    table.ForeignKey(
-                        name: "FK_Payment_Contract_ContractId",
-                        column: x => x.ContractId,
-                        principalTable: "Contract",
-                        principalColumn: "ContractId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Payment_Order_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Order",
-                        principalColumn: "OrderId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ContractId");
                 });
 
             migrationBuilder.CreateTable(
@@ -456,42 +433,41 @@ namespace CCSS_Repository.Migrations
                         name: "FK_Task_Event_EventId",
                         column: x => x.EventId,
                         principalTable: "Event",
-                        principalColumn: "EventId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EventId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ticket",
+                name: "Payment",
                 columns: table => new
                 {
+                    PaymentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatAt = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TicketId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    PaymentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EventId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ContractId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ticket", x => x.TicketId);
+                    table.PrimaryKey("PK_Payment", x => x.PaymentId);
                     table.ForeignKey(
-                        name: "FK_Ticket_Account_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Account",
-                        principalColumn: "AccountId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Payment_Contract_ContractId",
+                        column: x => x.ContractId,
+                        principalTable: "Contract",
+                        principalColumn: "ContractId");
                     table.ForeignKey(
-                        name: "FK_Ticket_Event_TicketId",
+                        name: "FK_Payment_Order_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Order",
+                        principalColumn: "OrderId");
+                    table.ForeignKey(
+                        name: "FK_Payment_Ticket_TicketId",
                         column: x => x.TicketId,
-                        principalTable: "Event",
-                        principalColumn: "EventId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Ticket_Payment_TicketId",
-                        column: x => x.TicketId,
-                        principalTable: "Payment",
-                        principalColumn: "PaymentId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "Ticket",
+                        principalColumn: "TicketId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -500,15 +476,55 @@ namespace CCSS_Repository.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AccountCategory_AccountId",
+                table: "AccountCategory",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccountCategory_CategoryId",
+                table: "AccountCategory",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Cart_AccountId",
                 table: "Cart",
                 column: "AccountId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_CartProduct_CartId",
+                table: "CartProduct",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartProduct_ProductId",
+                table: "CartProduct",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Character_CategoryId",
+                table: "Character",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contract_AccountId",
+                table: "Contract",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contract_PackageId",
+                table: "Contract",
+                column: "PackageId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ContractCharacter_CharacterId",
                 table: "ContractCharacter",
                 column: "CharacterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContractCharacter_ContracId",
+                table: "ContractCharacter",
+                column: "ContracId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventCharacter_CharacterId",
@@ -542,6 +558,12 @@ namespace CCSS_Repository.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Order_CartId",
+                table: "Order",
+                column: "CartId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Payment_ContractId",
                 table: "Payment",
                 column: "ContractId");
@@ -550,6 +572,12 @@ namespace CCSS_Repository.Migrations
                 name: "IX_Payment_OrderId",
                 table: "Payment",
                 column: "OrderId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payment_TicketId",
+                table: "Payment",
+                column: "TicketId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -577,6 +605,12 @@ namespace CCSS_Repository.Migrations
                 name: "IX_Ticket_AccountId",
                 table: "Ticket",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ticket_EventId",
+                table: "Ticket",
+                column: "EventId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -601,16 +635,13 @@ namespace CCSS_Repository.Migrations
                 name: "Image");
 
             migrationBuilder.DropTable(
+                name: "Payment");
+
+            migrationBuilder.DropTable(
                 name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "Task");
-
-            migrationBuilder.DropTable(
-                name: "Ticket");
-
-            migrationBuilder.DropTable(
-                name: "Cart");
 
             migrationBuilder.DropTable(
                 name: "Character");
@@ -619,25 +650,28 @@ namespace CCSS_Repository.Migrations
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "Event");
+                name: "Order");
 
             migrationBuilder.DropTable(
-                name: "Payment");
-
-            migrationBuilder.DropTable(
-                name: "Category");
+                name: "Ticket");
 
             migrationBuilder.DropTable(
                 name: "Contract");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Category");
 
             migrationBuilder.DropTable(
-                name: "Account");
+                name: "Cart");
+
+            migrationBuilder.DropTable(
+                name: "Event");
 
             migrationBuilder.DropTable(
                 name: "Package");
+
+            migrationBuilder.DropTable(
+                name: "Account");
 
             migrationBuilder.DropTable(
                 name: "Role");

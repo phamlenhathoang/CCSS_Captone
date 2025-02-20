@@ -13,9 +13,11 @@ namespace CCSS_Repository.Entities
     {
         [Key]
         public string AccountCategoryId { get; set; } = Guid.NewGuid().ToString();
+
         [ForeignKey("AccountId")]
         public string AccountId { get; set; }
         public Account Account { get; set; }
+
         [ForeignKey("CategoryId")]
         public string CategoryId { get; set; }
         public Category Category { get; set; }
