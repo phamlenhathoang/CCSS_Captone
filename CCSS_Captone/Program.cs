@@ -11,6 +11,8 @@ builder.Services.AddScoped<IPackageRepository, PackageRepository>();
 builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IContractRespository, ContractRespository>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 
 //Service
@@ -18,12 +20,14 @@ builder.Services.AddScoped<IPackageService, PackageService>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IContractServices, ContractServices>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(PackageProfile),
                                typeof(CharacterProfile), 
-                               typeof(CategoryProfile));
+                               typeof(CategoryProfile),
+                               typeof(TaskProfile));
 
 builder.Services.AddDbContext<CCSSDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

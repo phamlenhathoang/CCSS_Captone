@@ -14,22 +14,22 @@ namespace CCSS_Repository.Entities
     {
         [Key]
         public string PaymentId { get; set; } = Guid.NewGuid().ToString();
-        public string Type { get; set; }
-        public PaymentStatus Status { get; set; }
-        public double Amount { get; set; }
-        public string TransactionId { get; set; }
-        public string CreatAt { get; set; }
+        public string? Type { get; set; }
+        public PaymentStatus? Status { get; set; }
+        public double? Amount { get; set; }
+        public string? TransactionId { get; set; }
+        public string? CreatAt { get; set; }
 
         [ForeignKey("OrderId")]
-        public string OrderId { get; set; }
+        public string? OrderId { get; set; }
         public Order Order { get; set; }
 
         [ForeignKey("TicketId")]
-        public string TicketId { get; set; }
+        public string? TicketId { get; set; }
         public Ticket Ticket { get; set; }
 
         [ForeignKey("ContractId")]
-        public string ContractId { get; set; }
+        public string? ContractId { get; set; }
         public Contract Contract { get; set; }
     }
 

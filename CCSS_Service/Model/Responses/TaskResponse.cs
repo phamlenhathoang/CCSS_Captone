@@ -1,23 +1,19 @@
-﻿using System;
+﻿using CCSS_Repository.Entities;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CCSS_Repository.Entities
+namespace CCSS_Service.Model.Responses
 {
-    [Table("Task")]
-
-    public partial class Task
+    public class TaskResponse
     {
-        [Key]
-        public string TaskId { get; set; } = Guid.NewGuid().ToString();
+        public string TaskId { get; set; }
         [ForeignKey("AccountId")]
         public string? AccountId { get; set; }
-        public Account Account { get; set; }    
+        public Account Account { get; set; }
 
         public string? TaskName { get; set; }
         public string? Location { get; set; }
@@ -29,7 +25,7 @@ namespace CCSS_Repository.Entities
 
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
-        public TaskStatus? Status { get; set; }
+        public string? Status { get; set; }
 
         [ForeignKey("EventId")]
         public string? EventId { get; set; }
@@ -38,15 +34,5 @@ namespace CCSS_Repository.Entities
         [ForeignKey("ContractId")]
         public string? ContractId { get; set; }
         public Contract Contract { get; set; }
-
-    }
-
-    public enum TaskStatus
-    {
-        Pending,
-        Assignment,
-        Progressing,
-        Completed,
-        Cancel
     }
 }

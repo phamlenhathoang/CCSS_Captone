@@ -18,23 +18,23 @@ namespace CCSS_Captone.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PackageResponse>> GetPackage(string id)
         {
-            var character = await _packageService.GetPackage(id);
-            if (character == null)
+            var package = await _packageService.GetPackage(id);
+            if (package == null)
             {
                 return NotFound(new { message = "Package not found." });
             }
-            return Ok(character);
+            return Ok(package);
         }
 
         [HttpGet]
         public async Task<ActionResult<PackageResponse>> GetAll()
         {
-            var character = await _packageService.GetAll();
-            if (character == null)
+            var package = await _packageService.GetAll();
+            if (package == null)
             {
                 return NotFound(new { message = "Package not found." });
             }
-            return Ok(character);
+            return Ok(package);
         }
     }
 }

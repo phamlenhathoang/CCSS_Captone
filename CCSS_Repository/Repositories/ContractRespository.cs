@@ -13,6 +13,7 @@ namespace CCSS_Repository.Repositories
     {
         Task<List<Contract>> GetAllContract(string searchterm);
         Task<Contract> GetContractById(string id);
+        Task<Contract> GetContractAndContractCharacter(string id);
         Task AddContract(Contract contract);
         Task UpdateContract(Contract contract);
         Task DeleteContract(string contractId);
@@ -65,6 +66,11 @@ namespace CCSS_Repository.Repositories
             {
                 throw new Exception("Delete Success");
             }
+        }
+
+        public async Task<Contract> GetContractAndContractCharacter(string id)
+        {
+            return await _context.Contracts.Include(c => c.ContractCharacters).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
         }
     }
 }

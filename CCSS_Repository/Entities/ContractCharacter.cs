@@ -19,5 +19,7 @@ namespace CCSS_Repository.Entities
         [ForeignKey("CharacterId")]
         public string CharacterId { get; set; }
         public Character Character { get; set; } 
+
+        public int Quantity {  get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace CCSS_Service.Model.Responses
     public class PackageResponse
     {
         public string PackageName { get; set; }
-        public string Description { get; set; }
-        public double Price { get; set; }
+        public string? Description { get; set; }
+        public double? Price { get; set; }
     }
 }

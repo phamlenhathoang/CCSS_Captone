@@ -13,8 +13,8 @@ namespace CCSS_Repository.Entities
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
-        public RoleName RoleName { get; set; }
-        public string Description { get; set; }
+        public RoleName? RoleName { get; set; }
+        public string? Description { get; set; }
         public ICollection<Account> Accounts { get; set; } = new List<Account>();   
 
     }
