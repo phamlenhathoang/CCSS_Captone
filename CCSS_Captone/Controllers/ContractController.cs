@@ -1,4 +1,5 @@
 ﻿using CCSS_Service.Model.Requests;
+using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -48,6 +49,27 @@ namespace CCSS_Captone.Controllers
             }
             return BadRequest(ModelState);
         }
-            
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateContract (string contracId, ContractResponse contractResponse)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.UpdateContract(contracId, contractResponse);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteContract(string contractId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            await _services.DeleteContract(contractId);
+            return Ok("Delete Success");
+        }
     }
 }
