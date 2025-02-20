@@ -16,13 +16,13 @@ namespace CCSS_Repository.Entities
         public string TicketId { get; set; } = Guid.NewGuid().ToString();
 
         [ForeignKey("AccountId")]
-        public string AccountId { get; set; }    
+        public string? AccountId { get; set; }    
         public Account Account { get; set; }    
-        public int Quantity { get; set; }
-        public double Price { get; set; }
+        public int? Quantity { get; set; }
+        public double? Price { get; set; }
 
         [ForeignKey("EventId")]
-        public string EventId { get; set; }
+        public string? EventId { get; set; }
         public Event Event { get; set; }
 
         public Payment Payment { get; set; }    

@@ -16,7 +16,7 @@ namespace CCSS_Repository.Entities
         public CCSSDbContext() { }
 
         public virtual DbSet<Account> Accounts { get; set; }
-        public virtual DbSet<AccountCategory> AccountCategorys { get; set; }
+        public virtual DbSet<AccountCategory> AccountCategories { get; set; }
         public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<CartProduct> CartProducts { get; set; }
         public virtual DbSet<Category> Categories { get; set; }

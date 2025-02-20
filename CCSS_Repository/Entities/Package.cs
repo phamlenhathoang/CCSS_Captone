@@ -13,9 +13,9 @@ namespace CCSS_Repository.Entities
     {
         [Key]
         public string PackageId {  get; set; } = Guid.NewGuid().ToString();   
-        public string PackageName { get; set; }
-        public string Description { get; set; }
-        public double Price { get; set; }
+        public string? PackageName { get; set; }
+        public string? Description { get; set; }
+        public double? Price { get; set; }
         public ICollection<Contract> Contracts { get; set; } = new List<Contract>();
     }
 }

@@ -13,16 +13,18 @@ namespace CCSS_Repository.Entities
     {
         [Key]
         public string AccountId { get; set; } = Guid.NewGuid().ToString();
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string Description { get; set; }
-        public DateTime Birthday { get; set; }
-        public int Phone {  get; set; }
-        public bool IsActive {  get; set; }
-        public bool OnTask {  get; set; }
-        public string Code {  get; set; }
-        public string ImageUrl {  get; set; }
+        public string? Description { get; set; }
+        public DateTime? Birthday { get; set; }
+        public int? Phone {  get; set; }
+        public bool? IsActive {  get; set; }
+        public bool? OnTask {  get; set; }
+        public bool? Leader {  get; set; }   
+        public string? Code {  get; set; }
+        public string? ImageUrl {  get; set; }
+        public int? TaskQuantity { get; set; }
 
         [ForeignKey("RoleId")]
         public string RoleId { get; set; }

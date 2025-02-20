@@ -14,7 +14,7 @@ namespace CCSS_Repository.Entities
         [Key]
         public string OrderId { get; set; }
         [ForeignKey("CartId")]
-        public string CartId { get; set; }  
+        public string? CartId { get; set; }  
         public Cart Cart { get; set; }
         public Payment Payment { get; set; }
     }

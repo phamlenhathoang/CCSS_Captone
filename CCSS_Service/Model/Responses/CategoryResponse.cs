@@ -10,6 +10,6 @@ namespace CCSS_Service.Model.Responses
     {
         public string CategoryId { get; set; } = Guid.NewGuid().ToString();
         public string CategoryName { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 }

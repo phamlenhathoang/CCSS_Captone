@@ -13,13 +13,13 @@ namespace CCSS_Repository.Entities
     {
         [Key]
         public string ProductId { get; set; } = Guid.NewGuid().ToString();  
-        public string ProductName { get; set; } 
-        public string Description { get; set; }
-        public int Quantity { get; set; }
-        public double Price { get; set; }
-        public DateTime CreateDate { get; set; }
+        public string? ProductName { get; set; } 
+        public string? Description { get; set; }
+        public int? Quantity { get; set; }
+        public double? Price { get; set; }
+        public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }
         public ICollection<CartProduct> CartProducts { get; set; } = new List<CartProduct>();   
         public ICollection<Image> Images { get; set; } = new List<Image>();
     }

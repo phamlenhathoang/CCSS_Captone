@@ -19,23 +19,23 @@ namespace CCSS_Captone.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryResponse>> GetCharater(string id)
         {
-            var character = await _categoryService.GetCategory(id);
-            if (character == null)
+            var category = await _categoryService.GetCategory(id);
+            if (category == null)
             {
                 return NotFound(new { message = "Category not found." });
             }
-            return Ok(character);
+            return Ok(category);
         }
 
         [HttpGet]
         public async Task<ActionResult<CategoryResponse>> GetAll()
         {
-            var character = await _categoryService.GetAll();
-            if (character == null)
+            var category = await _categoryService.GetAll();
+            if (category == null)
             {
                 return NotFound(new { message = "Category not found." });
             }
-            return Ok(character);
+            return Ok(category);
         }
     }
 }

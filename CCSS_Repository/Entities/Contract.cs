@@ -16,21 +16,22 @@ namespace CCSS_Repository.Entities
         public string ContractId { get; set; } = Guid.NewGuid().ToString();
 
         [ForeignKey("AccountId")]
-        public string AccountId { get; set; }
+        public string? AccountId { get; set; }
         public Account Account { get; set; }
-
-        public string ContractName { get; set; }
-        public string ContractCode { get; set; }    
-        public string Description { get; set; }
-        public double Price { get; set; }
-        public double Amount { get; set; }
-        public bool Signature { get; set; }
-        public string Deposit { get; set; }
+        public string? ContractName { get; set; }
+        public string? ContractCode { get; set; }    
+        public string? Description { get; set; }
+        public double? Price { get; set; }
+        public double? Amount { get; set; }
+        public bool? Signature { get; set; }
+        public string? Deposit { get; set; }
+        public int? CharacterQuantity { get; set; }
+        public string? Location { get; set; }
         public ContractStatus Status { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         [ForeignKey("PackageId")]
-        public string PackageId { get; set; }
+        public string? PackageId { get; set; }
         public Package Package { get; set; }
         public Feedback Feedback { get; set; }
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
