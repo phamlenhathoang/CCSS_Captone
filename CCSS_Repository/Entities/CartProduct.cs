@@ -18,6 +18,7 @@ namespace CCSS_Repository.Entities
         public string ProductId { get; set; }
         public Product Product { get; set; }
 
+
         [ForeignKey("CartId")]
         public string CartId { get; set; }
         public Cart Cart { get; set; }

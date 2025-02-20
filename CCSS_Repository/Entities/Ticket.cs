@@ -21,12 +21,10 @@ namespace CCSS_Repository.Entities
         public int Quantity { get; set; }
         public double Price { get; set; }
 
-        [ForeignKey("PaymentId")]
-        public string PaymentId { get; set; }
-        public Payment Payment { get; set; }
-
         [ForeignKey("EventId")]
         public string EventId { get; set; }
         public Event Event { get; set; }
+
+        public Payment Payment { get; set; }    
     }
 }

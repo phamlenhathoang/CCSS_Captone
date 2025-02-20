@@ -26,7 +26,7 @@ namespace CCSS_Repository.Entities
         public double Amount { get; set; }
         public bool Signature { get; set; }
         public string Deposit { get; set; }
-        public string Status { get; set; }
+        public ContractStatus Status { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         [ForeignKey("PackageId")]
@@ -44,6 +44,7 @@ namespace CCSS_Repository.Entities
         Pending,
         Browsed,
         Progressing,
-        Completed
+        Completed,
+        Cancel
     }
 }

@@ -81,13 +81,17 @@ namespace CCSS_Repository.Migrations
 
                     b.Property<string>("AccountId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CategoryId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("AccountCategoryId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("AccountCategory");
                 });
@@ -119,13 +123,17 @@ namespace CCSS_Repository.Migrations
 
                     b.Property<string>("CartId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProductId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CartProductId");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("CartProduct");
                 });
@@ -155,7 +163,7 @@ namespace CCSS_Repository.Migrations
 
                     b.Property<string>("CategoryId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CharacterName")
                         .IsRequired()
@@ -175,6 +183,8 @@ namespace CCSS_Repository.Migrations
 
                     b.HasKey("CharacterId");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Character");
                 });
 
@@ -185,7 +195,7 @@ namespace CCSS_Repository.Migrations
 
                     b.Property<string>("AccountId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
@@ -211,7 +221,7 @@ namespace CCSS_Repository.Migrations
 
                     b.Property<string>("PackageId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -228,6 +238,10 @@ namespace CCSS_Repository.Migrations
 
                     b.HasKey("ContractId");
 
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("PackageId");
+
                     b.ToTable("Contract");
                 });
 
@@ -242,11 +256,13 @@ namespace CCSS_Repository.Migrations
 
                     b.Property<string>("ContracId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ContractCharacterId");
 
                     b.HasIndex("CharacterId");
+
+                    b.HasIndex("ContracId");
 
                     b.ToTable("ContractCharacter");
                 });
@@ -389,9 +405,12 @@ namespace CCSS_Repository.Migrations
 
                     b.Property<string>("CartId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("OrderId");
+
+                    b.HasIndex("CartId")
+                        .IsUnique();
 
                     b.ToTable("Order");
                 });
@@ -440,6 +459,10 @@ namespace CCSS_Repository.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<string>("TicketId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("TransactionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -453,6 +476,9 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("ContractId");
 
                     b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.HasIndex("TicketId")
                         .IsUnique();
 
                     b.ToTable("Payment");
@@ -612,11 +638,7 @@ namespace CCSS_Repository.Migrations
 
                     b.Property<string>("EventId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PaymentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -628,6 +650,9 @@ namespace CCSS_Repository.Migrations
 
                     b.HasIndex("AccountId");
 
+                    b.HasIndex("EventId")
+                        .IsUnique();
+
                     b.ToTable("Ticket");
                 });
 
@@ -636,7 +661,7 @@ namespace CCSS_Repository.Migrations
                     b.HasOne("CCSS_Repository.Entities.Role", "Role")
                         .WithMany("Accounts")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Role");
@@ -646,14 +671,14 @@ namespace CCSS_Repository.Migrations
                 {
                     b.HasOne("CCSS_Repository.Entities.Account", "Account")
                         .WithMany("AccountCategories")
-                        .HasForeignKey("AccountCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CCSS_Repository.Entities.Category", "Category")
                         .WithMany("AccountCategories")
-                        .HasForeignKey("AccountCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Account");
@@ -666,32 +691,24 @@ namespace CCSS_Repository.Migrations
                     b.HasOne("CCSS_Repository.Entities.Account", "Account")
                         .WithOne("Cart")
                         .HasForeignKey("CCSS_Repository.Entities.Cart", "AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CCSS_Repository.Entities.Order", "Order")
-                        .WithOne("Cart")
-                        .HasForeignKey("CCSS_Repository.Entities.Cart", "CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Account");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.CartProduct", b =>
                 {
                     b.HasOne("CCSS_Repository.Entities.Cart", "Cart")
                         .WithMany("CartProducts")
-                        .HasForeignKey("CartProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CCSS_Repository.Entities.Product", "Product")
                         .WithMany("CartProducts")
-                        .HasForeignKey("CartProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Cart");
@@ -703,8 +720,8 @@ namespace CCSS_Repository.Migrations
                 {
                     b.HasOne("CCSS_Repository.Entities.Category", "Category")
                         .WithMany("Characters")
-                        .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -714,14 +731,14 @@ namespace CCSS_Repository.Migrations
                 {
                     b.HasOne("CCSS_Repository.Entities.Account", "Account")
                         .WithMany("Contracts")
-                        .HasForeignKey("ContractId")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CCSS_Repository.Entities.Package", "Package")
                         .WithMany("Contracts")
-                        .HasForeignKey("ContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Account");
@@ -734,13 +751,13 @@ namespace CCSS_Repository.Migrations
                     b.HasOne("CCSS_Repository.Entities.Character", "Character")
                         .WithMany("ContractCharacters")
                         .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CCSS_Repository.Entities.Contract", "Contract")
                         .WithMany("ContractCharacters")
-                        .HasForeignKey("ContractCharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ContracId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Character");
@@ -753,13 +770,13 @@ namespace CCSS_Repository.Migrations
                     b.HasOne("CCSS_Repository.Entities.Character", "Character")
                         .WithMany("EventCharacters")
                         .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CCSS_Repository.Entities.Event", "Event")
                         .WithMany("EventCharacters")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Character");
@@ -772,7 +789,7 @@ namespace CCSS_Repository.Migrations
                     b.HasOne("CCSS_Repository.Entities.Contract", "Contract")
                         .WithOne("Feedback")
                         .HasForeignKey("CCSS_Repository.Entities.Feedback", "ContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Contract");
@@ -783,19 +800,19 @@ namespace CCSS_Repository.Migrations
                     b.HasOne("CCSS_Repository.Entities.Character", "Character")
                         .WithMany("Images")
                         .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CCSS_Repository.Entities.Event", "Event")
                         .WithMany("Images")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CCSS_Repository.Entities.Product", "Product")
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Character");
@@ -805,23 +822,42 @@ namespace CCSS_Repository.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("CCSS_Repository.Entities.Order", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Cart", "Cart")
+                        .WithOne("Order")
+                        .HasForeignKey("CCSS_Repository.Entities.Order", "CartId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+                });
+
             modelBuilder.Entity("CCSS_Repository.Entities.Payment", b =>
                 {
                     b.HasOne("CCSS_Repository.Entities.Contract", "Contract")
                         .WithMany("Payments")
                         .HasForeignKey("ContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CCSS_Repository.Entities.Order", "Order")
                         .WithOne("Payment")
                         .HasForeignKey("CCSS_Repository.Entities.Payment", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("CCSS_Repository.Entities.Ticket", "Ticket")
+                        .WithOne("Payment")
+                        .HasForeignKey("CCSS_Repository.Entities.Payment", "TicketId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Contract");
 
                     b.Navigation("Order");
+
+                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.RefreshToken", b =>
@@ -829,7 +865,7 @@ namespace CCSS_Repository.Migrations
                     b.HasOne("CCSS_Repository.Entities.Account", "Account")
                         .WithOne("RefreshToken")
                         .HasForeignKey("CCSS_Repository.Entities.RefreshToken", "AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Account");
@@ -852,7 +888,7 @@ namespace CCSS_Repository.Migrations
                     b.HasOne("CCSS_Repository.Entities.Event", "Event")
                         .WithMany("Tasks")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Account");
@@ -867,26 +903,18 @@ namespace CCSS_Repository.Migrations
                     b.HasOne("CCSS_Repository.Entities.Account", "Account")
                         .WithMany("Tickets")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CCSS_Repository.Entities.Event", "Event")
-                        .WithMany("Tickets")
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CCSS_Repository.Entities.Payment", "Payment")
-                        .WithMany("Tickets")
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne("Ticket")
+                        .HasForeignKey("CCSS_Repository.Entities.Ticket", "EventId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Account");
 
                     b.Navigation("Event");
-
-                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Account", b =>
@@ -909,6 +937,9 @@ namespace CCSS_Repository.Migrations
             modelBuilder.Entity("CCSS_Repository.Entities.Cart", b =>
                 {
                     b.Navigation("CartProducts");
+
+                    b.Navigation("Order")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Category", b =>
@@ -947,14 +978,12 @@ namespace CCSS_Repository.Migrations
 
                     b.Navigation("Tasks");
 
-                    b.Navigation("Tickets");
+                    b.Navigation("Ticket")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Order", b =>
                 {
-                    b.Navigation("Cart")
-                        .IsRequired();
-
                     b.Navigation("Payment")
                         .IsRequired();
                 });
@@ -962,11 +991,6 @@ namespace CCSS_Repository.Migrations
             modelBuilder.Entity("CCSS_Repository.Entities.Package", b =>
                 {
                     b.Navigation("Contracts");
-                });
-
-            modelBuilder.Entity("CCSS_Repository.Entities.Payment", b =>
-                {
-                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Product", b =>
@@ -979,6 +1003,12 @@ namespace CCSS_Repository.Migrations
             modelBuilder.Entity("CCSS_Repository.Entities.Role", b =>
                 {
                     b.Navigation("Accounts");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.Ticket", b =>
+                {
+                    b.Navigation("Payment")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -42,6 +42,7 @@ namespace CCSS_Repository.Entities
         Pending,
         Assignment,
         Progressing,
-        Completed
+        Completed,
+        Cancel
     }
 }
