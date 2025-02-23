@@ -2,6 +2,7 @@
 using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Bcpg.Sig;
 
 namespace CCSS_Captone.Controllers
 {
@@ -35,6 +36,40 @@ namespace CCSS_Captone.Controllers
                 return NotFound(new { message = "Package not found." });
             }
             return Ok(package);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePackage(PackageResponse packageResponse)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _packageService.AddPackage(packageResponse);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdatePackage(string id, PackageResponse packageResponse)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _packageService.UpdatePackage(id, packageResponse);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeletePackage(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _packageService.DeletePackage(id);
+            return Ok(result);
         }
     }
 }
