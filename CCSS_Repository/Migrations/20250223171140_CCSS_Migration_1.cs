@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace CCSS_Repository.Migrations
 {
     /// <inheritdoc />
@@ -476,6 +478,163 @@ namespace CCSS_Repository.Migrations
                         principalTable: "Ticket",
                         principalColumn: "TicketId");
                 });
+
+            migrationBuilder.InsertData(
+                table: "Category",
+                columns: new[] { "CategoryId", "CategoryName", "Description" },
+                values: new object[,]
+                {
+                    { "cat1", "Category 1", "Description for Category 1" },
+                    { "cat2", "Category 2", "Description for Category 2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Event",
+                columns: new[] { "EventId", "CreateBy", "CreateDate", "Description", "EndDate", "EventName", "IsActive", "Location", "StartDate", "UpdateDate" },
+                values: new object[,]
+                {
+                    { "evt1", "acc1", new DateTime(2023, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "Description for Event 1", new DateTime(2023, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Event 1", true, "Location 1", new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { "evt2", "acc2", new DateTime(2023, 3, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "Description for Event 2", new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Event 2", true, "Location 2", new DateTime(2023, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Package",
+                columns: new[] { "PackageId", "Description", "PackageName", "Price" },
+                values: new object[] { "pkg1", "Basic service package", "Basic Package", 99.989999999999995 });
+
+            migrationBuilder.InsertData(
+                table: "Product",
+                columns: new[] { "ProductId", "CreateDate", "Description", "IsActive", "Price", "ProductName", "Quantity", "UpdateDate" },
+                values: new object[,]
+                {
+                    { "prod1", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Description of Product 1", true, 10.0, "Product 1", 100, null },
+                    { "prod2", new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Description of Product 2", true, 20.0, "Product 2", 200, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Role",
+                columns: new[] { "Id", "Description", "RoleName" },
+                values: new object[,]
+                {
+                    { "role1", "Admin role", 1 },
+                    { "role2", "Manager role", 2 },
+                    { "role3", "Customer role", 3 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Account",
+                columns: new[] { "AccountId", "Birthday", "Code", "Description", "Email", "ImageUrl", "IsActive", "Leader", "Name", "OnTask", "Password", "Phone", "RoleId", "TaskQuantity" },
+                values: new object[,]
+                {
+                    { "acc1", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE123", "Administrator account", "admin@example.com", "https://example.com/admin.png", true, true, "Admin User", false, "$2a$11$FWXUTSoNUUKhjzZpYg58XOxknyKTrLpU05wHWw0ACuTdetwFjREm.", 123456789, "role1", 0 },
+                    { "acc2", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE456", "Customer account", "customer@example.com", "https://example.com/customer.png", true, false, "Customer User", false, "$2a$11$36qva8DPXsI7y5aPfio3W.sK0KDA9K8BtYJg.iMHgJXnbH9Ndc1aK", 987654321, "role3", 0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Character",
+                columns: new[] { "CharacterId", "CategoryId", "CharacterName", "CreateDate", "IsActive", "Price", "UpdateDate" },
+                values: new object[,]
+                {
+                    { "char1", "cat1", "Character 1", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, 100.0, null },
+                    { "char2", "cat2", "Character 2", new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), true, 150.0, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AccountCategory",
+                columns: new[] { "AccountCategoryId", "AccountId", "CategoryId" },
+                values: new object[,]
+                {
+                    { "acat1", "acc1", "cat1" },
+                    { "acat2", "acc2", "cat2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Cart",
+                columns: new[] { "CartId", "AccountId", "TotalPrice" },
+                values: new object[,]
+                {
+                    { "cart1", "acc1", 0.0 },
+                    { "cart2", "acc2", 0.0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Contract",
+                columns: new[] { "ContractId", "AccountId", "Amount", "CharacterQuantity", "ContractCode", "ContractName", "Deposit", "Description", "EndDate", "Location", "PackageId", "Price", "Signature", "StartDate", "Status" },
+                values: new object[,]
+                {
+                    { "ctr1", "acc1", 450.0, 1, "C001", "Contract 1", "50", "Contract for Event 1", new DateTime(2023, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "Location 1", "pkg1", 500.0, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
+                    { "ctr2", "acc2", 750.0, 2, "C002", "Contract 2", "50", "Contract for Event 2", new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Location 2", "pkg1", 800.0, false, new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "EventCharacter",
+                columns: new[] { "EventCharacterId", "CharacterId", "EventId" },
+                values: new object[,]
+                {
+                    { "ec1", "char1", "evt1" },
+                    { "ec2", "char2", "evt2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "RefreshToken",
+                columns: new[] { "RefreshTokenId", "AccountId", "CreateAt", "ExpiresAt", "IsRevoked", "IsUsed", "JwtId", "RefreshTokenCode", "RefreshTokenValue" },
+                values: new object[] { "rt1", "acc1", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, "jwt1", "RTCODE1", "sample_refresh_token" });
+
+            migrationBuilder.InsertData(
+                table: "Ticket",
+                columns: new[] { "TicketId", "AccountId", "EventId", "Price", "Quantity" },
+                values: new object[] { "tkt1", "acc1", "evt1", 50.0, 1 });
+
+            migrationBuilder.InsertData(
+                table: "CartProduct",
+                columns: new[] { "CartProductId", "CartId", "ProductId" },
+                values: new object[,]
+                {
+                    { "cp1", "cart1", "prod1" },
+                    { "cp2", "cart2", "prod2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ContractCharacter",
+                columns: new[] { "ContractCharacterId", "CharacterId", "ContracId", "Quantity" },
+                values: new object[,]
+                {
+                    { "cc1", "char1", "ctr1", 1 },
+                    { "cc2", "char2", "ctr2", 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Feedback",
+                columns: new[] { "FeedbackId", "ContractId", "CreateDate", "Description", "Star", "UpdateDate" },
+                values: new object[] { "fb1", "ctr1", new DateTime(2023, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Excellent service", 5, null });
+
+            migrationBuilder.InsertData(
+                table: "Order",
+                columns: new[] { "OrderId", "CartId" },
+                values: new object[] { "order1", "cart1" });
+
+            migrationBuilder.InsertData(
+                table: "Payment",
+                columns: new[] { "PaymentId", "Amount", "ContractId", "CreatAt", "OrderId", "Status", "TicketId", "TransactionId", "Type" },
+                values: new object[,]
+                {
+                    { "pay2", 150.0, null, "2023-01-02", null, 2, "tkt1", "TXN002", "Bank Transfer" },
+                    { "pay3", 200.0, "ctr1", "2023-01-03", null, 1, null, "TXN003", "PayPal" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Task",
+                columns: new[] { "TaskId", "AccountId", "ContractId", "CreateDate", "Description", "EndDate", "EventId", "IsActive", "Location", "StartDate", "Status", "TaskName", "UpdateDate" },
+                values: new object[,]
+                {
+                    { "tsk1", "acc1", "ctr1", new DateTime(2023, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Task for Event 1", new DateTime(2023, 3, 1, 12, 0, 0, 0, DateTimeKind.Unspecified), "evt1", true, "Location A", new DateTime(2023, 3, 1, 9, 0, 0, 0, DateTimeKind.Unspecified), 1, "Task 1", null },
+                    { "tsk2", "acc2", "ctr2", new DateTime(2023, 3, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "Task for Event 2", new DateTime(2023, 4, 1, 17, 0, 0, 0, DateTimeKind.Unspecified), "evt2", true, "Location B", new DateTime(2023, 4, 1, 14, 0, 0, 0, DateTimeKind.Unspecified), 2, "Task 2", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Payment",
+                columns: new[] { "PaymentId", "Amount", "ContractId", "CreatAt", "OrderId", "Status", "TicketId", "TransactionId", "Type" },
+                values: new object[] { "pay1", 100.0, null, "2023-01-01", "order1", 1, null, "TXN001", "Credit Card" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Account_RoleId",

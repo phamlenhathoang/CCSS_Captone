@@ -74,6 +74,42 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Account");
+
+                    b.HasData(
+                        new
+                        {
+                            AccountId = "acc1",
+                            Birthday = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Code = "CODE123",
+                            Description = "Administrator account",
+                            Email = "admin@example.com",
+                            ImageUrl = "https://example.com/admin.png",
+                            IsActive = true,
+                            Leader = true,
+                            Name = "Admin User",
+                            OnTask = false,
+                            Password = "$2a$11$FWXUTSoNUUKhjzZpYg58XOxknyKTrLpU05wHWw0ACuTdetwFjREm.",
+                            Phone = 123456789,
+                            RoleId = "role1",
+                            TaskQuantity = 0
+                        },
+                        new
+                        {
+                            AccountId = "acc2",
+                            Birthday = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Code = "CODE456",
+                            Description = "Customer account",
+                            Email = "customer@example.com",
+                            ImageUrl = "https://example.com/customer.png",
+                            IsActive = true,
+                            Leader = false,
+                            Name = "Customer User",
+                            OnTask = false,
+                            Password = "$2a$11$36qva8DPXsI7y5aPfio3W.sK0KDA9K8BtYJg.iMHgJXnbH9Ndc1aK",
+                            Phone = 987654321,
+                            RoleId = "role3",
+                            TaskQuantity = 0
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.AccountCategory", b =>
@@ -96,6 +132,20 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("AccountCategory");
+
+                    b.HasData(
+                        new
+                        {
+                            AccountCategoryId = "acat1",
+                            AccountId = "acc1",
+                            CategoryId = "cat1"
+                        },
+                        new
+                        {
+                            AccountCategoryId = "acat2",
+                            AccountId = "acc2",
+                            CategoryId = "cat2"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Cart", b =>
@@ -116,6 +166,20 @@ namespace CCSS_Repository.Migrations
                         .IsUnique();
 
                     b.ToTable("Cart");
+
+                    b.HasData(
+                        new
+                        {
+                            CartId = "cart1",
+                            AccountId = "acc1",
+                            TotalPrice = 0.0
+                        },
+                        new
+                        {
+                            CartId = "cart2",
+                            AccountId = "acc2",
+                            TotalPrice = 0.0
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.CartProduct", b =>
@@ -138,6 +202,20 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("CartProduct");
+
+                    b.HasData(
+                        new
+                        {
+                            CartProductId = "cp1",
+                            CartId = "cart1",
+                            ProductId = "prod1"
+                        },
+                        new
+                        {
+                            CartProductId = "cp2",
+                            CartId = "cart2",
+                            ProductId = "prod2"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Category", b =>
@@ -154,6 +232,20 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = "cat1",
+                            CategoryName = "Category 1",
+                            Description = "Description for Category 1"
+                        },
+                        new
+                        {
+                            CategoryId = "cat2",
+                            CategoryName = "Category 2",
+                            Description = "Description for Category 2"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Character", b =>
@@ -184,6 +276,26 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Character");
+
+                    b.HasData(
+                        new
+                        {
+                            CharacterId = "char1",
+                            CategoryId = "cat1",
+                            CharacterName = "Character 1",
+                            CreateDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsActive = true,
+                            Price = 100.0
+                        },
+                        new
+                        {
+                            CharacterId = "char2",
+                            CategoryId = "cat2",
+                            CharacterName = "Character 2",
+                            CreateDate = new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsActive = true,
+                            Price = 150.0
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Contract", b =>
@@ -240,6 +352,44 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("PackageId");
 
                     b.ToTable("Contract");
+
+                    b.HasData(
+                        new
+                        {
+                            ContractId = "ctr1",
+                            AccountId = "acc1",
+                            Amount = 450.0,
+                            CharacterQuantity = 1,
+                            ContractCode = "C001",
+                            ContractName = "Contract 1",
+                            Deposit = "50",
+                            Description = "Contract for Event 1",
+                            EndDate = new DateTime(2023, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = "Location 1",
+                            PackageId = "pkg1",
+                            Price = 500.0,
+                            Signature = true,
+                            StartDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 1
+                        },
+                        new
+                        {
+                            ContractId = "ctr2",
+                            AccountId = "acc2",
+                            Amount = 750.0,
+                            CharacterQuantity = 2,
+                            ContractCode = "C002",
+                            ContractName = "Contract 2",
+                            Deposit = "50",
+                            Description = "Contract for Event 2",
+                            EndDate = new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = "Location 2",
+                            PackageId = "pkg1",
+                            Price = 800.0,
+                            Signature = false,
+                            StartDate = new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 2
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.ContractCharacter", b =>
@@ -265,6 +415,22 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("ContracId");
 
                     b.ToTable("ContractCharacter");
+
+                    b.HasData(
+                        new
+                        {
+                            ContractCharacterId = "cc1",
+                            CharacterId = "char1",
+                            ContracId = "ctr1",
+                            Quantity = 1
+                        },
+                        new
+                        {
+                            ContractCharacterId = "cc2",
+                            CharacterId = "char2",
+                            ContracId = "ctr2",
+                            Quantity = 2
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Event", b =>
@@ -302,6 +468,32 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("EventId");
 
                     b.ToTable("Event");
+
+                    b.HasData(
+                        new
+                        {
+                            EventId = "evt1",
+                            CreateBy = "acc1",
+                            CreateDate = new DateTime(2023, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Description for Event 1",
+                            EndDate = new DateTime(2023, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EventName = "Event 1",
+                            IsActive = true,
+                            Location = "Location 1",
+                            StartDate = new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            EventId = "evt2",
+                            CreateBy = "acc2",
+                            CreateDate = new DateTime(2023, 3, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Description for Event 2",
+                            EndDate = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EventName = "Event 2",
+                            IsActive = true,
+                            Location = "Location 2",
+                            StartDate = new DateTime(2023, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.EventCharacter", b =>
@@ -324,6 +516,20 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("EventId");
 
                     b.ToTable("EventCharacter");
+
+                    b.HasData(
+                        new
+                        {
+                            EventCharacterId = "ec1",
+                            CharacterId = "char1",
+                            EventId = "evt1"
+                        },
+                        new
+                        {
+                            EventCharacterId = "ec2",
+                            CharacterId = "char2",
+                            EventId = "evt2"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Feedback", b =>
@@ -353,6 +559,16 @@ namespace CCSS_Repository.Migrations
                         .HasFilter("[ContractId] IS NOT NULL");
 
                     b.ToTable("Feedback");
+
+                    b.HasData(
+                        new
+                        {
+                            FeedbackId = "fb1",
+                            ContractId = "ctr1",
+                            CreateDate = new DateTime(2023, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Excellent service",
+                            Star = 5
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Image", b =>
@@ -404,6 +620,13 @@ namespace CCSS_Repository.Migrations
                         .HasFilter("[CartId] IS NOT NULL");
 
                     b.ToTable("Order");
+
+                    b.HasData(
+                        new
+                        {
+                            OrderId = "order1",
+                            CartId = "cart1"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Package", b =>
@@ -423,6 +646,15 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("PackageId");
 
                     b.ToTable("Package");
+
+                    b.HasData(
+                        new
+                        {
+                            PackageId = "pkg1",
+                            Description = "Basic service package",
+                            PackageName = "Basic Package",
+                            Price = 99.989999999999995
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Payment", b =>
@@ -467,6 +699,38 @@ namespace CCSS_Repository.Migrations
                         .HasFilter("[TicketId] IS NOT NULL");
 
                     b.ToTable("Payment");
+
+                    b.HasData(
+                        new
+                        {
+                            PaymentId = "pay1",
+                            Amount = 100.0,
+                            CreatAt = "2023-01-01",
+                            OrderId = "order1",
+                            Status = 1,
+                            TransactionId = "TXN001",
+                            Type = "Credit Card"
+                        },
+                        new
+                        {
+                            PaymentId = "pay2",
+                            Amount = 150.0,
+                            CreatAt = "2023-01-02",
+                            Status = 2,
+                            TicketId = "tkt1",
+                            TransactionId = "TXN002",
+                            Type = "Bank Transfer"
+                        },
+                        new
+                        {
+                            PaymentId = "pay3",
+                            Amount = 200.0,
+                            ContractId = "ctr1",
+                            CreatAt = "2023-01-03",
+                            Status = 1,
+                            TransactionId = "TXN003",
+                            Type = "PayPal"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Product", b =>
@@ -498,6 +762,28 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("ProductId");
 
                     b.ToTable("Product");
+
+                    b.HasData(
+                        new
+                        {
+                            ProductId = "prod1",
+                            CreateDate = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Description of Product 1",
+                            IsActive = true,
+                            Price = 10.0,
+                            ProductName = "Product 1",
+                            Quantity = 100
+                        },
+                        new
+                        {
+                            ProductId = "prod2",
+                            CreateDate = new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Description of Product 2",
+                            IsActive = true,
+                            Price = 20.0,
+                            ProductName = "Product 2",
+                            Quantity = 200
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.RefreshToken", b =>
@@ -536,6 +822,20 @@ namespace CCSS_Repository.Migrations
                         .HasFilter("[AccountId] IS NOT NULL");
 
                     b.ToTable("RefreshToken");
+
+                    b.HasData(
+                        new
+                        {
+                            RefreshTokenId = "rt1",
+                            AccountId = "acc1",
+                            CreateAt = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ExpiresAt = new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsRevoked = false,
+                            IsUsed = false,
+                            JwtId = "jwt1",
+                            RefreshTokenCode = "RTCODE1",
+                            RefreshTokenValue = "sample_refresh_token"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Role", b =>
@@ -552,6 +852,26 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "role1",
+                            Description = "Admin role",
+                            RoleName = 1
+                        },
+                        new
+                        {
+                            Id = "role2",
+                            Description = "Manager role",
+                            RoleName = 2
+                        },
+                        new
+                        {
+                            Id = "role3",
+                            Description = "Customer role",
+                            RoleName = 3
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Task", b =>
@@ -604,6 +924,38 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("EventId");
 
                     b.ToTable("Task");
+
+                    b.HasData(
+                        new
+                        {
+                            TaskId = "tsk1",
+                            AccountId = "acc1",
+                            ContractId = "ctr1",
+                            CreateDate = new DateTime(2023, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Task for Event 1",
+                            EndDate = new DateTime(2023, 3, 1, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            EventId = "evt1",
+                            IsActive = true,
+                            Location = "Location A",
+                            StartDate = new DateTime(2023, 3, 1, 9, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 1,
+                            TaskName = "Task 1"
+                        },
+                        new
+                        {
+                            TaskId = "tsk2",
+                            AccountId = "acc2",
+                            ContractId = "ctr2",
+                            CreateDate = new DateTime(2023, 3, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Task for Event 2",
+                            EndDate = new DateTime(2023, 4, 1, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            EventId = "evt2",
+                            IsActive = true,
+                            Location = "Location B",
+                            StartDate = new DateTime(2023, 4, 1, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 2,
+                            TaskName = "Task 2"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Ticket", b =>
@@ -632,6 +984,16 @@ namespace CCSS_Repository.Migrations
                         .HasFilter("[EventId] IS NOT NULL");
 
                     b.ToTable("Ticket");
+
+                    b.HasData(
+                        new
+                        {
+                            TicketId = "tkt1",
+                            AccountId = "acc1",
+                            EventId = "evt1",
+                            Price = 50.0,
+                            Quantity = 1
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Account", b =>
