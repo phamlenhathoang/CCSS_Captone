@@ -1,4 +1,5 @@
-﻿using CCSS_Service.Model.Requests;
+﻿using CCSS_Repository.Entities;
+using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +13,7 @@ namespace CCSS_Captone.Controllers
     {
         private readonly IContractServices _services;
 
-        public ContractController(IContractServices services )
+        public ContractController(IContractServices services)
         {
             _services = services;
         }
@@ -44,6 +45,10 @@ namespace CCSS_Captone.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (contractRequest == null || contractRequest.contractCharacterRequests == null || !contractRequest.contractCharacterRequests.Any())
+                {
+                    return BadRequest("Invalid contract data.");
+                }
                 var result = await _services.AddContract(contractRequest);
                 return Ok(result);
             }
@@ -51,11 +56,22 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateContract (string contracId, ContractResponse contractResponse)
+        public async Task<IActionResult> UpdateContract(string contracId, ContractResponse contractResponse)
         {
             if (ModelState.IsValid)
             {
                 var result = await _services.UpdateContract(contracId, contractResponse);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpPut("Status")]
+        public async Task<IActionResult> UpdateStatusContract(string contractId, ContractStatus contractStatus)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.UpdateStatusContract(contractId, contractStatus);
                 return Ok(result);
             }
             return BadRequest(ModelState);
@@ -68,8 +84,8 @@ namespace CCSS_Captone.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _services.DeleteContract(contractId);
-            return Ok("Delete Success");
+            var result = await _services.DeleteContract(contractId);
+            return Ok(result);
         }
     }
 }

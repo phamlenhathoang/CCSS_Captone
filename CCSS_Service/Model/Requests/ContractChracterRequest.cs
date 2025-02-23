@@ -8,7 +8,9 @@ namespace CCSS_Service.Model.Requests
 {
     public class ContractChracterRequest
     {
-        public string ContracId { get; set; }
+        //public string ContracId { get; set; }
         public string CharacterId { get; set; }
+        public int Quantity { get; set; }
+
     }
 }

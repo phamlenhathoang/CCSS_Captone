@@ -11,6 +11,7 @@ builder.Services.AddScoped<IPackageRepository, PackageRepository>();
 builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IContractRespository, ContractRespository>();
+builder.Services.AddScoped<IContractCharacterRepository, ContractCharacterRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
