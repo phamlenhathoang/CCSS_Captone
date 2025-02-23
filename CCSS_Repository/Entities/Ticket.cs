@@ -15,9 +15,7 @@ namespace CCSS_Repository.Entities
         [Key]
         public string TicketId { get; set; } = Guid.NewGuid().ToString();
 
-        [ForeignKey("AccountId")]
-        public string? AccountId { get; set; }    
-        public Account Account { get; set; }    
+       
         public int? Quantity { get; set; }
         public double? Price { get; set; }
 
@@ -25,6 +23,7 @@ namespace CCSS_Repository.Entities
         public string? EventId { get; set; }
         public Event Event { get; set; }
 
-        public Payment Payment { get; set; }    
+        public ICollection<TicketAccount> TicketAccounts { get; set; } = new List<TicketAccount>();
+
     }
 }

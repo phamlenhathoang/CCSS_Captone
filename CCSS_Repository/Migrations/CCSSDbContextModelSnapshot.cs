@@ -88,7 +88,7 @@ namespace CCSS_Repository.Migrations
                             Leader = true,
                             Name = "Admin User",
                             OnTask = false,
-                            Password = "$2a$11$FWXUTSoNUUKhjzZpYg58XOxknyKTrLpU05wHWw0ACuTdetwFjREm.",
+                            Password = "$2a$11$k1n0OIOC7CcgbJTroAJeA.yQMGKyJvum3XVflpv1.pu84VY3Bh1Xa",
                             Phone = 123456789,
                             RoleId = "role1",
                             TaskQuantity = 0
@@ -105,7 +105,7 @@ namespace CCSS_Repository.Migrations
                             Leader = false,
                             Name = "Customer User",
                             OnTask = false,
-                            Password = "$2a$11$36qva8DPXsI7y5aPfio3W.sK0KDA9K8BtYJg.iMHgJXnbH9Ndc1aK",
+                            Password = "$2a$11$OBK7w5pzB7VMNTVZnIH62.F9/fWW9Me4GmVYwYd37R.Gz4evwuq3W",
                             Phone = 987654321,
                             RoleId = "role3",
                             TaskQuantity = 0
@@ -963,9 +963,6 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("TicketId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AccountId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("EventId")
                         .HasColumnType("nvarchar(450)");
 
@@ -977,8 +974,6 @@ namespace CCSS_Repository.Migrations
 
                     b.HasKey("TicketId");
 
-                    b.HasIndex("AccountId");
-
                     b.HasIndex("EventId")
                         .IsUnique()
                         .HasFilter("[EventId] IS NOT NULL");
@@ -989,10 +984,45 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             TicketId = "tkt1",
-                            AccountId = "acc1",
                             EventId = "evt1",
                             Price = 50.0,
-                            Quantity = 1
+                            Quantity = 100
+                        });
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.TicketAccount", b =>
+                {
+                    b.Property<string>("TicketAccountId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TicketId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("quantitypurchased")
+                        .HasColumnType("int");
+
+                    b.HasKey("TicketAccountId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("TicketAccounts");
+
+                    b.HasData(
+                        new
+                        {
+                            TicketAccountId = "tkt1",
+                            AccountId = "acc2",
+                            TicketId = "tkt1",
+                            TotalPrice = 250.0,
+                            quantitypurchased = 5
                         });
                 });
 
@@ -1177,7 +1207,7 @@ namespace CCSS_Repository.Migrations
                         .HasForeignKey("CCSS_Repository.Entities.Payment", "OrderId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("CCSS_Repository.Entities.Ticket", "Ticket")
+                    b.HasOne("CCSS_Repository.Entities.TicketAccount", "TicketAccount")
                         .WithOne("Payment")
                         .HasForeignKey("CCSS_Repository.Entities.Payment", "TicketId")
                         .OnDelete(DeleteBehavior.NoAction);
@@ -1186,7 +1216,7 @@ namespace CCSS_Repository.Migrations
 
                     b.Navigation("Order");
 
-                    b.Navigation("Ticket");
+                    b.Navigation("TicketAccount");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.RefreshToken", b =>
@@ -1225,19 +1255,29 @@ namespace CCSS_Repository.Migrations
 
             modelBuilder.Entity("CCSS_Repository.Entities.Ticket", b =>
                 {
-                    b.HasOne("CCSS_Repository.Entities.Account", "Account")
-                        .WithMany("Tickets")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("CCSS_Repository.Entities.Event", "Event")
                         .WithOne("Ticket")
                         .HasForeignKey("CCSS_Repository.Entities.Ticket", "EventId")
                         .OnDelete(DeleteBehavior.NoAction);
 
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.TicketAccount", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Account", "Account")
+                        .WithMany("TicketAccounts")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("CCSS_Repository.Entities.Ticket", "Ticket")
+                        .WithMany("TicketAccounts")
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.Navigation("Account");
 
-                    b.Navigation("Event");
+                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Account", b =>
@@ -1254,7 +1294,7 @@ namespace CCSS_Repository.Migrations
 
                     b.Navigation("Tasks");
 
-                    b.Navigation("Tickets");
+                    b.Navigation("TicketAccounts");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Cart", b =>
@@ -1329,6 +1369,11 @@ namespace CCSS_Repository.Migrations
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Ticket", b =>
+                {
+                    b.Navigation("TicketAccounts");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.TicketAccount", b =>
                 {
                     b.Navigation("Payment")
                         .IsRequired();
