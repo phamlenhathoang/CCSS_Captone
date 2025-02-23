@@ -114,6 +114,25 @@ namespace CCSS_Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Ticket",
+                columns: table => new
+                {
+                    TicketId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    EventId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ticket", x => x.TicketId);
+                    table.ForeignKey(
+                        name: "FK_Ticket_Event_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Event",
+                        principalColumn: "EventId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Account",
                 columns: table => new
                 {
@@ -298,28 +317,28 @@ namespace CCSS_Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ticket",
+                name: "TicketAccounts",
                 columns: table => new
                 {
-                    TicketId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TicketAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AccountId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: true),
-                    Price = table.Column<double>(type: "float", nullable: true),
-                    EventId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    quantitypurchased = table.Column<int>(type: "int", nullable: false),
+                    TotalPrice = table.Column<double>(type: "float", nullable: false),
+                    TicketId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ticket", x => x.TicketId);
+                    table.PrimaryKey("PK_TicketAccounts", x => x.TicketAccountId);
                     table.ForeignKey(
-                        name: "FK_Ticket_Account_AccountId",
+                        name: "FK_TicketAccounts_Account_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Account",
                         principalColumn: "AccountId");
                     table.ForeignKey(
-                        name: "FK_Ticket_Event_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Event",
-                        principalColumn: "EventId");
+                        name: "FK_TicketAccounts_Ticket_TicketId",
+                        column: x => x.TicketId,
+                        principalTable: "Ticket",
+                        principalColumn: "TicketId");
                 });
 
             migrationBuilder.CreateTable(
@@ -473,10 +492,10 @@ namespace CCSS_Repository.Migrations
                         principalTable: "Order",
                         principalColumn: "OrderId");
                     table.ForeignKey(
-                        name: "FK_Payment_Ticket_TicketId",
+                        name: "FK_Payment_TicketAccounts_TicketId",
                         column: x => x.TicketId,
-                        principalTable: "Ticket",
-                        principalColumn: "TicketId");
+                        principalTable: "TicketAccounts",
+                        principalColumn: "TicketAccountId");
                 });
 
             migrationBuilder.InsertData(
@@ -526,8 +545,8 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "AccountId", "Birthday", "Code", "Description", "Email", "ImageUrl", "IsActive", "Leader", "Name", "OnTask", "Password", "Phone", "RoleId", "TaskQuantity" },
                 values: new object[,]
                 {
-                    { "acc1", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE123", "Administrator account", "admin@example.com", "https://example.com/admin.png", true, true, "Admin User", false, "$2a$11$FWXUTSoNUUKhjzZpYg58XOxknyKTrLpU05wHWw0ACuTdetwFjREm.", 123456789, "role1", 0 },
-                    { "acc2", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE456", "Customer account", "customer@example.com", "https://example.com/customer.png", true, false, "Customer User", false, "$2a$11$36qva8DPXsI7y5aPfio3W.sK0KDA9K8BtYJg.iMHgJXnbH9Ndc1aK", 987654321, "role3", 0 }
+                    { "acc1", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE123", "Administrator account", "admin@example.com", "https://example.com/admin.png", true, true, "Admin User", false, "$2a$11$k1n0OIOC7CcgbJTroAJeA.yQMGKyJvum3XVflpv1.pu84VY3Bh1Xa", 123456789, "role1", 0 },
+                    { "acc2", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE456", "Customer account", "customer@example.com", "https://example.com/customer.png", true, false, "Customer User", false, "$2a$11$OBK7w5pzB7VMNTVZnIH62.F9/fWW9Me4GmVYwYd37R.Gz4evwuq3W", 987654321, "role3", 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -538,6 +557,11 @@ namespace CCSS_Repository.Migrations
                     { "char1", "cat1", "Character 1", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, 100.0, null },
                     { "char2", "cat2", "Character 2", new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), true, 150.0, null }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Ticket",
+                columns: new[] { "TicketId", "EventId", "Price", "Quantity" },
+                values: new object[] { "tkt1", "evt1", 50.0, 100 });
 
             migrationBuilder.InsertData(
                 table: "AccountCategory",
@@ -581,9 +605,9 @@ namespace CCSS_Repository.Migrations
                 values: new object[] { "rt1", "acc1", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, "jwt1", "RTCODE1", "sample_refresh_token" });
 
             migrationBuilder.InsertData(
-                table: "Ticket",
-                columns: new[] { "TicketId", "AccountId", "EventId", "Price", "Quantity" },
-                values: new object[] { "tkt1", "acc1", "evt1", 50.0, 1 });
+                table: "TicketAccounts",
+                columns: new[] { "TicketAccountId", "AccountId", "TicketId", "TotalPrice", "quantitypurchased" },
+                values: new object[] { "tkt1", "acc2", "tkt1", 250.0, 5 });
 
             migrationBuilder.InsertData(
                 table: "CartProduct",
@@ -773,16 +797,21 @@ namespace CCSS_Repository.Migrations
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ticket_AccountId",
-                table: "Ticket",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Ticket_EventId",
                 table: "Ticket",
                 column: "EventId",
                 unique: true,
                 filter: "[EventId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TicketAccounts_AccountId",
+                table: "TicketAccounts",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TicketAccounts_TicketId",
+                table: "TicketAccounts",
+                column: "TicketId");
         }
 
         /// <inheritdoc />
@@ -825,7 +854,7 @@ namespace CCSS_Repository.Migrations
                 name: "Order");
 
             migrationBuilder.DropTable(
-                name: "Ticket");
+                name: "TicketAccounts");
 
             migrationBuilder.DropTable(
                 name: "Contract");
@@ -837,13 +866,16 @@ namespace CCSS_Repository.Migrations
                 name: "Cart");
 
             migrationBuilder.DropTable(
-                name: "Event");
+                name: "Ticket");
 
             migrationBuilder.DropTable(
                 name: "Package");
 
             migrationBuilder.DropTable(
                 name: "Account");
+
+            migrationBuilder.DropTable(
+                name: "Event");
 
             migrationBuilder.DropTable(
                 name: "Role");

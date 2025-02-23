@@ -33,7 +33,7 @@ namespace CCSS_Repository.Entities
         public Cart Cart { get; set; }
         public ICollection<AccountCategory> AccountCategories { get; set; } = new List<AccountCategory>();
         public ICollection<Task> Tasks { get; set; } = new List<Task>();
-        public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+        public ICollection<TicketAccount> TicketAccounts { get; set; } = new List<TicketAccount>();
         public ICollection<Contract> Contracts { get; set; } = new List<Contract>();
     }
 }

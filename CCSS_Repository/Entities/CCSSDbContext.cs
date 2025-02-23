@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,7 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
+        public virtual DbSet<TicketAccount> TicketAccounts { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var configuration = new ConfigurationBuilder()
@@ -90,9 +92,9 @@ namespace CCSS_Repository.Entities
                 .HasForeignKey(a => a.AccountId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            //Account - Ticket
+            //Account - TicketAccount
             modelBuilder.Entity<Account>()
-                .HasMany(a => a.Tickets)
+                .HasMany(a => a.TicketAccounts)
                 .WithOne(r => r.Account)
                 .HasForeignKey(a => a.AccountId)
                 .OnDelete(DeleteBehavior.NoAction);
@@ -137,12 +139,19 @@ namespace CCSS_Repository.Entities
                .HasOne(a => a.Ticket)
                .WithOne(r => r.Event)
                .HasForeignKey<Ticket>(a => a.EventId)
-               .OnDelete(DeleteBehavior.NoAction);
-
-            //Ticket - Payment
+               .OnDelete(DeleteBehavior.NoAction); 
+            
+            //Ticket - TicketAccount
             modelBuilder.Entity<Ticket>()
+                .HasMany(a => a.TicketAccounts)
+                .WithOne(r => r.Ticket)
+                .HasForeignKey(a => a.TicketId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            //TicketAccount - Payment
+            modelBuilder.Entity<TicketAccount>()
                .HasOne(a => a.Payment)
-               .WithOne(r => r.Ticket)
+               .WithOne(r => r.TicketAccount)
                .HasForeignKey<Payment>(a => a.TicketId)
                .OnDelete(DeleteBehavior.NoAction);
 
@@ -518,10 +527,21 @@ namespace CCSS_Repository.Entities
                 new Ticket
                 {
                     TicketId = "tkt1",
-                    AccountId = "acc1",
-                    Quantity = 1,
+                    Quantity = 100,
                     Price = 50,
                     EventId = "evt1"
+                }
+            );
+
+            // Seed TicketsAccount
+            modelBuilder.Entity<TicketAccount>().HasData(
+                new TicketAccount
+                {
+                    TicketAccountId = "tkt1",
+                    AccountId = "acc2",
+                    quantitypurchased = 5,
+                    TotalPrice = 250,
+                    TicketId = "tkt1"
                 }
             );
 

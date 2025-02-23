@@ -26,7 +26,7 @@ namespace CCSS_Repository.Entities
 
         [ForeignKey("TicketId")]
         public string? TicketId { get; set; }
-        public Ticket Ticket { get; set; }
+        public TicketAccount TicketAccount { get; set; }
 
         [ForeignKey("ContractId")]
         public string? ContractId { get; set; }
