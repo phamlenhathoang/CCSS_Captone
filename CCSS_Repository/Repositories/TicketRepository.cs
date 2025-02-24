@@ -23,8 +23,12 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Ticket> GetTicket(string id)
         {
-            return await _dbContext.Tickets.FirstOrDefaultAsync(t => t.TicketId == id);
+            return await _dbContext.Tickets
+                .Where(t => t.TicketId == id && t.Event.IsActive == true) // Chỉ lấy Ticket có Event.IsActive == true
+                .Include(t => t.Event) // Bao gồm Event để đảm bảo có thể truy cập IsActive
+                .FirstOrDefaultAsync();
         }
+
 
         public async Task<bool> AddTicket(Ticket ticket)
         {

@@ -12,14 +12,14 @@ namespace CCSS_Service.Model.Requests
     {
         //public string TicketId { get; set; } = Guid.NewGuid().ToString();
 
-        public string? AccountId { get; set; }
-        //public Account Account { get; set; }
+
         public int? Quantity { get; set; }
         public double? Price { get; set; }
 
-        public string? EventId { get; set; }
-        public Event Event { get; set; }
+        //[ForeignKey("EventId")]
+        //public string? EventId { get; set; }
+        //public Event Event { get; set; }
 
-        //public Payment Payment { get; set; }
+        //public ICollection<TicketAccount> TicketAccounts { get; set; } = new List<TicketAccount>();
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCSS_Repository.Migrations
 {
     [DbContext(typeof(CCSSDbContext))]
-    [Migration("20250223180224_CCSS_Migration_1")]
+    [Migration("20250224074024_CCSS_Migration_1")]
     partial class CCSS_Migration_1
     {
         /// <inheritdoc />
@@ -91,7 +91,7 @@ namespace CCSS_Repository.Migrations
                             Leader = true,
                             Name = "Admin User",
                             OnTask = false,
-                            Password = "$2a$11$k1n0OIOC7CcgbJTroAJeA.yQMGKyJvum3XVflpv1.pu84VY3Bh1Xa",
+                            Password = "$2a$11$apXEBF6Fn2.5tFMpLxuRLesqJtjTDEJ5IX39W/u/22ZviOmHwrbh2",
                             Phone = 123456789,
                             RoleId = "role1",
                             TaskQuantity = 0
@@ -108,7 +108,7 @@ namespace CCSS_Repository.Migrations
                             Leader = false,
                             Name = "Customer User",
                             OnTask = false,
-                            Password = "$2a$11$OBK7w5pzB7VMNTVZnIH62.F9/fWW9Me4GmVYwYd37R.Gz4evwuq3W",
+                            Password = "$2a$11$jKXAa90/7MBppoU6EZ93Xu6Ao.zQO7L3sJMdAbhGLuyrQtiKs7Xa6",
                             Phone = 987654321,
                             RoleId = "role3",
                             TaskQuantity = 0
@@ -677,10 +677,13 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Purpose")
+                        .HasColumnType("int");
+
                     b.Property<int?>("Status")
                         .HasColumnType("int");
 
-                    b.Property<string>("TicketId")
+                    b.Property<string>("TicketAccountId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TransactionId")
@@ -697,9 +700,9 @@ namespace CCSS_Repository.Migrations
                         .IsUnique()
                         .HasFilter("[OrderId] IS NOT NULL");
 
-                    b.HasIndex("TicketId")
+                    b.HasIndex("TicketAccountId")
                         .IsUnique()
-                        .HasFilter("[TicketId] IS NOT NULL");
+                        .HasFilter("[TicketAccountId] IS NOT NULL");
 
                     b.ToTable("Payment");
 
@@ -709,7 +712,7 @@ namespace CCSS_Repository.Migrations
                             PaymentId = "pay1",
                             Amount = 100.0,
                             CreatAt = "2023-01-01",
-                            OrderId = "order1",
+                            Purpose = 0,
                             Status = 1,
                             TransactionId = "TXN001",
                             Type = "Credit Card"
@@ -719,8 +722,9 @@ namespace CCSS_Repository.Migrations
                             PaymentId = "pay2",
                             Amount = 150.0,
                             CreatAt = "2023-01-02",
+                            Purpose = 0,
                             Status = 2,
-                            TicketId = "tkt1",
+                            TicketAccountId = "tkat1",
                             TransactionId = "TXN002",
                             Type = "Bank Transfer"
                         },
@@ -730,6 +734,7 @@ namespace CCSS_Repository.Migrations
                             Amount = 200.0,
                             ContractId = "ctr1",
                             CreatAt = "2023-01-03",
+                            Purpose = 0,
                             Status = 1,
                             TransactionId = "TXN003",
                             Type = "PayPal"
@@ -1021,7 +1026,7 @@ namespace CCSS_Repository.Migrations
                     b.HasData(
                         new
                         {
-                            TicketAccountId = "tkt1",
+                            TicketAccountId = "tkat1",
                             AccountId = "acc2",
                             TicketId = "tkt1",
                             TotalPrice = 250.0,
@@ -1212,7 +1217,7 @@ namespace CCSS_Repository.Migrations
 
                     b.HasOne("CCSS_Repository.Entities.TicketAccount", "TicketAccount")
                         .WithOne("Payment")
-                        .HasForeignKey("CCSS_Repository.Entities.Payment", "TicketId")
+                        .HasForeignKey("CCSS_Repository.Entities.Payment", "TicketAccountId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Contract");
