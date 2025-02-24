@@ -471,11 +471,12 @@ namespace CCSS_Repository.Migrations
                     PaymentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: true),
+                    Purpose = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: true),
                     TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatAt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TicketId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TicketAccountId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ContractId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -492,8 +493,8 @@ namespace CCSS_Repository.Migrations
                         principalTable: "Order",
                         principalColumn: "OrderId");
                     table.ForeignKey(
-                        name: "FK_Payment_TicketAccounts_TicketId",
-                        column: x => x.TicketId,
+                        name: "FK_Payment_TicketAccounts_TicketAccountId",
+                        column: x => x.TicketAccountId,
                         principalTable: "TicketAccounts",
                         principalColumn: "TicketAccountId");
                 });
@@ -522,6 +523,11 @@ namespace CCSS_Repository.Migrations
                 values: new object[] { "pkg1", "Basic service package", "Basic Package", 99.989999999999995 });
 
             migrationBuilder.InsertData(
+                table: "Payment",
+                columns: new[] { "PaymentId", "Amount", "ContractId", "CreatAt", "OrderId", "Purpose", "Status", "TicketAccountId", "TransactionId", "Type" },
+                values: new object[] { "pay1", 100.0, null, "2023-01-01", null, 0, 1, null, "TXN001", "Credit Card" });
+
+            migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "ProductId", "CreateDate", "Description", "IsActive", "Price", "ProductName", "Quantity", "UpdateDate" },
                 values: new object[,]
@@ -545,8 +551,8 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "AccountId", "Birthday", "Code", "Description", "Email", "ImageUrl", "IsActive", "Leader", "Name", "OnTask", "Password", "Phone", "RoleId", "TaskQuantity" },
                 values: new object[,]
                 {
-                    { "acc1", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE123", "Administrator account", "admin@example.com", "https://example.com/admin.png", true, true, "Admin User", false, "$2a$11$k1n0OIOC7CcgbJTroAJeA.yQMGKyJvum3XVflpv1.pu84VY3Bh1Xa", 123456789, "role1", 0 },
-                    { "acc2", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE456", "Customer account", "customer@example.com", "https://example.com/customer.png", true, false, "Customer User", false, "$2a$11$OBK7w5pzB7VMNTVZnIH62.F9/fWW9Me4GmVYwYd37R.Gz4evwuq3W", 987654321, "role3", 0 }
+                    { "acc1", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE123", "Administrator account", "admin@example.com", "https://example.com/admin.png", true, true, "Admin User", false, "$2a$11$apXEBF6Fn2.5tFMpLxuRLesqJtjTDEJ5IX39W/u/22ZviOmHwrbh2", 123456789, "role1", 0 },
+                    { "acc2", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE456", "Customer account", "customer@example.com", "https://example.com/customer.png", true, false, "Customer User", false, "$2a$11$jKXAa90/7MBppoU6EZ93Xu6Ao.zQO7L3sJMdAbhGLuyrQtiKs7Xa6", 987654321, "role3", 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -607,7 +613,7 @@ namespace CCSS_Repository.Migrations
             migrationBuilder.InsertData(
                 table: "TicketAccounts",
                 columns: new[] { "TicketAccountId", "AccountId", "TicketId", "TotalPrice", "quantitypurchased" },
-                values: new object[] { "tkt1", "acc2", "tkt1", 250.0, 5 });
+                values: new object[] { "tkat1", "acc2", "tkt1", 250.0, 5 });
 
             migrationBuilder.InsertData(
                 table: "CartProduct",
@@ -639,11 +645,11 @@ namespace CCSS_Repository.Migrations
 
             migrationBuilder.InsertData(
                 table: "Payment",
-                columns: new[] { "PaymentId", "Amount", "ContractId", "CreatAt", "OrderId", "Status", "TicketId", "TransactionId", "Type" },
+                columns: new[] { "PaymentId", "Amount", "ContractId", "CreatAt", "OrderId", "Purpose", "Status", "TicketAccountId", "TransactionId", "Type" },
                 values: new object[,]
                 {
-                    { "pay2", 150.0, null, "2023-01-02", null, 2, "tkt1", "TXN002", "Bank Transfer" },
-                    { "pay3", 200.0, "ctr1", "2023-01-03", null, 1, null, "TXN003", "PayPal" }
+                    { "pay2", 150.0, null, "2023-01-02", null, 0, 2, "tkat1", "TXN002", "Bank Transfer" },
+                    { "pay3", 200.0, "ctr1", "2023-01-03", null, 0, 1, null, "TXN003", "PayPal" }
                 });
 
             migrationBuilder.InsertData(
@@ -654,11 +660,6 @@ namespace CCSS_Repository.Migrations
                     { "tsk1", "acc1", "ctr1", new DateTime(2023, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Task for Event 1", new DateTime(2023, 3, 1, 12, 0, 0, 0, DateTimeKind.Unspecified), "evt1", true, "Location A", new DateTime(2023, 3, 1, 9, 0, 0, 0, DateTimeKind.Unspecified), 1, "Task 1", null },
                     { "tsk2", "acc2", "ctr2", new DateTime(2023, 3, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "Task for Event 2", new DateTime(2023, 4, 1, 17, 0, 0, 0, DateTimeKind.Unspecified), "evt2", true, "Location B", new DateTime(2023, 4, 1, 14, 0, 0, 0, DateTimeKind.Unspecified), 2, "Task 2", null }
                 });
-
-            migrationBuilder.InsertData(
-                table: "Payment",
-                columns: new[] { "PaymentId", "Amount", "ContractId", "CreatAt", "OrderId", "Status", "TicketId", "TransactionId", "Type" },
-                values: new object[] { "pay1", 100.0, null, "2023-01-01", "order1", 1, null, "TXN001", "Credit Card" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Account_RoleId",
@@ -768,11 +769,11 @@ namespace CCSS_Repository.Migrations
                 filter: "[OrderId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payment_TicketId",
+                name: "IX_Payment_TicketAccountId",
                 table: "Payment",
-                column: "TicketId",
+                column: "TicketAccountId",
                 unique: true,
-                filter: "[TicketId] IS NOT NULL");
+                filter: "[TicketAccountId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshToken_AccountId",

@@ -29,15 +29,27 @@ namespace CCSS_Service.Model.Requests
         public string? EventName { get; set; }
         public string? Description { get; set; }
         public string? Location { get; set; }
-        public bool? IsActive { get; set; }
+        //public bool? IsActive { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime? UpdateDate { get; set; }
         public string? CreateBy { get; set; }
         public TicketRequest Ticket { get; set; }
         //public ICollection<Image> Images { get; set; } = new List<Image>();
-        //public ICollection<EventCharacter> EventCharacters { get; set; } = new List<EventCharacter>();
+        public ICollection<EventCharacterRequest> EventCharacterRequest { get; set; } = new List<EventCharacterRequest>();
+        //public ICollection<Task> Tasks { get; set; } = new List<Task>();
+    }
+    public class UpdateEventRequest
+    {
+        public string? EventName { get; set; }
+        public string? Description { get; set; }
+        public string? Location { get; set; }
+        //public bool? IsActive { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string? CreateBy { get; set; }
+        public TicketRequest Ticket { get; set; }
+        //public ICollection<Image> Images { get; set; } = new List<Image>();
+        public ICollection<EventCharacterRequest> EventCharacterRequests { get; set; } = new List<EventCharacterRequest>();
         //public ICollection<Task> Tasks { get; set; } = new List<Task>();
     }
 }

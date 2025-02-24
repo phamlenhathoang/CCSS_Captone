@@ -10,17 +10,16 @@ namespace CCSS_Service.Model.Responses
 {
     public class TicketResponse 
     {
-        public string TicketId { get; set; } = Guid.NewGuid().ToString();
+        public string TicketId { get; set; } 
 
-        public string? AccountId { get; set; }
-        //public Account Account { get; set; }
+
         public int? Quantity { get; set; }
         public double? Price { get; set; }
 
-        public string? EventId { get; set; }
-        public EventResponse Event { get; set; }
+        //public string? EventId { get; set; }
+        //public EventResponse Event { get; set; }
 
-        //public Payment Payment { get; set; }
+        //public ICollection<TicketAccount> TicketAccounts { get; set; } = new List<TicketAccount>();
     }
 }
 

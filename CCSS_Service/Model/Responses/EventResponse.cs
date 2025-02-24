@@ -1,4 +1,5 @@
 ﻿using CCSS_Repository.Entities;
+using CCSS_Service.Model.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace CCSS_Service.Model.Responses
         public string? CreateBy { get; set; }
         public TicketResponse Ticket { get; set; }
         //public ICollection<Image> Images { get; set; } = new List<Image>();
-        //public ICollection<EventCharacter> EventCharacters { get; set; } = new List<EventCharacter>();
+        public List<EventCharacterResponse> EventCharacterResponses { get; set; } = new List<EventCharacterResponse>();
         //public ICollection<Task> Tasks { get; set; } = new List<Task>();
     }
 }

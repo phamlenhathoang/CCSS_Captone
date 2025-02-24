@@ -152,7 +152,7 @@ namespace CCSS_Repository.Entities
             modelBuilder.Entity<TicketAccount>()
                .HasOne(a => a.Payment)
                .WithOne(r => r.TicketAccount)
-               .HasForeignKey<Payment>(a => a.TicketId)
+               .HasForeignKey<Payment>(a => a.TicketAccountId)
                .OnDelete(DeleteBehavior.NoAction);
 
             //Event - Image
@@ -537,7 +537,7 @@ namespace CCSS_Repository.Entities
             modelBuilder.Entity<TicketAccount>().HasData(
                 new TicketAccount
                 {
-                    TicketAccountId = "tkt1",
+                    TicketAccountId = "tkat1",
                     AccountId = "acc2",
                     quantitypurchased = 5,
                     TotalPrice = 250,
@@ -552,11 +552,12 @@ namespace CCSS_Repository.Entities
                     PaymentId = "pay1",
                     Type = "Credit Card",
                     Status = (PaymentStatus?)1,
+                    Purpose = (PaymentPurpose)0,
                     Amount = 100,
                     TransactionId = "TXN001",
                     CreatAt = "2023-01-01",
-                    OrderId = "order1",
-                    TicketId = null,
+                    OrderId = null,
+                    TicketAccountId = null,
                     ContractId = null
                 },
                 new Payment
@@ -568,7 +569,7 @@ namespace CCSS_Repository.Entities
                     TransactionId = "TXN002",
                     CreatAt = "2023-01-02",
                     OrderId = null,
-                    TicketId = "tkt1",
+                    TicketAccountId = "tkat1",
                     ContractId = null
                 },
                 new Payment
@@ -580,7 +581,7 @@ namespace CCSS_Repository.Entities
                     TransactionId = "TXN003",
                     CreatAt = "2023-01-03",
                     OrderId = null,
-                    TicketId = null,
+                    TicketAccountId = null,
                     ContractId = "ctr1"
                 }
             );
