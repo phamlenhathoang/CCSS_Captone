@@ -1,4 +1,5 @@
 ﻿using CCSS_Repository.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,6 +23,7 @@ namespace CCSS_Service.Model.Requests
         public string Deposit { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
+        public IFormFile UrlImage { get; set; }
         public List<CharacterSelection> contractCharacterRequests { get; set; }
 
     }

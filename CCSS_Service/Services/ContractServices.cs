@@ -2,6 +2,8 @@
 using CCSS_Repository.Repositories;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
+using Google.Cloud.Storage.V1;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -28,6 +30,8 @@ namespace CCSS_Service.Services
         private readonly IContractRespository _respository;
         private readonly IContractCharacterRepository _contractCharacterRepository;
         private readonly ICharacterRepository _characterRepository;
+        private readonly string _projectId = "miracles-ef238";
+        private readonly string _bucketName = "miracles-ef238.appspot.com";
 
 
         public ContractServices(IContractRespository respository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
@@ -48,6 +52,38 @@ namespace CCSS_Service.Services
             return code;
         }
 
+        private async Task<string> UploadImageToFirebase(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                throw new Exception("File không hợp lệ");
+            }
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                var bytes = memoryStream.ToArray();
+
+                // Initialize Firebase Admin SDK
+                var credential = Google.Apis.Auth.OAuth2.GoogleCredential.FromFile("CCSS.json");
+                var storage = StorageClient.Create(credential);
+
+                // Construct the object name (path) in Firebase Storage
+                var objectName = $"images/{DateTime.Now.Ticks}_{file.FileName}";
+
+                // Upload the file to Firebase Storage
+                var response = await storage.UploadObjectAsync(
+                    bucket: _bucketName,
+                    objectName: objectName,
+                    contentType: file.ContentType,
+                    source: new MemoryStream(bytes)
+                );
+
+                // Return the download URL
+                var downloadUrl = $"https://storage.googleapis.com/{_bucketName}/{objectName}";
+                return downloadUrl;
+            }
+        }
         public async Task<List<Contract>> GetAllContract(string? searchterm)
         {
             return await _respository.GetAllContract(searchterm);
@@ -114,6 +150,7 @@ namespace CCSS_Service.Services
             {
                 return "contract is null";
             }
+            var downloadUrl = await UploadImageToFirebase(contractRequest.UrlImage);
             var newContract = new Contract()
             {
                 ContractId = Guid.NewGuid().ToString(),
@@ -130,6 +167,7 @@ namespace CCSS_Service.Services
                 Status = ContractStatus.Pending,
                 StartDate = StartDate,
                 EndDate = EndDate,
+                ImageUrl = downloadUrl,
             };
             var result = await _respository.AddContract(newContract);
             if (!result)
