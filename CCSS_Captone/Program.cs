@@ -18,6 +18,8 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketAccountRepository, TicketAccountRepository>();
 builder.Services.AddScoped<IEventCharacterRepository, EventCharacterRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
+
 
 
 //Service
@@ -28,6 +30,7 @@ builder.Services.AddScoped<IContractServices, ContractServices>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ITicketAccountService, TicketAccountService>();
+builder.Services.AddScoped<IImageService, ImageServices>();
 
 
 //AutoMapper
