@@ -20,7 +20,7 @@ namespace CCSS_Repository.Entities
         public Account Account { get; set; }
         public string? ContractName { get; set; }
         public string? ContractCode { get; set; }    
-        public string? Description { get; set; }
+        public ContractDescription? Description { get; set; }
         public double? Price { get; set; }
         public double? Amount { get; set; }
         public bool? Signature { get; set; }

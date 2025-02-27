@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CCSS_Service.Model.Requests;
+using CCSS_Repository.Entities;
 using CCSS_Service.Model.Responses;
 using System;
 using System.Collections.Generic;
@@ -9,15 +9,12 @@ using System.Threading.Tasks;
 
 namespace CCSS_Service.Profiles
 {
-    public class TaskProfile : Profile
+    public class AccountResponseProfile : Profile
     {
-        public TaskProfile() 
+        public AccountResponseProfile() 
         {
             //Response
-            CreateMap<Task, TaskResponse>().ReverseMap();
-
-            //Request
-            CreateMap<Task, TaskRequest>().ReverseMap();
+            CreateMap<AccountCategory, AccountCategoryResponse>().ReverseMap();
         }
     }
 }

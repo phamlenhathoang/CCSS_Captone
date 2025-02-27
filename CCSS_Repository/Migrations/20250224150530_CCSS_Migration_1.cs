@@ -244,7 +244,7 @@ namespace CCSS_Repository.Migrations
                     AccountId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ContractName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContractCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<double>(type: "float", nullable: true),
                     Amount = table.Column<double>(type: "float", nullable: true),
                     Signature = table.Column<bool>(type: "bit", nullable: true),
@@ -269,6 +269,26 @@ namespace CCSS_Repository.Migrations
                         column: x => x.PackageId,
                         principalTable: "Package",
                         principalColumn: "PackageId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notification",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notification", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notification_Account_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Account",
+                        principalColumn: "AccountId");
                 });
 
             migrationBuilder.CreateTable(
@@ -566,6 +586,11 @@ namespace CCSS_Repository.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Notification_AccountId",
+                table: "Notification",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Order_CartId",
                 table: "Order",
                 column: "CartId",
@@ -646,6 +671,9 @@ namespace CCSS_Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Image");
+
+            migrationBuilder.DropTable(
+                name: "Notification");
 
             migrationBuilder.DropTable(
                 name: "Payment");

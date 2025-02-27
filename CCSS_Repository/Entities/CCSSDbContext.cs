@@ -35,6 +35,7 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var configuration = new ConfigurationBuilder()
@@ -53,6 +54,13 @@ namespace CCSS_Repository.Entities
                 .HasOne(a => a.Role)
                 .WithMany(r => r.Accounts)
                 .HasForeignKey(a => a.RoleId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            //Account - Notification
+            modelBuilder.Entity<Account>()
+                .HasMany(a => a.Notifications)
+                .WithOne(r => r.Account)
+                .HasForeignKey(a => a.AccountId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             //Account - RefreshToken

@@ -209,8 +209,8 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("Deposit")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Description")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
@@ -387,6 +387,32 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Image");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.Notification", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Order", b =>
@@ -793,6 +819,17 @@ namespace CCSS_Repository.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("CCSS_Repository.Entities.Notification", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Account", "Account")
+                        .WithMany("Notifications")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
             modelBuilder.Entity("CCSS_Repository.Entities.Order", b =>
                 {
                     b.HasOne("CCSS_Repository.Entities.Cart", "Cart")
@@ -886,6 +923,8 @@ namespace CCSS_Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("Contracts");
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("RefreshToken")
                         .IsRequired();
