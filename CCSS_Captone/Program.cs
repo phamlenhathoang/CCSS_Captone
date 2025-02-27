@@ -1,5 +1,7 @@
 using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.BackgroundServices;
+using CCSS_Service.Hubs;
 using CCSS_Service.Profiles;
 using CCSS_Service.Services;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +28,8 @@ builder.Services.AddScoped<IContractRespository, ContractRespository>();
 builder.Services.AddScoped<IContractCharacterRepository, ContractCharacterRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();  
+
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketAccountRepository, TicketAccountRepository>();
@@ -42,6 +46,9 @@ builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IContractServices, ContractServices>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ITicketAccountService, TicketAccountService>();
 builder.Services.AddScoped<IImageService, ImageServices>();
@@ -53,13 +60,19 @@ builder.Services.AddAutoMapper(typeof(PackageProfile),
                                typeof(CharacterProfile), 
                                typeof(CategoryProfile),
                                typeof(TaskProfile),
+                               typeof(AccountProfile),
+                               typeof(AccountResponseProfile));
                                typeof(EventProfile),
                                typeof(TicketProfile),
                                typeof(TicketAccountProfile),
                                typeof(EventCharacterProfile));
 
+builder.Services.AddSignalR();
+
 builder.Services.AddDbContext<CCSSDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddHostedService<NotificationBackgroundService>();
 
 // Add services to the container.
 
@@ -71,12 +84,12 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseRouting();
+
+app.MapHub<TaskHub>("/taskHub");
 
 app.UseHttpsRedirection();
 

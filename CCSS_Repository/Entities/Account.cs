@@ -35,5 +35,6 @@ namespace CCSS_Repository.Entities
         public ICollection<Task> Tasks { get; set; } = new List<Task>();
         public ICollection<TicketAccount> TicketAccounts { get; set; } = new List<TicketAccount>();
         public ICollection<Contract> Contracts { get; set; } = new List<Contract>();
+        public ICollection<Notification> Notifications { get; set; }
     }
 }
