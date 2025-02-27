@@ -5,17 +5,39 @@ using CCSS_Service.Hubs;
 using CCSS_Service.Profiles;
 using CCSS_Service.Services;
 using Microsoft.EntityFrameworkCore;
+using CCSS_Service.Model.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy => policy.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader());
+});
+builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
+builder.Services.AddScoped<IMomoService, MomoService>();
+
 
 //Repositories
 builder.Services.AddScoped<IPackageRepository, PackageRepository>();
 builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IContractRespository, ContractRespository>();
+builder.Services.AddScoped<IContractCharacterRepository, ContractCharacterRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();  
+
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<ITicketAccountRepository, TicketAccountRepository>();
+builder.Services.AddScoped<IEventCharacterRepository, EventCharacterRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
+
+
 
 
 //Service
@@ -27,6 +49,10 @@ builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<ITicketAccountService, TicketAccountService>();
+builder.Services.AddScoped<IImageService, ImageServices>();
+
 
 
 //AutoMapper
@@ -36,6 +62,10 @@ builder.Services.AddAutoMapper(typeof(PackageProfile),
                                typeof(TaskProfile),
                                typeof(AccountProfile),
                                typeof(AccountResponseProfile));
+                               typeof(EventProfile),
+                               typeof(TicketProfile),
+                               typeof(TicketAccountProfile),
+                               typeof(EventCharacterProfile));
 
 builder.Services.AddSignalR();
 
@@ -47,6 +77,7 @@ builder.Services.AddHostedService<NotificationBackgroundService>();
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -61,6 +92,8 @@ app.UseRouting();
 app.MapHub<TaskHub>("/taskHub");
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 

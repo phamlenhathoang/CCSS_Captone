@@ -16,6 +16,7 @@ namespace CCSS_Repository.Entities
         public string PaymentId { get; set; } = Guid.NewGuid().ToString();
         public string? Type { get; set; }
         public PaymentStatus? Status { get; set; }
+        public PaymentPurpose Purpose { get; set; }
         public double? Amount { get; set; }
         public string? TransactionId { get; set; }
         public string? CreatAt { get; set; }
@@ -24,9 +25,9 @@ namespace CCSS_Repository.Entities
         public string? OrderId { get; set; }
         public Order Order { get; set; }
 
-        [ForeignKey("TicketId")]
-        public string? TicketId { get; set; }
-        public Ticket Ticket { get; set; }
+        [ForeignKey("TicketAccountId")]
+        public string? TicketAccountId { get; set; }
+        public TicketAccount TicketAccount { get; set; }
 
         [ForeignKey("ContractId")]
         public string? ContractId { get; set; }
@@ -38,5 +39,12 @@ namespace CCSS_Repository.Entities
         Pending,
         Complete,
         Cancel
+    }
+    public enum PaymentPurpose
+    {
+        BuyTicket,
+        ContractDeposit,
+        contractSettlement,
+        Order
     }
 }

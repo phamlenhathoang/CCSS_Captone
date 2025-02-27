@@ -4,6 +4,7 @@ using CCSS_Repository.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCSS_Repository.Migrations
 {
     [DbContext(typeof(CCSSDbContext))]
-    partial class CCSSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250224074024_CCSS_Migration_1")]
+    partial class CCSS_Migration_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,7 +91,7 @@ namespace CCSS_Repository.Migrations
                             Leader = true,
                             Name = "Admin User",
                             OnTask = false,
-                            Password = "$2a$11$UUWTgEVuSu/WTixjyRQCNOk70VsfWpBSaOjVp/yzj9uHqE5KZEldK",
+                            Password = "$2a$11$apXEBF6Fn2.5tFMpLxuRLesqJtjTDEJ5IX39W/u/22ZviOmHwrbh2",
                             Phone = 123456789,
                             RoleId = "role1",
                             TaskQuantity = 0
@@ -105,7 +108,7 @@ namespace CCSS_Repository.Migrations
                             Leader = false,
                             Name = "Customer User",
                             OnTask = false,
-                            Password = "$2a$11$c6/YXePSNrZvmNP6Vh5Wbu7alLi0hzIy3upEPqKkU2n4KHRG4bg9W",
+                            Password = "$2a$11$jKXAa90/7MBppoU6EZ93Xu6Ao.zQO7L3sJMdAbhGLuyrQtiKs7Xa6",
                             Phone = 987654321,
                             RoleId = "role3",
                             TaskQuantity = 0
@@ -321,14 +324,11 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("Deposit")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Description")
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
@@ -606,32 +606,6 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Image");
-                });
-
-            modelBuilder.Entity("CCSS_Repository.Entities.Notification", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AccountId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Order", b =>
@@ -1219,17 +1193,6 @@ namespace CCSS_Repository.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("CCSS_Repository.Entities.Notification", b =>
-                {
-                    b.HasOne("CCSS_Repository.Entities.Account", "Account")
-                        .WithMany("Notifications")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-                });
-
             modelBuilder.Entity("CCSS_Repository.Entities.Order", b =>
                 {
                     b.HasOne("CCSS_Repository.Entities.Cart", "Cart")
@@ -1333,8 +1296,6 @@ namespace CCSS_Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("Contracts");
-
-                    b.Navigation("Notifications");
 
                     b.Navigation("RefreshToken")
                         .IsRequired();
