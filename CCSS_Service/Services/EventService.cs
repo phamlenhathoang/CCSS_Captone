@@ -24,12 +24,14 @@ namespace CCSS_Service.Services
     public class EventService : IEventService
     {
         private readonly IEventRepository _repository;
+        private readonly IImageService _imageService;
         private readonly IMapper _mapper;
 
-        public EventService(IEventRepository repository, IMapper mapper)
+        public EventService(IEventRepository repository, IMapper mapper, IImageService imageService)
         {
             _repository = repository;
             _mapper = mapper;
+            _imageService = imageService;
         }
 
         public async Task<List<EventResponse>> GetAllEvents(string searchTerm)
@@ -97,7 +99,17 @@ namespace CCSS_Service.Services
                 }
 
                 // Lưu vào database
-                await _repository.AddEvent(newEvent);
+                bool isAdded = await _repository.AddEvent(newEvent);
+
+                // Kiểm tra kết quả lưu database
+                if (!isAdded)
+                {
+                    return "Failed to add event to database";
+                }
+                ImageRequest image = new ImageRequest();
+                image.ImageUrl = eventRequest.ImageUrl;
+                image.EventId = newEvent.EventId.ToString();
+                await _imageService.AddImage(image);
 
                 return "Add Success";
             }

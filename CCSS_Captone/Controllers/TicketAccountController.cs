@@ -71,7 +71,7 @@ namespace CCSS_Captone.Controllers
             try
             {
                 var result = await _ticketAccountService.AddTicketAccount(request);
-                if (result.Contains("Success"))
+                if (result!=null)
                 {
                     return Ok(result);
                 }
