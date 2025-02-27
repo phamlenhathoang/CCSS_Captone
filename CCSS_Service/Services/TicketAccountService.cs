@@ -13,7 +13,7 @@ namespace CCSS_Service.Services
     {
         Task<List<TicketAccountResponse>> GetAllTicketAccounts();
         Task<TicketAccountResponse> GetTicketAccount(string id);
-        Task<string> AddTicketAccount(TicketAccountRequest request);
+        Task<TicketAccountResponse> AddTicketAccount(TicketAccountRequest request);
         Task<string> UpdateTicketAccount(string id, TicketAccountRequest request);
         Task<bool> DeleteTicketAccount(string id);
     }
@@ -47,26 +47,21 @@ namespace CCSS_Service.Services
         }
 
         /// ✅ **Thêm mới TicketAccount**
-        public async Task<string> AddTicketAccount(TicketAccountRequest request)
+        public async Task<TicketAccountResponse> AddTicketAccount(TicketAccountRequest request)
         {
-            if (request == null)
-            {
-                return "Invalid request: TicketAccount is null";
-            }
-
             try
             {
                 // ✅ Lấy thông tin Ticket tương ứng
                 var ticket = await _ticketRepository.GetTicket(request.TicketId);
                 if (ticket == null)
                 {
-                    return "Ticket not found";
+                    throw new Exception("Ticket not found");
                 }
 
                 // ✅ Kiểm tra số lượng còn đủ không
                 if (ticket.Quantity < request.quantitypurchased)
                 {
-                    return "Not enough tickets available";
+                    throw new Exception("Not enough tickets available");
                 }
 
                 // ✅ Cập nhật số lượng Ticket
@@ -76,19 +71,25 @@ namespace CCSS_Service.Services
                 var newTicketAccount = _mapper.Map<TicketAccount>(request);
                 newTicketAccount.TicketAccountId = Guid.NewGuid().ToString();
 
-                // ✅ Lưu TicketAccount vào DB
-                await _ticketAccountRepository.AddTicketAccount(newTicketAccount);
+                // ✅ Lưu TicketAccount vào DB và kiểm tra kết quả
+                bool isAdded = await _ticketAccountRepository.AddTicketAccount(newTicketAccount);
+                if (!isAdded)
+                {
+                    throw new Exception("Failed to add TicketAccount");
+                }
 
                 // ✅ Lưu cập nhật số lượng Ticket vào DB
                 await _ticketRepository.UpdateTicket(ticket);
-
-                return "Add Success";
+                var response = _mapper.Map<TicketAccountResponse>(newTicketAccount);
+                return response;
             }
             catch (Exception ex)
             {
-                return $"An error occurred: {ex.Message}";
+                throw;
             }
         }
+
+
 
 
         /// ✅ **Cập nhật TicketAccount**

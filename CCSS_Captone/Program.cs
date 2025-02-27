@@ -3,8 +3,20 @@ using CCSS_Repository.Repositories;
 using CCSS_Service.Profiles;
 using CCSS_Service.Services;
 using Microsoft.EntityFrameworkCore;
+using CCSS_Service.Model.Requests;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy => policy.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader());
+});
+builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
+builder.Services.AddScoped<IMomoService, MomoService>();
+
 
 //Repositories
 builder.Services.AddScoped<IPackageRepository, PackageRepository>();
@@ -17,6 +29,7 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketAccountRepository, TicketAccountRepository>();
 builder.Services.AddScoped<IEventCharacterRepository, EventCharacterRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
 
 //Service
@@ -27,6 +40,7 @@ builder.Services.AddScoped<IContractServices, ContractServices>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ITicketAccountService, TicketAccountService>();
+
 
 
 //AutoMapper
@@ -45,6 +59,7 @@ builder.Services.AddDbContext<CCSSDbContext>(options =>
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -59,6 +74,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 

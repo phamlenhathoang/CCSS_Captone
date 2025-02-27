@@ -15,6 +15,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="NReco.PdfGenerator" Version="1.2.1" />
+		<PackageReference Include="RestSharp" Version="112.1.0" />
 		<PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.2" />
 	</ItemGroup>
 
