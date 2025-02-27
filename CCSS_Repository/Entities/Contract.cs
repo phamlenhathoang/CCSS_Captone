@@ -30,6 +30,8 @@ namespace CCSS_Repository.Entities
         public ContractStatus Status { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public string? ImageUrl { get; set; }
+
         [ForeignKey("PackageId")]
         public string? PackageId { get; set; }
         public Package Package { get; set; }

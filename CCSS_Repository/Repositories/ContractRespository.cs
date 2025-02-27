@@ -14,9 +14,10 @@ namespace CCSS_Repository.Repositories
         Task<List<Contract>> GetAllContract(string searchterm);
         Task<Contract> GetContractById(string id);
         Task<Contract> GetContractAndContractCharacter(string id);
-        Task AddContract(Contract contract);
-        Task UpdateContract(Contract contract);
-        Task DeleteContract(string contractId);
+        Task<bool> AddContract(Contract contract);
+        Task<bool> UpdateContract(Contract contract);
+        Task<bool> DeleteContract(Contract contract);
+      
     }
 
     public class ContractRespository: IContractRespository
@@ -42,30 +43,22 @@ namespace CCSS_Repository.Repositories
             return await _context.Contracts.FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
         }
 
-        public async Task AddContract(Contract contract)
+        public async Task<bool> AddContract(Contract contract)
         {
              _context.Contracts.Add(contract);
-            await _context.SaveChangesAsync();
+           return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task UpdateContract(Contract contract)
+        public async Task<bool> UpdateContract(Contract contract)
         {
             _context.Contracts.Update(contract);
-            await _context.SaveChangesAsync();
+           return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task DeleteContract(string contractId)
+        public async Task<bool> DeleteContract(Contract contract)
         {
-            var contract = await GetContractById(contractId);
-            if (contract != null)
-            {
-                _context.Contracts.Remove(contract);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                throw new Exception("Delete Success");
-            }
+            _context.Contracts.Remove(contract);
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<Contract> GetContractAndContractCharacter(string id)

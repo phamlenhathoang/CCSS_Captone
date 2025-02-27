@@ -21,7 +21,7 @@ namespace CCSS_Service.Model.Responses
         public DateTime? UpdateDate { get; set; }
         public string? CreateBy { get; set; }
         public TicketResponse Ticket { get; set; }
-        //public ICollection<Image> Images { get; set; } = new List<Image>();
+        public ICollection<ImageResponse> Images { get; set; } = new List<ImageResponse>();
         public List<EventCharacterResponse> EventCharacterResponses { get; set; } = new List<EventCharacterResponse>();
         //public ICollection<Task> Tasks { get; set; } = new List<Task>();
     }

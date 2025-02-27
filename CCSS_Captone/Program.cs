@@ -23,6 +23,7 @@ builder.Services.AddScoped<IPackageRepository, PackageRepository>();
 builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IContractRespository, ContractRespository>();
+builder.Services.AddScoped<IContractCharacterRepository, ContractCharacterRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
@@ -30,6 +31,9 @@ builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketAccountRepository, TicketAccountRepository>();
 builder.Services.AddScoped<IEventCharacterRepository, EventCharacterRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
+
+
 
 
 //Service
@@ -40,6 +44,7 @@ builder.Services.AddScoped<IContractServices, ContractServices>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ITicketAccountService, TicketAccountService>();
+builder.Services.AddScoped<IImageService, ImageServices>();
 
 
 

@@ -53,7 +53,8 @@ namespace CCSS_Repository.Repositories
             // Luôn Include Ticket & EventCharacters sau khi lọc
             query = query
                 .Include(e => e.Ticket)
-                .Include(e => e.EventCharacters);
+                .Include(e => e.EventCharacters)
+                .Include(e => e.Images);
 
             return await query.ToListAsync();
         }
@@ -66,6 +67,7 @@ namespace CCSS_Repository.Repositories
                 .Where(e => e.IsActive == true) // 🔥 Chỉ lấy sự kiện có IsActive == true
                 .Include(e => e.Ticket)
                 .Include(e => e.EventCharacters)
+                .Include(e => e.Images)
                 .FirstOrDefaultAsync(e => e.EventId == id);
         }
 
