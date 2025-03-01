@@ -18,6 +18,7 @@ namespace CCSS_Repository.Repositories
         Task<Account> GetAccountIncludeAccountCategory(string accountId);
         Task<Account> GetAccountByAccountId(string accountId);
         Task<Account> GetAccountByAccountIdIncludeTask(string acountId, string? taskId);
+        Task<Account> GetAccountByEmailAndPassword(string email, string password);  
     }
     public class AccountRepository : IAccountRepository
     {
@@ -64,6 +65,11 @@ namespace CCSS_Repository.Repositories
             }
 
             return await accounts.ToListAsync();
+        }
+
+        public async Task<Account> GetAccountByEmailAndPassword(string email, string password)
+        {
+            return await dbContext.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email && a.Password == password);   
         }
 
         public async Task<Account> GetAccountIncludeAccountCategory(string accountId)

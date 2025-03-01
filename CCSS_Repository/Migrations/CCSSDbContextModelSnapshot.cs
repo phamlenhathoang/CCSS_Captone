@@ -88,7 +88,7 @@ namespace CCSS_Repository.Migrations
                             Leader = true,
                             Name = "Admin User",
                             OnTask = false,
-                            Password = "$2a$11$UUWTgEVuSu/WTixjyRQCNOk70VsfWpBSaOjVp/yzj9uHqE5KZEldK",
+                            Password = "$2a$11$WIowXxKY9Pgrlc0UgXYcgecfWAIQqjlQDFQh/q262j57FNYuX6iKO",
                             Phone = 123456789,
                             RoleId = "role1",
                             TaskQuantity = 0
@@ -105,7 +105,7 @@ namespace CCSS_Repository.Migrations
                             Leader = false,
                             Name = "Customer User",
                             OnTask = false,
-                            Password = "$2a$11$c6/YXePSNrZvmNP6Vh5Wbu7alLi0hzIy3upEPqKkU2n4KHRG4bg9W",
+                            Password = "$2a$11$XFNiaVMLdyw.ZHF1thasEeBg1llakPp0.dducSAR3u1ePqV8gpYBi",
                             Phone = 987654321,
                             RoleId = "role3",
                             TaskQuantity = 0
@@ -366,7 +366,7 @@ namespace CCSS_Repository.Migrations
                             ContractCode = "C001",
                             ContractName = "Contract 1",
                             Deposit = "50",
-                            Description = "Contract for Event 1",
+                            Description = 2,
                             EndDate = new DateTime(2023, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Location = "Location 1",
                             PackageId = "pkg1",
@@ -384,7 +384,7 @@ namespace CCSS_Repository.Migrations
                             ContractCode = "C002",
                             ContractName = "Contract 2",
                             Deposit = "50",
-                            Description = "Contract for Event 2",
+                            Description = 1,
                             EndDate = new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Location = "Location 2",
                             PackageId = "pkg1",
@@ -843,17 +843,12 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("JwtId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RefreshTokenCode")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("RefreshTokenValue")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RefreshTokenId");
 
-                    b.HasIndex("AccountId")
-                        .IsUnique()
-                        .HasFilter("[AccountId] IS NOT NULL");
+                    b.HasIndex("AccountId");
 
                     b.ToTable("RefreshToken");
 
@@ -867,7 +862,6 @@ namespace CCSS_Repository.Migrations
                             IsRevoked = false,
                             IsUsed = false,
                             JwtId = "jwt1",
-                            RefreshTokenCode = "RTCODE1",
                             RefreshTokenValue = "sample_refresh_token"
                         });
                 });
@@ -1267,8 +1261,8 @@ namespace CCSS_Repository.Migrations
             modelBuilder.Entity("CCSS_Repository.Entities.RefreshToken", b =>
                 {
                     b.HasOne("CCSS_Repository.Entities.Account", "Account")
-                        .WithOne("RefreshToken")
-                        .HasForeignKey("CCSS_Repository.Entities.RefreshToken", "AccountId")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Account");
@@ -1336,8 +1330,7 @@ namespace CCSS_Repository.Migrations
 
                     b.Navigation("Notifications");
 
-                    b.Navigation("RefreshToken")
-                        .IsRequired();
+                    b.Navigation("RefreshTokens");
 
                     b.Navigation("Tasks");
 

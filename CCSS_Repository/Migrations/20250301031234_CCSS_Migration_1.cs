@@ -265,7 +265,7 @@ namespace CCSS_Repository.Migrations
                     AccountId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ContractName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContractCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<double>(type: "float", nullable: true),
                     Amount = table.Column<double>(type: "float", nullable: true),
                     Signature = table.Column<bool>(type: "bit", nullable: true),
@@ -275,6 +275,7 @@ namespace CCSS_Repository.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PackageId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -293,12 +294,31 @@ namespace CCSS_Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notification",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notification", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notification_Account_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Account",
+                        principalColumn: "AccountId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RefreshToken",
                 columns: table => new
                 {
                     RefreshTokenId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     RefreshTokenValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RefreshTokenCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JwtId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsUsed = table.Column<bool>(type: "bit", nullable: true),
                     IsRevoked = table.Column<bool>(type: "bit", nullable: true),
@@ -551,8 +571,8 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "AccountId", "Birthday", "Code", "Description", "Email", "ImageUrl", "IsActive", "Leader", "Name", "OnTask", "Password", "Phone", "RoleId", "TaskQuantity" },
                 values: new object[,]
                 {
-                    { "acc1", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE123", "Administrator account", "admin@example.com", "https://example.com/admin.png", true, true, "Admin User", false, "$2a$11$apXEBF6Fn2.5tFMpLxuRLesqJtjTDEJ5IX39W/u/22ZviOmHwrbh2", 123456789, "role1", 0 },
-                    { "acc2", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE456", "Customer account", "customer@example.com", "https://example.com/customer.png", true, false, "Customer User", false, "$2a$11$jKXAa90/7MBppoU6EZ93Xu6Ao.zQO7L3sJMdAbhGLuyrQtiKs7Xa6", 987654321, "role3", 0 }
+                    { "acc1", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE123", "Administrator account", "admin@example.com", "https://example.com/admin.png", true, true, "Admin User", false, "$2a$11$wbbM8zoTEeIXs33wVQLYf.5jXmnOYbJLIxNXXcANhAubWoD8H5hsS", 123456789, "role1", 0 },
+                    { "acc2", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "CODE456", "Customer account", "customer@example.com", "https://example.com/customer.png", true, false, "Customer User", false, "$2a$11$mMnD2U8Ylf2sXKakbghlcuzh5m3efUWGqVWfSVbkFvmjC/w.g7MSi", 987654321, "role3", 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -589,11 +609,11 @@ namespace CCSS_Repository.Migrations
 
             migrationBuilder.InsertData(
                 table: "Contract",
-                columns: new[] { "ContractId", "AccountId", "Amount", "CharacterQuantity", "ContractCode", "ContractName", "Deposit", "Description", "EndDate", "Location", "PackageId", "Price", "Signature", "StartDate", "Status" },
+                columns: new[] { "ContractId", "AccountId", "Amount", "CharacterQuantity", "ContractCode", "ContractName", "Deposit", "Description", "EndDate", "ImageUrl", "Location", "PackageId", "Price", "Signature", "StartDate", "Status" },
                 values: new object[,]
                 {
-                    { "ctr1", "acc1", 450.0, 1, "C001", "Contract 1", "50", "Contract for Event 1", new DateTime(2023, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "Location 1", "pkg1", 500.0, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { "ctr2", "acc2", 750.0, 2, "C002", "Contract 2", "50", "Contract for Event 2", new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Location 2", "pkg1", 800.0, false, new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 }
+                    { "ctr1", "acc1", 450.0, 1, "C001", "Contract 1", "50", 2, new DateTime(2023, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Location 1", "pkg1", 500.0, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
+                    { "ctr2", "acc2", 750.0, 2, "C002", "Contract 2", "50", 1, new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Location 2", "pkg1", 800.0, false, new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -607,8 +627,8 @@ namespace CCSS_Repository.Migrations
 
             migrationBuilder.InsertData(
                 table: "RefreshToken",
-                columns: new[] { "RefreshTokenId", "AccountId", "CreateAt", "ExpiresAt", "IsRevoked", "IsUsed", "JwtId", "RefreshTokenCode", "RefreshTokenValue" },
-                values: new object[] { "rt1", "acc1", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, "jwt1", "RTCODE1", "sample_refresh_token" });
+                columns: new[] { "RefreshTokenId", "AccountId", "CreateAt", "ExpiresAt", "IsRevoked", "IsUsed", "JwtId", "RefreshTokenValue" },
+                values: new object[] { "rt1", "acc1", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), false, false, "jwt1", "sample_refresh_token" });
 
             migrationBuilder.InsertData(
                 table: "TicketAccounts",
@@ -750,6 +770,11 @@ namespace CCSS_Repository.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Notification_AccountId",
+                table: "Notification",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Order_CartId",
                 table: "Order",
                 column: "CartId",
@@ -835,6 +860,9 @@ namespace CCSS_Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Image");
+
+            migrationBuilder.DropTable(
+                name: "Notification");
 
             migrationBuilder.DropTable(
                 name: "Payment");
