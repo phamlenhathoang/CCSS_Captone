@@ -29,12 +29,12 @@ namespace CCSS_Repository.Entities
         [ForeignKey("RoleId")]
         public string RoleId { get; set; }
         public Role Role { get; set; } 
-        public RefreshToken RefreshToken { get; set; }  
         public Cart Cart { get; set; }
         public ICollection<AccountCategory> AccountCategories { get; set; } = new List<AccountCategory>();
         public ICollection<Task> Tasks { get; set; } = new List<Task>();
         public ICollection<TicketAccount> TicketAccounts { get; set; } = new List<TicketAccount>();
         public ICollection<Contract> Contracts { get; set; } = new List<Contract>();
         public ICollection<Notification> Notifications { get; set; }
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }

@@ -1,12 +1,18 @@
 ﻿using AutoMapper;
 using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Model;
 using CCSS_Service.Model.Responses;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Task = CCSS_Repository.Entities.Task;
@@ -19,6 +25,8 @@ namespace CCSS_Service.Services
         Task<List<AccountCharacteRespones>> CheckForCharactersWithDuplicateCosplayers(string accountId, List<string> chacracters);
         Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId);
         Task<bool> ChangeAccountForTask(string taskId, string accountId);
+        Task<AccountLoginResponse> Login(string email, string password);
+        Task<string> CodeValidation(string email, string code);
     }
     public class AccountService : IAccountService
     {
@@ -27,9 +35,11 @@ namespace CCSS_Service.Services
         private readonly IContractRespository contractRespository;
         private readonly ICharacterRepository characterRepository;
         private readonly ICategoryRepository categoryRepository;
+        private readonly IRefreshTokenRepository refreshTokenRepository; 
+        private readonly IConfiguration _configuration;
         private readonly IMapper mapper;
 
-        public AccountService(ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, ICategoryRepository categoryRepository)
+        public AccountService(ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, ICategoryRepository categoryRepository, IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository)
         {
             this.taskRepository = taskRepository;
             this.accountRepository = accountRepository;
@@ -37,6 +47,8 @@ namespace CCSS_Service.Services
             this.characterRepository = characterRepository;
             this.contractRespository = contractRepository;
             this.categoryRepository = categoryRepository;
+            _configuration = configuration;
+            this.refreshTokenRepository = refreshTokenRepository;
         }
 
         public async Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId)
@@ -220,6 +232,92 @@ namespace CCSS_Service.Services
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<AccountLoginResponse> Login(string email, string password)
+        {
+            try
+            {
+                var account = await accountRepository.GetAccountByEmailAndPassword(email, PasswordHash.ConvertToEncrypt(password));
+                if (account == null)
+                {
+                    throw new Exception("Email or password wrong");
+                }
+                else
+                {
+                    if ((bool)!account.IsActive)
+                    {
+                        throw new Exception("Account has not been activated");
+                    }
+                    else
+                    {
+                        var jti = Guid.NewGuid().ToString();
+                        var jwtHandler = new JwtSecurityTokenHandler();
+                        var issuer = _configuration["AppSettings:Issuer"];
+                        var audience = _configuration["AppSettings:Audience"];
+
+                        var key = Encoding.ASCII.GetBytes(_configuration["AppSettings:SecretKey"]);
+                        var tokenDes = new SecurityTokenDescriptor
+                        {
+                            Subject = new ClaimsIdentity(new[]
+                            {
+                        new Claim("Id", account.AccountId),
+                        new Claim("Email", account.Email),
+                        new Claim(ClaimTypes.Role, account.Role.RoleName.ToString()),
+                        new Claim(JwtRegisteredClaimNames.Jti, jti)
+                    }),
+                            Expires = DateTime.UtcNow.AddHours(1),
+                            Issuer = issuer,
+                            Audience = audience, // Đảm bảo rằng giá trị này được lấy từ cấu hình
+                            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                        };
+                        var jwtToken = jwtHandler.CreateToken(tokenDes);
+                        string refreshTokenValue = GenerateRefreshToken();
+                        RefreshToken refreshToken = new RefreshToken
+                        {
+                            RefreshTokenId = Guid.NewGuid().ToString(),
+                            AccountId = account.AccountId,
+                            CreateAt = DateTime.UtcNow,
+                            ExpiresAt = DateTime.UtcNow.AddHours(1),
+                            IsUsed = false,
+                            RefreshTokenValue = refreshTokenValue,
+                            JwtId = jti,
+                            IsRevoked = false,
+                        };
+                        bool result = await refreshTokenRepository.AddRefreshToken(refreshToken);
+                        if (!result)
+                        {
+                            throw new Exception("Cannot save refresh token !!!");
+                        }
+                        string accessToken = jwtHandler.WriteToken(jwtToken);
+                        return new AccountLoginResponse
+                        {
+                            AccessToken = accessToken,
+                            RefreshToken = refreshTokenValue,
+                        };
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private string GenerateRefreshToken()
+        {
+            var random = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(random);
+                return Convert.ToBase64String(random);
+            }
+        }
+
+        public Task<string> CodeValidation(string email, string code)
+        {
+            throw new NotImplementedException();
         }
     }
 }

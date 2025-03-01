@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCSS_Repository.Migrations
 {
     [DbContext(typeof(CCSSDbContext))]
-    [Migration("20250224074024_CCSS_Migration_1")]
-    partial class CCSS_Migration_1
+    [Migration("20250301040752_CCSS_Migration_2")]
+    partial class CCSS_Migration_2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,7 +91,7 @@ namespace CCSS_Repository.Migrations
                             Leader = true,
                             Name = "Admin User",
                             OnTask = false,
-                            Password = "$2a$11$apXEBF6Fn2.5tFMpLxuRLesqJtjTDEJ5IX39W/u/22ZviOmHwrbh2",
+                            Password = "$2a$11$WIowXxKY9Pgrlc0UgXYcgecfWAIQqjlQDFQh/q262j57FNYuX6iKO",
                             Phone = 123456789,
                             RoleId = "role1",
                             TaskQuantity = 0
@@ -108,7 +108,7 @@ namespace CCSS_Repository.Migrations
                             Leader = false,
                             Name = "Customer User",
                             OnTask = false,
-                            Password = "$2a$11$jKXAa90/7MBppoU6EZ93Xu6Ao.zQO7L3sJMdAbhGLuyrQtiKs7Xa6",
+                            Password = "$2a$11$XFNiaVMLdyw.ZHF1thasEeBg1llakPp0.dducSAR3u1ePqV8gpYBi",
                             Phone = 987654321,
                             RoleId = "role3",
                             TaskQuantity = 0
@@ -324,11 +324,14 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("Deposit")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Description")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
@@ -366,7 +369,7 @@ namespace CCSS_Repository.Migrations
                             ContractCode = "C001",
                             ContractName = "Contract 1",
                             Deposit = "50",
-                            Description = "Contract for Event 1",
+                            Description = 2,
                             EndDate = new DateTime(2023, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Location = "Location 1",
                             PackageId = "pkg1",
@@ -384,7 +387,7 @@ namespace CCSS_Repository.Migrations
                             ContractCode = "C002",
                             ContractName = "Contract 2",
                             Deposit = "50",
-                            Description = "Contract for Event 2",
+                            Description = 1,
                             EndDate = new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Location = "Location 2",
                             PackageId = "pkg1",
@@ -608,6 +611,32 @@ namespace CCSS_Repository.Migrations
                     b.ToTable("Image");
                 });
 
+            modelBuilder.Entity("CCSS_Repository.Entities.Notification", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Notification");
+                });
+
             modelBuilder.Entity("CCSS_Repository.Entities.Order", b =>
                 {
                     b.Property<string>("OrderId")
@@ -817,17 +846,12 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("JwtId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RefreshTokenCode")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("RefreshTokenValue")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RefreshTokenId");
 
-                    b.HasIndex("AccountId")
-                        .IsUnique()
-                        .HasFilter("[AccountId] IS NOT NULL");
+                    b.HasIndex("AccountId");
 
                     b.ToTable("RefreshToken");
 
@@ -841,7 +865,6 @@ namespace CCSS_Repository.Migrations
                             IsRevoked = false,
                             IsUsed = false,
                             JwtId = "jwt1",
-                            RefreshTokenCode = "RTCODE1",
                             RefreshTokenValue = "sample_refresh_token"
                         });
                 });
@@ -1193,6 +1216,17 @@ namespace CCSS_Repository.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("CCSS_Repository.Entities.Notification", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Account", "Account")
+                        .WithMany("Notifications")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
             modelBuilder.Entity("CCSS_Repository.Entities.Order", b =>
                 {
                     b.HasOne("CCSS_Repository.Entities.Cart", "Cart")
@@ -1230,8 +1264,8 @@ namespace CCSS_Repository.Migrations
             modelBuilder.Entity("CCSS_Repository.Entities.RefreshToken", b =>
                 {
                     b.HasOne("CCSS_Repository.Entities.Account", "Account")
-                        .WithOne("RefreshToken")
-                        .HasForeignKey("CCSS_Repository.Entities.RefreshToken", "AccountId")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Account");
@@ -1297,8 +1331,9 @@ namespace CCSS_Repository.Migrations
 
                     b.Navigation("Contracts");
 
-                    b.Navigation("RefreshToken")
-                        .IsRequired();
+                    b.Navigation("Notifications");
+
+                    b.Navigation("RefreshTokens");
 
                     b.Navigation("Tasks");
 

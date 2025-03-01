@@ -68,9 +68,9 @@ namespace CCSS_Repository.Entities
 
             //Account - RefreshToken
             modelBuilder.Entity<Account>()
-                .HasOne(a => a.RefreshToken)
+                .HasMany(a => a.RefreshTokens)
                 .WithOne(r => r.Account)
-                .HasForeignKey<RefreshToken>(a => a.AccountId)
+                .HasForeignKey(a => a.AccountId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             //Account - Cart
@@ -312,7 +312,6 @@ namespace CCSS_Repository.Entities
                 {
                     RefreshTokenId = "rt1",
                     RefreshTokenValue = "sample_refresh_token",
-                    RefreshTokenCode = "RTCODE1",
                     JwtId = "jwt1",
                     IsUsed = false,
                     IsRevoked = false,
@@ -378,7 +377,7 @@ namespace CCSS_Repository.Entities
                     AccountId = "acc1",
                     ContractName = "Contract 1",
                     ContractCode = "C001",
-                    Description = "Contract for Event 1",
+                    Description = ContractDescription.CreateEvent,
                     Price = 500,
                     Amount = 450,
                     Signature = true,
@@ -396,7 +395,7 @@ namespace CCSS_Repository.Entities
                     AccountId = "acc2",
                     ContractName = "Contract 2",
                     ContractCode = "C002",
-                    Description = "Contract for Event 2",
+                    Description = ContractDescription.RentCosplayer,
                     Price = 800,
                     Amount = 750,
                     Signature = false,
