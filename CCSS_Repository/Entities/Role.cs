@@ -25,7 +25,6 @@ namespace CCSS_Repository.Entities
         Manager,
         Consultant,
         Cosplayer,
-        Organizer,
         Customer,
     }
 }
