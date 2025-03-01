@@ -185,7 +185,7 @@ namespace CCSS_Service.Services
 
                 if (!checkContract && contract.Description == ContractDescription.CreateEvent)
                 {
-                    List<Account> accounts = await accountRepository.GetAllAccountOrganizer();
+                    List<Account> accounts = await accountRepository.GetAllAccountLeader();
                     Account account = accounts[0];
                     Task task = new Task()
                     {

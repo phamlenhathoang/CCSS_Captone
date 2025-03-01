@@ -14,7 +14,7 @@ namespace CCSS_Repository.Repositories
     {
         Task<List<Account>> GetAccountByCategoryId(string categoryId, string? accountId);
         Task<Account> GetAccount(string accountId);
-        Task<List<Account>> GetAllAccountOrganizer();
+        Task<List<Account>> GetAllAccountLeader();
         Task<Account> GetAccountIncludeAccountCategory(string accountId);
         Task<Account> GetAccountByAccountId(string accountId);
         Task<Account> GetAccountByAccountIdIncludeTask(string acountId, string? taskId);
@@ -77,9 +77,9 @@ namespace CCSS_Repository.Repositories
             return await dbContext.Accounts.Include(a => a.AccountCategories).FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsActive == true);
         }
 
-        public async Task<List<Account>> GetAllAccountOrganizer()
+        public async Task<List<Account>> GetAllAccountLeader()
         {
-            return await dbContext.Accounts.Include(a => a.Role).Where(a => a.Role.RoleName == RoleName.Organizer && a.IsActive == true).OrderBy(a => a.TaskQuantity).ToListAsync();
+            return await dbContext.Accounts.Include(a => a.Role).Where(a => a.Leader == true && a.IsActive == true).OrderBy(a => a.TaskQuantity).ToListAsync();
         }
     }
 }
