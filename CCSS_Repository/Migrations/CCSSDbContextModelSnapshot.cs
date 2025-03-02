@@ -90,7 +90,7 @@ namespace CCSS_Repository.Migrations
                             OnTask = false,
                             Password = "CR044vTz0E1+p6akfbtyoA==",
                             Phone = 123456789,
-                            RoleId = "role1",
+                            RoleId = "1",
                             TaskQuantity = 0
                         },
                         new
@@ -107,7 +107,7 @@ namespace CCSS_Repository.Migrations
                             OnTask = false,
                             Password = "CR044vTz0E1+p6akfbtyoA==",
                             Phone = 987654321,
-                            RoleId = "role3",
+                            RoleId = "5",
                             TaskQuantity = 0
                         });
                 });
@@ -884,21 +884,33 @@ namespace CCSS_Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "role1",
+                            Id = "1",
                             Description = "Admin role",
+                            RoleName = 0
+                        },
+                        new
+                        {
+                            Id = "2",
+                            Description = "Manager role",
                             RoleName = 1
                         },
                         new
                         {
-                            Id = "role2",
-                            Description = "Manager role",
+                            Id = "3",
+                            Description = "Consultant role",
                             RoleName = 2
                         },
                         new
                         {
-                            Id = "role3",
-                            Description = "Customer role",
+                            Id = "4",
+                            Description = "Cosplayer role",
                             RoleName = 3
+                        },
+                        new
+                        {
+                            Id = "5",
+                            Description = "Customer role",
+                            RoleName = 4
                         });
                 });
 
