@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCSS_Repository.Migrations
 {
     [DbContext(typeof(CCSSDbContext))]
-    [Migration("20250301031234_CCSS_Migration_1")]
+    [Migration("20250301101056_CCSS_Migration_1")]
     partial class CCSS_Migration_1
     {
         /// <inheritdoc />
@@ -91,9 +91,9 @@ namespace CCSS_Repository.Migrations
                             Leader = true,
                             Name = "Admin User",
                             OnTask = false,
-                            Password = "$2a$11$wbbM8zoTEeIXs33wVQLYf.5jXmnOYbJLIxNXXcANhAubWoD8H5hsS",
+                            Password = "CR044vTz0E1+p6akfbtyoA==",
                             Phone = 123456789,
-                            RoleId = "role1",
+                            RoleId = "1",
                             TaskQuantity = 0
                         },
                         new
@@ -108,9 +108,9 @@ namespace CCSS_Repository.Migrations
                             Leader = false,
                             Name = "Customer User",
                             OnTask = false,
-                            Password = "$2a$11$mMnD2U8Ylf2sXKakbghlcuzh5m3efUWGqVWfSVbkFvmjC/w.g7MSi",
+                            Password = "CR044vTz0E1+p6akfbtyoA==",
                             Phone = 987654321,
-                            RoleId = "role3",
+                            RoleId = "5",
                             TaskQuantity = 0
                         });
                 });
@@ -851,9 +851,7 @@ namespace CCSS_Repository.Migrations
 
                     b.HasKey("RefreshTokenId");
 
-                    b.HasIndex("AccountId")
-                        .IsUnique()
-                        .HasFilter("[AccountId] IS NOT NULL");
+                    b.HasIndex("AccountId");
 
                     b.ToTable("RefreshToken");
 
@@ -889,21 +887,33 @@ namespace CCSS_Repository.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "role1",
+                            Id = "1",
                             Description = "Admin role",
+                            RoleName = 0
+                        },
+                        new
+                        {
+                            Id = "2",
+                            Description = "Manager role",
                             RoleName = 1
                         },
                         new
                         {
-                            Id = "role2",
-                            Description = "Manager role",
+                            Id = "3",
+                            Description = "Consultant role",
                             RoleName = 2
                         },
                         new
                         {
-                            Id = "role3",
-                            Description = "Customer role",
+                            Id = "4",
+                            Description = "Cosplayer role",
                             RoleName = 3
+                        },
+                        new
+                        {
+                            Id = "5",
+                            Description = "Customer role",
+                            RoleName = 4
                         });
                 });
 
@@ -1046,7 +1056,7 @@ namespace CCSS_Repository.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("TicketAccounts");
+                    b.ToTable("TicketAccount");
 
                     b.HasData(
                         new
@@ -1266,8 +1276,8 @@ namespace CCSS_Repository.Migrations
             modelBuilder.Entity("CCSS_Repository.Entities.RefreshToken", b =>
                 {
                     b.HasOne("CCSS_Repository.Entities.Account", "Account")
-                        .WithOne("RefreshToken")
-                        .HasForeignKey("CCSS_Repository.Entities.RefreshToken", "AccountId")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Account");
@@ -1335,8 +1345,7 @@ namespace CCSS_Repository.Migrations
 
                     b.Navigation("Notifications");
 
-                    b.Navigation("RefreshToken")
-                        .IsRequired();
+                    b.Navigation("RefreshTokens");
 
                     b.Navigation("Tasks");
 

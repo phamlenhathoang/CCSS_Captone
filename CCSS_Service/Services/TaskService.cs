@@ -166,7 +166,6 @@ namespace CCSS_Service.Services
         public async Task<string> AddTaskForListAccount(List<AddTaskRequest> addTaskRequests)
         {
             List<Task> tasks = new List<Task>();
-            bool checkContract = false;
             foreach (var addTaskRequest in addTaskRequests)
             {
                 Character character = await characterRepository.GetCharacter(addTaskRequest.CharacterId);
@@ -182,33 +181,6 @@ namespace CCSS_Service.Services
                 {
                     return addTaskRequest.ContractId + " does not exist";
                 }
-
-                if (!checkContract && contract.Description == ContractDescription.CreateEvent)
-                {
-                    List<Account> accounts = await accountRepository.GetAllAccountLeader();
-                    Account account = accounts[0];
-                    Task task = new Task()
-                    {
-                        TaskId = Guid.NewGuid().ToString(),
-                        Status = CCSS_Repository.Entities.TaskStatus.Pending,
-                        AccountId = account.AccountId,
-                        ContractId = contract.ContractId,
-                        CreateDate = DateTime.UtcNow,
-                        Description = contract.Description.ToString(),
-                        StartDate = contract.StartDate,
-                        EndDate = contract.EndDate,
-                        TaskName = contract.Description.ToString(),
-                        Location = contract.Location,
-                        IsActive = true,
-
-                    };
-
-                    tasks.Add(task);
-
-                    checkContract = true;
-                }
-
-
 
                 if (addTaskRequest.QuantityCharacter != addTaskRequest.AccountIds.Count())
                 {
