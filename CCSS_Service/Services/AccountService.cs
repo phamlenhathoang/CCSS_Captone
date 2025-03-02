@@ -7,6 +7,7 @@ using CCSS_Service.Model.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,7 @@ namespace CCSS_Service.Services
         private readonly IContractRespository contractRespository;
         private readonly ICharacterRepository characterRepository;
         private readonly ICategoryRepository categoryRepository;
-        private readonly IRefreshTokenRepository refreshTokenRepository; 
+        private readonly IRefreshTokenRepository refreshTokenRepository;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IMapper mapper;
@@ -61,7 +62,7 @@ namespace CCSS_Service.Services
         {
             try
             {
-                List<AccountResponse> accountResponses = new List<AccountResponse> ();
+                List<AccountResponse> accountResponses = new List<AccountResponse>();
                 Task taskCurrent = await taskRepository.GetTask(taskId);
                 if (taskCurrent == null)
                 {
@@ -78,12 +79,12 @@ namespace CCSS_Service.Services
 
                 List<Account> accounts = await accountRepository.GetAccountByCategoryId(character.CategoryId, checkAccount.AccountId);
 
-                foreach(var account in accounts)
+                foreach (var account in accounts)
                 {
                     List<Task> tasks = await taskRepository.GetTaskByAccountId(account.AccountId);
-                    if(!tasks.Any())
+                    if (!tasks.Any())
                     {
-                         accountResponses.Add(mapper.Map<AccountResponse>(account));    
+                        accountResponses.Add(mapper.Map<AccountResponse>(account));
                     }
                     if (tasks.Any())
                     {
@@ -142,7 +143,7 @@ namespace CCSS_Service.Services
                 };
                 accountCharacteRespones.Add(accountCategoryResponse);
             }
-  
+
             return accountCharacteRespones;
         }
 
@@ -153,7 +154,7 @@ namespace CCSS_Service.Services
             List<Account> accounts = new List<Account>();
             List<AccountResponse> accountResponses = new List<AccountResponse>();
             List<AccountCategoryResponse> accountCategoryResponses = new List<AccountCategoryResponse>();
-            
+
             List<Task> tasks = new List<Task>();
             if (contract == null)
             {
@@ -164,7 +165,7 @@ namespace CCSS_Service.Services
                 foreach (var contractCharacter in (List<ContractCharacter>)contract.ContractCharacters)
                 {
                     Character character = await characterRepository.GetCharacter(contractCharacter.CharacterId);
-                    if(character != null)
+                    if (character != null)
                     {
                         accounts = await accountRepository.GetAccountByCategoryId(character.CategoryId, null);
                         if (accounts == null)
@@ -249,68 +250,77 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("Email or password wrong");
                 }
-                else
-                {
-                    if ((bool)!account.IsActive)
-                    {
-                        throw new Exception("Account has not been activated");
-                    }
-                    else
-                    {
-                        var jti = Guid.NewGuid().ToString();
-                        var jwtHandler = new JwtSecurityTokenHandler();
-                        var issuer = _configuration["AppSettings:Issuer"];
-                        var audience = _configuration["AppSettings:Audience"];
 
-                        var key = Encoding.ASCII.GetBytes(_configuration["AppSettings:SecretKey"]);
-                        var tokenDes = new SecurityTokenDescriptor
-                        {
-                            Subject = new ClaimsIdentity(new[]
-                            {
-                        new Claim("Id", account.AccountId),
-                        new Claim("Email", account.Email),
-                        new Claim("AccountName", account.Name),
-                        new Claim(ClaimTypes.Role, account.Role.RoleName.ToString()),
-                        new Claim(JwtRegisteredClaimNames.Jti, jti)
-                    }),
-                            Expires = DateTime.UtcNow.AddHours(1),
-                            Issuer = issuer,
-                            Audience = audience, // Đảm bảo rằng giá trị này được lấy từ cấu hình
-                            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                        };
-                        var jwtToken = jwtHandler.CreateToken(tokenDes);
-                        string refreshTokenValue = GenerateRefreshToken();
-                        RefreshToken refreshToken = new RefreshToken
-                        {
-                            RefreshTokenId = Guid.NewGuid().ToString(),
-                            AccountId = account.AccountId,
-                            CreateAt = DateTime.UtcNow,
-                            ExpiresAt = DateTime.UtcNow.AddHours(1),
-                            IsUsed = false,
-                            RefreshTokenValue = refreshTokenValue,
-                            JwtId = jti,
-                            IsRevoked = false,
-                        };
-                        bool result = await refreshTokenRepository.AddRefreshToken(refreshToken);
-                        if (!result)
-                        {
-                            throw new Exception("Cannot save refresh token !!!");
-                        }
-                        string accessToken = jwtHandler.WriteToken(jwtToken);
-                        return new AccountLoginResponse
-                        {
-                            AccessToken = accessToken,
-                            RefreshToken = refreshTokenValue,
-                        };
-                    }
+                if ((bool)!account.IsActive)
+                {
+                    throw new Exception("Account has not been activated");
                 }
 
+                var jti = Guid.NewGuid().ToString();
+                var jwtHandler = new JwtSecurityTokenHandler();
+                var issuer = _configuration["AppSettings:Issuer"];
+                var audience = _configuration["AppSettings:Audience"];
+
+                var key = Encoding.UTF8.GetBytes(_configuration["AppSettings:SecretKey"]);
+
+                var tokenDes = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new[]
+                    {
+                new Claim("Id", account.AccountId),
+                new Claim("Email", account.Email),
+                new Claim("AccountName", account.Name),
+                new Claim(ClaimTypes.Role, account.Role.RoleName.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, jti)
+            }),
+                    Expires = DateTime.UtcNow.AddHours(2),
+                    Issuer = issuer,
+                    Audience = audience,
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                };
+
+                var jwtToken = jwtHandler.CreateToken(tokenDes);
+                Console.WriteLine(SecurityAlgorithms.HmacSha256);
+
+                string refreshTokenValue = GenerateRefreshToken();
+                RefreshToken refreshToken = new RefreshToken
+                {
+                    RefreshTokenId = Guid.NewGuid().ToString(),
+                    AccountId = account.AccountId,
+                    CreateAt = DateTime.UtcNow,
+                    ExpiresAt = DateTime.UtcNow.AddDays(7),
+                    IsUsed = false,
+                    RefreshTokenValue = refreshTokenValue,
+                    JwtId = jti,
+                    IsRevoked = false
+                };
+
+                bool result = await refreshTokenRepository.AddRefreshToken(refreshToken);
+                if (!result)
+                {
+                    throw new Exception("Cannot save refresh token !!!");
+                }
+
+                string accessToken = jwtHandler.WriteToken(jwtToken);
+                return new AccountLoginResponse
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshTokenValue
+                };
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Error: " + ex.Message);
                 throw new Exception(ex.Message);
             }
         }
+
+        // Lưu ý:
+        // - Đổi Encoding.ASCII thành Encoding.UTF8 để đảm bảo mã hóa chính xác.
+        // - Đảm bảo giá trị secret key trùng khớp ở cả phía tạo và validate token.
+
+        // Sau khi sửa xong, bạn hãy tạo token mới và thử validate lại nhé! 🚀
+
 
         private string GenerateRefreshToken()
         {

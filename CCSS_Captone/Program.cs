@@ -54,7 +54,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ITicketAccountService, TicketAccountService>();
 builder.Services.AddScoped<IImageService, ImageServices>();
-
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 
 //AutoMapper
@@ -95,9 +95,9 @@ builder.Services.AddAuthentication(options =>
             ValidIssuer = builder.Configuration["AppSettings:Issuer"],
             ValidAudience = builder.Configuration["AppSettings:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:SecretKey"])),
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateIssuerSigningKey = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ClockSkew = TimeSpan.Zero
         };
     });
 

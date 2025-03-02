@@ -35,7 +35,7 @@ namespace CCSS_Service.Services
 
         public async Task<bool> UpdateNotification(string notificationId)
         {
-            if(notificationId.IsNullOrEmpty())
+            if(string.IsNullOrEmpty(notificationId))
             {
                 return false;
             }
