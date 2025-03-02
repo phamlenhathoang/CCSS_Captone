@@ -14,6 +14,7 @@ namespace CCSS_Repository.Repositories
         Task<List<Image>> GetAllImage();
         Task<Image> GetImageById(string id);
         Task AddImage(Image image);
+        Task<bool> AddListImage(List<Image> imageList);
         Task DeleteImage(Image image);
         Task UpdateImage(Image image);
     }
@@ -53,6 +54,12 @@ namespace CCSS_Repository.Repositories
         {
             _context.Images.Remove(image);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> AddListImage(List<Image> imageList)
+        {
+            _context.Images.AddRange(imageList);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

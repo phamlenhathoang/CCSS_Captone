@@ -42,11 +42,11 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCharacter(CharacterResponse character)
+        public async Task<IActionResult> CreateCharacter([FromForm] CharacterRequest character, [FromForm] List<IFormFile> imageFiles)
         {
             if (ModelState.IsValid)
             {
-                var result = await _characterService.AddCharacter(character);
+                var result = await _characterService.AddCharacter(character, imageFiles);
                 return Ok(result);
             }
             return BadRequest(ModelState);
