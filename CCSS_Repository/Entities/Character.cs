@@ -19,7 +19,7 @@ namespace CCSS_Repository.Entities
         public string? CategoryId { get; set; }
         public Category Category { get; set; }  
         public string? CharacterName { get; set; }
-        private string? Description { get; set; }
+        public string? Description { get; set; }
         public double? Price { get; set; }
         public bool? IsActive { get; set; }
         public DateTime CreateDate { get; set; }

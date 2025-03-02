@@ -14,9 +14,9 @@ namespace CCSS_Repository.Repositories
         Task<List<Contract>> GetAllContract(string searchterm);
         Task<Contract> GetContractById(string id);
         Task<Contract> GetContractAndContractCharacter(string id);
-        Task AddContract(Contract contract);
-        Task UpdateContract(Contract contract);
-        Task DeleteContract(string contractId);
+        //Task AddContract(Contract contract);
+        //Task UpdateContract(Contract contract);
+        //Task DeleteContract(string contractId);
         Task<Contract> GetContractAndTasks(string contractId);
         Task<bool> AddContract(Contract contract);
         Task<bool> UpdateContract(Contract contract);

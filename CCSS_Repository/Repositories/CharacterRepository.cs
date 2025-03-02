@@ -13,6 +13,9 @@ namespace CCSS_Repository.Repositories
         Task<Character> GetCharacter(string characterId);
         Task<List<Character>> GetAll();
         Task<Character> GetCharacterByCharacterName(string characterName);
+        Task<bool> CreateCharacter(Character character);
+        Task<bool> UpdateCharacter(Character character);
+        Task<bool> DeleteCharacter(Character character);
     }
     public class CharacterRepository : ICharacterRepository
     {
@@ -34,6 +37,24 @@ namespace CCSS_Repository.Repositories
         public async Task<Character> GetCharacterByCharacterName(string characterName)
         {
             return await _context.Characters.Include(c => c.Category).FirstOrDefaultAsync(c => c.CharacterName == characterName && c.IsActive == true);
+        }
+
+        public async Task<bool> CreateCharacter(Character character)
+        {
+            _context.Characters.Add(character);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> UpdateCharacter(Character character)
+        {
+            _context.Characters.Update(character);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> DeleteCharacter(Character character)
+        {
+            _context.Characters.Remove(character);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
