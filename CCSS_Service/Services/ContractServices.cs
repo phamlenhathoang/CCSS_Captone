@@ -205,7 +205,7 @@ namespace CCSS_Service.Services
             }
             contractExicting.PackageId = contractResponse.PackageId;
             contractExicting.ContractName = contractResponse.ContractName;
-            contractExicting.Description = contractResponse.Description;
+            contractExicting.Description = ContractDescription.CreateEvent;
             contractExicting.Price = contractResponse.Price;
             contractExicting.Amount = contractResponse.Amount;
             contractExicting.Signature = contractResponse.Signature;
