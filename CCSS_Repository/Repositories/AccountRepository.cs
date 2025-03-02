@@ -69,7 +69,7 @@ namespace CCSS_Repository.Repositories
                 .Where(x => x.Role.RoleName == RoleName.Cosplayer && x.IsActive == true)
                 .OrderBy(x => x.TaskQuantity);
 
-            if (!accountId.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(accountId))
             {
                 accounts = accounts.Where(a => !a.AccountId.Equals(accountId));
             }

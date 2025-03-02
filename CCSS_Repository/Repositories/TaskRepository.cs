@@ -71,7 +71,7 @@ namespace CCSS_Repository.Repositories
         public async Task<List<Task>> GetTaskByAccountId(string accountId, string? taskId)
         {
             IQueryable<Task> tasks =  _dbContext.Tasks.Include(t => t.Account).Where(t => t.AccountId == accountId && t.IsActive == true);
-            if (!taskId.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(taskId))
             {
                 tasks = tasks.Where(t => t.TaskId == taskId);
             }
