@@ -14,13 +14,11 @@ namespace CCSS_Repository.Entities
         [Key]
         public string RefreshTokenId { get; set; } = Guid.NewGuid().ToString();   
         public string? RefreshTokenValue {  get; set; }
-        public string? RefreshTokenCode {  get; set; }
         public string? JwtId {  get; set; }
         public bool? IsUsed { get; set; }
         public bool? IsRevoked { get; set; }
         public DateTime? CreateAt { get; set; }
         public DateTime? ExpiresAt { get; set; }
-
         [ForeignKey("AccountId")]
         public string? AccountId { get; set; }
         public Account Account { get; set; }    

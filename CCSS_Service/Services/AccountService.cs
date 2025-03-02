@@ -1,12 +1,21 @@
 ﻿using AutoMapper;
 using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Model;
+using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Task = CCSS_Repository.Entities.Task;
@@ -19,6 +28,9 @@ namespace CCSS_Service.Services
         Task<List<AccountCharacteRespones>> CheckForCharactersWithDuplicateCosplayers(string accountId, List<string> chacracters);
         Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId);
         Task<bool> ChangeAccountForTask(string taskId, string accountId);
+        Task<AccountLoginResponse> Login(string email, string password);
+        Task<string> Register(AccountRequest accountRequest, string role); 
+        Task<string> CodeValidation(string email, string code);
     }
     public class AccountService : IAccountService
     {
@@ -27,9 +39,12 @@ namespace CCSS_Service.Services
         private readonly IContractRespository contractRespository;
         private readonly ICharacterRepository characterRepository;
         private readonly ICategoryRepository categoryRepository;
+        private readonly IRefreshTokenRepository refreshTokenRepository; 
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
         private readonly IMapper mapper;
 
-        public AccountService(ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, ICategoryRepository categoryRepository)
+        public AccountService(ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, ICategoryRepository categoryRepository, IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
         {
             this.taskRepository = taskRepository;
             this.accountRepository = accountRepository;
@@ -37,6 +52,9 @@ namespace CCSS_Service.Services
             this.characterRepository = characterRepository;
             this.contractRespository = contractRepository;
             this.categoryRepository = categoryRepository;
+            _configuration = configuration;
+            this.refreshTokenRepository = refreshTokenRepository;
+            this._emailService = emailService;
         }
 
         public async Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId)
@@ -219,6 +237,177 @@ namespace CCSS_Service.Services
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<AccountLoginResponse> Login(string email, string password)
+        {
+            try
+            {
+                var account = await accountRepository.GetAccountByEmailAndPassword(email, PasswordHash.ConvertToEncrypt(password));
+                if (account == null)
+                {
+                    throw new Exception("Email or password wrong");
+                }
+                else
+                {
+                    if ((bool)!account.IsActive)
+                    {
+                        throw new Exception("Account has not been activated");
+                    }
+                    else
+                    {
+                        var jti = Guid.NewGuid().ToString();
+                        var jwtHandler = new JwtSecurityTokenHandler();
+                        var issuer = _configuration["AppSettings:Issuer"];
+                        var audience = _configuration["AppSettings:Audience"];
+
+                        var key = Encoding.ASCII.GetBytes(_configuration["AppSettings:SecretKey"]);
+                        var tokenDes = new SecurityTokenDescriptor
+                        {
+                            Subject = new ClaimsIdentity(new[]
+                            {
+                        new Claim("Id", account.AccountId),
+                        new Claim("Email", account.Email),
+                        new Claim("AccountName", account.Name),
+                        new Claim(ClaimTypes.Role, account.Role.RoleName.ToString()),
+                        new Claim(JwtRegisteredClaimNames.Jti, jti)
+                    }),
+                            Expires = DateTime.UtcNow.AddHours(1),
+                            Issuer = issuer,
+                            Audience = audience, // Đảm bảo rằng giá trị này được lấy từ cấu hình
+                            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                        };
+                        var jwtToken = jwtHandler.CreateToken(tokenDes);
+                        string refreshTokenValue = GenerateRefreshToken();
+                        RefreshToken refreshToken = new RefreshToken
+                        {
+                            RefreshTokenId = Guid.NewGuid().ToString(),
+                            AccountId = account.AccountId,
+                            CreateAt = DateTime.UtcNow,
+                            ExpiresAt = DateTime.UtcNow.AddHours(1),
+                            IsUsed = false,
+                            RefreshTokenValue = refreshTokenValue,
+                            JwtId = jti,
+                            IsRevoked = false,
+                        };
+                        bool result = await refreshTokenRepository.AddRefreshToken(refreshToken);
+                        if (!result)
+                        {
+                            throw new Exception("Cannot save refresh token !!!");
+                        }
+                        string accessToken = jwtHandler.WriteToken(jwtToken);
+                        return new AccountLoginResponse
+                        {
+                            AccessToken = accessToken,
+                            RefreshToken = refreshTokenValue,
+                        };
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private string GenerateRefreshToken()
+        {
+            var random = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(random);
+                return Convert.ToBase64String(random);
+            }
+        }
+
+        private string GenerateCode(int length = 6)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            Random random = new Random();
+
+            string code = new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+
+            return code;
+        }
+
+        public async Task<string> Register(AccountRequest accountRequest, string role)
+        {
+            if (string.IsNullOrEmpty(accountRequest.Email) || string.IsNullOrEmpty(accountRequest.Password) || string.IsNullOrEmpty(role))
+            {
+                return "Email and password cannot null!!!";
+            }
+            var checkEmail = await accountRepository.GetAccountByEmail(accountRequest.Email);
+            if (checkEmail != null)
+            {
+                return "Email existed!!!";
+            }
+            else
+            {
+                DateTime date;
+
+                string[] formats = { "dd/MM/yyyy", "d/MM/yyyy", "dd/M/yyyy", "d/M/yyyy" };
+
+                if (DateTime.TryParseExact(accountRequest.Birthday, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+                {
+                    Console.WriteLine("Ngày hợp lệ: " + date.ToString("yyyy-MM-dd"));
+                }
+                else
+                {
+                    Console.WriteLine("Không thể chuyển đổi chuỗi thành DateTime.");
+                }
+
+                Account account = new Account();
+
+                account.AccountId = Guid.NewGuid().ToString();
+                account.Name = accountRequest.Name;
+                account.Email = accountRequest.Email;
+                account.Description = accountRequest.Description;
+                account.IsActive = false;
+                account.Code = GenerateCode();
+                account.Password = PasswordHash.ConvertToEncrypt(accountRequest.Password);
+                account.Birthday = date;
+                account.Phone = int.Parse(accountRequest.Phone);
+
+                if (role.ToLower() == RoleName.Customer.ToString().ToLower())
+                {
+                    account.RoleId = "4";
+                }
+                else
+                {
+                    account.RoleId = "3";
+                    account.Leader = false;
+                }
+
+
+                bool result = await accountRepository.AddAccount(account);
+                if (!result)
+                {
+                    return "Cannot save account";
+                }
+                await _emailService.SendEmailAsync(accountRequest.Email, "Confirm your account", $"Here is your code: {account.Code}. Please enter this code to authenticate your account.", true);
+                return "Please enter code";
+            }
+        }
+
+        public async Task<string> CodeValidation(string email, string code)
+        {
+            var checkAccount = await accountRepository.GetAccountByEmailAndCode(email, code);
+            if (checkAccount == null)
+            {
+                throw new Exception("Code does not exist");
+            }
+            else
+            {
+                checkAccount.IsActive = true;
+                bool result = await accountRepository.UpdateAccount(checkAccount);
+                if (!result)
+                {
+                    return "Can not save account";
+                }
+                return "Success";
             }
         }
     }

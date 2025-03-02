@@ -68,9 +68,9 @@ namespace CCSS_Repository.Entities
 
             //Account - RefreshToken
             modelBuilder.Entity<Account>()
-                .HasOne(a => a.RefreshToken)
+                .HasMany(a => a.RefreshTokens)
                 .WithOne(r => r.Account)
-                .HasForeignKey<RefreshToken>(a => a.AccountId)
+                .HasForeignKey(a => a.AccountId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             //Account - Cart
@@ -257,9 +257,11 @@ namespace CCSS_Repository.Entities
             // --- SEED DATA (Dữ liệu khởi tạo mẫu) ---
             // Seed Roles
             modelBuilder.Entity<Role>().HasData(
-                new Role { Id = "role1", RoleName = (RoleName?)1, Description = "Admin role" },
-                new Role { Id = "role2", RoleName = (RoleName?)2, Description = "Manager role" },
-                new Role { Id = "role3", RoleName = (RoleName?)3, Description = "Customer role" }
+                new Role { Id = "1", RoleName = (RoleName?)0, Description = "Admin role" },
+                new Role { Id = "2", RoleName = (RoleName?)1, Description = "Manager role" },
+                new Role { Id = "3", RoleName = (RoleName?)2, Description = "Consultant role" },
+                new Role { Id = "4", RoleName = (RoleName?)3, Description = "Cosplayer role" },
+                new Role { Id = "5", RoleName = (RoleName?)4, Description = "Customer role" }
             );
 
             // Seed Categories
@@ -275,7 +277,7 @@ namespace CCSS_Repository.Entities
                     AccountId = "acc1",
                     Name = "Admin User",
                     Email = "admin@example.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("password123"),
+                    Password = "CR044vTz0E1+p6akfbtyoA==",
                     Description = "Administrator account",
                     Birthday = new DateTime(1990, 1, 1),
                     Phone = 123456789,
@@ -285,14 +287,14 @@ namespace CCSS_Repository.Entities
                     Code = "CODE123",
                     ImageUrl = "https://example.com/admin.png",
                     TaskQuantity = 0,
-                    RoleId = "role1"
+                    RoleId = "1"
                 },
                 new Account
                 {
                     AccountId = "acc2",
                     Name = "Customer User",
                     Email = "customer@example.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("password456"),
+                    Password = "CR044vTz0E1+p6akfbtyoA==",
                     Description = "Customer account",
                     Birthday = new DateTime(2000, 1, 1),
                     Phone = 987654321,
@@ -302,7 +304,7 @@ namespace CCSS_Repository.Entities
                     Code = "CODE456",
                     ImageUrl = "https://example.com/customer.png",
                     TaskQuantity = 0,
-                    RoleId = "role3"
+                    RoleId = "5"
                 }
             );
 
@@ -312,7 +314,6 @@ namespace CCSS_Repository.Entities
                 {
                     RefreshTokenId = "rt1",
                     RefreshTokenValue = "sample_refresh_token",
-                    RefreshTokenCode = "RTCODE1",
                     JwtId = "jwt1",
                     IsUsed = false,
                     IsRevoked = false,
@@ -378,7 +379,7 @@ namespace CCSS_Repository.Entities
                     AccountId = "acc1",
                     ContractName = "Contract 1",
                     ContractCode = "C001",
-                    Description = "Contract for Event 1",
+                    Description = ContractDescription.CreateEvent,
                     Price = 500,
                     Amount = 450,
                     Signature = true,
@@ -396,7 +397,7 @@ namespace CCSS_Repository.Entities
                     AccountId = "acc2",
                     ContractName = "Contract 2",
                     ContractCode = "C002",
-                    Description = "Contract for Event 2",
+                    Description = ContractDescription.RentCosplayer,
                     Price = 800,
                     Amount = 750,
                     Signature = false,

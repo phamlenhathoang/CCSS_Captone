@@ -14,10 +14,15 @@ namespace CCSS_Repository.Repositories
     {
         Task<List<Account>> GetAccountByCategoryId(string categoryId, string? accountId);
         Task<Account> GetAccount(string accountId);
-        Task<List<Account>> GetAllAccountOrganizer();
+        Task<List<Account>> GetAllAccountLeader();
         Task<Account> GetAccountIncludeAccountCategory(string accountId);
         Task<Account> GetAccountByAccountId(string accountId);
         Task<Account> GetAccountByAccountIdIncludeTask(string acountId, string? taskId);
+        Task<Account> GetAccountByEmailAndPassword(string email, string password);
+        Task<Account> GetAccountByEmail(string email);
+        Task<Account> GetAccountByEmailAndCode(string email, string code);
+        Task<bool> AddAccount(Account account);
+        Task<bool> UpdateAccount(Account account);
     }
     public class AccountRepository : IAccountRepository
     {
@@ -25,6 +30,12 @@ namespace CCSS_Repository.Repositories
         public AccountRepository(CCSSDbContext dbContext) 
         {
             this.dbContext = dbContext;
+        }
+
+        public async Task<bool> AddAccount(Account account)
+        {
+            await dbContext.AddAsync(account);
+            return await dbContext.SaveChangesAsync() > 0 ? true : false;
         }
 
         public async Task<Account> GetAccount(string accountId)
@@ -66,14 +77,35 @@ namespace CCSS_Repository.Repositories
             return await accounts.ToListAsync();
         }
 
+        public Task<Account> GetAccountByEmail(string email)
+        {
+            return dbContext.Accounts.FirstOrDefaultAsync(a => a.Email == email);   
+        }
+
+        public Task<Account> GetAccountByEmailAndCode(string email, string code)
+        {
+            return dbContext.Accounts.FirstOrDefaultAsync(a => a.Email.Equals(email) && a.Code.Equals(code));
+        }
+
+        public async Task<Account> GetAccountByEmailAndPassword(string email, string password)
+        {
+            return await dbContext.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email && a.Password == password);   
+        }
+
         public async Task<Account> GetAccountIncludeAccountCategory(string accountId)
         {
             return await dbContext.Accounts.Include(a => a.AccountCategories).FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsActive == true);
         }
 
-        public async Task<List<Account>> GetAllAccountOrganizer()
+        public async Task<List<Account>> GetAllAccountLeader()
         {
-            return await dbContext.Accounts.Include(a => a.Role).Where(a => a.Role.RoleName == RoleName.Organizer && a.IsActive == true).OrderBy(a => a.TaskQuantity).ToListAsync();
+            return await dbContext.Accounts.Include(a => a.Role).Where(a => a.Leader == true && a.IsActive == true).OrderBy(a => a.TaskQuantity).ToListAsync();
+        }
+
+        public async Task<bool> UpdateAccount(Account account)
+        {
+            dbContext.Update(account);
+            return await dbContext.SaveChangesAsync() > 0 ? true : false;
         }
     }
 }
