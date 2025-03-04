@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace CCSS_Service.Model.Requests
         public string? Description { get; set; }
         public double? Price { get; set; }
         public bool? IsActive { get; set; }
-        public DateTime? UpdateDate { get; set; }
-    }
+    
+    }   
+
+
 }
