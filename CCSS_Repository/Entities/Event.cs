@@ -26,6 +26,5 @@ namespace CCSS_Repository.Entities
         public Ticket Ticket { get; set; } 
         public ICollection<Image> Images { get; set; } = new List<Image>();
         public ICollection<EventCharacter> EventCharacters { get; set; } = new List<EventCharacter>();  
-        public ICollection<Task> Tasks { get; set; } = new List<Task>();  
     }
 }
