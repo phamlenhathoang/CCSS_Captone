@@ -25,221 +25,221 @@ namespace CCSS_Service.Services
 {
     public interface IAccountService
     {
-        Task<List<AccountCategoryResponse>> GetListAccountToContactByContractId(string contractId);
-        Task<List<AccountCharacteRespones>> CheckForCharactersWithDuplicateCosplayers(string accountId, List<string> chacracters);
-        Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId);
-        Task<bool> ChangeAccountForTask(string taskId, string accountId);
+        //Task<List<AccountCategoryResponse>> GetListAccountToContactByContractId(string contractId);
+        //Task<List<AccountCharacteRespones>> CheckForCharactersWithDuplicateCosplayers(string accountId, List<string> chacracters);
+        //Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId);
+        //Task<bool> ChangeAccountForTask(string taskId, string accountId);
         Task<AccountLoginResponse> Login(string email, string password);
         Task<string> Register(AccountRequest accountRequest, string role); 
         Task<string> CodeValidation(string email, string code);
     }
     public class AccountService : IAccountService
     {
-        private readonly ITaskRepository taskRepository;
+        //private readonly ITaskRepository taskRepository;
         private readonly IAccountRepository accountRepository;
-        private readonly IContractRespository contractRespository;
-        private readonly ICharacterRepository characterRepository;
-        private readonly ICategoryRepository categoryRepository;
+        //private readonly IContractRespository contractRespository;
+        //private readonly ICharacterRepository characterRepository;
+        //private readonly ICategoryRepository categoryRepository;
         private readonly IRefreshTokenRepository refreshTokenRepository;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IMapper mapper;
 
-        public AccountService(ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, ICategoryRepository categoryRepository, IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
+        public AccountService( /*IAccountRepository accountRepository, */IMapper mapper, /*ICharacterRepository characterRepository, IContractRespository contractRepository, ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
         {
-            this.taskRepository = taskRepository;
+            //this.taskRepository = taskRepository;
             this.accountRepository = accountRepository;
             this.mapper = mapper;
-            this.characterRepository = characterRepository;
-            this.contractRespository = contractRepository;
-            this.categoryRepository = categoryRepository;
+            //this.characterRepository = characterRepository;
+            //this.contractRespository = contractRepository;
+            //this.categoryRepository = categoryRepository;
             _configuration = configuration;
             this.refreshTokenRepository = refreshTokenRepository;
             this._emailService = emailService;
         }
 
-        public async Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId)
-        {
-            try
-            {
-                List<AccountResponse> accountResponses = new List<AccountResponse>();
-                Task taskCurrent = await taskRepository.GetTask(taskId);
-                if (taskCurrent == null)
-                {
-                    throw new Exception("Task does not exist");
-                }
+        //public async Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId)
+        //{
+        //    try
+        //    {
+        //        List<AccountResponse> accountResponses = new List<AccountResponse>();
+        //        Task taskCurrent = await taskRepository.GetTask(taskId);
+        //        if (taskCurrent == null)
+        //        {
+        //            throw new Exception("Task does not exist");
+        //        }
 
-                Account checkAccount = await accountRepository.GetAccountByAccountId(accountId);
-                if (checkAccount == null)
-                {
-                    throw new Exception("Account does not exist");
-                }
+        //        Account checkAccount = await accountRepository.GetAccountByAccountId(accountId);
+        //        if (checkAccount == null)
+        //        {
+        //            throw new Exception("Account does not exist");
+        //        }
 
-                Character character = await characterRepository.GetCharacterByCharacterName(taskCurrent.TaskName);
+        //        Character character = await characterRepository.GetCharacterByCharacterName(taskCurrent.TaskName);
 
-                List<Account> accounts = await accountRepository.GetAccountByCategoryId(character.CategoryId, checkAccount.AccountId);
+        //        List<Account> accounts = await accountRepository.GetAccountByCategoryId(character.CategoryId, checkAccount.AccountId);
 
-                foreach (var account in accounts)
-                {
-                    List<Task> tasks = await taskRepository.GetTaskByAccountId(account.AccountId);
-                    if (!tasks.Any())
-                    {
-                        accountResponses.Add(mapper.Map<AccountResponse>(account));
-                    }
-                    if (tasks.Any())
-                    {
-                        for (int i = 0; i < tasks.Count - 1; i++)
-                        {
-                            Task task = tasks[i];
-                            Task taskNext = tasks[i + 1];
+        //        foreach (var account in accounts)
+        //        {
+        //            List<Task> tasks = await taskRepository.GetTaskByAccountId(account.AccountId);
+        //            if (!tasks.Any())
+        //            {
+        //                accountResponses.Add(mapper.Map<AccountResponse>(account));
+        //            }
+        //            if (tasks.Any())
+        //            {
+        //                for (int i = 0; i < tasks.Count - 1; i++)
+        //                {
+        //                    Task task = tasks[i];
+        //                    Task taskNext = tasks[i + 1];
 
-                            if (taskNext == null)
-                            {
-                                break;
-                            }
+        //                    if (taskNext == null)
+        //                    {
+        //                        break;
+        //                    }
 
-                            if (task.StartDate.HasValue && task.EndDate.HasValue && taskNext.StartDate.HasValue && taskNext.EndDate.HasValue)
-                            {
-                                if (task.EndDate.Value.Date < taskCurrent.StartDate && taskCurrent.EndDate < taskNext.StartDate.Value.Date)
-                                {
-                                    accountResponses.Add(mapper.Map<AccountResponse>(account));
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                return accountResponses;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+        //                    if (task.StartDate.HasValue && task.EndDate.HasValue && taskNext.StartDate.HasValue && taskNext.EndDate.HasValue)
+        //                    {
+        //                        if (task.EndDate.Value.Date < taskCurrent.StartDate && taskCurrent.EndDate < taskNext.StartDate.Value.Date)
+        //                        {
+        //                            accountResponses.Add(mapper.Map<AccountResponse>(account));
+        //                            break;
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        return accountResponses;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //}
 
-        public async Task<List<AccountCharacteRespones>> CheckForCharactersWithDuplicateCosplayers(string accountId, List<string> characters)
-        {
-            List<AccountCharacteRespones> accountCharacteRespones = new List<AccountCharacteRespones>();
-            Account account = await accountRepository.GetAccountIncludeAccountCategory(accountId);
+        //public async Task<List<AccountCharacteRespones>> CheckForCharactersWithDuplicateCosplayers(string accountId, List<string> characters)
+        //{
+        //    List<AccountCharacteRespones> accountCharacteRespones = new List<AccountCharacteRespones>();
+        //    Account account = await accountRepository.GetAccountIncludeAccountCategory(accountId);
 
-            if (account == null)
-            {
-                return new List<AccountCharacteRespones>();
-            }
+        //    if (account == null)
+        //    {
+        //        return new List<AccountCharacteRespones>();
+        //    }
 
-            foreach (var character in characters)
-            {
-                Character checkCharacter = await characterRepository.GetCharacter(character);
-                if (checkCharacter == null)
-                {
-                    return new List<AccountCharacteRespones>();
-                }
-                if (checkCharacter == null) continue;
+        //    foreach (var character in characters)
+        //    {
+        //        Character checkCharacter = await characterRepository.GetCharacter(character);
+        //        if (checkCharacter == null)
+        //        {
+        //            return new List<AccountCharacteRespones>();
+        //        }
+        //        if (checkCharacter == null) continue;
 
-                var accountCategoryResponse = new AccountCharacteRespones
-                {
-                    CharacterId = checkCharacter.CharacterId,
-                    Duplicate = !account.AccountCategories.Any(ac => ac.CategoryId.Equals(checkCharacter.CategoryId))
-                };
-                accountCharacteRespones.Add(accountCategoryResponse);
-            }
+        //        var accountCategoryResponse = new AccountCharacteRespones
+        //        {
+        //            CharacterId = checkCharacter.CharacterId,
+        //            Duplicate = !account.AccountCategories.Any(ac => ac.CategoryId.Equals(checkCharacter.CategoryId))
+        //        };
+        //        accountCharacteRespones.Add(accountCategoryResponse);
+        //    }
 
-            return accountCharacteRespones;
-        }
+        //    return accountCharacteRespones;
+        //}
 
-        public async Task<List<AccountCategoryResponse>> GetListAccountToContactByContractId(string contractId)
-        {
-            CCSS_Repository.Entities.Contract contract = await contractRespository.GetContractById(contractId);
+        //public async Task<List<AccountCategoryResponse>> GetListAccountToContactByContractId(string contractId)
+        //{
+        //    CCSS_Repository.Entities.Contract contract = await contractRespository.GetContractById(contractId);
 
-            List<Account> accounts = new List<Account>();
-            List<AccountResponse> accountResponses = new List<AccountResponse>();
-            List<AccountCategoryResponse> accountCategoryResponses = new List<AccountCategoryResponse>();
+        //    List<Account> accounts = new List<Account>();
+        //    List<AccountResponse> accountResponses = new List<AccountResponse>();
+        //    List<AccountCategoryResponse> accountCategoryResponses = new List<AccountCategoryResponse>();
 
-            List<Task> tasks = new List<Task>();
-            if (contract == null)
-            {
-                return new List<AccountCategoryResponse>();
-            }
-            if (contract.ContractCharacters != null)
-            {
-                foreach (var contractCharacter in (List<ContractCharacter>)contract.ContractCharacters)
-                {
-                    Character character = await characterRepository.GetCharacter(contractCharacter.CharacterId);
-                    if (character != null)
-                    {
-                        accounts = await accountRepository.GetAccountByCategoryId(character.CategoryId, null);
-                        if (accounts == null)
-                        {
-                            return new List<AccountCategoryResponse>();
-                        }
-                        foreach (var account in accounts)
-                        {
-                            tasks = await taskRepository.GetTaskByAccountId(account.AccountId);
-                            if (!tasks.Any())
-                            {
-                                accountResponses.Add(mapper.Map<AccountResponse>(account));
-                            }
-                            if (tasks.Any())
-                            {
-                                for (int i = 0; i < tasks.Count - 1; i++)
-                                {
-                                    Task task = tasks[i];
-                                    Task taskNext = tasks[i + 1];
-                                    if (taskNext == null)
-                                    {
-                                        break;
-                                    }
-                                    if (task.StartDate.HasValue && task.EndDate.HasValue && taskNext.StartDate.HasValue && taskNext.EndDate.HasValue)
-                                    {
-                                        if (task.EndDate.Value.Date < contract.StartDate.Date && contract.EndDate.Date < taskNext.StartDate.Value.Date)
-                                        {
-                                            accountResponses.Add(mapper.Map<AccountResponse>(account));
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        AccountCategoryResponse accountCategoryResponse = new AccountCategoryResponse()
-                        {
-                            CategoryId = character.CategoryId,
-                            CategoryName = character.Category.CategoryName,
-                            Description = character.Category.Description,
-                            CharacterId = character.CharacterId,
-                            Character = character.CharacterName,
-                            AccountResponses = accountResponses
-                        };
-                        accountCategoryResponses.Add(accountCategoryResponse);
-                        accountResponses = new List<AccountResponse>();
-                    }
-                }
-            }
-            return accountCategoryResponses;
-        }
+        //    List<Task> tasks = new List<Task>();
+        //    if (contract == null)
+        //    {
+        //        return new List<AccountCategoryResponse>();
+        //    }
+        //    if (contract.ContractCharacters != null)
+        //    {
+        //        foreach (var contractCharacter in (List<ContractCharacter>)contract.ContractCharacters)
+        //        {
+        //            Character character = await characterRepository.GetCharacter(contractCharacter.CharacterId);
+        //            if (character != null)
+        //            {
+        //                accounts = await accountRepository.GetAccountByCategoryId(character.CategoryId, null);
+        //                if (accounts == null)
+        //                {
+        //                    return new List<AccountCategoryResponse>();
+        //                }
+        //                foreach (var account in accounts)
+        //                {
+        //                    tasks = await taskRepository.GetTaskByAccountId(account.AccountId);
+        //                    if (!tasks.Any())
+        //                    {
+        //                        accountResponses.Add(mapper.Map<AccountResponse>(account));
+        //                    }
+        //                    if (tasks.Any())
+        //                    {
+        //                        for (int i = 0; i < tasks.Count - 1; i++)
+        //                        {
+        //                            Task task = tasks[i];
+        //                            Task taskNext = tasks[i + 1];
+        //                            if (taskNext == null)
+        //                            {
+        //                                break;
+        //                            }
+        //                            if (task.StartDate.HasValue && task.EndDate.HasValue && taskNext.StartDate.HasValue && taskNext.EndDate.HasValue)
+        //                            {
+        //                                if (task.EndDate.Value.Date < contract.StartDate.Date && contract.EndDate.Date < taskNext.StartDate.Value.Date)
+        //                                {
+        //                                    accountResponses.Add(mapper.Map<AccountResponse>(account));
+        //                                    break;
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //                AccountCategoryResponse accountCategoryResponse = new AccountCategoryResponse()
+        //                {
+        //                    CategoryId = character.CategoryId,
+        //                    CategoryName = character.Category.CategoryName,
+        //                    Description = character.Category.Description,
+        //                    CharacterId = character.CharacterId,
+        //                    Character = character.CharacterName,
+        //                    AccountResponses = accountResponses
+        //                };
+        //                accountCategoryResponses.Add(accountCategoryResponse);
+        //                accountResponses = new List<AccountResponse>();
+        //            }
+        //        }
+        //    }
+        //    return accountCategoryResponses;
+        //}
 
-        public async Task<bool> ChangeAccountForTask(string taskId, string accountId)
-        {
-            try
-            {
-                Account account = await accountRepository.GetAccountByAccountId(accountId);
-                Task task = await taskRepository.GetTask(taskId);
+        //public async Task<bool> ChangeAccountForTask(string taskId, string accountId)
+        //{
+        //    try
+        //    {
+        //        Account account = await accountRepository.GetAccountByAccountId(accountId);
+        //        Task task = await taskRepository.GetTask(taskId);
 
-                if (task == null || account == null)
-                {
-                    throw new Exception("Task or account does not exist");
-                }
+        //        if (task == null || account == null)
+        //        {
+        //            throw new Exception("Task or account does not exist");
+        //        }
 
-                task.AccountId = account.AccountId;
+        //        task.AccountId = account.AccountId;
 
-                bool result = await taskRepository.UpdateTask(task);
+        //        bool result = await taskRepository.UpdateTask(task);
 
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    }
+        //}
 
         public async Task<AccountLoginResponse> Login(string email, string password)
         {

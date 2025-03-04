@@ -35,10 +35,14 @@ namespace CCSS_Repository.Entities
         [ForeignKey("PackageId")]
         public string? PackageId { get; set; }
         public Package Package { get; set; }
+
+        [ForeignKey("CouponId")]
+        public string CouponId { get; set;}
+        public Coupon Coupon { get; set; }
+
         public Feedback Feedback { get; set; }
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
         public ICollection<ContractCharacter> ContractCharacters { get; set; } = new List<ContractCharacter>();
-        public ICollection<Task> Tasks { get; set; } = new List<Task>();
         
     }
 

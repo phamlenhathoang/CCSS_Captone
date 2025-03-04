@@ -17,6 +17,5 @@ namespace CCSS_Repository.Entities
         public string? CategoryName { get; set; }
         public string? Description { get; set; }
         public ICollection<Character> Characters { get; set; } = new List<Character>();
-        public ICollection<AccountCategory> AccountCategories { get; set; } = new List<AccountCategory>();
     }
 }

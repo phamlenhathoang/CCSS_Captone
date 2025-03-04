@@ -16,41 +16,41 @@ namespace CCSS_Captone.Controllers
             this.accountService = accountService;
         }
 
-        [HttpGet("contractId")]
-        public async Task<ActionResult<AccountResponse>> GetListAccountToContactByContractId(string contractId)
-        {
-            var accounts = await accountService.GetListAccountToContactByContractId(contractId);
-            if (accounts == null)
-            {
-                return NotFound(new { message = "Accounts not found." });
-            }
-            return Ok(accounts);
-        }
+        //[HttpGet("contractId")]
+        //public async Task<ActionResult<AccountResponse>> GetListAccountToContactByContractId(string contractId)
+        //{
+        //    var accounts = await accountService.GetListAccountToContactByContractId(contractId);
+        //    if (accounts == null)
+        //    {
+        //        return NotFound(new { message = "Accounts not found." });
+        //    }
+        //    return Ok(accounts);
+        //}
 
-        [HttpPost]
-        public async Task<ActionResult> CheckForCharactersWithDuplicateCosplayers(string accountId, List<string> chacracters)
-        {
-            var accounts = await accountService.CheckForCharactersWithDuplicateCosplayers(accountId, chacracters);
-            return Ok(accounts);
-        }
+        //[HttpPost]
+        //public async Task<ActionResult> CheckForCharactersWithDuplicateCosplayers(string accountId, List<string> chacracters)
+        //{
+        //    var accounts = await accountService.CheckForCharactersWithDuplicateCosplayers(accountId, chacracters);
+        //    return Ok(accounts);
+        //}
 
-        [HttpGet]
-        public async Task<ActionResult> GetAccountsForTask(string taskId, string accountId)
-        {
-            var accounts = await accountService.GetAccountsForTask(taskId, accountId);
-            if (accounts == null)
-            {
-                return NotFound(new { message = "Accounts not found." });
-            }
-            return Ok(accounts);
-        }
+        //[HttpGet]
+        //public async Task<ActionResult> GetAccountsForTask(string taskId, string accountId)
+        //{
+        //    var accounts = await accountService.GetAccountsForTask(taskId, accountId);
+        //    if (accounts == null)
+        //    {
+        //        return NotFound(new { message = "Accounts not found." });
+        //    }
+        //    return Ok(accounts);
+        //}
 
-        [HttpPut]
-        public async Task<IActionResult> ChangeAccountForTask(string taskId, string accountId)
-        {
-            var result = await accountService.ChangeAccountForTask(taskId, accountId);
-            return Ok(result);
-        }
+        //[HttpPut]
+        //public async Task<IActionResult> ChangeAccountForTask(string taskId, string accountId)
+        //{
+        //    var result = await accountService.ChangeAccountForTask(taskId, accountId);
+        //    return Ok(result);
+        //}
 
     }
 }

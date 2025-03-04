@@ -14,7 +14,7 @@ namespace CCSS_Repository.Repositories
         Task<List<Contract>> GetAllContract(string searchterm);
         Task<Contract> GetContractById(string id);
         Task<Contract> GetContractAndContractCharacter(string id);
-        Task<Contract> GetContractAndTasks(string contractId);
+        //Task<Contract> GetContractAndTasks(string contractId);
         Task<bool> AddContract(Contract contract);
         Task<bool> UpdateContract(Contract contract);
         Task<bool> DeleteContract(Contract contract);
@@ -67,9 +67,9 @@ namespace CCSS_Repository.Repositories
             return await _context.Contracts.Include(c => c.ContractCharacters).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
         }
 
-        public async Task<Contract> GetContractAndTasks(string contractId)
-        {
-            return await _context.Contracts.Include(c => c.Tasks).FirstOrDefaultAsync(c => c.ContractId.Equals(contractId));
-        }
+        //public async Task<Contract> GetContractAndTasks(string contractId)
+        //{
+        //    return await _context.Contracts.Include(c => c.Tasks).FirstOrDefaultAsync(c => c.ContractId.Equals(contractId));
+        //}
     }
 }

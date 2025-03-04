@@ -24,35 +24,35 @@ namespace CCSS_Service.Services
 {
     public interface ITaskService
     {
-        Task<string> UpdateStatusTask(string taskId, int taskStatus, string accountId);
-        Task<string> DeleteTask(string taskId);
-        Task<TaskResponse> GetTask(string taskId);
-        //Task<string> AddTask(List<TaskRequest> taskRequests, int quantityAccount, string contractId);
-        Task<List<TaskResponse>> GetTaskListsByAccountId(string accountId, string? taskId);
-        Task<string> AddTaskForListAccount(List<AddTaskRequest> addTaskRequests);
-        Task<List<TaskResponse>> ViewAllTaskByAccountId(string accountId, string? taskId);
-        Task<List<TaskResponse>> ViewAllTaskByContractId(string contractId);
+        //Task<string> UpdateStatusTask(string taskId, int taskStatus, string accountId);
+        //Task<string> DeleteTask(string taskId);
+        //Task<TaskResponse> GetTask(string taskId);
+        ////Task<string> AddTask(List<TaskRequest> taskRequests, int quantityAccount, string contractId);
+        //Task<List<TaskResponse>> GetTaskListsByAccountId(string accountId, string? taskId);
+        //Task<string> AddTaskForListAccount(List<AddTaskRequest> addTaskRequests);
+        //Task<List<TaskResponse>> ViewAllTaskByAccountId(string accountId, string? taskId);
+        //Task<List<TaskResponse>> ViewAllTaskByContractId(string contractId);
     }
     public class TaskService : ITaskService
     {
-        private readonly ITaskRepository taskRepository;
-        private readonly IContractRespository contractRespository;
-        private readonly IAccountRepository accountRepository;
-        private readonly ICharacterRepository characterRepository;
-        private readonly INotificationRepository notificationRepository;
-        private readonly IMapper mapper;
-        private readonly IHubContext<TaskHub> hubContext;
+        //private readonly ITaskRepository taskRepository;
+        //private readonly IContractRespository contractRespository;
+        //private readonly IAccountRepository accountRepository;
+        //private readonly ICharacterRepository characterRepository;
+        //private readonly INotificationRepository notificationRepository;
+        //private readonly IMapper mapper;
+        //private readonly IHubContext<TaskHub> hubContext;
 
-        public TaskService(ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<TaskHub> hubContext, INotificationRepository notificationRepository)
-        {
-            this.taskRepository = taskRepository;
-            this.contractRespository = contractRespository;
-            this.accountRepository = accountRepository;
-            this.characterRepository = characterRepository;
-            this.mapper = mapper;
-            this.hubContext = hubContext;
-            this.notificationRepository = notificationRepository;
-        }
+        //public TaskService(ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<TaskHub> hubContext, INotificationRepository notificationRepository)
+        //{
+        //    this.taskRepository = taskRepository;
+        //    this.contractRespository = contractRespository;
+        //    this.accountRepository = accountRepository;
+        //    this.characterRepository = characterRepository;
+        //    this.mapper = mapper;
+        //    this.hubContext = hubContext;
+        //    this.notificationRepository = notificationRepository;
+        //}
 
         //public async Task<string> AddTask(List<TaskRequest> taskRequests, int quantityAccount, string contractId)
         //{
@@ -163,256 +163,256 @@ namespace CCSS_Service.Services
         //    return resultNotification ? "Successfully" : "Failed";
         //}
 
-        public async Task<string> AddTaskForListAccount(List<AddTaskRequest> addTaskRequests)
-        {
-            List<Task> tasks = new List<Task>();
-            foreach (var addTaskRequest in addTaskRequests)
-            {
-                Character character = await characterRepository.GetCharacter(addTaskRequest.CharacterId);
+        //public async Task<string> AddTaskForListAccount(List<AddTaskRequest> addTaskRequests)
+        //{
+        //    List<Task> tasks = new List<Task>();
+        //    foreach (var addTaskRequest in addTaskRequests)
+        //    {
+        //        Character character = await characterRepository.GetCharacter(addTaskRequest.CharacterId);
 
-                if (character == null)
-                {
-                    return addTaskRequest.CharacterId + " does not exist";
-                }
+        //        if (character == null)
+        //        {
+        //            return addTaskRequest.CharacterId + " does not exist";
+        //        }
 
-                Contract contract = await contractRespository.GetContractById(addTaskRequest.ContractId);
+        //        Contract contract = await contractRespository.GetContractById(addTaskRequest.ContractId);
 
-                if (contract == null)
-                {
-                    return addTaskRequest.ContractId + " does not exist";
-                }
+        //        if (contract == null)
+        //        {
+        //            return addTaskRequest.ContractId + " does not exist";
+        //        }
 
-                if (addTaskRequest.QuantityCharacter != addTaskRequest.AccountIds.Count())
-                {
-                    return addTaskRequest.CharacterId + "not enough staff";
-                }
+        //        if (addTaskRequest.QuantityCharacter != addTaskRequest.AccountIds.Count())
+        //        {
+        //            return addTaskRequest.CharacterId + "not enough staff";
+        //        }
 
-                foreach (var accountId in addTaskRequest.AccountIds)
-                {
-                    Account account = await accountRepository.GetAccountIncludeAccountCategory(accountId);
-                    bool checkAccount = account.AccountCategories.Any(ac => ac.CategoryId.Equals(character.CategoryId));
-                    if (!checkAccount)
-                    {
-                        return account.AccountId + " cannot cosplay " + character.CharacterId;
-                    }
+        //        foreach (var accountId in addTaskRequest.AccountIds)
+        //        {
+        //            Account account = await accountRepository.GetAccountIncludeAccountCategory(accountId);
+        //            bool checkAccount = account.AccountCategories.Any(ac => ac.CategoryId.Equals(character.CategoryId));
+        //            if (!checkAccount)
+        //            {
+        //                return account.AccountId + " cannot cosplay " + character.CharacterId;
+        //            }
 
-                    Task task = new Task()
-                    {
-                        AccountId = account.AccountId,
-                        ContractId = contract.ContractId,
-                        CreateDate = DateTime.Now,
-                        Description = contract.Description.ToString(),
-                        StartDate = contract.StartDate,
-                        EndDate = contract.EndDate,
-                        IsActive = true,
-                        Status = TaskStatus.Pending,
-                        Location = contract.Location,
-                        TaskName = character.CharacterName,
-                        TaskId = Guid.NewGuid().ToString(),
-                        UpdateDate = null,
-                    };
-                    tasks.Add(task);
-                }
-            }
+        //            Task task = new Task()
+        //            {
+        //                AccountId = account.AccountId,
+        //                ContractId = contract.ContractId,
+        //                CreateDate = DateTime.Now,
+        //                Description = contract.Description.ToString(),
+        //                StartDate = contract.StartDate,
+        //                EndDate = contract.EndDate,
+        //                IsActive = true,
+        //                Status = TaskStatus.Pending,
+        //                Location = contract.Location,
+        //                TaskName = character.CharacterName,
+        //                TaskId = Guid.NewGuid().ToString(),
+        //                UpdateDate = null,
+        //            };
+        //            tasks.Add(task);
+        //        }
+        //    }
 
-            bool result = await taskRepository.AddRangeTask(tasks);
-            List<Notification> notificationList = new List<Notification>();
+        //    bool result = await taskRepository.AddRangeTask(tasks);
+        //    List<Notification> notificationList = new List<Notification>();
 
-            if (result)
-            {
-                foreach (var task in tasks)
-                {
-                    string connectionId = TaskHub.GetConnectionId(task.AccountId);
-                    string message = $"You have just received a new task";
-                    if (!string.IsNullOrEmpty(connectionId))
-                    {
-                        await hubContext.Clients.Client(connectionId).SendAsync("ReceiveTaskNotification", message);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"User {task.AccountId} không online, không thể gửi thông báo");
-                        var notification = new Notification()
-                        {
-                            AccountId = task.AccountId,
-                            Message = message,
-                            Id = Guid.NewGuid().ToString(),
-                        };
-                        notificationList.Add(notification);
-                    }
-                }
-            }
+        //    if (result)
+        //    {
+        //        foreach (var task in tasks)
+        //        {
+        //            string connectionId = TaskHub.GetConnectionId(task.AccountId);
+        //            string message = $"You have just received a new task";
+        //            if (!string.IsNullOrEmpty(connectionId))
+        //            {
+        //                await hubContext.Clients.Client(connectionId).SendAsync("ReceiveTaskNotification", message);
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine($"User {task.AccountId} không online, không thể gửi thông báo");
+        //                var notification = new Notification()
+        //                {
+        //                    AccountId = task.AccountId,
+        //                    Message = message,
+        //                    Id = Guid.NewGuid().ToString(),
+        //                };
+        //                notificationList.Add(notification);
+        //            }
+        //        }
+        //    }
 
-            bool resultNotification = await notificationRepository.AddRangeNotification(notificationList);
+        //    bool resultNotification = await notificationRepository.AddRangeNotification(notificationList);
 
-            return resultNotification ? "Successfully" : "Failed";
-        }
+        //    return resultNotification ? "Successfully" : "Failed";
+        //}
 
-        public async Task<string> DeleteTask(string taskId)
-        {
-            var checkTask = await taskRepository.GetTask(taskId);
-            if (checkTask == null)
-            {
-                return "Task does not exist";
-            }
-            checkTask.IsActive = false;
-            bool result = await taskRepository.UpdateTask(checkTask);
-            return result ? "Delete task successfully" : "Delete task failed";
-        }
+        //public async Task<string> DeleteTask(string taskId)
+        //{
+        //    var checkTask = await taskRepository.GetTask(taskId);
+        //    if (checkTask == null)
+        //    {
+        //        return "Task does not exist";
+        //    }
+        //    checkTask.IsActive = false;
+        //    bool result = await taskRepository.UpdateTask(checkTask);
+        //    return result ? "Delete task successfully" : "Delete task failed";
+        //}
 
-        public async Task<TaskResponse> GetTask(string taskId)
-        {
-            var checkTask = await taskRepository.GetTask(taskId);
-            if (checkTask == null)
-            {
-                return null;
-            }
-            TaskResponse task = new TaskResponse()
-            {
-                AccountId = checkTask.AccountId,
-                ContractId = checkTask.ContractId,
-                CreateDate = checkTask.CreateDate,
-                Description = checkTask.Description,
-                EndDate = checkTask.EndDate,
-                Status = checkTask.Status.ToString(),
-                EventId = checkTask.EventId,
-                IsActive = checkTask.IsActive,
-                Location = checkTask.Location,
-                StartDate = checkTask.StartDate,
-                TaskId = checkTask.TaskId,
-                TaskName = checkTask.TaskName,
-                UpdateDate = checkTask.UpdateDate,
-            };
-            return task;
-        }
+        //public async Task<TaskResponse> GetTask(string taskId)
+        //{
+        //    var checkTask = await taskRepository.GetTask(taskId);
+        //    if (checkTask == null)
+        //    {
+        //        return null;
+        //    }
+        //    TaskResponse task = new TaskResponse()
+        //    {
+        //        AccountId = checkTask.AccountId,
+        //        ContractId = checkTask.ContractId,
+        //        CreateDate = checkTask.CreateDate,
+        //        Description = checkTask.Description,
+        //        EndDate = checkTask.EndDate,
+        //        Status = checkTask.Status.ToString(),
+        //        EventId = checkTask.EventId,
+        //        IsActive = checkTask.IsActive,
+        //        Location = checkTask.Location,
+        //        StartDate = checkTask.StartDate,
+        //        TaskId = checkTask.TaskId,
+        //        TaskName = checkTask.TaskName,
+        //        UpdateDate = checkTask.UpdateDate,
+        //    };
+        //    return task;
+        //}
 
-        public async Task<List<TaskResponse>> GetTaskListsByAccountId(string accountId, string? taskId)
-        {
-            Account account = await accountRepository.GetAccount(accountId);
-            if (account == null)
-            {
-                return new List<TaskResponse>();
-            }
+        //public async Task<List<TaskResponse>> GetTaskListsByAccountId(string accountId, string? taskId)
+        //{
+        //    Account account = await accountRepository.GetAccount(accountId);
+        //    if (account == null)
+        //    {
+        //        return new List<TaskResponse>();
+        //    }
 
-            List<Task> tasks = await taskRepository.GetTaskByAccountId(accountId, taskId);
-            return mapper.Map<List<TaskResponse>>(tasks);
-        }
+        //    List<Task> tasks = await taskRepository.GetTaskByAccountId(accountId, taskId);
+        //    return mapper.Map<List<TaskResponse>>(tasks);
+        //}
 
-        public async Task<string> UpdateStatusTask(string taskId, int taskStatus, string accountId)
-        {
-            var checkAccount = await accountRepository.GetAccount(accountId);
-            if (checkAccount == null)
-            {
-                return "Account does not have permisson to update";
-            }
-            var checkTask = await taskRepository.GetTask(taskId);
-            if (checkTask == null)
-            {
-                return "Task does not exist";
-            }
-            if (checkTask.Status == CCSS_Repository.Entities.TaskStatus.Cancel)
-            {
-                return "A canceled task cannot be updated";
-            }
-            bool checkNewStatus = IsValidStatusTransition(checkTask.Status, (CCSS_Repository.Entities.TaskStatus)taskStatus);
-            if (checkNewStatus)
-            {
-                checkTask.Status = (CCSS_Repository.Entities.TaskStatus)taskStatus;
-                bool result = await taskRepository.UpdateTask(checkTask);
-                return result ? "Update task successfully" : "Update task failed";
-            }
-            return null;
-        }
+        //public async Task<string> UpdateStatusTask(string taskId, int taskStatus, string accountId)
+        //{
+        //    var checkAccount = await accountRepository.GetAccount(accountId);
+        //    if (checkAccount == null)
+        //    {
+        //        return "Account does not have permisson to update";
+        //    }
+        //    var checkTask = await taskRepository.GetTask(taskId);
+        //    if (checkTask == null)
+        //    {
+        //        return "Task does not exist";
+        //    }
+        //    if (checkTask.Status == CCSS_Repository.Entities.TaskStatus.Cancel)
+        //    {
+        //        return "A canceled task cannot be updated";
+        //    }
+        //    bool checkNewStatus = IsValidStatusTransition(checkTask.Status, (CCSS_Repository.Entities.TaskStatus)taskStatus);
+        //    if (checkNewStatus)
+        //    {
+        //        checkTask.Status = (CCSS_Repository.Entities.TaskStatus)taskStatus;
+        //        bool result = await taskRepository.UpdateTask(checkTask);
+        //        return result ? "Update task successfully" : "Update task failed";
+        //    }
+        //    return null;
+        //}
 
-        public async Task<List<TaskResponse>> ViewAllTaskByAccountId(string accountId, string? taskId)
-        {
-            try
-            {
-                List<TaskResponse> taskResponses = new List<TaskResponse>();
-                Account acount = await accountRepository.GetAccountByAccountIdIncludeTask(accountId, taskId);
+        //public async Task<List<TaskResponse>> ViewAllTaskByAccountId(string accountId, string? taskId)
+        //{
+        //    try
+        //    {
+        //        List<TaskResponse> taskResponses = new List<TaskResponse>();
+        //        Account acount = await accountRepository.GetAccountByAccountIdIncludeTask(accountId, taskId);
 
-                if (acount == null)
-                {
-                    throw new Exception("Account does not exist");
-                }
+        //        if (acount == null)
+        //        {
+        //            throw new Exception("Account does not exist");
+        //        }
 
-                foreach (Task task in acount.Tasks)
-                {
-                    TaskResponse taskResponse = new TaskResponse()
-                    {
-                        AccountId = task.AccountId,
-                        ContractId = task.ContractId,
-                        CreateDate = task.CreateDate,
-                        Description = task.Description,
-                        EndDate = task.EndDate,
-                        Status = task.Status.ToString(),
-                        EventId = task.EventId,
-                        IsActive = task.IsActive,
-                        Location = task.Location,
-                        StartDate = task.StartDate,
-                        TaskId = task.TaskId,
-                        TaskName = task.TaskName,
-                        UpdateDate = task.UpdateDate,
-                    };
-                    taskResponses.Add(taskResponse);
-                }
-                return taskResponses;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"{ex.Message}");
-            }
-        }
+        //        foreach (Task task in acount.Tasks)
+        //        {
+        //            TaskResponse taskResponse = new TaskResponse()
+        //            {
+        //                AccountId = task.AccountId,
+        //                ContractId = task.ContractId,
+        //                CreateDate = task.CreateDate,
+        //                Description = task.Description,
+        //                EndDate = task.EndDate,
+        //                Status = task.Status.ToString(),
+        //                EventId = task.EventId,
+        //                IsActive = task.IsActive,
+        //                Location = task.Location,
+        //                StartDate = task.StartDate,
+        //                TaskId = task.TaskId,
+        //                TaskName = task.TaskName,
+        //                UpdateDate = task.UpdateDate,
+        //            };
+        //            taskResponses.Add(taskResponse);
+        //        }
+        //        return taskResponses;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception($"{ex.Message}");
+        //    }
+        //}
 
-        public async Task<List<TaskResponse>> ViewAllTaskByContractId(string contractId)
-        {
-            try
-            {
-                List<TaskResponse> taskResponses = new List<TaskResponse>();
-                Contract contract = await contractRespository.GetContractAndTasks(contractId);
-                if (contract == null)
-                {
-                    throw new Exception("Contract does not exist");
-                }
-                foreach (Task task in contract.Tasks)
-                {
-                    TaskResponse taskResponse = new TaskResponse()
-                    {
-                        AccountId = task.AccountId,
-                        ContractId = task.ContractId,
-                        CreateDate = task.CreateDate,
-                        Description = task.Description,
-                        EndDate = task.EndDate,
-                        Status = task.Status.ToString(),
-                        EventId = task.EventId,
-                        IsActive = task.IsActive,
-                        Location = task.Location,
-                        StartDate = task.StartDate,
-                        TaskId = task.TaskId,
-                        TaskName = task.TaskName,
-                        UpdateDate = task.UpdateDate,
-                    };
-                    taskResponses.Add(taskResponse);
-                }
-                return taskResponses;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            } 
-        }
+        //public async Task<List<TaskResponse>> ViewAllTaskByContractId(string contractId)
+        //{
+        //    try
+        //    {
+        //        List<TaskResponse> taskResponses = new List<TaskResponse>();
+        //        Contract contract = await contractRespository.GetContractAndTasks(contractId);
+        //        if (contract == null)
+        //        {
+        //            throw new Exception("Contract does not exist");
+        //        }
+        //        foreach (Task task in contract.Tasks)
+        //        {
+        //            TaskResponse taskResponse = new TaskResponse()
+        //            {
+        //                AccountId = task.AccountId,
+        //                ContractId = task.ContractId,
+        //                CreateDate = task.CreateDate,
+        //                Description = task.Description,
+        //                EndDate = task.EndDate,
+        //                Status = task.Status.ToString(),
+        //                EventId = task.EventId,
+        //                IsActive = task.IsActive,
+        //                Location = task.Location,
+        //                StartDate = task.StartDate,
+        //                TaskId = task.TaskId,
+        //                TaskName = task.TaskName,
+        //                UpdateDate = task.UpdateDate,
+        //            };
+        //            taskResponses.Add(taskResponse);
+        //        }
+        //        return taskResponses;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(ex.Message);
+        //    } 
+        //}
 
-        private bool IsValidStatusTransition(CCSS_Repository.Entities.TaskStatus? currentStatus, CCSS_Repository.Entities.TaskStatus newStatus)
-        {
-            if (currentStatus == CCSS_Repository.Entities.TaskStatus.Pending && newStatus == CCSS_Repository.Entities.TaskStatus.Assignment)
-                return true;
+        //private bool IsValidStatusTransition(CCSS_Repository.Entities.TaskStatus? currentStatus, CCSS_Repository.Entities.TaskStatus newStatus)
+        //{
+        //    if (currentStatus == CCSS_Repository.Entities.TaskStatus.Pending && newStatus == CCSS_Repository.Entities.TaskStatus.Assignment)
+        //        return true;
 
-            if (currentStatus == CCSS_Repository.Entities.TaskStatus.Assignment && newStatus == CCSS_Repository.Entities.TaskStatus.Progressing)
-                return true;
+        //    if (currentStatus == CCSS_Repository.Entities.TaskStatus.Assignment && newStatus == CCSS_Repository.Entities.TaskStatus.Progressing)
+        //        return true;
 
-            if (currentStatus == CCSS_Repository.Entities.TaskStatus.Progressing && newStatus == CCSS_Repository.Entities.TaskStatus.Completed)
-                return true;
+        //    if (currentStatus == CCSS_Repository.Entities.TaskStatus.Progressing && newStatus == CCSS_Repository.Entities.TaskStatus.Completed)
+        //        return true;
 
-            return false;
-        }
+        //    return false;
+        //}
     }
 }

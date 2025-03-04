@@ -11,57 +11,57 @@ namespace CCSS_Captone.Controllers
     [ApiController]
     public class TaskController : ControllerBase
     {
-        private readonly ITaskService taskService;
+        //private readonly ITaskService taskService;
 
-        public TaskController(ITaskService taskService)
-        {
-            this.taskService = taskService;
-        }
+        //public TaskController(ITaskService taskService)
+        //{
+        //    this.taskService = taskService;
+        //}
 
-        [HttpPut]
-        public async Task<ActionResult<TaskResponse>> UpdateStatusTask(string taskId, int taskStatus, string accountId)
-        {
-            var task = await taskService.UpdateStatusTask(taskId, taskStatus, accountId);
-            return Ok(task);
-        }
+        //[HttpPut]
+        //public async Task<ActionResult<TaskResponse>> UpdateStatusTask(string taskId, int taskStatus, string accountId)
+        //{
+        //    var task = await taskService.UpdateStatusTask(taskId, taskStatus, accountId);
+        //    return Ok(task);
+        //}
 
-        [HttpDelete("id")]
-        public async Task<ActionResult<TaskResponse>> DeleteTask(string taskId)
-        {
-            var task = await taskService.DeleteTask(taskId);
-            return Ok(task);
-        }
+        //[HttpDelete("id")]
+        //public async Task<ActionResult<TaskResponse>> DeleteTask(string taskId)
+        //{
+        //    var task = await taskService.DeleteTask(taskId);
+        //    return Ok(task);
+        //}
 
-        [HttpGet("taskId")]
-        public async Task<ActionResult<TaskResponse>> GetTask(string taskId)
-        {
-            var task = await taskService.GetTask(taskId);
-            if (task == null)
-            {
-                return NotFound(new { message = "Update task does not success." });
-            }
-            return Ok(task);
-        }
+        //[HttpGet("taskId")]
+        //public async Task<ActionResult<TaskResponse>> GetTask(string taskId)
+        //{
+        //    var task = await taskService.GetTask(taskId);
+        //    if (task == null)
+        //    {
+        //        return NotFound(new { message = "Update task does not success." });
+        //    }
+        //    return Ok(task);
+        //}
 
-        [HttpGet("accountId")]
-        public async Task<ActionResult> ViewAllTaskByAccountId(string accountId, string? taskId)
-        {
-            var task = await taskService.ViewAllTaskByAccountId(accountId, taskId);
-            return Ok(task);
-        }
+        //[HttpGet("accountId")]
+        //public async Task<ActionResult> ViewAllTaskByAccountId(string accountId, string? taskId)
+        //{
+        //    var task = await taskService.ViewAllTaskByAccountId(accountId, taskId);
+        //    return Ok(task);
+        //}
 
-        [HttpPost]
-        public async Task<ActionResult<TaskResponse>> AddTaskForListAccount(List<AddTaskRequest> addTaskRequests)
-        {
-            var task = await taskService.AddTaskForListAccount(addTaskRequests);
-            return Ok(task);
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<TaskResponse>> AddTaskForListAccount(List<AddTaskRequest> addTaskRequests)
+        //{
+        //    var task = await taskService.AddTaskForListAccount(addTaskRequests);
+        //    return Ok(task);
+        //}
 
-        [HttpGet("contractId")]
-        public async Task<ActionResult> ViewAllTaskByContractId(string contractId)
-        {
-            var task = await taskService.ViewAllTaskByContractId(contractId);
-            return Ok(task);
-        }
+        //[HttpGet("contractId")]
+        //public async Task<ActionResult> ViewAllTaskByContractId(string contractId)
+        //{
+        //    var task = await taskService.ViewAllTaskByContractId(contractId);
+        //    return Ok(task);
+        //}
     }
 }
