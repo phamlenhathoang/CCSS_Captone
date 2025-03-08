@@ -35,6 +35,19 @@ namespace CCSS_Captone.Controllers
                 return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
         }
+        [HttpGet("GetAllByAccountId/{id}")]
+        public async Task<IActionResult> GetAllTicketAccountsByAccountId(string id)
+        {
+            try
+            {
+                var ticketAccounts = await _ticketAccountService.GetTicketAccountByAccountId(id);
+                return Ok(ticketAccounts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
+        }
 
         /// <summary>
         /// Lấy thông tin chi tiết của một TicketAccount theo ID
@@ -97,6 +110,28 @@ namespace CCSS_Captone.Controllers
             try
             {
                 var result = await _ticketAccountService.UpdateTicketAccount(id, request);
+                if (result.Contains("Success"))
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
+        }
+        [HttpPut("Ticketcheck")]
+        public async Task<IActionResult> TicketCheck( [FromBody] TicketCheckRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest("Invalid request");
+            }
+
+            try
+            {
+                var result = await _ticketAccountService.TicketCheck(request);
                 if (result.Contains("Success"))
                 {
                     return Ok(result);

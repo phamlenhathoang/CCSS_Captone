@@ -10,6 +10,7 @@ namespace CCSS_Repository.Repositories
     {
         Task<List<Event>> GetAllEvents(string searchTerm);
         Task<Event> GetEventById(string id);
+        Task<Event> GetEventByTicketId(string ticketId);
         Task<bool> AddEvent(Event eventObj);
         Task<bool> UpdateEvent(Event eventObj);
         Task<bool> DeleteEvent(string id);
@@ -57,6 +58,13 @@ namespace CCSS_Repository.Repositories
                 .Include(e => e.Images);
 
             return await query.ToListAsync();
+        }
+        public async Task<Event> GetEventByTicketId(string ticketId)
+        {
+            return await _dbContext.Events
+        .Where(e => e.IsActive == true && e.Ticket.TicketId == ticketId) 
+        .Include(e => e.Ticket) 
+        .FirstOrDefaultAsync();
         }
 
 

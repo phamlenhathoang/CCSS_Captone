@@ -68,7 +68,7 @@ namespace CCSS_Captone.Controllers
         /// Tạo một sự kiện mới
         /// </summary>
         [HttpPost("AddEvent")]
-        public async Task<IActionResult> AddEvent([FromBody] CreateEventRequest eventRequest)
+        public async Task<IActionResult> AddEvent([FromForm] CreateEventRequest eventRequest)
         {
             if (eventRequest == null)
                 return BadRequest("Invalid request: Event data is null");

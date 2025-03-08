@@ -3,8 +3,15 @@ using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using Microsoft.Extensions.Configuration;
+using MimeKit;
+using MimeKit.Text;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CCSS_Service.Services
@@ -13,7 +20,9 @@ namespace CCSS_Service.Services
     {
         Task<List<TicketAccountResponse>> GetAllTicketAccounts();
         Task<TicketAccountResponse> GetTicketAccount(string id);
+        Task<List<TicketAccountResponse>> GetTicketAccountByAccountId(string id);
         Task<TicketAccountResponse> AddTicketAccount(TicketAccountRequest request);
+        Task<string> TicketCheck(TicketCheckRequest request);
         Task<string> UpdateTicketAccount(string id, TicketAccountRequest request);
         Task<bool> DeleteTicketAccount(string id);
     }
@@ -23,13 +32,19 @@ namespace CCSS_Service.Services
         private readonly ITicketAccountRepository _ticketAccountRepository;
         private readonly ITicketRepository _ticketRepository;
         private readonly IMapper _mapper;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IEventRepository _eventrepository;
 
-        public TicketAccountService(ITicketAccountRepository ticketAccountRepository, ITicketRepository ticketRepository, IMapper mapper)
+        private const string Base62Chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+        public TicketAccountService(ITicketAccountRepository ticketAccountRepository, ITicketRepository ticketRepository, IMapper mapper, IAccountRepository accountRepository, IEventRepository eventrepository)
         {
            
             _mapper = mapper;
             _ticketAccountRepository = ticketAccountRepository;
             _ticketRepository = ticketRepository;
+            _accountRepository = accountRepository;
+            _eventrepository = eventrepository;
         }
 
         /// ✅ **Lấy danh sách tất cả TicketAccount**
@@ -44,6 +59,11 @@ namespace CCSS_Service.Services
         {
             var ticketAccount = await _ticketAccountRepository.GetTicketAccount(id);
             return _mapper.Map<TicketAccountResponse>(ticketAccount);
+        }
+        public async Task<List<TicketAccountResponse>> GetTicketAccountByAccountId(string id)
+        {
+            var ticketAccounts = await _ticketAccountRepository.GetTicketAccountByAccountId(id);
+            return _mapper.Map<List<TicketAccountResponse>>(ticketAccounts);
         }
 
         /// ✅ **Thêm mới TicketAccount**
@@ -71,6 +91,9 @@ namespace CCSS_Service.Services
                 var newTicketAccount = _mapper.Map<TicketAccount>(request);
                 newTicketAccount.TicketAccountId = Guid.NewGuid().ToString();
 
+                // ✅ Tạo TicketCode từ TicketAccountId (6 ký tự)
+                newTicketAccount.TicketCode = GenerateShortCode(newTicketAccount.TicketAccountId);
+
                 // ✅ Lưu TicketAccount vào DB và kiểm tra kết quả
                 bool isAdded = await _ticketAccountRepository.AddTicketAccount(newTicketAccount);
                 if (!isAdded)
@@ -81,6 +104,7 @@ namespace CCSS_Service.Services
                 // ✅ Lưu cập nhật số lượng Ticket vào DB
                 await _ticketRepository.UpdateTicket(ticket);
                 var response = _mapper.Map<TicketAccountResponse>(newTicketAccount);
+                
                 return response;
             }
             catch (Exception ex)
@@ -88,6 +112,8 @@ namespace CCSS_Service.Services
                 throw;
             }
         }
+
+       
 
 
 
@@ -111,5 +137,51 @@ namespace CCSS_Service.Services
         {
             return await _ticketAccountRepository.DeleteTicketAccount(id);
         }
+        public async Task<string> TicketCheck(TicketCheckRequest request)
+        {
+            var existingTicketAccount = await _ticketAccountRepository.GetTicketAccountByTicketCode(request.TicketCode);
+            if (existingTicketAccount == null)
+            {
+                return "Ticket not found";
+            }
+            else if (existingTicketAccount.quantitypurchased == 0)
+            {
+                return "Ticket has expired";
+            }
+            else if (existingTicketAccount.quantitypurchased<request.quantity)
+            {
+                return "exceed ticket capacity";
+            }
+
+            _mapper.Map(request, existingTicketAccount);
+            existingTicketAccount.quantitypurchased -= request.quantity;
+            await _ticketAccountRepository.UpdateTicketAccount(existingTicketAccount);
+            return "Check Success";
+        }
+
+
+        public static string GenerateShortCode(string input)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
+                ulong number = BitConverter.ToUInt64(hashBytes, 0); // Lấy 8 byte đầu
+
+                return ToBase62(number, 6); // Chuyển thành chuỗi 6 ký tự
+            }
+        }
+
+        private static string ToBase62(ulong number, int length)
+        {
+            var result = new char[length];
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = Base62Chars[(int)(number % 62)];
+                number /= 62;
+            }
+            return new string(result.Reverse().ToArray());
+        }
+
+        
     }
 }

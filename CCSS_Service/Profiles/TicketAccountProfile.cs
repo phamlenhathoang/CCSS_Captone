@@ -16,6 +16,7 @@ namespace CCSS_Service.Profiles
         {
             CreateMap<TicketAccount, TicketAccountRequest>().ReverseMap();
             CreateMap<TicketAccount, TicketAccountResponse>().ReverseMap();
+            CreateMap<TicketAccount, TicketCheckRequest>().ReverseMap();
         }
     }
 }

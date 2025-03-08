@@ -19,7 +19,7 @@ namespace CCSS_Repository.Entities
         public PaymentPurpose Purpose { get; set; }
         public double? Amount { get; set; }
         public string? TransactionId { get; set; }
-        public string? CreatAt { get; set; }
+        public DateTime? CreatAt { get; set; }
 
         [ForeignKey("OrderId")]
         public string? OrderId { get; set; }

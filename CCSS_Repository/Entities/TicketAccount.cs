@@ -16,6 +16,7 @@ namespace CCSS_Repository.Entities
 
         [ForeignKey("AccountId")]
         public string? AccountId { get; set; }
+        public string TicketCode { get; set; }
         public Account Account { get; set; }
         public int quantitypurchased { get; set; }
         public double TotalPrice { get; set; }

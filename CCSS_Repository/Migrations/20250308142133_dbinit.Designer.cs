@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCSS_Repository.Migrations
 {
     [DbContext(typeof(CCSSDbContext))]
-    [Migration("20250304144229_CCSS_Migration_1")]
-    partial class CCSS_Migration_1
+    [Migration("20250308142133_dbinit")]
+    partial class dbinit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,6 +83,30 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Account");
+
+                    b.HasData(
+                        new
+                        {
+                            AccountId = "1",
+                            Birthday = new DateTime(1995, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "john@example.com",
+                            IsActive = true,
+                            Name = "John Doe",
+                            Password = "hashed_password",
+                            Phone = 123456789,
+                            RoleId = "1"
+                        },
+                        new
+                        {
+                            AccountId = "2",
+                            Birthday = new DateTime(1995, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "phuongnam26012002@gmail.com",
+                            IsActive = true,
+                            Name = "Glenn Quagmire",
+                            Password = "giggity",
+                            Phone = 123456789,
+                            RoleId = "4"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.AccountCoupon", b =>
@@ -135,6 +159,20 @@ namespace CCSS_Repository.Migrations
                         .IsUnique();
 
                     b.ToTable("Cart");
+
+                    b.HasData(
+                        new
+                        {
+                            CartId = "CART001",
+                            AccountId = "1",
+                            TotalPrice = 100.0
+                        },
+                        new
+                        {
+                            CartId = "CART002",
+                            AccountId = "2",
+                            TotalPrice = 200.0
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.CartProduct", b =>
@@ -157,6 +195,14 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("CartProduct");
+
+                    b.HasData(
+                        new
+                        {
+                            CartProductId = "1",
+                            CartId = "CART001",
+                            ProductId = "P1"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Category", b =>
@@ -173,6 +219,20 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = "1",
+                            CategoryName = "Fantasy",
+                            Description = "Characters from fantasy world"
+                        },
+                        new
+                        {
+                            CategoryId = "2",
+                            CategoryName = "Sci-Fi",
+                            Description = "Characters from sci-fi universe"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Character", b =>
@@ -218,6 +278,18 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Character");
+
+                    b.HasData(
+                        new
+                        {
+                            CharacterId = "CH1",
+                            CategoryId = "1",
+                            CharacterName = "Elf Warrior",
+                            CreateDate = new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6595),
+                            Description = "A fantasy elf warrior",
+                            IsActive = true,
+                            Price = 100.0
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Contract", b =>
@@ -283,6 +355,27 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("PackageId");
 
                     b.ToTable("Contract");
+
+                    b.HasData(
+                        new
+                        {
+                            ContractId = "CON001",
+                            AccountId = "2",
+                            Amount = 1.0,
+                            CharacterQuantity = 2,
+                            ContractCode = "CT001",
+                            ContractName = "Hợp đồng thuê cosplayer",
+                            CouponId = "CPN001",
+                            Deposit = "50%",
+                            Description = 1,
+                            EndDate = new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Location = "Hà Nội",
+                            PackageId = "PKG001",
+                            Price = 500.0,
+                            Signature = true,
+                            StartDate = new DateTime(2025, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = 2
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.ContractCharacter", b =>
@@ -315,6 +408,16 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("ContracId");
 
                     b.ToTable("ContractCharacter");
+
+                    b.HasData(
+                        new
+                        {
+                            ContractCharacterId = "CC1",
+                            AccountId = "1",
+                            CharacterId = "CH1",
+                            ContracId = "CON001",
+                            Quantity = 2
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Coupon", b =>
@@ -341,6 +444,17 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("CouponId");
 
                     b.ToTable("Coupon");
+
+                    b.HasData(
+                        new
+                        {
+                            CouponId = "CPN001",
+                            Amount = 5.0,
+                            Condition = "First order",
+                            EndDate = new DateTime(2025, 4, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6401),
+                            Percent = 10f,
+                            StartDate = new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6387)
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Event", b =>
@@ -378,6 +492,19 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("EventId");
 
                     b.ToTable("Event");
+
+                    b.HasData(
+                        new
+                        {
+                            EventId = "E1",
+                            CreateDate = new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6513),
+                            Description = "Annual cosplay event",
+                            EndDate = new DateTime(2025, 3, 11, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6509),
+                            EventName = "Cosplay Festival",
+                            IsActive = true,
+                            Location = "Tokyo",
+                            StartDate = new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6505)
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.EventCharacter", b =>
@@ -436,6 +563,16 @@ namespace CCSS_Repository.Migrations
                         .HasFilter("[ContractId] IS NOT NULL");
 
                     b.ToTable("Feedback");
+
+                    b.HasData(
+                        new
+                        {
+                            FeedbackId = "F1",
+                            ContractId = "CON001",
+                            CreateDate = new DateTime(2025, 3, 8, 14, 21, 33, 186, DateTimeKind.Utc).AddTicks(6725),
+                            Description = "Great!",
+                            Star = 5
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Image", b =>
@@ -520,6 +657,14 @@ namespace CCSS_Repository.Migrations
                         .IsUnique();
 
                     b.ToTable("Order");
+
+                    b.HasData(
+                        new
+                        {
+                            OrderId = "O1",
+                            CartId = "CART001",
+                            CouponId = "CPN001"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Package", b =>
@@ -539,6 +684,22 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("PackageId");
 
                     b.ToTable("Package");
+
+                    b.HasData(
+                        new
+                        {
+                            PackageId = "PKG001",
+                            Description = "Includes basic costume and props",
+                            PackageName = "Basic Cosplay Package",
+                            Price = 100.0
+                        },
+                        new
+                        {
+                            PackageId = "PKG002",
+                            Description = "Includes premium costume, props, and makeup",
+                            PackageName = "Premium Cosplay Package",
+                            Price = 300.0
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Payment", b =>
@@ -552,8 +713,8 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("ContractId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CreatAt")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("CreatAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(450)");
@@ -586,6 +747,18 @@ namespace CCSS_Repository.Migrations
                         .HasFilter("[TicketAccountId] IS NOT NULL");
 
                     b.ToTable("Payment");
+
+                    b.HasData(
+                        new
+                        {
+                            PaymentId = "P1",
+                            Amount = 100.0,
+                            CreatAt = new DateTime(2025, 3, 8, 14, 21, 33, 186, DateTimeKind.Utc).AddTicks(6750),
+                            OrderId = "O1",
+                            Purpose = 0,
+                            Status = 2,
+                            Type = "Credit Card"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Product", b =>
@@ -617,6 +790,18 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("ProductId");
 
                     b.ToTable("Product");
+
+                    b.HasData(
+                        new
+                        {
+                            ProductId = "P1",
+                            CreateDate = new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6568),
+                            Description = "A high-quality cosplay sword",
+                            IsActive = true,
+                            Price = 50.0,
+                            ProductName = "Cosplay Sword",
+                            Quantity = 10
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.RefreshToken", b =>
@@ -666,6 +851,38 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "0",
+                            Description = "Admin",
+                            RoleName = 0
+                        },
+                        new
+                        {
+                            Id = "1",
+                            Description = "Manager",
+                            RoleName = 1
+                        },
+                        new
+                        {
+                            Id = "2",
+                            Description = "Consultant",
+                            RoleName = 2
+                        },
+                        new
+                        {
+                            Id = "3",
+                            Description = "Cosplayer",
+                            RoleName = 3
+                        },
+                        new
+                        {
+                            Id = "4",
+                            Description = "Customer",
+                            RoleName = 4
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Task", b =>
@@ -717,6 +934,20 @@ namespace CCSS_Repository.Migrations
                         .HasFilter("[EventCharacterId] IS NOT NULL");
 
                     b.ToTable("Task");
+
+                    b.HasData(
+                        new
+                        {
+                            TaskId = "T1",
+                            ContractCharacterId = "CC1",
+                            Description = "Prepare the booth for the event",
+                            EndDate = new DateTime(2025, 3, 9, 14, 21, 33, 186, DateTimeKind.Utc).AddTicks(6768),
+                            IsActive = true,
+                            Location = "Event Hall",
+                            StartDate = new DateTime(2025, 3, 8, 14, 21, 33, 186, DateTimeKind.Utc).AddTicks(6768),
+                            Status = 2,
+                            TaskName = "Setup Booth"
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Ticket", b =>
@@ -740,6 +971,15 @@ namespace CCSS_Repository.Migrations
                         .HasFilter("[EventId] IS NOT NULL");
 
                     b.ToTable("Ticket");
+
+                    b.HasData(
+                        new
+                        {
+                            TicketId = "T1",
+                            EventId = "E1",
+                            Price = 20.0,
+                            Quantity = 100
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.TicketAccount", b =>
@@ -749,6 +989,10 @@ namespace CCSS_Repository.Migrations
 
                     b.Property<string>("AccountId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TicketCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TicketId")
                         .HasColumnType("nvarchar(450)");
@@ -766,6 +1010,17 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("TicketId");
 
                     b.ToTable("TicketAccount");
+
+                    b.HasData(
+                        new
+                        {
+                            TicketAccountId = "1",
+                            AccountId = "2",
+                            TicketCode = "TCK001",
+                            TicketId = "T1",
+                            TotalPrice = 100.0,
+                            quantitypurchased = 2
+                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Account", b =>

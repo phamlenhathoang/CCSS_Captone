@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace CCSS_Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class CCSS_Migration_1 : Migration
+    public partial class dbinit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -378,6 +380,7 @@ namespace CCSS_Repository.Migrations
                 {
                     TicketAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AccountId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TicketCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     quantitypurchased = table.Column<int>(type: "int", nullable: false),
                     TotalPrice = table.Column<double>(type: "float", nullable: false),
                     TicketId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -504,7 +507,7 @@ namespace CCSS_Repository.Migrations
                     Purpose = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: true),
                     TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatAt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     OrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     TicketAccountId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ContractId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -560,6 +563,119 @@ namespace CCSS_Repository.Migrations
                         principalTable: "EventCharacter",
                         principalColumn: "EventCharacterId");
                 });
+
+            migrationBuilder.InsertData(
+                table: "Category",
+                columns: new[] { "CategoryId", "CategoryName", "Description" },
+                values: new object[,]
+                {
+                    { "1", "Fantasy", "Characters from fantasy world" },
+                    { "2", "Sci-Fi", "Characters from sci-fi universe" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Coupon",
+                columns: new[] { "CouponId", "Amount", "Condition", "EndDate", "Percent", "StartDate" },
+                values: new object[] { "CPN001", 5.0, "First order", new DateTime(2025, 4, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6401), 10f, new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6387) });
+
+            migrationBuilder.InsertData(
+                table: "Event",
+                columns: new[] { "EventId", "CreateBy", "CreateDate", "Description", "EndDate", "EventName", "IsActive", "Location", "StartDate", "UpdateDate" },
+                values: new object[] { "E1", null, new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6513), "Annual cosplay event", new DateTime(2025, 3, 11, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6509), "Cosplay Festival", true, "Tokyo", new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6505), null });
+
+            migrationBuilder.InsertData(
+                table: "Package",
+                columns: new[] { "PackageId", "Description", "PackageName", "Price" },
+                values: new object[,]
+                {
+                    { "PKG001", "Includes basic costume and props", "Basic Cosplay Package", 100.0 },
+                    { "PKG002", "Includes premium costume, props, and makeup", "Premium Cosplay Package", 300.0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Product",
+                columns: new[] { "ProductId", "CreateDate", "Description", "IsActive", "Price", "ProductName", "Quantity", "UpdateDate" },
+                values: new object[] { "P1", new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6568), "A high-quality cosplay sword", true, 50.0, "Cosplay Sword", 10, null });
+
+            migrationBuilder.InsertData(
+                table: "Role",
+                columns: new[] { "Id", "Description", "RoleName" },
+                values: new object[,]
+                {
+                    { "0", "Admin", 0 },
+                    { "1", "Manager", 1 },
+                    { "2", "Consultant", 2 },
+                    { "3", "Cosplayer", 3 },
+                    { "4", "Customer", 4 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Account",
+                columns: new[] { "AccountId", "Birthday", "Code", "Description", "Email", "Height", "ImageUrl", "IsActive", "Leader", "Name", "OnTask", "Password", "Phone", "RoleId", "TaskQuantity", "Weight" },
+                values: new object[,]
+                {
+                    { "1", new DateTime(1995, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "john@example.com", null, null, true, null, "John Doe", null, "hashed_password", 123456789, "1", null, null },
+                    { "2", new DateTime(1995, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "phuongnam26012002@gmail.com", null, null, true, null, "Glenn Quagmire", null, "giggity", 123456789, "4", null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Character",
+                columns: new[] { "CharacterId", "CategoryId", "CharacterName", "CreateDate", "Description", "IsActive", "MaxHeight", "MaxWeight", "MinHeight", "MinWeight", "Price", "UpdateDate" },
+                values: new object[] { "CH1", "1", "Elf Warrior", new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6595), "A fantasy elf warrior", true, null, null, null, null, 100.0, null });
+
+            migrationBuilder.InsertData(
+                table: "Ticket",
+                columns: new[] { "TicketId", "EventId", "Price", "Quantity" },
+                values: new object[] { "T1", "E1", 20.0, 100 });
+
+            migrationBuilder.InsertData(
+                table: "Cart",
+                columns: new[] { "CartId", "AccountId", "TotalPrice" },
+                values: new object[,]
+                {
+                    { "CART001", "1", 100.0 },
+                    { "CART002", "2", 200.0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Contract",
+                columns: new[] { "ContractId", "AccountId", "Amount", "CharacterQuantity", "ContractCode", "ContractName", "CouponId", "Deposit", "Description", "EndDate", "ImageUrl", "Location", "PackageId", "Price", "Signature", "StartDate", "Status" },
+                values: new object[] { "CON001", "2", 1.0, 2, "CT001", "Hợp đồng thuê cosplayer", "CPN001", "50%", 1, new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Hà Nội", "PKG001", 500.0, true, new DateTime(2025, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 });
+
+            migrationBuilder.InsertData(
+                table: "TicketAccount",
+                columns: new[] { "TicketAccountId", "AccountId", "TicketCode", "TicketId", "TotalPrice", "quantitypurchased" },
+                values: new object[] { "1", "2", "TCK001", "T1", 100.0, 2 });
+
+            migrationBuilder.InsertData(
+                table: "CartProduct",
+                columns: new[] { "CartProductId", "CartId", "ProductId" },
+                values: new object[] { "1", "CART001", "P1" });
+
+            migrationBuilder.InsertData(
+                table: "ContractCharacter",
+                columns: new[] { "ContractCharacterId", "AccountId", "CharacterId", "ContracId", "Quantity" },
+                values: new object[] { "CC1", "1", "CH1", "CON001", 2 });
+
+            migrationBuilder.InsertData(
+                table: "Feedback",
+                columns: new[] { "FeedbackId", "ContractId", "CreateDate", "Description", "Star", "UpdateDate" },
+                values: new object[] { "F1", "CON001", new DateTime(2025, 3, 8, 14, 21, 33, 186, DateTimeKind.Utc).AddTicks(6725), "Great!", 5, null });
+
+            migrationBuilder.InsertData(
+                table: "Order",
+                columns: new[] { "OrderId", "CartId", "CouponId" },
+                values: new object[] { "O1", "CART001", "CPN001" });
+
+            migrationBuilder.InsertData(
+                table: "Payment",
+                columns: new[] { "PaymentId", "Amount", "ContractId", "CreatAt", "OrderId", "Purpose", "Status", "TicketAccountId", "TransactionId", "Type" },
+                values: new object[] { "P1", 100.0, null, new DateTime(2025, 3, 8, 14, 21, 33, 186, DateTimeKind.Utc).AddTicks(6750), "O1", 0, 2, null, null, "Credit Card" });
+
+            migrationBuilder.InsertData(
+                table: "Task",
+                columns: new[] { "TaskId", "ContractCharacterId", "CreateDate", "Description", "EndDate", "EventCharacterId", "IsActive", "Location", "StartDate", "Status", "TaskName", "UpdateDate" },
+                values: new object[] { "T1", "CC1", null, "Prepare the booth for the event", new DateTime(2025, 3, 9, 14, 21, 33, 186, DateTimeKind.Utc).AddTicks(6768), null, true, "Event Hall", new DateTime(2025, 3, 8, 14, 21, 33, 186, DateTimeKind.Utc).AddTicks(6768), 2, "Setup Booth", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Account_RoleId",
