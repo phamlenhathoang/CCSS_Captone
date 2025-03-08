@@ -541,7 +541,8 @@ namespace CCSS_Repository.Entities
                     AccountId = "acc2",
                     quantitypurchased = 5,
                     TotalPrice = 250,
-                    TicketId = "tkt1"
+                    TicketId = "tkt1",
+                    TicketCode = "hehehe"
                 }
             );
 
@@ -555,7 +556,7 @@ namespace CCSS_Repository.Entities
                     Purpose = (PaymentPurpose)0,
                     Amount = 100,
                     TransactionId = "TXN001",
-                    CreatAt = "2023-01-01",
+                    CreatAt = DateTime.Parse("2023-01-02"),
                     OrderId = null,
                     TicketAccountId = null,
                     ContractId = null
@@ -567,7 +568,7 @@ namespace CCSS_Repository.Entities
                     Status = (PaymentStatus?)2,
                     Amount = 150,
                     TransactionId = "TXN002",
-                    CreatAt = "2023-01-02",
+                    CreatAt = DateTime.Parse("2023-01-02"),
                     OrderId = null,
                     TicketAccountId = "tkat1",
                     ContractId = null
@@ -579,7 +580,7 @@ namespace CCSS_Repository.Entities
                     Status = (PaymentStatus?)1,
                     Amount = 200,
                     TransactionId = "TXN003",
-                    CreatAt = "2023-01-03",
+                    CreatAt = DateTime.Parse("2023-01-02"),
                     OrderId = null,
                     TicketAccountId = null,
                     ContractId = "ctr1"

@@ -184,7 +184,7 @@ namespace CCSS_Service.Services
                         AccountId = accountId,
                         TicketId = ticketId,
                         quantitypurchased = ticketQuantity.GetValueOrDefault(),
-                        TotalPrice = amount.GetValueOrDefault()
+                        TotalPrice = amount.GetValueOrDefault(),
                     };
 
                     var addTicketResult = await _ticketAccountService.AddTicketAccount(ticketAccountRequest);
@@ -195,6 +195,7 @@ namespace CCSS_Service.Services
                         Type = "Momo",
                         Status = PaymentStatus.Complete,
                         Purpose = PaymentPurpose.BuyTicket,
+                        CreatAt = DateTime.UtcNow,
                         TransactionId = orderId,
                         Amount = amount.GetValueOrDefault(),
                         TicketAccountId = addTicketResult.TicketAccountId

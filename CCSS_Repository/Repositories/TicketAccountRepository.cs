@@ -7,6 +7,8 @@ namespace CCSS_Repository.Repositories
     public interface ITicketAccountRepository
     {
         Task<TicketAccount> GetTicketAccount(string id);
+        Task<TicketAccount> GetTicketAccountByTicketCode(string ticketCode);
+        Task<List<TicketAccount>> GetTicketAccountByAccountId(string id);
         Task<List<TicketAccount>> GetAllTicketAccounts();
         Task<bool> AddTicketAccount(TicketAccount ticketAccount);
         Task<bool> UpdateTicketAccount(TicketAccount ticketAccount);
@@ -25,17 +27,31 @@ namespace CCSS_Repository.Repositories
         public async Task<TicketAccount> GetTicketAccount(string id)
         {
             return await _dbContext.TicketAccounts
-                .Where(ta => ta.TicketAccountId == id && ta.Ticket.Event.IsActive == true) // Chỉ lấy TicketAccount nếu Event.IsActive == true
-                .Include(ta => ta.Ticket) // Bao gồm Ticket để đảm bảo có thể truy cập Event
-                .ThenInclude(t => t.Event) // Bao gồm Event để kiểm tra IsActive
+                .Where(ta => ta.TicketAccountId == id && ta.Ticket.Event.IsActive == true) 
+                .Include(ta => ta.Ticket) 
+                .ThenInclude(t => t.Event) 
+                .FirstOrDefaultAsync();
+        }
+        public async Task<List<TicketAccount>> GetTicketAccountByAccountId(string id)
+        {
+            return await _dbContext.TicketAccounts
+                .Where(ta => ta.AccountId == id && ta.Ticket.Event.IsActive == true) 
+                .Include(ta => ta.Ticket) 
+                .ThenInclude(t => t.Event) 
+                .ToListAsync();
+        }
+        public async Task<TicketAccount> GetTicketAccountByTicketCode(string ticketCode)
+        {
+            return await _dbContext.TicketAccounts
+                .Where(ta => ta.TicketCode == ticketCode) 
                 .FirstOrDefaultAsync();
         }
         public async Task<List<TicketAccount>> GetAllTicketAccounts()
         {
             return await _dbContext.TicketAccounts
-                .Where(ta => ta.Ticket.Event.IsActive == true) // Chỉ lấy TicketAccount nếu Event.IsActive == true
-                .Include(ta => ta.Ticket) // Bao gồm Ticket để đảm bảo có thể truy cập Event
-                .ThenInclude(t => t.Event) // Bao gồm Event để kiểm tra IsActive
+                .Where(ta => ta.Ticket.Event.IsActive == true) 
+                .Include(ta => ta.Ticket) 
+                .ThenInclude(t => t.Event) 
                 .ToListAsync();
         }
 
@@ -68,5 +84,6 @@ namespace CCSS_Repository.Repositories
             return result > 0;
         }
 
+        
     }
 }

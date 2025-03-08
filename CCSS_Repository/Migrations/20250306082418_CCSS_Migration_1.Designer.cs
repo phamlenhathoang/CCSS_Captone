@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCSS_Repository.Migrations
 {
     [DbContext(typeof(CCSSDbContext))]
-    [Migration("20250226163333_UpdateContract")]
-    partial class UpdateContract
+    [Migration("20250306082418_CCSS_Migration_1")]
+    partial class CCSS_Migration_1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,7 +91,7 @@ namespace CCSS_Repository.Migrations
                             Leader = true,
                             Name = "Admin User",
                             OnTask = false,
-                            Password = "$2a$11$UUWTgEVuSu/WTixjyRQCNOk70VsfWpBSaOjVp/yzj9uHqE5KZEldK",
+                            Password = "$2a$11$rRC4s2zRi7jQSXku5QKcC.QtM0OSD5CvKB1Sio6WciDX9TJIIYl1m",
                             Phone = 123456789,
                             RoleId = "role1",
                             TaskQuantity = 0
@@ -108,7 +108,7 @@ namespace CCSS_Repository.Migrations
                             Leader = false,
                             Name = "Customer User",
                             OnTask = false,
-                            Password = "$2a$11$c6/YXePSNrZvmNP6Vh5Wbu7alLi0hzIy3upEPqKkU2n4KHRG4bg9W",
+                            Password = "$2a$11$UPgqfYjvgkq6sfOBDAonvOHRBhNm39CmPQCOEmJ2ATjQElXCiYUMS",
                             Phone = 987654321,
                             RoleId = "role3",
                             TaskQuantity = 0
@@ -674,8 +674,8 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("ContractId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CreatAt")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("CreatAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(450)");
@@ -714,7 +714,7 @@ namespace CCSS_Repository.Migrations
                         {
                             PaymentId = "pay1",
                             Amount = 100.0,
-                            CreatAt = "2023-01-01",
+                            CreatAt = new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Purpose = 0,
                             Status = 1,
                             TransactionId = "TXN001",
@@ -724,7 +724,7 @@ namespace CCSS_Repository.Migrations
                         {
                             PaymentId = "pay2",
                             Amount = 150.0,
-                            CreatAt = "2023-01-02",
+                            CreatAt = new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Purpose = 0,
                             Status = 2,
                             TicketAccountId = "tkat1",
@@ -736,7 +736,7 @@ namespace CCSS_Repository.Migrations
                             PaymentId = "pay3",
                             Amount = 200.0,
                             ContractId = "ctr1",
-                            CreatAt = "2023-01-03",
+                            CreatAt = new DateTime(2023, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Purpose = 0,
                             Status = 1,
                             TransactionId = "TXN003",
@@ -1009,6 +1009,10 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("AccountId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("TicketCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TicketId")
                         .HasColumnType("nvarchar(450)");
 
@@ -1031,6 +1035,7 @@ namespace CCSS_Repository.Migrations
                         {
                             TicketAccountId = "tkat1",
                             AccountId = "acc2",
+                            TicketCode = "hehehe",
                             TicketId = "tkt1",
                             TotalPrice = 250.0,
                             quantitypurchased = 5

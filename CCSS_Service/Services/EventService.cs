@@ -107,7 +107,7 @@ namespace CCSS_Service.Services
                     return "Failed to add event to database";
                 }
                 ImageRequest image = new ImageRequest();
-                image.ImageUrl = eventRequest.ImageUrl;
+                //image.ImageUrl = eventRequest.ImageUrl;
                 image.EventId = newEvent.EventId.ToString();
                 await _imageService.AddImage(image);
 
