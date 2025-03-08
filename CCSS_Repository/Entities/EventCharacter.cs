@@ -21,5 +21,10 @@ namespace CCSS_Repository.Entities
         [ForeignKey("CharacterId")]
         public string CharacterId { get; set; }
         public Character Character { get; set; } 
+        public Task Task { get; set; }
+
+        [ForeignKey("AccountId")]
+        public string AccountId { get; set; }
+        public Account Account { get; set; }
     }
 }

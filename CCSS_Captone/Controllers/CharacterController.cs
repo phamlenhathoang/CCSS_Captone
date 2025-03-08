@@ -1,7 +1,10 @@
-﻿using CCSS_Service.Model.Responses;
+﻿using CCSS_Repository.Entities;
+using CCSS_Service.Model.Requests;
+using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Writers;
 
 namespace CCSS_Captone.Controllers
 {
@@ -36,6 +39,39 @@ namespace CCSS_Captone.Controllers
                 return NotFound(new { message = "Character not found." });
             }
             return Ok(character);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCharacter([FromForm] CharacterRequest character, [FromForm] List<IFormFile> imageFiles)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _characterService.AddCharacter(character, imageFiles);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCharacter(string id, CharacterRequest character)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _characterService.UpdateCharacter(id, character);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCharacter(string id)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _characterService.DeleteCharacter(id);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
         }
     }
 }

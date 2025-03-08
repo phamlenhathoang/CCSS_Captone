@@ -1,9 +1,15 @@
 using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.BackgroundServices;
+using CCSS_Service.Hubs;
 using CCSS_Service.Profiles;
 using CCSS_Service.Services;
 using Microsoft.EntityFrameworkCore;
 using CCSS_Service.Model.Requests;
+using CCSS_Service.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,14 +32,14 @@ builder.Services.AddScoped<IContractRespository, ContractRespository>();
 builder.Services.AddScoped<IContractCharacterRepository, ContractCharacterRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();  
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketAccountRepository, TicketAccountRepository>();
 builder.Services.AddScoped<IEventCharacterRepository, EventCharacterRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
-
-
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
 
 //Service
@@ -42,10 +48,13 @@ builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IContractServices, ContractServices>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ITicketAccountService, TicketAccountService>();
 builder.Services.AddScoped<IImageService, ImageServices>();
-
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
 
 //AutoMapper
@@ -53,13 +62,43 @@ builder.Services.AddAutoMapper(typeof(PackageProfile),
                                typeof(CharacterProfile), 
                                typeof(CategoryProfile),
                                typeof(TaskProfile),
+                               typeof(AccountProfile),
                                typeof(EventProfile),
                                typeof(TicketProfile),
                                typeof(TicketAccountProfile),
                                typeof(EventCharacterProfile));
 
+builder.Services.AddSignalR();
+
 builder.Services.AddDbContext<CCSSDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddHostedService<NotificationBackgroundService>();
+
+builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
+var secretKey = builder.Configuration["AppSettings:SecretKey"];
+var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidIssuer = builder.Configuration["AppSettings:Issuer"],
+            ValidAudience = builder.Configuration["AppSettings:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:SecretKey"])),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
 // Add services to the container.
 
@@ -74,12 +113,12 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseRouting();
+
+app.MapHub<TaskHub>("/taskHub");
 
 app.UseHttpsRedirection();
 

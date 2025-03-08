@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 namespace CCSS_Repository.Entities
 {
     [Table("Role")]
-    public partial class Role
-    {
-        [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        public RoleName? RoleName { get; set; }
-        public string? Description { get; set; }
-        public ICollection<Account> Accounts { get; set; } = new List<Account>();   
+            public partial class Role
+            {
+                [Key]
+                public string Id { get; set; } = Guid.NewGuid().ToString();
+                public RoleName? RoleName { get; set; }
+                public string? Description { get; set; }
+                public ICollection<Account> Accounts { get; set; } = new List<Account>();   
 
-    }
+            }
 
     public enum RoleName
     {
@@ -25,7 +25,6 @@ namespace CCSS_Repository.Entities
         Manager,
         Consultant,
         Cosplayer,
-        Organizer,
         Customer,
     }
 }

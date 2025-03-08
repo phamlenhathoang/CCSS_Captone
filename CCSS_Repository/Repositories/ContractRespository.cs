@@ -14,10 +14,11 @@ namespace CCSS_Repository.Repositories
         Task<List<Contract>> GetAllContract(string searchterm);
         Task<Contract> GetContractById(string id);
         Task<Contract> GetContractAndContractCharacter(string id);
+        //Task<Contract> GetContractAndTasks(string contractId);
         Task<bool> AddContract(Contract contract);
         Task<bool> UpdateContract(Contract contract);
         Task<bool> DeleteContract(Contract contract);
-      
+
     }
 
     public class ContractRespository: IContractRespository
@@ -40,19 +41,19 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Contract> GetContractById(string id)
         {
-            return await _context.Contracts.FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
+            return await _context.Contracts.Include(c => c.ContractCharacters).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
         }
 
         public async Task<bool> AddContract(Contract contract)
         {
-             _context.Contracts.Add(contract);
-           return await _context.SaveChangesAsync() > 0;
+            _context.Contracts.Add(contract);
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> UpdateContract(Contract contract)
         {
             _context.Contracts.Update(contract);
-           return await _context.SaveChangesAsync() > 0;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> DeleteContract(Contract contract)
@@ -65,5 +66,10 @@ namespace CCSS_Repository.Repositories
         {
             return await _context.Contracts.Include(c => c.ContractCharacters).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
         }
+
+        //public async Task<Contract> GetContractAndTasks(string contractId)
+        //{
+        //    return await _context.Contracts.Include(c => c.Tasks).FirstOrDefaultAsync(c => c.ContractId.Equals(contractId));
+        //}
     }
 }

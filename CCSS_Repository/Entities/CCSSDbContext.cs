@@ -17,7 +17,6 @@ namespace CCSS_Repository.Entities
         public CCSSDbContext() { }
 
         public virtual DbSet<Account> Accounts { get; set; }
-        public virtual DbSet<AccountCategory> AccountCategories { get; set; }
         public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<CartProduct> CartProducts { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
@@ -36,7 +35,9 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<TicketAccount> TicketAccounts { get; set; }
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var configuration = new ConfigurationBuilder()
@@ -57,11 +58,25 @@ namespace CCSS_Repository.Entities
                 .HasForeignKey(a => a.RoleId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            //Account - Notification
+            modelBuilder.Entity<Account>()
+                .HasMany(a => a.Notifications)
+                .WithOne(r => r.Account)
+                .HasForeignKey(a => a.AccountId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            //Account - AccountCoupon
+            modelBuilder.Entity<Account>()
+               .HasMany(a => a.AccountCoupons)
+               .WithOne(r => r.Account)
+               .HasForeignKey(a => a.AccountId)
+               .OnDelete(DeleteBehavior.NoAction);
+
             //Account - RefreshToken
             modelBuilder.Entity<Account>()
-                .HasOne(a => a.RefreshToken)
+                .HasMany(a => a.RefreshTokens)
                 .WithOne(r => r.Account)
-                .HasForeignKey<RefreshToken>(a => a.AccountId)
+                .HasForeignKey(a => a.AccountId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             //Account - Cart
@@ -78,18 +93,18 @@ namespace CCSS_Repository.Entities
                 .HasForeignKey(a => a.AccountId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            //Account - AccountCategory
+            //Account - EventCharacter
             modelBuilder.Entity<Account>()
-                .HasMany(a => a.AccountCategories)
+                .HasOne(a => a.EventCharacter)
                 .WithOne(r => r.Account)
-                .HasForeignKey(a => a.AccountId)
+                .HasForeignKey<EventCharacter>(a => a.AccountId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            //Account - Task
+            //Account - ContractCharacter
             modelBuilder.Entity<Account>()
-                .HasMany(a => a.Tasks)
+                .HasOne(a => a.ContractCharacter)
                 .WithOne(r => r.Account)
-                .HasForeignKey(a => a.AccountId)
+                .HasForeignKey<ContractCharacter>(a => a.AccountId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             //Account - TicketAccount
@@ -118,6 +133,13 @@ namespace CCSS_Repository.Entities
                 .HasOne(a => a.Payment)
                 .WithOne(r => r.Order)
                 .HasForeignKey<Payment>(a => a.OrderId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            //Order - Coupon 
+            modelBuilder.Entity<Order>()
+                .HasOne(a => a.Coupon)
+                .WithOne(r => r.Order)
+                .HasForeignKey<Order>(a => a.CouponId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             //Product - CartProduct
@@ -169,25 +191,25 @@ namespace CCSS_Repository.Entities
                .HasForeignKey(a => a.EventId)
                .OnDelete(DeleteBehavior.NoAction);
 
-            //Event - Task
-            modelBuilder.Entity<Event>()
-               .HasMany(a => a.Tasks)
-               .WithOne(r => r.Event)
-               .HasForeignKey(a => a.EventId)
-               .OnDelete(DeleteBehavior.NoAction);
-
-            //Task - Contract 
-            modelBuilder.Entity<Task>()
-               .HasOne(a => a.Contract)
-               .WithMany(r => r.Tasks)
-               .HasForeignKey(a => a.ContractId)
-               .OnDelete(DeleteBehavior.NoAction);
-
             //Contract - Payment
             modelBuilder.Entity<Contract>()
                .HasMany(a => a.Payments)
                .WithOne(r => r.Contract)
                .HasForeignKey(a => a.ContractId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            //Coupon - AccountCoupon
+            modelBuilder.Entity<Coupon>()
+               .HasMany(a => a.AccountCoupons)
+               .WithOne(r => r.Coupon)
+               .HasForeignKey(a => a.CouponId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            //Contract - Coupon
+            modelBuilder.Entity<Contract>()
+               .HasOne(a => a.Coupon)
+               .WithMany(r => r.Contracts)
+               .HasForeignKey(a => a.CouponId)
                .OnDelete(DeleteBehavior.NoAction);
 
             //Contract - Feedback
@@ -239,353 +261,209 @@ namespace CCSS_Repository.Entities
                .HasForeignKey(a => a.CategoryId)
                .OnDelete(DeleteBehavior.NoAction);
 
-            //Category - AccountCategory
-            modelBuilder.Entity<Category>()
-               .HasMany(a => a.AccountCategories)
-               .WithOne(r => r.Category)
-               .HasForeignKey(a => a.CategoryId)
+            //Task - EventCharacter
+            modelBuilder.Entity<Task>()
+               .HasOne(a => a.EventCharacter)
+               .WithOne(r => r.Task)
+               .HasForeignKey<Task>(a => a.EventCharacterId)
                .OnDelete(DeleteBehavior.NoAction);
+
+            //Task - ContractCharacter
+            modelBuilder.Entity<Task>()
+               .HasOne(a => a.ContractCharacter)
+               .WithOne(r => r.Task)
+               .HasForeignKey<Task>(a => a.ContractCharacterId)
+               .OnDelete(DeleteBehavior.NoAction);
+
             // --- SEED DATA (Dữ liệu khởi tạo mẫu) ---
-            // Seed Roles
-            modelBuilder.Entity<Role>().HasData(
-                new Role { Id = "role1", RoleName = (RoleName?)1, Description = "Admin role" },
-                new Role { Id = "role2", RoleName = (RoleName?)2, Description = "Manager role" },
-                new Role { Id = "role3", RoleName = (RoleName?)3, Description = "Customer role" }
-            );
-
-            // Seed Categories
+            // Seed dữ liệu cho bảng Category
             modelBuilder.Entity<Category>().HasData(
-                new Category { CategoryId = "cat1", CategoryName = "Category 1", Description = "Description for Category 1" },
-                new Category { CategoryId = "cat2", CategoryName = "Category 2", Description = "Description for Category 2" }
+                new Category { CategoryId = "1", CategoryName = "Fantasy", Description = "Characters from fantasy world" },
+                new Category { CategoryId = "2", CategoryName = "Sci-Fi", Description = "Characters from sci-fi universe" }
+            );
+            // Seed dữ liệu cho bảng Package
+            modelBuilder.Entity<Package>().HasData(
+                new Package
+                {
+                    PackageId = "PKG001",
+                    PackageName = "Basic Cosplay Package",
+                    Description = "Includes basic costume and props",
+                    Price = 100.0
+                },
+                new Package
+                {
+                    PackageId = "PKG002",
+                    PackageName = "Premium Cosplay Package",
+                    Description = "Includes premium costume, props, and makeup",
+                    Price = 300.0
+                }
+            );
+            // Seed dữ liệu cho bảng Role
+            modelBuilder.Entity<Role>().HasData(
+                new Role { Id = "0", RoleName = RoleName.Admin, Description = "Admin" },
+                new Role { Id = "1", RoleName = RoleName.Manager, Description = "Manager" },
+                new Role { Id = "2", RoleName = RoleName.Consultant, Description = "Consultant" },
+                new Role { Id = "3", RoleName = RoleName.Cosplayer, Description = "Cosplayer" },
+                new Role { Id = "4", RoleName = RoleName.Customer, Description = "Customer" }
             );
 
-            // Seed Accounts
+            // Seed dữ liệu cho bảng Account
             modelBuilder.Entity<Account>().HasData(
                 new Account
                 {
-                    AccountId = "acc1",
-                    Name = "Admin User",
-                    Email = "admin@example.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("password123"),
-                    Description = "Administrator account",
-                    Birthday = new DateTime(1990, 1, 1),
-                    Phone = 123456789,
+                    AccountId = "1",
+                    Name = "John Doe",
+                    Email = "john@example.com",
+                    Password = "hashed_password",
+                    RoleId = "1",
                     IsActive = true,
-                    OnTask = false,
-                    Leader = true,
-                    Code = "CODE123",
-                    ImageUrl = "https://example.com/admin.png",
-                    TaskQuantity = 0,
-                    RoleId = "role1"
+                    Birthday = new DateTime(1995, 5, 20),
+                    Phone = 123456789
                 },
                 new Account
                 {
-                    AccountId = "acc2",
-                    Name = "Customer User",
-                    Email = "customer@example.com",
-                    Password = BCrypt.Net.BCrypt.HashPassword("password456"),
-                    Description = "Customer account",
-                    Birthday = new DateTime(2000, 1, 1),
-                    Phone = 987654321,
+                    AccountId = "2",
+                    Name = "Glenn Quagmire",
+                    Email = "phuongnam26012002@gmail.com",
+                    Password = "giggity",
+                    RoleId = "4",
                     IsActive = true,
-                    OnTask = false,
-                    Leader = false,
-                    Code = "CODE456",
-                    ImageUrl = "https://example.com/customer.png",
-                    TaskQuantity = 0,
-                    RoleId = "role3"
+                    Birthday = new DateTime(1995, 5, 20),
+                    Phone = 123456789
                 }
             );
 
-            // Seed RefreshToken (1-1 với Account)
-            modelBuilder.Entity<RefreshToken>().HasData(
-                new RefreshToken
+            // Seed dữ liệu cho bảng Coupon
+            modelBuilder.Entity<Coupon>().HasData(
+                new Coupon
                 {
-                    RefreshTokenId = "rt1",
-                    RefreshTokenValue = "sample_refresh_token",
-                    RefreshTokenCode = "RTCODE1",
-                    JwtId = "jwt1",
-                    IsUsed = false,
-                    IsRevoked = false,
-                    CreateAt = new DateTime(2023, 1, 1),
-                    ExpiresAt = new DateTime(2023, 1, 8),
-                    AccountId = "acc1"
+                    CouponId = "CPN001",
+                    Condition = "First order",
+                    Percent = 10,
+                    Amount = 5,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddMonths(1)
                 }
             );
 
-            // Seed Carts (1 Cart cho mỗi Account)
-            modelBuilder.Entity<Cart>().HasData(
-                new Cart { CartId = "cart1", AccountId = "acc1", TotalPrice = 0 },
-                new Cart { CartId = "cart2", AccountId = "acc2", TotalPrice = 0 }
-            );
-
-            // Seed Products
-            modelBuilder.Entity<Product>().HasData(
-                new Product
-                {
-                    ProductId = "prod1",
-                    ProductName = "Product 1",
-                    Description = "Description of Product 1",
-                    Quantity = 100,
-                    Price = 10.0,
-                    CreateDate = new DateTime(2023, 1, 1),
-                    UpdateDate = null,
-                    IsActive = true
-                },
-                new Product
-                {
-                    ProductId = "prod2",
-                    ProductName = "Product 2",
-                    Description = "Description of Product 2",
-                    Quantity = 200,
-                    Price = 20.0,
-                    CreateDate = new DateTime(2023, 1, 2),
-                    UpdateDate = null,
-                    IsActive = true
-                }
-            );
-
-            // Seed CartProducts
-            modelBuilder.Entity<CartProduct>().HasData(
-                new CartProduct { CartProductId = "cp1", CartId = "cart1", ProductId = "prod1" },
-                new CartProduct { CartProductId = "cp2", CartId = "cart2", ProductId = "prod2" }
-            );
-
-            // Seed Orders (liên kết với Cart)
-            modelBuilder.Entity<Order>().HasData(
-                new Order { OrderId = "order1", CartId = "cart1" }
-            );
-
-            // Seed Packages
-            modelBuilder.Entity<Package>().HasData(
-                new Package { PackageId = "pkg1", PackageName = "Basic Package", Description = "Basic service package", Price = 99.99 }
-            );
-
-            // Seed Contracts
+            // Seed dữ liệu cho bảng Contract
             modelBuilder.Entity<Contract>().HasData(
                 new Contract
                 {
-                    ContractId = "ctr1",
-                    AccountId = "acc1",
-                    ContractName = "Contract 1",
-                    ContractCode = "C001",
-                    Description = "Contract for Event 1",
-                    Price = 500,
-                    Amount = 450,
+                    ContractId = "CON001",
+                    AccountId = "2",
+                    ContractName = "Hợp đồng thuê cosplayer",
+                    ContractCode = "CT001",
+                    Description = ContractDescription.RentCosplayer,
+                    Price = 500.0,
+                    Amount = 1,
                     Signature = true,
-                    Deposit = "50",
-                    CharacterQuantity = 1,
-                    Location = "Location 1",
-                    Status = (ContractStatus)1,
-                    StartDate = new DateTime(2023, 1, 1),
-                    EndDate = new DateTime(2023, 1, 31),
-                    PackageId = "pkg1"
-                },
-                new Contract
-                {
-                    ContractId = "ctr2",
-                    AccountId = "acc2",
-                    ContractName = "Contract 2",
-                    ContractCode = "C002",
-                    Description = "Contract for Event 2",
-                    Price = 800,
-                    Amount = 750,
-                    Signature = false,
-                    Deposit = "50",
+                    Deposit = "50%",
                     CharacterQuantity = 2,
-                    Location = "Location 2",
-                    Status = (ContractStatus)2,
-                    StartDate = new DateTime(2023, 2, 1),
-                    EndDate = new DateTime(2023, 3, 1),
-                    PackageId = "pkg1"
+                    Location = "Hà Nội",
+                    Status = ContractStatus.Progressing,
+                    StartDate = new DateTime(2025, 3, 10),
+                    EndDate = new DateTime(2025, 3, 15),
+                    PackageId = "PKG001",
+                    CouponId = "CPN001"
                 }
             );
 
-            // Seed ContractCharacters (nối Contract với Character)
-            modelBuilder.Entity<ContractCharacter>().HasData(
-                new ContractCharacter { ContractCharacterId = "cc1", ContracId = "ctr1", CharacterId = "char1", Quantity = 1 },
-                new ContractCharacter { ContractCharacterId = "cc2", ContracId = "ctr2", CharacterId = "char2", Quantity = 2 }
-            );
-
-            // Seed Characters
-            modelBuilder.Entity<Character>().HasData(
-                new Character
-                {
-                    CharacterId = "char1",
-                    CategoryId = "cat1",
-                    CharacterName = "Character 1",
-                    Price = 100,
-                    IsActive = true,
-                    CreateDate = new DateTime(2023, 1, 1),
-                    UpdateDate = null
-                },
-                new Character
-                {
-                    CharacterId = "char2",
-                    CategoryId = "cat2",
-                    CharacterName = "Character 2",
-                    Price = 150,
-                    IsActive = true,
-                    CreateDate = new DateTime(2023, 1, 2),
-                    UpdateDate = null
-                }
-            );
-
-            // Seed Events
+            // Seed dữ liệu cho bảng Event
             modelBuilder.Entity<Event>().HasData(
                 new Event
                 {
-                    EventId = "evt1",
-                    EventName = "Event 1",
-                    Description = "Description for Event 1",
-                    Location = "Location 1",
-                    IsActive = true,
-                    StartDate = new DateTime(2023, 3, 1),
-                    EndDate = new DateTime(2023, 3, 2),
-                    CreateDate = new DateTime(2023, 2, 25),
-                    UpdateDate = null,
-                    CreateBy = "acc1"
-                },
-                new Event
-                {
-                    EventId = "evt2",
-                    EventName = "Event 2",
-                    Description = "Description for Event 2",
-                    Location = "Location 2",
-                    IsActive = true,
-                    StartDate = new DateTime(2023, 4, 1),
-                    EndDate = new DateTime(2023, 4, 2),
-                    CreateDate = new DateTime(2023, 3, 25),
-                    UpdateDate = null,
-                    CreateBy = "acc2"
+                    EventId = "E1",
+                    EventName = "Cosplay Festival",
+                    Description = "Annual cosplay event",
+                    Location = "Tokyo",
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(3),
+                    CreateDate = DateTime.Now,
+                    IsActive = true
                 }
             );
 
-            // Seed EventCharacters
-            modelBuilder.Entity<EventCharacter>().HasData(
-                new EventCharacter { EventCharacterId = "ec1", EventId = "evt1", CharacterId = "char1" },
-                new EventCharacter { EventCharacterId = "ec2", EventId = "evt2", CharacterId = "char2" }
+            // Seed dữ liệu cho bảng Cart
+            modelBuilder.Entity<Cart>().HasData(
+                new Cart { CartId = "CART001", AccountId = "1", TotalPrice = 100.0 },
+                new Cart { CartId = "CART002", AccountId = "2", TotalPrice = 200.0 }
             );
 
-            // Seed AccountCategories (nối Account với Category)
-            modelBuilder.Entity<AccountCategory>().HasData(
-                new AccountCategory { AccountCategoryId = "acat1", AccountId = "acc1", CategoryId = "cat1" },
-                new AccountCategory { AccountCategoryId = "acat2", AccountId = "acc2", CategoryId = "cat2" }
-            );
-
-            // Seed Feedback (1-1 với Contract)
-            modelBuilder.Entity<Feedback>().HasData(
-                new Feedback
+            // Seed dữ liệu cho bảng Product
+            modelBuilder.Entity<Product>().HasData(
+                new Product
                 {
-                    FeedbackId = "fb1",
-                    Star = 5,
-                    Description = "Excellent service",
-                    CreateDate = new DateTime(2023, 3, 5),
-                    UpdateDate = null,
-                    ContractId = "ctr1"
+                    ProductId = "P1",
+                    ProductName = "Cosplay Sword",
+                    Description = "A high-quality cosplay sword",
+                    Quantity = 10,
+                    Price = 50,
+                    CreateDate = DateTime.Now,
+                    IsActive = true
                 }
             );
 
-            // Seed Tasks
-            modelBuilder.Entity<Task>().HasData(
-                new Task
+            // Seed dữ liệu cho bảng Character
+            modelBuilder.Entity<Character>().HasData(
+                new Character
                 {
-                    TaskId = "tsk1",
-                    AccountId = "acc1",
-                    TaskName = "Task 1",
-                    Location = "Location A",
-                    Description = "Task for Event 1",
+                    CharacterId = "CH1",
+                    CategoryId = "1",
+                    CharacterName = "Elf Warrior",
+                    Description = "A fantasy elf warrior",
+                    Price = 100,
                     IsActive = true,
-                    StartDate = new DateTime(2023, 3, 1, 9, 0, 0),
-                    EndDate = new DateTime(2023, 3, 1, 12, 0, 0),
-                    CreateDate = new DateTime(2023, 2, 28),
-                    UpdateDate = null,
-                    Status = (TaskStatus?)1,
-                    EventId = "evt1",
-                    ContractId = "ctr1"
-                },
-                new Task
-                {
-                    TaskId = "tsk2",
-                    AccountId = "acc2",
-                    TaskName = "Task 2",
-                    Location = "Location B",
-                    Description = "Task for Event 2",
-                    IsActive = true,
-                    StartDate = new DateTime(2023, 4, 1, 14, 0, 0),
-                    EndDate = new DateTime(2023, 4, 1, 17, 0, 0),
-                    CreateDate = new DateTime(2023, 3, 31),
-                    UpdateDate = null,
-                    Status = (TaskStatus?)2,
-                    EventId = "evt2",
-                    ContractId = "ctr2"
+                    CreateDate = DateTime.Now
                 }
             );
 
-            // Seed Tickets
+            // Seed dữ liệu cho bảng Ticket
             modelBuilder.Entity<Ticket>().HasData(
                 new Ticket
                 {
-                    TicketId = "tkt1",
+                    TicketId = "T1",
+                    EventId = "E1",
                     Quantity = 100,
-                    Price = 50,
-                    EventId = "evt1"
+                    Price = 20
                 }
             );
 
-            // Seed TicketsAccount
+            // Seed dữ liệu cho bảng TicketAccount
             modelBuilder.Entity<TicketAccount>().HasData(
-                new TicketAccount
-                {
-                    TicketAccountId = "tkat1",
-                    AccountId = "acc2",
-                    quantitypurchased = 5,
-                    TotalPrice = 250,
-                    TicketId = "tkt1",
-                    TicketCode = "hehehe"
-                }
+                new TicketAccount { TicketAccountId = "1", AccountId = "2", TicketCode = "TCK001", quantitypurchased = 2, TotalPrice = 100.0, TicketId = "T1" }
             );
 
-            // Seed Payments (cho Order, Ticket và Contract)
-            modelBuilder.Entity<Payment>().HasData(
-                new Payment
-                {
-                    PaymentId = "pay1",
-                    Type = "Credit Card",
-                    Status = (PaymentStatus?)1,
-                    Purpose = (PaymentPurpose)0,
-                    Amount = 100,
-                    TransactionId = "TXN001",
-                    CreatAt = DateTime.Parse("2023-01-02"),
-                    OrderId = null,
-                    TicketAccountId = null,
-                    ContractId = null
-                },
-                new Payment
-                {
-                    PaymentId = "pay2",
-                    Type = "Bank Transfer",
-                    Status = (PaymentStatus?)2,
-                    Amount = 150,
-                    TransactionId = "TXN002",
-                    CreatAt = DateTime.Parse("2023-01-02"),
-                    OrderId = null,
-                    TicketAccountId = "tkat1",
-                    ContractId = null
-                },
-                new Payment
-                {
-                    PaymentId = "pay3",
-                    Type = "PayPal",
-                    Status = (PaymentStatus?)1,
-                    Amount = 200,
-                    TransactionId = "TXN003",
-                    CreatAt = DateTime.Parse("2023-01-02"),
-                    OrderId = null,
-                    TicketAccountId = null,
-                    ContractId = "ctr1"
-                }
+            // Seed dữ liệu cho bảng CartProduct
+            modelBuilder.Entity<CartProduct>().HasData(
+                new CartProduct { CartProductId = "1", ProductId = "P1", CartId = "CART001" }
             );
+
+            // Seed dữ liệu cho bảng Order
+            modelBuilder.Entity<Order>().HasData(
+                new Order { OrderId = "O1", CartId = "CART001", CouponId = "CPN001" }
+            );
+
+            // Seed dữ liệu cho bảng ContractCharacter
+            modelBuilder.Entity<ContractCharacter>().HasData(
+                new ContractCharacter { ContractCharacterId = "CC1", ContracId = "CON001", AccountId = "1", CharacterId = "CH1", Quantity = 2 }
+            );
+
+            // Seed dữ liệu cho bảng Feedback
+            modelBuilder.Entity<Feedback>().HasData(
+                new Feedback { FeedbackId = "F1", Star = 5, Description = "Great!", CreateDate = DateTime.UtcNow, ContractId = "CON001" }
+            );
+
+            // Seed dữ liệu cho bảng Payment
+            modelBuilder.Entity<Payment>().HasData(
+                new Payment { PaymentId = "P1", Type = "Credit Card", Status = PaymentStatus.Cancel, Purpose = 0, Amount = 100.0, OrderId = "O1", CreatAt = DateTime.UtcNow }
+            );
+
+            // Seed dữ liệu cho bảng Task
+            modelBuilder.Entity<Task>().HasData(
+                new Task { TaskId = "T1", TaskName = "Setup Booth", Location = "Event Hall", Description = "Prepare the booth for the event", IsActive = true, StartDate = DateTime.UtcNow, EndDate = DateTime.UtcNow.AddDays(1), Status = TaskStatus.Progressing, ContractCharacterId = "CC1" }
+            );
+
 
             base.OnModelCreating(modelBuilder);
         }

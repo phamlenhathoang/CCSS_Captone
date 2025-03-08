@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace CCSS_Repository.Entities
 {
+    [Table("TicketAccount")]
     public class TicketAccount
     {
         [Key]

@@ -186,7 +186,7 @@ namespace CCSS_Service.Services
                 }
 
                 // ✅ Xử lý danh sách EventCharacter (nếu có)
-                if (eventRequest.EventCharacterRequests != null && !eventRequest.EventCharacterRequests.IsNullOrEmpty())
+                if (eventRequest.EventCharacterRequests != null)
                 {
                     // 🔥 Xóa toàn bộ EventCharacter cũ
                     await _repository.DeleteEventCharactersByEventId(existingEvent.EventId);

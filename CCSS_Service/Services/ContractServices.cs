@@ -23,6 +23,7 @@ namespace CCSS_Service.Services
         Task<string> UpdateContract(string contractId, ContractResponse contractResponse);
         Task<string> DeleteContract(string id);
         Task<string> UpdateStatusContract(string contracId, ContractStatus newStatus);
+        Task<string> UploadImageToFirebase(IFormFile file);
 
     }
     public class ContractServices : IContractServices
@@ -52,7 +53,8 @@ namespace CCSS_Service.Services
             return code;
         }
 
-        private async Task<string> UploadImageToFirebase(IFormFile file)
+        #region UploadImageToFirebase
+        public async Task<string> UploadImageToFirebase(IFormFile file)
         {
             if (file == null || file.Length == 0)
             {
@@ -84,6 +86,9 @@ namespace CCSS_Service.Services
                 return downloadUrl;
             }
         }
+
+        #endregion
+
         public async Task<List<Contract>> GetAllContract(string? searchterm)
         {
             return await _respository.GetAllContract(searchterm);
@@ -205,7 +210,7 @@ namespace CCSS_Service.Services
             }
             contractExicting.PackageId = contractResponse.PackageId;
             contractExicting.ContractName = contractResponse.ContractName;
-            contractExicting.Description = contractResponse.Description;
+            contractExicting.Description = ContractDescription.CreateEvent;
             contractExicting.Price = contractResponse.Price;
             contractExicting.Amount = contractResponse.Amount;
             contractExicting.Signature = contractResponse.Signature;

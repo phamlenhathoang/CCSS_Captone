@@ -25,15 +25,18 @@ namespace CCSS_Repository.Entities
         public string? Code {  get; set; }
         public string? ImageUrl {  get; set; }
         public int? TaskQuantity { get; set; }
-
+        public float? Height { get; set; }
+        public float? Weight { get; set; }
         [ForeignKey("RoleId")]
         public string RoleId { get; set; }
         public Role Role { get; set; } 
-        public RefreshToken RefreshToken { get; set; }  
         public Cart Cart { get; set; }
-        public ICollection<AccountCategory> AccountCategories { get; set; } = new List<AccountCategory>();
-        public ICollection<Task> Tasks { get; set; } = new List<Task>();
+        public EventCharacter EventCharacter { get; set; }
+        public ContractCharacter ContractCharacter { get; set; }
         public ICollection<TicketAccount> TicketAccounts { get; set; } = new List<TicketAccount>();
         public ICollection<Contract> Contracts { get; set; } = new List<Contract>();
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();    
+        public ICollection<AccountCoupon> AccountCoupons { get; set; } = new List<AccountCoupon>();
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }

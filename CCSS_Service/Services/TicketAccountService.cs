@@ -3,6 +3,11 @@ using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using Microsoft.Extensions.Configuration;
+using MimeKit;
+using MimeKit.Text;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -27,14 +32,19 @@ namespace CCSS_Service.Services
         private readonly ITicketAccountRepository _ticketAccountRepository;
         private readonly ITicketRepository _ticketRepository;
         private readonly IMapper _mapper;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IEventRepository _eventrepository;
+
         private const string Base62Chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-        public TicketAccountService(ITicketAccountRepository ticketAccountRepository, ITicketRepository ticketRepository, IMapper mapper)
+        public TicketAccountService(ITicketAccountRepository ticketAccountRepository, ITicketRepository ticketRepository, IMapper mapper, IAccountRepository accountRepository, IEventRepository eventrepository)
         {
            
             _mapper = mapper;
             _ticketAccountRepository = ticketAccountRepository;
             _ticketRepository = ticketRepository;
+            _accountRepository = accountRepository;
+            _eventrepository = eventrepository;
         }
 
         /// ✅ **Lấy danh sách tất cả TicketAccount**
@@ -94,6 +104,7 @@ namespace CCSS_Service.Services
                 // ✅ Lưu cập nhật số lượng Ticket vào DB
                 await _ticketRepository.UpdateTicket(ticket);
                 var response = _mapper.Map<TicketAccountResponse>(newTicketAccount);
+                
                 return response;
             }
             catch (Exception ex)
@@ -101,6 +112,8 @@ namespace CCSS_Service.Services
                 throw;
             }
         }
+
+       
 
 
 

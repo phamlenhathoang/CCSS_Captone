@@ -15,10 +15,6 @@ namespace CCSS_Repository.Entities
     {
         [Key]
         public string TaskId { get; set; } = Guid.NewGuid().ToString();
-        [ForeignKey("AccountId")]
-        public string? AccountId { get; set; }
-        public Account Account { get; set; }    
-
         public string? TaskName { get; set; }
         public string? Location { get; set; }
         public string? Description { get; set; }
@@ -31,13 +27,15 @@ namespace CCSS_Repository.Entities
         public DateTime? UpdateDate { get; set; }
         public TaskStatus? Status { get; set; }
 
-        [ForeignKey("EventId")]
-        public string? EventId { get; set; }
-        public Event Event { get; set; }
+        [ForeignKey("EventCharacterId")]
+        public string? EventCharacterId { get; set; }
+        public EventCharacter EventCharacter { get; set; }
 
-        [ForeignKey("ContractId")]
-        public string? ContractId { get; set; }
-        public Contract Contract { get; set; }
+        [ForeignKey("ContractCharacterId")]
+        public string? ContractCharacterId { get; set; }
+        public ContractCharacter ContractCharacter { get; set; }
+
+
 
     }
 

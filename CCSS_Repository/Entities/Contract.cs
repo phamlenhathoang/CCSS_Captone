@@ -20,7 +20,7 @@ namespace CCSS_Repository.Entities
         public Account Account { get; set; }
         public string? ContractName { get; set; }
         public string? ContractCode { get; set; }    
-        public string? Description { get; set; }
+        public ContractDescription? Description { get; set; }
         public double? Price { get; set; }
         public double? Amount { get; set; }
         public bool? Signature { get; set; }
@@ -35,10 +35,14 @@ namespace CCSS_Repository.Entities
         [ForeignKey("PackageId")]
         public string? PackageId { get; set; }
         public Package Package { get; set; }
+
+        [ForeignKey("CouponId")]
+        public string CouponId { get; set;}
+        public Coupon Coupon { get; set; }
+
         public Feedback Feedback { get; set; }
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
         public ICollection<ContractCharacter> ContractCharacters { get; set; } = new List<ContractCharacter>();
-        public ICollection<Task> Tasks { get; set; } = new List<Task>();
         
     }
 

@@ -19,9 +19,13 @@ namespace CCSS_Repository.Entities
         public string? CategoryId { get; set; }
         public Category Category { get; set; }  
         public string? CharacterName { get; set; }
-        private string? Description { get; set; }
+        public string? Description { get; set; }
         public double? Price { get; set; }
         public bool? IsActive { get; set; }
+        public float? MaxHeight { get; set; }
+        public float? MaxWeight { get; set; }
+        public float? MinHeight { get; set; }
+        public float? MinWeight { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public ICollection<Image> Images { get; set; } = new List<Image>(); 
