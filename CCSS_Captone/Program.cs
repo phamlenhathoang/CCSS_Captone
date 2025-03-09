@@ -110,8 +110,9 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.EnableAnnotations(); 
 });
-
+builder.Services.AddScoped<IVNPayService, VNPayService>();
 var app = builder.Build();
+
 
 app.UseSwagger();
 app.UseSwaggerUI();

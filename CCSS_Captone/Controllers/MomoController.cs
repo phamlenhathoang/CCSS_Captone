@@ -32,7 +32,7 @@ namespace CCSS_Captone.Controllers
         [Route("PaymentCallBack")]
         public async Task<IActionResult> PaymentCallBack()
         {
-            var response = await _momoService.PaymentExecuteAsync(HttpContext.Request.Query);
+            var response = await _momoService.MomoPaymentExecuteAsync(HttpContext.Request.Query);
             return Ok(response);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Libraries;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using MailKit.Net.Smtp;
@@ -23,7 +24,7 @@ namespace CCSS_Service.Services
     public interface IMomoService
     {
         Task<MomoCreatePaymentResponse> CreatePaymentAsync(OrderInfoModel model);
-        Task<string> PaymentExecuteAsync(IQueryCollection collection);
+        Task<string> MomoPaymentExecuteAsync(IQueryCollection collection);
     }
 
     public class MomoService : IMomoService
@@ -101,7 +102,7 @@ namespace CCSS_Service.Services
 
 
 
-        public async Task<string> PaymentExecuteAsync(IQueryCollection collection)
+        public async Task<string> MomoPaymentExecuteAsync(IQueryCollection collection)
         {
             var amountSt = collection["amount"].ToString();
             var orderInfo = collection["orderInfo"].ToString();
@@ -174,7 +175,8 @@ namespace CCSS_Service.Services
                     await _paymentRepository.AddPayment(payment);
                     var account = await _accountRepository.GetAccountByAccountId(accountId);
                     var event1 = await _eventrepository.GetEventByTicketId(ticketId);
-                    await SendEmailNotification(purpose, account.Email, addTicketResult.TicketCode, event1.EventName, event1.Location, event1.StartDate, addTicketResult.quantitypurchased);
+                    var sendMail = new SendMail();
+                    await sendMail.SendEmailNotification(purpose, account.Email, addTicketResult.TicketCode, event1.EventName, event1.Location, event1.StartDate, addTicketResult.quantitypurchased);
                     return "mua vé thành công";
 
                 case PaymentPurpose.ContractDeposit: // đặt cọc hợp đồng
@@ -188,80 +190,7 @@ namespace CCSS_Service.Services
 
         }
 
-        public async Task<bool> SendEmailNotification(PaymentPurpose? purpose, string toEmail, string ticketCode, string eventName, string location, DateTime startDate, int quantity)
-        {
-            try
-            {
-                var configuration = new ConfigurationBuilder()
-                   .SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                   .Build();
-
-                string fromEmail = configuration["FromEmail:Email"];
-                string emailPassword = configuration["FromEmail:Password"];
-
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("CCSS", fromEmail));
-                message.To.Add(new MailboxAddress("", toEmail));
-                message.Subject = purpose switch
-                {
-                    PaymentPurpose.BuyTicket => "Xác nhận đặt vé thành công",
-                    PaymentPurpose.ContractDeposit => "Xác nhận đặt cọc hợp đồng",
-                    PaymentPurpose.contractSettlement => "Xác nhận tất toán hợp đồng",
-                    PaymentPurpose.Order => "Xác nhận đơn hàng",
-                    _ => "Thông báo thanh toán"
-                };
-
-                string emailBody = purpose switch
-                {
-                    PaymentPurpose.BuyTicket => $@"
-                <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
-    <h2 style='color: #5a189a; text-align: center;'>🎉 Chúc mừng, bạn đã đặt vé thành công! 🎉</h2>
-    <div style='background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);'>
-        <p><strong>🌟 Sự kiện:</strong> {eventName}</p>
-        <p><strong>📍 Địa điểm:</strong> {location}</p>
-        <p><strong>🕒 Ngày diễn ra:</strong> {startDate:HH:mm dd/M/yyyy}</p>
-        <p><strong>🎟 Mã vé:</strong> <span style='color: #d63384; font-size: 18px;'>{ticketCode}</span></p>
-        <p><strong>👥 Số lượng vé:</strong> {quantity}</p>
-    </div>
-
-    <div style='text-align: center; margin-top: 20px;'>
-        <p style='font-size: 16px; font-weight: bold'>📢 Vui lòng mang theo mã vé khi tham dự để check-in.</p>
-        <p style='margin-top: 15px; ;'>🥰 Cảm ơn Quý khách đã sử dụng dịch vụ của chúng tôi, hẹn gặp bạn tại sự kiện sắp tới!! 😘</p>
-    </div>
-</div>",
-
-                    PaymentPurpose.ContractDeposit => $@"
-                <h2>Bạn đã đặt cọc hợp đồng thành công!</h2>
-                <p>Vui lòng kiểm tra chi tiết hợp đồng trong hệ thống.</p>",
-
-                    PaymentPurpose.contractSettlement => $@"
-                <h2>Bạn đã tất toán hợp đồng thành công!</h2>
-                <p>Hợp đồng đã hoàn tất. Cảm ơn bạn!</p>",
-
-                    PaymentPurpose.Order => $@"
-                <h2>Đơn hàng của bạn đã được xác nhận!</h2>
-                <p>Chúng tôi sẽ sớm giao hàng cho bạn.</p>",
-
-                    _ => "<p>Cảm ơn bạn đã thực hiện thanh toán.</p>"
-                };
-
-                message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
-
-                using var smtp = new SmtpClient();
-                await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-                await smtp.AuthenticateAsync(fromEmail, emailPassword);
-                await smtp.SendAsync(message);
-                await smtp.DisconnectAsync(true);
-
-                return true; // ✅ Gửi email thành công
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Lỗi gửi email: {ex.Message}");
-                return false; // ❌ Gửi email thất bại
-            }
-        }
+        
 
 
         private string ComputeHmacSha256(string message, string secretKey)
