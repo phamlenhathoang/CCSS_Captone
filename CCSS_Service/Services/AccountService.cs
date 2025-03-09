@@ -45,7 +45,7 @@ namespace CCSS_Service.Services
         private readonly IConfiguration _configuration;
         private readonly IMapper mapper;
 
-        public AccountService( /*IAccountRepository accountRepository, */IMapper mapper, /*ICharacterRepository characterRepository, IContractRespository contractRepository, ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
+        public AccountService(IAccountRepository accountRepository, IMapper mapper, /*ICharacterRepository characterRepository, IContractRespository contractRepository, ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
         {
             //this.taskRepository = taskRepository;
             this.accountRepository = accountRepository;
