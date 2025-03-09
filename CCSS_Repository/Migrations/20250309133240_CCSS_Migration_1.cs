@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CCSS_Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class dbinit : Migration
+    public partial class CCSS_Migration_1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -576,12 +576,12 @@ namespace CCSS_Repository.Migrations
             migrationBuilder.InsertData(
                 table: "Coupon",
                 columns: new[] { "CouponId", "Amount", "Condition", "EndDate", "Percent", "StartDate" },
-                values: new object[] { "CPN001", 5.0, "First order", new DateTime(2025, 4, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6401), 10f, new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6387) });
+                values: new object[] { "CPN001", 5.0, "First order", new DateTime(2025, 4, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9805), 10f, new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9794) });
 
             migrationBuilder.InsertData(
                 table: "Event",
                 columns: new[] { "EventId", "CreateBy", "CreateDate", "Description", "EndDate", "EventName", "IsActive", "Location", "StartDate", "UpdateDate" },
-                values: new object[] { "E1", null, new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6513), "Annual cosplay event", new DateTime(2025, 3, 11, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6509), "Cosplay Festival", true, "Tokyo", new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6505), null });
+                values: new object[] { "E1", null, new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9891), "Annual cosplay event", new DateTime(2025, 3, 12, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9886), "Cosplay Festival", true, "Tokyo", new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9885), null });
 
             migrationBuilder.InsertData(
                 table: "Package",
@@ -595,7 +595,7 @@ namespace CCSS_Repository.Migrations
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "ProductId", "CreateDate", "Description", "IsActive", "Price", "ProductName", "Quantity", "UpdateDate" },
-                values: new object[] { "P1", new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6568), "A high-quality cosplay sword", true, 50.0, "Cosplay Sword", 10, null });
+                values: new object[] { "P1", new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9947), "A high-quality cosplay sword", true, 50.0, "Cosplay Sword", 10, null });
 
             migrationBuilder.InsertData(
                 table: "Role",
@@ -614,14 +614,14 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "AccountId", "Birthday", "Code", "Description", "Email", "Height", "ImageUrl", "IsActive", "Leader", "Name", "OnTask", "Password", "Phone", "RoleId", "TaskQuantity", "Weight" },
                 values: new object[,]
                 {
-                    { "1", new DateTime(1995, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "john@example.com", null, null, true, null, "John Doe", null, "hashed_password", 123456789, "1", null, null },
-                    { "2", new DateTime(1995, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "phuongnam26012002@gmail.com", null, null, true, null, "Glenn Quagmire", null, "giggity", 123456789, "4", null, null }
+                    { "1", new DateTime(1995, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "john@example.com", null, null, true, null, "John Doe", null, "ZkmcwLVZC7B06TE7qd/qoA==", 123456789, "1", null, null },
+                    { "2", new DateTime(1995, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "phuongnam26012002@gmail.com", null, null, true, null, "Glenn Quagmire", null, "ZkmcwLVZC7B06TE7qd/qoA==", 123456789, "4", null, null }
                 });
 
             migrationBuilder.InsertData(
                 table: "Character",
                 columns: new[] { "CharacterId", "CategoryId", "CharacterName", "CreateDate", "Description", "IsActive", "MaxHeight", "MaxWeight", "MinHeight", "MinWeight", "Price", "UpdateDate" },
-                values: new object[] { "CH1", "1", "Elf Warrior", new DateTime(2025, 3, 8, 21, 21, 33, 186, DateTimeKind.Local).AddTicks(6595), "A fantasy elf warrior", true, null, null, null, null, 100.0, null });
+                values: new object[] { "CH1", "1", "Elf Warrior", new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9978), "A fantasy elf warrior", true, null, null, null, null, 100.0, null });
 
             migrationBuilder.InsertData(
                 table: "Ticket",
@@ -660,7 +660,7 @@ namespace CCSS_Repository.Migrations
             migrationBuilder.InsertData(
                 table: "Feedback",
                 columns: new[] { "FeedbackId", "ContractId", "CreateDate", "Description", "Star", "UpdateDate" },
-                values: new object[] { "F1", "CON001", new DateTime(2025, 3, 8, 14, 21, 33, 186, DateTimeKind.Utc).AddTicks(6725), "Great!", 5, null });
+                values: new object[] { "F1", "CON001", new DateTime(2025, 3, 9, 13, 32, 38, 705, DateTimeKind.Utc).AddTicks(138), "Great!", 5, null });
 
             migrationBuilder.InsertData(
                 table: "Order",
@@ -670,12 +670,12 @@ namespace CCSS_Repository.Migrations
             migrationBuilder.InsertData(
                 table: "Payment",
                 columns: new[] { "PaymentId", "Amount", "ContractId", "CreatAt", "OrderId", "Purpose", "Status", "TicketAccountId", "TransactionId", "Type" },
-                values: new object[] { "P1", 100.0, null, new DateTime(2025, 3, 8, 14, 21, 33, 186, DateTimeKind.Utc).AddTicks(6750), "O1", 0, 2, null, null, "Credit Card" });
+                values: new object[] { "P1", 100.0, null, new DateTime(2025, 3, 9, 13, 32, 38, 705, DateTimeKind.Utc).AddTicks(158), "O1", 0, 2, null, null, "Credit Card" });
 
             migrationBuilder.InsertData(
                 table: "Task",
                 columns: new[] { "TaskId", "ContractCharacterId", "CreateDate", "Description", "EndDate", "EventCharacterId", "IsActive", "Location", "StartDate", "Status", "TaskName", "UpdateDate" },
-                values: new object[] { "T1", "CC1", null, "Prepare the booth for the event", new DateTime(2025, 3, 9, 14, 21, 33, 186, DateTimeKind.Utc).AddTicks(6768), null, true, "Event Hall", new DateTime(2025, 3, 8, 14, 21, 33, 186, DateTimeKind.Utc).AddTicks(6768), 2, "Setup Booth", null });
+                values: new object[] { "T1", "CC1", null, "Prepare the booth for the event", new DateTime(2025, 3, 10, 13, 32, 38, 705, DateTimeKind.Utc).AddTicks(177), null, true, "Event Hall", new DateTime(2025, 3, 9, 13, 32, 38, 705, DateTimeKind.Utc).AddTicks(176), 2, "Setup Booth", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Account_RoleId",
