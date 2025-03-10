@@ -12,6 +12,7 @@ namespace CCSS_Repository.Repositories
     public interface IPaymentRepository
     {
         Task<Payment> GetPayment(string paymentId);
+        Task<Payment> GetPaymentByTransactionId(string TransactionId);
         Task<List<Payment>> GetAll();
         Task<bool> AddPayment(Payment payment);
         Task<bool> UpdatePayment(Payment payment);
@@ -34,6 +35,10 @@ namespace CCSS_Repository.Repositories
         public async Task<Payment> GetPayment(string paymentId)
         {
             return await _context.Payments.FirstOrDefaultAsync(p => p.PaymentId.Equals(paymentId));
+        }
+        public async Task<Payment> GetPaymentByTransactionId(string Id)
+        {
+            return await _context.Payments.FirstOrDefaultAsync(p => p.TransactionId.Equals(Id));
         }
 
         public async Task<bool> AddPayment(Payment payment)

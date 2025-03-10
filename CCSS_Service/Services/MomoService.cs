@@ -94,8 +94,25 @@ namespace CCSS_Service.Services
 
             var response = await client.ExecuteAsync(request);
             var momoResponse = JsonConvert.DeserializeObject<MomoCreatePaymentResponse>(response.Content);
-            return momoResponse;
+            
+           
+                    Payment payment = new Payment
+                    {
+                        PaymentId = Guid.NewGuid().ToString(),
+                        Type = "Momo",
+                        Status = PaymentStatus.Pending,
+                        Purpose =model.Purpose,
+                        CreatAt = DateTime.UtcNow,
+                        TransactionId = model.OrderId,
+                        Amount = model.Amount,
+                        //TicketAccountId = addTicketResult.TicketAccountId
+                    };
 
+                    await _paymentRepository.AddPayment(payment);
+                    return momoResponse;
+                
+            
+            
         }
 
 
@@ -145,8 +162,16 @@ namespace CCSS_Service.Services
                     Console.WriteLine($"Lỗi parse extraData: {ex.Message}");
                 }
             }
+            if (string.IsNullOrEmpty(orderId))
+            {
+                return "Thiếu orderId!";
+            }
+            var existingPayment = await _paymentRepository.GetPaymentByTransactionId(orderId);
+            if (existingPayment == null)
+            {
+                return "Không tìm thấy payment để cập nhật!";
+            }
 
-            
             switch (purpose)
             {
                 case PaymentPurpose.BuyTicket: // mua vé
@@ -160,19 +185,22 @@ namespace CCSS_Service.Services
 
                     var addTicketResult = await _ticketAccountService.AddTicketAccount(ticketAccountRequest);
 
-                    Payment payment = new Payment
-                    {
-                        PaymentId = Guid.NewGuid().ToString(),
-                        Type = "Momo",
-                        Status = PaymentStatus.Complete,
-                        Purpose = PaymentPurpose.BuyTicket,
-                        CreatAt = DateTime.UtcNow,
-                        TransactionId = orderId,
-                        Amount = amount.GetValueOrDefault(),
-                        TicketAccountId = addTicketResult.TicketAccountId
-                    };
+                    //Payment payment = new Payment
+                    //{
+                    //    PaymentId = Guid.NewGuid().ToString(),
+                    //    Type = "Momo",
+                    //    Status = PaymentStatus.Complete,
+                    //    Purpose = PaymentPurpose.BuyTicket,
+                    //    CreatAt = DateTime.UtcNow,
+                    //    TransactionId = orderId,
+                    //    Amount = amount.GetValueOrDefault(),
+                    //    TicketAccountId = addTicketResult.TicketAccountId
+                    //};
+                    existingPayment.Status = PaymentStatus.Complete;
+                    existingPayment.TicketAccountId = addTicketResult.TicketAccountId;
 
-                    await _paymentRepository.AddPayment(payment);
+                    await _paymentRepository.UpdatePayment(existingPayment);
+
                     var account = await _accountRepository.GetAccountByAccountId(accountId);
                     var event1 = await _eventrepository.GetEventByTicketId(ticketId);
                     var sendMail = new SendMail();

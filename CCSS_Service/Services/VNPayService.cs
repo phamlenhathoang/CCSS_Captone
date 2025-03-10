@@ -17,7 +17,7 @@ namespace CCSS_Service.Services
 {
     public interface IVNPayService
     {
-        string CreatePaymentUrl(VNPayInformationModel model, HttpContext context);
+        Task<string> CreatePaymentUrl(VNPayInformationModel model, HttpContext context);
         //VNPayResponseModel VNPayPaymentExecute(IQueryCollection collections);
         Task<string> VNPayPaymentExecuteAsync(IQueryCollection collection);
 
@@ -40,7 +40,7 @@ namespace CCSS_Service.Services
             _paymentRepository = paymentRepository;
             _eventrepository = eventrepository;
         }
-        public string CreatePaymentUrl(VNPayInformationModel model, HttpContext context)
+        public async Task<string> CreatePaymentUrl(VNPayInformationModel model, HttpContext context)
         {
             Console.WriteLine("hihi");
             var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById(_configuration["TimeZoneId"]);
@@ -59,6 +59,16 @@ namespace CCSS_Service.Services
             pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
             pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
             pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
+            var payment = new Payment
+            {
+                PaymentId = Guid.NewGuid().ToString(),
+                Type = "VNPay",
+                Status = PaymentStatus.Pending,
+                Purpose = model.Purpose,
+                CreatAt = DateTime.UtcNow,
+                //TransactionId = vnPayTranId,
+                Amount = model.Amount,
+            };
             var extraData = new
             {
                 AccountId = model.AccountId,
@@ -66,7 +76,8 @@ namespace CCSS_Service.Services
                 TicketQuantity = model.TicketQuantity,
                 Purpose = model.Purpose.ToString(), // Chuyển enum thành string
                 ContractId = model.ContractId, // Thêm ContractId
-                CartId = model.CartId
+                CartId = model.CartId,
+                PaymentId= payment.PaymentId
             };
 
             // Chuyển đối tượng thành chuỗi JSON và mã hóa Base64
@@ -84,7 +95,9 @@ namespace CCSS_Service.Services
 
             var paymentUrl =
                 pay.CreateRequestUrl(_configuration["Vnpay:BaseUrl"], _configuration["Vnpay:HashSecret"]);
-
+            //var vnPayTranId = pay.GetResponseData("vnp_TransactionNo");
+            
+            await _paymentRepository.AddPayment(payment);
             return paymentUrl;
         }
 
@@ -137,6 +150,9 @@ namespace CCSS_Service.Services
 
                         if (extraData.ContainsKey("CartId"))
                             response.CartId = extraData["CartId"];
+
+                        if (extraData.ContainsKey("PaymentId"))
+                            response.PaymentId = extraData["PaymentId"];
                         if (collection.ContainsKey("vnp_Amount"))
                             response.Amount = response.Amount = double.Parse(collection["vnp_Amount"]); 
 
@@ -152,6 +168,12 @@ namespace CCSS_Service.Services
             PaymentPurpose? purpose = Enum.TryParse(response.Purpose, out PaymentPurpose parsedPurpose)
     ? parsedPurpose
     : (PaymentPurpose?)null;
+            
+            var existingPayment = await _paymentRepository.GetPayment(response.PaymentId);
+            if (existingPayment == null)
+            {
+                return "Không tìm thấy payment để cập nhật!";
+            }
             switch (purpose)
             {
                 case PaymentPurpose.BuyTicket: // mua vé
@@ -165,19 +187,23 @@ namespace CCSS_Service.Services
 
                     var addTicketResult = await _ticketAccountService.AddTicketAccount(ticketAccountRequest);
 
-                    Payment payment = new Payment
-                    {
-                        PaymentId = Guid.NewGuid().ToString(),
-                        Type = "VNPay",
-                        Status = PaymentStatus.Complete,
-                        Purpose = PaymentPurpose.BuyTicket,
-                        CreatAt = DateTime.UtcNow,
-                        TransactionId = response.TransactionId,
-                        Amount = response.Amount,
-                        TicketAccountId = addTicketResult.TicketAccountId
-                    };
+                    //Payment payment = new Payment
+                    //{
+                    //    PaymentId = Guid.NewGuid().ToString(),
+                    //    Type = "VNPay",
+                    //    Status = PaymentStatus.Complete,
+                    //    Purpose = PaymentPurpose.BuyTicket,
+                    //    CreatAt = DateTime.UtcNow,
+                    //    TransactionId = response.TransactionId,
+                    //    Amount = response.Amount,
+                    //    TicketAccountId = addTicketResult.TicketAccountId
+                    //};
+                    existingPayment.Status = PaymentStatus.Complete;
+                    existingPayment.TransactionId = response.TransactionId;
+                    existingPayment.TicketAccountId = addTicketResult.TicketAccountId;
 
-                    await _paymentRepository.AddPayment(payment);
+                    await _paymentRepository.UpdatePayment(existingPayment);
+                    //await _paymentRepository.AddPayment(payment);
                     var account = await _accountRepository.GetAccountByAccountId(response.AccountId);
                     var event1 = await _eventrepository.GetEventByTicketId(response.TicketId);
                     var sendMail = new SendMail();
