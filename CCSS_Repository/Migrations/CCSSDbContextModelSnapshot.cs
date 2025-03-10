@@ -267,6 +267,9 @@ namespace CCSS_Repository.Migrations
                     b.Property<double?>("Price")
                         .HasColumnType("float");
 
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
@@ -282,10 +285,11 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH1",
                             CategoryId = "1",
                             CharacterName = "Elf Warrior",
-                            CreateDate = new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9978),
+                            CreateDate = new DateTime(2025, 3, 9, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9460),
                             Description = "A fantasy elf warrior",
                             IsActive = true,
-                            Price = 100.0
+                            Price = 100.0,
+                            Quantity = 50
                         });
                 });
 
@@ -448,9 +452,9 @@ namespace CCSS_Repository.Migrations
                             CouponId = "CPN001",
                             Amount = 5.0,
                             Condition = "First order",
-                            EndDate = new DateTime(2025, 4, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9805),
+                            EndDate = new DateTime(2025, 4, 9, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9270),
                             Percent = 10f,
-                            StartDate = new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9794)
+                            StartDate = new DateTime(2025, 3, 9, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9250)
                         });
                 });
 
@@ -494,13 +498,13 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             EventId = "E1",
-                            CreateDate = new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9891),
+                            CreateDate = new DateTime(2025, 3, 9, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9368),
                             Description = "Annual cosplay event",
-                            EndDate = new DateTime(2025, 3, 12, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9886),
+                            EndDate = new DateTime(2025, 3, 12, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9363),
                             EventName = "Cosplay Festival",
                             IsActive = true,
                             Location = "Tokyo",
-                            StartDate = new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9885)
+                            StartDate = new DateTime(2025, 3, 9, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9362)
                         });
                 });
 
@@ -566,7 +570,7 @@ namespace CCSS_Repository.Migrations
                         {
                             FeedbackId = "F1",
                             ContractId = "CON001",
-                            CreateDate = new DateTime(2025, 3, 9, 13, 32, 38, 705, DateTimeKind.Utc).AddTicks(138),
+                            CreateDate = new DateTime(2025, 3, 9, 13, 57, 41, 234, DateTimeKind.Utc).AddTicks(9622),
                             Description = "Great!",
                             Star = 5
                         });
@@ -750,7 +754,7 @@ namespace CCSS_Repository.Migrations
                         {
                             PaymentId = "P1",
                             Amount = 100.0,
-                            CreatAt = new DateTime(2025, 3, 9, 13, 32, 38, 705, DateTimeKind.Utc).AddTicks(158),
+                            CreatAt = new DateTime(2025, 3, 9, 13, 57, 41, 234, DateTimeKind.Utc).AddTicks(9649),
                             OrderId = "O1",
                             Purpose = 0,
                             Status = 2,
@@ -792,7 +796,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P1",
-                            CreateDate = new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9947),
+                            CreateDate = new DateTime(2025, 3, 9, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9427),
                             Description = "A high-quality cosplay sword",
                             IsActive = true,
                             Price = 50.0,
@@ -938,10 +942,10 @@ namespace CCSS_Repository.Migrations
                             TaskId = "T1",
                             ContractCharacterId = "CC1",
                             Description = "Prepare the booth for the event",
-                            EndDate = new DateTime(2025, 3, 10, 13, 32, 38, 705, DateTimeKind.Utc).AddTicks(177),
+                            EndDate = new DateTime(2025, 3, 10, 13, 57, 41, 234, DateTimeKind.Utc).AddTicks(9716),
                             IsActive = true,
                             Location = "Event Hall",
-                            StartDate = new DateTime(2025, 3, 9, 13, 32, 38, 705, DateTimeKind.Utc).AddTicks(176),
+                            StartDate = new DateTime(2025, 3, 9, 13, 57, 41, 234, DateTimeKind.Utc).AddTicks(9715),
                             Status = 2,
                             TaskName = "Setup Booth"
                         });
