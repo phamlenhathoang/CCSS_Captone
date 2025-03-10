@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CCSS_Repository.Entities;
+using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ namespace CCSS_Service.Profiles
         {
             //Response
             CreateMap<Account, AccountResponse>().ReverseMap();
+
+            //Request 
+            CreateMap<Account, UpdateAccountRequest>().ReverseMap();
         }
     }
 }

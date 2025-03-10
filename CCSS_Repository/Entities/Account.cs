@@ -18,7 +18,7 @@ namespace CCSS_Repository.Entities
         public string Password { get; set; }
         public string? Description { get; set; }
         public DateTime? Birthday { get; set; }
-        public int? Phone {  get; set; }
+        public string? Phone { get; set; }
         public bool? IsActive {  get; set; }
         public bool? OnTask {  get; set; }
         public bool? Leader {  get; set; }   

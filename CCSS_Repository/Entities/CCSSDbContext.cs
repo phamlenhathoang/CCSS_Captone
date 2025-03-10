@@ -318,7 +318,7 @@ namespace CCSS_Repository.Entities
                     RoleId = "1",
                     IsActive = true,
                     Birthday = new DateTime(1995, 5, 20),
-                    Phone = 123456789
+                    Phone = "123456789"
                 },
                 new Account
                 {
@@ -329,7 +329,7 @@ namespace CCSS_Repository.Entities
                     RoleId = "4",
                     IsActive = true,
                     Birthday = new DateTime(1995, 5, 20),
-                    Phone = 123456789
+                    Phone = "123456789"
                 }
             );
 

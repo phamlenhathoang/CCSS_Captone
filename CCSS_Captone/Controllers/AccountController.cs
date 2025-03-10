@@ -1,4 +1,5 @@
-﻿using CCSS_Service.Model.Responses;
+﻿using CCSS_Service.Model.Requests;
+using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -52,5 +53,19 @@ namespace CCSS_Captone.Controllers
         //    return Ok(result);
         //}
 
+
+        [HttpGet]
+        public async Task<IActionResult> GetAccountByAccountId(string accountId)
+        {
+            var account = await accountService.GetAccountByAccountId(accountId);   
+            return Ok(account);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest)
+        {
+            var account = await accountService.UpdateAccountByAccountId(accountId, updateAccountRequest);
+            return Ok(account);
+        }
     }
 }
