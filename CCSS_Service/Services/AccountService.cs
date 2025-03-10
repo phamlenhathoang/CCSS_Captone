@@ -32,6 +32,8 @@ namespace CCSS_Service.Services
         Task<AccountLoginResponse> Login(string email, string password);
         Task<string> Register(AccountRequest accountRequest, string role); 
         Task<string> CodeValidation(string email, string code);
+        Task<AccountResponse> GetAccountByAccountId(string accountId);
+        Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest);
     }
     public class AccountService : IAccountService
     {
@@ -379,7 +381,7 @@ namespace CCSS_Service.Services
                 account.Code = GenerateCode();
                 account.Password = PasswordHash.ConvertToEncrypt(accountRequest.Password);
                 account.Birthday = date;
-                account.Phone = int.Parse(accountRequest.Phone);
+                account.Phone = accountRequest.Phone;
 
                 if (role.ToLower() == RoleName.Customer.ToString().ToLower())
                 {
@@ -419,6 +421,28 @@ namespace CCSS_Service.Services
                 }
                 return "Success";
             }
+        }
+
+        public async Task<AccountResponse> GetAccountByAccountId(string accountId)
+        {
+            Account account = await accountRepository.GetAccountByAccountId(accountId);
+            if (account == null)
+            {
+                return null;
+            }
+            return mapper.Map<AccountResponse>(account);
+        }
+
+        public async Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest)
+        {
+            Account checkAccount = await accountRepository.GetAccountByAccountId(accountId);
+            if (checkAccount == null)
+            {
+                return false;
+            }
+            mapper.Map(updateAccountRequest, checkAccount);
+            bool result = await accountRepository.UpdateAccount(checkAccount);
+            return result;  
         }
     }
 }
