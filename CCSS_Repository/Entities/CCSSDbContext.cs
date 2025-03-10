@@ -414,7 +414,8 @@ namespace CCSS_Repository.Entities
                     Description = "A fantasy elf warrior",
                     Price = 100,
                     IsActive = true,
-                    CreateDate = DateTime.Now
+                    CreateDate = DateTime.Now,
+                    Quantity = 50
                 }
             );
 

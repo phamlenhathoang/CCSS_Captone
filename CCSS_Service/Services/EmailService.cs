@@ -21,7 +21,7 @@ namespace CCSS_Service.Services
             _smtpClient = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
-                Credentials = new NetworkCredential("nhathoang1470@gmail.com", "qovp ibrn ohbl cgmr"),
+                Credentials = new NetworkCredential("nhathoang1470@gmail.com", "vjnb wwrv sxlc whci"),
                 EnableSsl = true,
             };
         }

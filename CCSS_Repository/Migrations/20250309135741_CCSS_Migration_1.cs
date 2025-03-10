@@ -121,6 +121,7 @@ namespace CCSS_Repository.Migrations
                     MaxWeight = table.Column<float>(type: "real", nullable: true),
                     MinHeight = table.Column<float>(type: "real", nullable: true),
                     MinWeight = table.Column<float>(type: "real", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -576,12 +577,12 @@ namespace CCSS_Repository.Migrations
             migrationBuilder.InsertData(
                 table: "Coupon",
                 columns: new[] { "CouponId", "Amount", "Condition", "EndDate", "Percent", "StartDate" },
-                values: new object[] { "CPN001", 5.0, "First order", new DateTime(2025, 4, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9805), 10f, new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9794) });
+                values: new object[] { "CPN001", 5.0, "First order", new DateTime(2025, 4, 9, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9270), 10f, new DateTime(2025, 3, 9, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9250) });
 
             migrationBuilder.InsertData(
                 table: "Event",
                 columns: new[] { "EventId", "CreateBy", "CreateDate", "Description", "EndDate", "EventName", "IsActive", "Location", "StartDate", "UpdateDate" },
-                values: new object[] { "E1", null, new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9891), "Annual cosplay event", new DateTime(2025, 3, 12, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9886), "Cosplay Festival", true, "Tokyo", new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9885), null });
+                values: new object[] { "E1", null, new DateTime(2025, 3, 9, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9368), "Annual cosplay event", new DateTime(2025, 3, 12, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9363), "Cosplay Festival", true, "Tokyo", new DateTime(2025, 3, 9, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9362), null });
 
             migrationBuilder.InsertData(
                 table: "Package",
@@ -595,7 +596,7 @@ namespace CCSS_Repository.Migrations
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "ProductId", "CreateDate", "Description", "IsActive", "Price", "ProductName", "Quantity", "UpdateDate" },
-                values: new object[] { "P1", new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9947), "A high-quality cosplay sword", true, 50.0, "Cosplay Sword", 10, null });
+                values: new object[] { "P1", new DateTime(2025, 3, 9, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9427), "A high-quality cosplay sword", true, 50.0, "Cosplay Sword", 10, null });
 
             migrationBuilder.InsertData(
                 table: "Role",
@@ -620,8 +621,8 @@ namespace CCSS_Repository.Migrations
 
             migrationBuilder.InsertData(
                 table: "Character",
-                columns: new[] { "CharacterId", "CategoryId", "CharacterName", "CreateDate", "Description", "IsActive", "MaxHeight", "MaxWeight", "MinHeight", "MinWeight", "Price", "UpdateDate" },
-                values: new object[] { "CH1", "1", "Elf Warrior", new DateTime(2025, 3, 9, 20, 32, 38, 704, DateTimeKind.Local).AddTicks(9978), "A fantasy elf warrior", true, null, null, null, null, 100.0, null });
+                columns: new[] { "CharacterId", "CategoryId", "CharacterName", "CreateDate", "Description", "IsActive", "MaxHeight", "MaxWeight", "MinHeight", "MinWeight", "Price", "Quantity", "UpdateDate" },
+                values: new object[] { "CH1", "1", "Elf Warrior", new DateTime(2025, 3, 9, 20, 57, 41, 234, DateTimeKind.Local).AddTicks(9460), "A fantasy elf warrior", true, null, null, null, null, 100.0, 50, null });
 
             migrationBuilder.InsertData(
                 table: "Ticket",
@@ -660,7 +661,7 @@ namespace CCSS_Repository.Migrations
             migrationBuilder.InsertData(
                 table: "Feedback",
                 columns: new[] { "FeedbackId", "ContractId", "CreateDate", "Description", "Star", "UpdateDate" },
-                values: new object[] { "F1", "CON001", new DateTime(2025, 3, 9, 13, 32, 38, 705, DateTimeKind.Utc).AddTicks(138), "Great!", 5, null });
+                values: new object[] { "F1", "CON001", new DateTime(2025, 3, 9, 13, 57, 41, 234, DateTimeKind.Utc).AddTicks(9622), "Great!", 5, null });
 
             migrationBuilder.InsertData(
                 table: "Order",
@@ -670,12 +671,12 @@ namespace CCSS_Repository.Migrations
             migrationBuilder.InsertData(
                 table: "Payment",
                 columns: new[] { "PaymentId", "Amount", "ContractId", "CreatAt", "OrderId", "Purpose", "Status", "TicketAccountId", "TransactionId", "Type" },
-                values: new object[] { "P1", 100.0, null, new DateTime(2025, 3, 9, 13, 32, 38, 705, DateTimeKind.Utc).AddTicks(158), "O1", 0, 2, null, null, "Credit Card" });
+                values: new object[] { "P1", 100.0, null, new DateTime(2025, 3, 9, 13, 57, 41, 234, DateTimeKind.Utc).AddTicks(9649), "O1", 0, 2, null, null, "Credit Card" });
 
             migrationBuilder.InsertData(
                 table: "Task",
                 columns: new[] { "TaskId", "ContractCharacterId", "CreateDate", "Description", "EndDate", "EventCharacterId", "IsActive", "Location", "StartDate", "Status", "TaskName", "UpdateDate" },
-                values: new object[] { "T1", "CC1", null, "Prepare the booth for the event", new DateTime(2025, 3, 10, 13, 32, 38, 705, DateTimeKind.Utc).AddTicks(177), null, true, "Event Hall", new DateTime(2025, 3, 9, 13, 32, 38, 705, DateTimeKind.Utc).AddTicks(176), 2, "Setup Booth", null });
+                values: new object[] { "T1", "CC1", null, "Prepare the booth for the event", new DateTime(2025, 3, 10, 13, 57, 41, 234, DateTimeKind.Utc).AddTicks(9716), null, true, "Event Hall", new DateTime(2025, 3, 9, 13, 57, 41, 234, DateTimeKind.Utc).AddTicks(9715), 2, "Setup Booth", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Account_RoleId",
