@@ -13,10 +13,14 @@ namespace CCSS_Repository.Entities
     {
         [Key]
         public string FeedbackId { get; set; } = Guid.NewGuid().ToString(); 
-        public int? Star {  get; set; }
         public string? Description { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
+        public string? CreateBy { get; set; }
+
+        [ForeignKey("AccountId")]
+        public string? AccountId { get; set; }
+        public Account Account { get; set; }
 
         [ForeignKey("ContractId")]
         public string? ContractId { get; set; }

@@ -16,7 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static iText.Svg.SvgConstants;
-using Contract = CCSS_Repository.Entities.Contract;
+using Contract = CCSS_Repository.Entities.Request;
 using Task = CCSS_Repository.Entities.Task;
 using TaskStatus = CCSS_Repository.Entities.TaskStatus;
 

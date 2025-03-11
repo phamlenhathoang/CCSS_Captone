@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace CCSS_Repository.Entities
 {
-    [Table("Image")]
+    [Table("EventImage")]
 
-    public partial class Image
+    public partial class EventImage
     {
         [Key]
         public string ImageId { get; set; } = Guid.NewGuid().ToString();    
@@ -18,16 +18,8 @@ namespace CCSS_Repository.Entities
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
-        [ForeignKey("ProductId")]
-        public string? ProductId { get; set; }
-        public Product Product { get; set; }
-
         [ForeignKey("EventId")]
         public string? EventId { get; set; }
         public Event Event { get; set; }
-
-        [ForeignKey("CharacterId")]
-        public string? CharacterId { get; set; }
-        public Character Character { get; set; }
     }
 }

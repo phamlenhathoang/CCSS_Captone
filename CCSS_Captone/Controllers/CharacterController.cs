@@ -12,66 +12,66 @@ namespace CCSS_Captone.Controllers
     [ApiController]
     public class CharacterController : ControllerBase
     {
-        private readonly ICharacterService _characterService;
+        //private readonly ICharacterService _characterService;
 
-        public CharacterController(ICharacterService characterService)
-        {
-            _characterService = characterService;
-        }
+        //public CharacterController(ICharacterService characterService)
+        //{
+        //    _characterService = characterService;
+        //}
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CharacterResponse>> GetCharater(string id)
-        {
-            var character = await _characterService.GetCharacter(id);
-            if (character == null)
-            {
-                return NotFound(new { message = "Character not found." });
-            }
-            return Ok(character);
-        }
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<CharacterResponse>> GetCharater(string id)
+        //{
+        //    var character = await _characterService.GetCharacter(id);
+        //    if (character == null)
+        //    {
+        //        return NotFound(new { message = "Character not found." });
+        //    }
+        //    return Ok(character);
+        //}
 
-        [HttpGet]
-        public async Task<ActionResult<CharacterResponse>> GetAll()
-        {
-            var character = await _characterService.GetAll();
-            if (character == null)
-            {
-                return NotFound(new { message = "Character not found." });
-            }
-            return Ok(character);
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<CharacterResponse>> GetAll()
+        //{
+        //    var character = await _characterService.GetAll();
+        //    if (character == null)
+        //    {
+        //        return NotFound(new { message = "Character not found." });
+        //    }
+        //    return Ok(character);
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> CreateCharacter([FromForm] CharacterRequest character, [FromForm] List<IFormFile> imageFiles)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await _characterService.AddCharacter(character, imageFiles);
-                return Ok(result);
-            }
-            return BadRequest(ModelState);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> CreateCharacter([FromForm] CharacterRequest character, [FromForm] List<IFormFile> imageFiles)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var result = await _characterService.AddCharacter(character, imageFiles);
+        //        return Ok(result);
+        //    }
+        //    return BadRequest(ModelState);
+        //}
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateCharacter(string id, CharacterRequest character)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await _characterService.UpdateCharacter(id, character);
-                return Ok(result);
-            }
-            return BadRequest(ModelState);
-        }
+        //[HttpPut]
+        //public async Task<IActionResult> UpdateCharacter(string id, CharacterRequest character)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var result = await _characterService.UpdateCharacter(id, character);
+        //        return Ok(result);
+        //    }
+        //    return BadRequest(ModelState);
+        //}
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteCharacter(string id)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await _characterService.DeleteCharacter(id);
-                return Ok(result);
-            }
-            return BadRequest(ModelState);
-        }
+        //[HttpDelete]
+        //public async Task<IActionResult> DeleteCharacter(string id)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var result = await _characterService.DeleteCharacter(id);
+        //        return Ok(result);
+        //    }
+        //    return BadRequest(ModelState);
+        //}
     }
 }

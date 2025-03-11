@@ -29,8 +29,9 @@ namespace CCSS_Repository.Entities
         public int? Quantity { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
-        public ICollection<Image> Images { get; set; } = new List<Image>(); 
         public ICollection<EventCharacter> EventCharacters { get; set; } = new List<EventCharacter>(); 
+        public ICollection<RequestCharacter> RequestCharacters { get; set; } = new List<RequestCharacter>(); 
         public ICollection<ContractCharacter> ContractCharacters { get; set; } = new List<ContractCharacter>(); 
+        public ICollection<CharacterImage> CharacterImages { get; set; } = new List<CharacterImage>(); 
     }
 }

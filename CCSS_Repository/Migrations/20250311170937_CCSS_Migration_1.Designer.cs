@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCSS_Repository.Migrations
 {
     [DbContext(typeof(CCSSDbContext))]
-    [Migration("20250310133845_CCSS_Migration_1")]
+    [Migration("20250311170937_CCSS_Migration_1")]
     partial class CCSS_Migration_1
     {
         /// <inheritdoc />
@@ -29,6 +29,9 @@ namespace CCSS_Repository.Migrations
                 {
                     b.Property<string>("AccountId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("AverageStar")
+                        .HasColumnType("float");
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime2");
@@ -72,6 +75,9 @@ namespace CCSS_Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<double?>("SalaryIndex")
+                        .HasColumnType("float");
+
                     b.Property<int?>("TaskQuantity")
                         .HasColumnType("int");
 
@@ -83,30 +89,6 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Account");
-
-                    b.HasData(
-                        new
-                        {
-                            AccountId = "1",
-                            Birthday = new DateTime(1995, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "john@example.com",
-                            IsActive = true,
-                            Name = "John Doe",
-                            Password = "ZkmcwLVZC7B06TE7qd/qoA==",
-                            Phone = "123456789",
-                            RoleId = "1"
-                        },
-                        new
-                        {
-                            AccountId = "2",
-                            Birthday = new DateTime(1995, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "phuongnam26012002@gmail.com",
-                            IsActive = true,
-                            Name = "Glenn Quagmire",
-                            Password = "ZkmcwLVZC7B06TE7qd/qoA==",
-                            Phone = "123456789",
-                            RoleId = "4"
-                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.AccountCoupon", b =>
@@ -125,12 +107,11 @@ namespace CCSS_Repository.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AccountCouponId");
 
@@ -139,6 +120,56 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("CouponId");
 
                     b.ToTable("AccountCoupon");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.AccountImage", b =>
+                {
+                    b.Property<string>("AccountImageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UrlImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AccountImageId");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("AccountImage");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.Activity", b =>
+                {
+                    b.Property<string>("ActivityId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ActivityId");
+
+                    b.ToTable("Activity");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Cart", b =>
@@ -150,8 +181,14 @@ namespace CCSS_Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<double>("TotalPrice")
                         .HasColumnType("float");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("CartId");
 
@@ -159,20 +196,6 @@ namespace CCSS_Repository.Migrations
                         .IsUnique();
 
                     b.ToTable("Cart");
-
-                    b.HasData(
-                        new
-                        {
-                            CartId = "CART001",
-                            AccountId = "1",
-                            TotalPrice = 100.0
-                        },
-                        new
-                        {
-                            CartId = "CART002",
-                            AccountId = "2",
-                            TotalPrice = 200.0
-                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.CartProduct", b =>
@@ -184,9 +207,18 @@ namespace CCSS_Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
                     b.Property<string>("ProductId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("CartProductId");
 
@@ -195,14 +227,6 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("CartProduct");
-
-                    b.HasData(
-                        new
-                        {
-                            CartProductId = "1",
-                            CartId = "CART001",
-                            ProductId = "P1"
-                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Category", b =>
@@ -219,20 +243,6 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Category");
-
-                    b.HasData(
-                        new
-                        {
-                            CategoryId = "1",
-                            CategoryName = "Fantasy",
-                            Description = "Characters from fantasy world"
-                        },
-                        new
-                        {
-                            CategoryId = "2",
-                            CategoryName = "Sci-Fi",
-                            Description = "Characters from sci-fi universe"
-                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Character", b =>
@@ -281,19 +291,31 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Character");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            CharacterId = "CH1",
-                            CategoryId = "1",
-                            CharacterName = "Elf Warrior",
-                            CreateDate = new DateTime(2025, 3, 10, 20, 38, 43, 140, DateTimeKind.Local).AddTicks(3392),
-                            Description = "A fantasy elf warrior",
-                            IsActive = true,
-                            Price = 100.0,
-                            Quantity = 50
-                        });
+            modelBuilder.Entity("CCSS_Repository.Entities.CharacterImage", b =>
+                {
+                    b.Property<string>("CharacterImageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CharacterId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UrlImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CharacterImageId");
+
+                    b.HasIndex("CharacterId");
+
+                    b.ToTable("CharacterImage");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Contract", b =>
@@ -301,85 +323,31 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("ContractId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AccountId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<double?>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("CharacterQuantity")
+                    b.Property<int>("ContractStatus")
                         .HasColumnType("int");
 
-                    b.Property<string>("ContractCode")
+                    b.Property<string>("CreateBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ContractName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CouponId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Deposit")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Description")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PackageId")
+                    b.Property<string>("RequestId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double?>("Price")
+                    b.Property<double?>("TotalPrice")
                         .HasColumnType("float");
-
-                    b.Property<bool?>("Signature")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.HasKey("ContractId");
 
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("CouponId");
-
-                    b.HasIndex("PackageId");
+                    b.HasIndex("RequestId")
+                        .IsUnique()
+                        .HasFilter("[RequestId] IS NOT NULL");
 
                     b.ToTable("Contract");
-
-                    b.HasData(
-                        new
-                        {
-                            ContractId = "CON001",
-                            AccountId = "2",
-                            Amount = 1.0,
-                            CharacterQuantity = 2,
-                            ContractCode = "CT001",
-                            ContractName = "Hợp đồng thuê cosplayer",
-                            CouponId = "CPN001",
-                            Deposit = "50%",
-                            Description = 1,
-                            EndDate = new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Location = "Hà Nội",
-                            PackageId = "PKG001",
-                            Price = 500.0,
-                            Signature = true,
-                            StartDate = new DateTime(2025, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Status = 2
-                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.ContractCharacter", b =>
@@ -387,41 +355,32 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("ContractCharacterId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AccountId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("CharacterId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ContracId")
-                        .IsRequired()
+                    b.Property<string>("ContractId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ContractCharacterId");
 
-                    b.HasIndex("AccountId")
-                        .IsUnique();
-
                     b.HasIndex("CharacterId");
 
-                    b.HasIndex("ContracId");
+                    b.HasIndex("ContractId");
 
                     b.ToTable("ContractCharacter");
-
-                    b.HasData(
-                        new
-                        {
-                            ContractCharacterId = "CC1",
-                            AccountId = "1",
-                            CharacterId = "CH1",
-                            ContracId = "CON001",
-                            Quantity = 2
-                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Coupon", b =>
@@ -445,20 +404,13 @@ namespace CCSS_Repository.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("CouponId");
 
                     b.ToTable("Coupon");
-
-                    b.HasData(
-                        new
-                        {
-                            CouponId = "CPN001",
-                            Amount = 5.0,
-                            Condition = "First order",
-                            EndDate = new DateTime(2025, 4, 10, 20, 38, 43, 140, DateTimeKind.Local).AddTicks(3091),
-                            Percent = 10f,
-                            StartDate = new DateTime(2025, 3, 10, 20, 38, 43, 140, DateTimeKind.Local).AddTicks(3075)
-                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Event", b =>
@@ -496,28 +448,43 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("EventId");
 
                     b.ToTable("Event");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            EventId = "E1",
-                            CreateDate = new DateTime(2025, 3, 10, 20, 38, 43, 140, DateTimeKind.Local).AddTicks(3204),
-                            Description = "Annual cosplay event",
-                            EndDate = new DateTime(2025, 3, 13, 20, 38, 43, 140, DateTimeKind.Local).AddTicks(3200),
-                            EventName = "Cosplay Festival",
-                            IsActive = true,
-                            Location = "Tokyo",
-                            StartDate = new DateTime(2025, 3, 10, 20, 38, 43, 140, DateTimeKind.Local).AddTicks(3199)
-                        });
+            modelBuilder.Entity("CCSS_Repository.Entities.EventActivity", b =>
+                {
+                    b.Property<string>("EventActivityId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ActivityId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EventId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("EventActivityId");
+
+                    b.HasIndex("ActivityId");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("EventActivity");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.EventCharacter", b =>
                 {
                     b.Property<string>("EventCharacterId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AccountId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CharacterId")
@@ -530,9 +497,6 @@ namespace CCSS_Repository.Migrations
 
                     b.HasKey("EventCharacterId");
 
-                    b.HasIndex("AccountId")
-                        .IsUnique();
-
                     b.HasIndex("CharacterId");
 
                     b.HasIndex("EventId");
@@ -540,51 +504,9 @@ namespace CCSS_Repository.Migrations
                     b.ToTable("EventCharacter");
                 });
 
-            modelBuilder.Entity("CCSS_Repository.Entities.Feedback", b =>
-                {
-                    b.Property<string>("FeedbackId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ContractId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Star")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("FeedbackId");
-
-                    b.HasIndex("ContractId")
-                        .IsUnique()
-                        .HasFilter("[ContractId] IS NOT NULL");
-
-                    b.ToTable("Feedback");
-
-                    b.HasData(
-                        new
-                        {
-                            FeedbackId = "F1",
-                            ContractId = "CON001",
-                            CreateDate = new DateTime(2025, 3, 10, 13, 38, 43, 140, DateTimeKind.Utc).AddTicks(3708),
-                            Description = "Great!",
-                            Star = 5
-                        });
-                });
-
-            modelBuilder.Entity("CCSS_Repository.Entities.Image", b =>
+            modelBuilder.Entity("CCSS_Repository.Entities.EventImage", b =>
                 {
                     b.Property<string>("ImageId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CharacterId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreateDate")
@@ -596,21 +518,46 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ImageId");
 
-                    b.HasIndex("CharacterId");
-
                     b.HasIndex("EventId");
 
-                    b.HasIndex("ProductId");
+                    b.ToTable("EventImage");
+                });
 
-                    b.ToTable("Image");
+            modelBuilder.Entity("CCSS_Repository.Entities.Feedback", b =>
+                {
+                    b.Property<string>("FeedbackId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ContractId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("FeedbackId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("ContractId");
+
+                    b.ToTable("Feedback");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Notification", b =>
@@ -644,31 +591,56 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CartId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("CouponId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("OrderId");
+                    b.Property<string>("OrderDate")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("CartId")
-                        .IsUnique()
-                        .HasFilter("[CartId] IS NOT NULL");
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.HasKey("OrderId");
 
                     b.HasIndex("CouponId")
                         .IsUnique();
 
                     b.ToTable("Order");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            OrderId = "O1",
-                            CartId = "CART001",
-                            CouponId = "CPN001"
-                        });
+            modelBuilder.Entity("CCSS_Repository.Entities.OrderProduct", b =>
+                {
+                    b.Property<string>("OrderProductId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderProductId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderProduct");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Package", b =>
@@ -685,25 +657,15 @@ namespace CCSS_Repository.Migrations
                     b.Property<double?>("Price")
                         .HasColumnType("float");
 
+                    b.Property<string>("ServiceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("PackageId");
 
-                    b.ToTable("Package");
+                    b.HasIndex("ServiceId");
 
-                    b.HasData(
-                        new
-                        {
-                            PackageId = "PKG001",
-                            Description = "Includes basic costume and props",
-                            PackageName = "Basic Cosplay Package",
-                            Price = 100.0
-                        },
-                        new
-                        {
-                            PackageId = "PKG002",
-                            Description = "Includes premium costume, props, and makeup",
-                            PackageName = "Premium Cosplay Package",
-                            Price = 300.0
-                        });
+                    b.ToTable("Package");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Payment", b =>
@@ -751,18 +713,6 @@ namespace CCSS_Repository.Migrations
                         .HasFilter("[TicketAccountId] IS NOT NULL");
 
                     b.ToTable("Payment");
-
-                    b.HasData(
-                        new
-                        {
-                            PaymentId = "P1",
-                            Amount = 100.0,
-                            CreatAt = new DateTime(2025, 3, 10, 13, 38, 43, 140, DateTimeKind.Utc).AddTicks(3744),
-                            OrderId = "O1",
-                            Purpose = 0,
-                            Status = 2,
-                            Type = "Credit Card"
-                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Product", b =>
@@ -794,18 +744,32 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("ProductId");
 
                     b.ToTable("Product");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            ProductId = "P1",
-                            CreateDate = new DateTime(2025, 3, 10, 20, 38, 43, 140, DateTimeKind.Local).AddTicks(3349),
-                            Description = "A high-quality cosplay sword",
-                            IsActive = true,
-                            Price = 50.0,
-                            ProductName = "Cosplay Sword",
-                            Quantity = 10
-                        });
+            modelBuilder.Entity("CCSS_Repository.Entities.ProductImage", b =>
+                {
+                    b.Property<string>("ProductImageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UrlImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProductImageId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImage");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.RefreshToken", b =>
@@ -841,6 +805,88 @@ namespace CCSS_Repository.Migrations
                     b.ToTable("RefreshToken");
                 });
 
+            modelBuilder.Entity("CCSS_Repository.Entities.Request", b =>
+                {
+                    b.Property<string>("RequestId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ContractId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CouponId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("Description")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ServiceId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("RequestId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("CouponId");
+
+                    b.ToTable("Request");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.RequestCharacter", b =>
+                {
+                    b.Property<string>("RequestCharacterId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CharacterId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CosplayerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("RequestCharacterId");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("RequestCharacter");
+                });
+
             modelBuilder.Entity("CCSS_Repository.Entities.Role", b =>
                 {
                     b.Property<string>("Id")
@@ -855,43 +901,39 @@ namespace CCSS_Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = "0",
-                            Description = "Admin",
-                            RoleName = 0
-                        },
-                        new
-                        {
-                            Id = "1",
-                            Description = "Manager",
-                            RoleName = 1
-                        },
-                        new
-                        {
-                            Id = "2",
-                            Description = "Consultant",
-                            RoleName = 2
-                        },
-                        new
-                        {
-                            Id = "3",
-                            Description = "Cosplayer",
-                            RoleName = 3
-                        },
-                        new
-                        {
-                            Id = "4",
-                            Description = "Customer",
-                            RoleName = 4
-                        });
+            modelBuilder.Entity("CCSS_Repository.Entities.Service", b =>
+                {
+                    b.Property<string>("ServiceId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ServiceName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ServiceId");
+
+                    b.ToTable("Service");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Task", b =>
                 {
                     b.Property<string>("TaskId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ContractCharacterId")
@@ -907,6 +949,7 @@ namespace CCSS_Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EventCharacterId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool?>("IsActive")
@@ -929,29 +972,17 @@ namespace CCSS_Repository.Migrations
 
                     b.HasKey("TaskId");
 
+                    b.HasIndex("AccountId")
+                        .IsUnique();
+
                     b.HasIndex("ContractCharacterId")
                         .IsUnique()
                         .HasFilter("[ContractCharacterId] IS NOT NULL");
 
                     b.HasIndex("EventCharacterId")
-                        .IsUnique()
-                        .HasFilter("[EventCharacterId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Task");
-
-                    b.HasData(
-                        new
-                        {
-                            TaskId = "T1",
-                            ContractCharacterId = "CC1",
-                            Description = "Prepare the booth for the event",
-                            EndDate = new DateTime(2025, 3, 11, 13, 38, 43, 140, DateTimeKind.Utc).AddTicks(3775),
-                            IsActive = true,
-                            Location = "Event Hall",
-                            StartDate = new DateTime(2025, 3, 10, 13, 38, 43, 140, DateTimeKind.Utc).AddTicks(3774),
-                            Status = 2,
-                            TaskName = "Setup Booth"
-                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Ticket", b =>
@@ -975,15 +1006,6 @@ namespace CCSS_Repository.Migrations
                         .HasFilter("[EventId] IS NOT NULL");
 
                     b.ToTable("Ticket");
-
-                    b.HasData(
-                        new
-                        {
-                            TicketId = "T1",
-                            EventId = "E1",
-                            Price = 20.0,
-                            Quantity = 100
-                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.TicketAccount", b =>
@@ -993,6 +1015,9 @@ namespace CCSS_Repository.Migrations
 
                     b.Property<string>("AccountId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<string>("TicketCode")
                         .IsRequired()
@@ -1004,9 +1029,6 @@ namespace CCSS_Repository.Migrations
                     b.Property<double>("TotalPrice")
                         .HasColumnType("float");
 
-                    b.Property<int>("quantitypurchased")
-                        .HasColumnType("int");
-
                     b.HasKey("TicketAccountId");
 
                     b.HasIndex("AccountId");
@@ -1014,17 +1036,6 @@ namespace CCSS_Repository.Migrations
                     b.HasIndex("TicketId");
 
                     b.ToTable("TicketAccount");
-
-                    b.HasData(
-                        new
-                        {
-                            TicketAccountId = "1",
-                            AccountId = "2",
-                            TicketCode = "TCK001",
-                            TicketId = "T1",
-                            TotalPrice = 100.0,
-                            quantitypurchased = 2
-                        });
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Account", b =>
@@ -1055,6 +1066,17 @@ namespace CCSS_Repository.Migrations
                     b.Navigation("Account");
 
                     b.Navigation("Coupon");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.AccountImage", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Account", "Account")
+                        .WithMany("AccountImages")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Cart", b =>
@@ -1097,39 +1119,28 @@ namespace CCSS_Repository.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("CCSS_Repository.Entities.CharacterImage", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Character", "Character")
+                        .WithMany("CharacterImages")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Character");
+                });
+
             modelBuilder.Entity("CCSS_Repository.Entities.Contract", b =>
                 {
-                    b.HasOne("CCSS_Repository.Entities.Account", "Account")
-                        .WithMany("Contracts")
-                        .HasForeignKey("AccountId")
+                    b.HasOne("CCSS_Repository.Entities.Request", "Request")
+                        .WithOne("Contract")
+                        .HasForeignKey("CCSS_Repository.Entities.Contract", "RequestId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("CCSS_Repository.Entities.Coupon", "Coupon")
-                        .WithMany("Contracts")
-                        .HasForeignKey("CouponId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("CCSS_Repository.Entities.Package", "Package")
-                        .WithMany("Contracts")
-                        .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Coupon");
-
-                    b.Navigation("Package");
+                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.ContractCharacter", b =>
                 {
-                    b.HasOne("CCSS_Repository.Entities.Account", "Account")
-                        .WithOne("ContractCharacter")
-                        .HasForeignKey("CCSS_Repository.Entities.ContractCharacter", "AccountId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("CCSS_Repository.Entities.Character", "Character")
                         .WithMany("ContractCharacters")
                         .HasForeignKey("CharacterId")
@@ -1138,25 +1149,33 @@ namespace CCSS_Repository.Migrations
 
                     b.HasOne("CCSS_Repository.Entities.Contract", "Contract")
                         .WithMany("ContractCharacters")
-                        .HasForeignKey("ContracId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Account");
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Character");
 
                     b.Navigation("Contract");
                 });
 
+            modelBuilder.Entity("CCSS_Repository.Entities.EventActivity", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Activity", "Activity")
+                        .WithMany("EventActivities")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("CCSS_Repository.Entities.Event", "Event")
+                        .WithMany("EventActivities")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("CCSS_Repository.Entities.EventCharacter", b =>
                 {
-                    b.HasOne("CCSS_Repository.Entities.Account", "Account")
-                        .WithOne("EventCharacter")
-                        .HasForeignKey("CCSS_Repository.Entities.EventCharacter", "AccountId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("CCSS_Repository.Entities.Character", "Character")
                         .WithMany("EventCharacters")
                         .HasForeignKey("CharacterId")
@@ -1169,45 +1188,36 @@ namespace CCSS_Repository.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Account");
-
                     b.Navigation("Character");
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.EventImage", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Event", "Event")
+                        .WithMany("EventImages")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Event");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Feedback", b =>
                 {
-                    b.HasOne("CCSS_Repository.Entities.Contract", "Contract")
-                        .WithOne("Feedback")
-                        .HasForeignKey("CCSS_Repository.Entities.Feedback", "ContractId")
+                    b.HasOne("CCSS_Repository.Entities.Account", "Account")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("CCSS_Repository.Entities.Contract", "Contract")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Account");
 
                     b.Navigation("Contract");
-                });
-
-            modelBuilder.Entity("CCSS_Repository.Entities.Image", b =>
-                {
-                    b.HasOne("CCSS_Repository.Entities.Character", "Character")
-                        .WithMany("Images")
-                        .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("CCSS_Repository.Entities.Event", "Event")
-                        .WithMany("Images")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("CCSS_Repository.Entities.Product", "Product")
-                        .WithMany("Images")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("Character");
-
-                    b.Navigation("Event");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Notification", b =>
@@ -1223,20 +1233,43 @@ namespace CCSS_Repository.Migrations
 
             modelBuilder.Entity("CCSS_Repository.Entities.Order", b =>
                 {
-                    b.HasOne("CCSS_Repository.Entities.Cart", "Cart")
-                        .WithOne("Order")
-                        .HasForeignKey("CCSS_Repository.Entities.Order", "CartId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("CCSS_Repository.Entities.Coupon", "Coupon")
                         .WithOne("Order")
                         .HasForeignKey("CCSS_Repository.Entities.Order", "CouponId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Cart");
-
                     b.Navigation("Coupon");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.OrderProduct", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Order", "Order")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("CCSS_Repository.Entities.Product", "Product")
+                        .WithMany("OrderProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.Package", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Service", "Service")
+                        .WithMany("Packages")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Payment", b =>
@@ -1263,6 +1296,17 @@ namespace CCSS_Repository.Migrations
                     b.Navigation("TicketAccount");
                 });
 
+            modelBuilder.Entity("CCSS_Repository.Entities.ProductImage", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("CCSS_Repository.Entities.RefreshToken", b =>
                 {
                     b.HasOne("CCSS_Repository.Entities.Account", "Account")
@@ -1273,8 +1317,58 @@ namespace CCSS_Repository.Migrations
                     b.Navigation("Account");
                 });
 
+            modelBuilder.Entity("CCSS_Repository.Entities.Request", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Account", "Account")
+                        .WithMany("Requests")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("CCSS_Repository.Entities.Coupon", "Coupon")
+                        .WithMany("Requests")
+                        .HasForeignKey("CouponId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("CCSS_Repository.Entities.Service", "Service")
+                        .WithMany("Requests")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Coupon");
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.RequestCharacter", b =>
+                {
+                    b.HasOne("CCSS_Repository.Entities.Character", "Character")
+                        .WithMany("RequestCharacters")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("CCSS_Repository.Entities.Request", "Request")
+                        .WithMany("RequestCharacters")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Character");
+
+                    b.Navigation("Request");
+                });
+
             modelBuilder.Entity("CCSS_Repository.Entities.Task", b =>
                 {
+                    b.HasOne("CCSS_Repository.Entities.Account", "Account")
+                        .WithOne("Task")
+                        .HasForeignKey("CCSS_Repository.Entities.Task", "AccountId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("CCSS_Repository.Entities.ContractCharacter", "ContractCharacter")
                         .WithOne("Task")
                         .HasForeignKey("CCSS_Repository.Entities.Task", "ContractCharacterId")
@@ -1283,7 +1377,10 @@ namespace CCSS_Repository.Migrations
                     b.HasOne("CCSS_Repository.Entities.EventCharacter", "EventCharacter")
                         .WithOne("Task")
                         .HasForeignKey("CCSS_Repository.Entities.Task", "EventCharacterId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Account");
 
                     b.Navigation("ContractCharacter");
 
@@ -1321,30 +1418,33 @@ namespace CCSS_Repository.Migrations
                 {
                     b.Navigation("AccountCoupons");
 
+                    b.Navigation("AccountImages");
+
                     b.Navigation("Cart")
                         .IsRequired();
 
-                    b.Navigation("ContractCharacter")
-                        .IsRequired();
-
-                    b.Navigation("Contracts");
-
-                    b.Navigation("EventCharacter")
-                        .IsRequired();
+                    b.Navigation("Feedbacks");
 
                     b.Navigation("Notifications");
 
                     b.Navigation("RefreshTokens");
 
+                    b.Navigation("Requests");
+
+                    b.Navigation("Task")
+                        .IsRequired();
+
                     b.Navigation("TicketAccounts");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.Activity", b =>
+                {
+                    b.Navigation("EventActivities");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Cart", b =>
                 {
                     b.Navigation("CartProducts");
-
-                    b.Navigation("Order")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Category", b =>
@@ -1354,19 +1454,20 @@ namespace CCSS_Repository.Migrations
 
             modelBuilder.Entity("CCSS_Repository.Entities.Character", b =>
                 {
+                    b.Navigation("CharacterImages");
+
                     b.Navigation("ContractCharacters");
 
                     b.Navigation("EventCharacters");
 
-                    b.Navigation("Images");
+                    b.Navigation("RequestCharacters");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Contract", b =>
                 {
                     b.Navigation("ContractCharacters");
 
-                    b.Navigation("Feedback")
-                        .IsRequired();
+                    b.Navigation("Feedbacks");
 
                     b.Navigation("Payments");
                 });
@@ -1381,17 +1482,19 @@ namespace CCSS_Repository.Migrations
                 {
                     b.Navigation("AccountCoupons");
 
-                    b.Navigation("Contracts");
-
                     b.Navigation("Order")
                         .IsRequired();
+
+                    b.Navigation("Requests");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Event", b =>
                 {
+                    b.Navigation("EventActivities");
+
                     b.Navigation("EventCharacters");
 
-                    b.Navigation("Images");
+                    b.Navigation("EventImages");
 
                     b.Navigation("Ticket")
                         .IsRequired();
@@ -1405,25 +1508,39 @@ namespace CCSS_Repository.Migrations
 
             modelBuilder.Entity("CCSS_Repository.Entities.Order", b =>
                 {
+                    b.Navigation("OrderProducts");
+
                     b.Navigation("Payment")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("CCSS_Repository.Entities.Package", b =>
-                {
-                    b.Navigation("Contracts");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Product", b =>
                 {
                     b.Navigation("CartProducts");
 
-                    b.Navigation("Images");
+                    b.Navigation("OrderProducts");
+
+                    b.Navigation("ProductImages");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.Request", b =>
+                {
+                    b.Navigation("Contract")
+                        .IsRequired();
+
+                    b.Navigation("RequestCharacters");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Role", b =>
                 {
                     b.Navigation("Accounts");
+                });
+
+            modelBuilder.Entity("CCSS_Repository.Entities.Service", b =>
+                {
+                    b.Navigation("Packages");
+
+                    b.Navigation("Requests");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Ticket", b =>

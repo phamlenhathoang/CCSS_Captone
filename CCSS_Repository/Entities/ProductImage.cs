@@ -8,23 +8,18 @@ using System.Threading.Tasks;
 
 namespace CCSS_Repository.Entities
 {
-    [Table("CartProduct")]
-    public partial class CartProduct
+    [Table("ProductImage")]
+    public partial class ProductImage
     {
         [Key]
-        public string CartProductId { get; set; } = Guid.NewGuid().ToString();
+        public string ProductImageId { get; set; } = Guid.NewGuid().ToString();
 
         [ForeignKey("ProductId")]
         public string ProductId { get; set; }
         public Product Product { get; set; }
 
-
-        [ForeignKey("CartId")]
-        public string CartId { get; set; }
-        public Cart Cart { get; set; }
-
-        public double? Price { get; set; }
-        public int? Quantity { get; set; }
-        public DateTime? CreatedDate { get; set; }  
+        public string UrlImage { get; set; }
+        public DateTime? CreateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
     }
 }
