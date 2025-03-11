@@ -14,7 +14,7 @@ namespace CCSS_Service.Model.Responses
 
         public string? AccountId { get; set; }
         //public Account Account { get; set; }
-        public int quantitypurchased { get; set; }
+        public int Quantity { get; set; }
         public double TotalPrice { get; set; }
         public string? TicketCode { get; set; }
 

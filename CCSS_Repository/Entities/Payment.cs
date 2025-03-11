@@ -29,7 +29,7 @@ namespace CCSS_Repository.Entities
         public string? TicketAccountId { get; set; }
         public TicketAccount TicketAccount { get; set; }
 
-        [ForeignKey("ContractId")]
+        [ForeignKey("RequestId")]
         public string? ContractId { get; set; }
         public Contract Contract { get; set; }
     }

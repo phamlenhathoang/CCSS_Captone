@@ -11,7 +11,7 @@ namespace CCSS_Service.Model.Responses
     {   
         public string PackageId { get; set; }
         public string ContractName { get; set; }
-        public ContractDescription Description { get; set; }
+        //public ContractDescription Description { get; set; }
         public double Price { get; set; }
         public double Amount { get; set; }
         public bool Signature { get; set; }

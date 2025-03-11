@@ -21,6 +21,7 @@ namespace CCSS_Repository.Entities
         public DateTime? UpdateDate { get; set; }
         public bool? IsActive { get; set; }
         public ICollection<CartProduct> CartProducts { get; set; } = new List<CartProduct>();   
-        public ICollection<Image> Images { get; set; } = new List<Image>();
+        public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
+        public ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
     }
 }

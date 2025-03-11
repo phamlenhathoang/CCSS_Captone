@@ -9,31 +9,31 @@ namespace CCSS_Captone.Controllers
     [ApiController]
     public class MomoController : Controller
     {
-        private readonly IMomoService _momoService;
+        //private readonly IMomoService _momoService;
 
-        public MomoController(IMomoService momoService)
-        {
-            _momoService = momoService;
-        }
+        //public MomoController(IMomoService momoService)
+        //{
+        //    _momoService = momoService;
+        //}
 
-        [HttpPost]
-        [SwaggerOperation(Description = "purpose==0 (Mua vé)<br>" +
-                                "purpose==1 (Trả tiền cọc hợp đồng)<br>" +
-                                "purpose==2 (Tất toán hợp đồng)<br>" +
-                                "purpose==3 (Mua hàng)")]
+        //[HttpPost]
+        //[SwaggerOperation(Description = "purpose==0 (Mua vé)<br>" +
+        //                        "purpose==1 (Trả tiền cọc hợp đồng)<br>" +
+        //                        "purpose==2 (Tất toán hợp đồng)<br>" +
+        //                        "purpose==3 (Mua hàng)")]
 
-        public async Task<IActionResult> CreatePaymentUrl(OrderInfoModel model)
-        {
-            var response = await _momoService.CreatePaymentAsync(model);
-            return Ok(response.PayUrl);
-        }
+        //public async Task<IActionResult> CreatePaymentUrl(OrderInfoModel model)
+        //{
+        //    var response = await _momoService.CreatePaymentAsync(model);
+        //    return Ok(response.PayUrl);
+        //}
 
-        [HttpGet]
-        [Route("PaymentCallBack")]
-        public async Task<IActionResult> PaymentCallBack()
-        {
-            var response = await _momoService.MomoPaymentExecuteAsync(HttpContext.Request.Query);
-            return Ok(response);
-        }
+        //[HttpGet]
+        //[Route("PaymentCallBack")]
+        //public async Task<IActionResult> PaymentCallBack()
+        //{
+        //    var response = await _momoService.MomoPaymentExecuteAsync(HttpContext.Request.Query);
+        //    return Ok(response);
+        //}
     }
 }

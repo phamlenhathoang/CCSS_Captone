@@ -13,13 +13,22 @@ namespace CCSS_Repository.Entities
     {
         [Key]
         public string OrderId { get; set; }
-        [ForeignKey("CartId")]
-        public string? CartId { get; set; }  
-        public Cart Cart { get; set; }
         public Payment Payment { get; set; }
 
         [ForeignKey("CouponId")]
         public string CouponId { get; set; }
         public Coupon Coupon { get; set; }
+
+        public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
+
+        public string? OrderDate { get; set; }
+        public double? TotalPrice { get; set; }
+        public OrderStatus OrderStatus { get; set; }
+    }
+
+    public enum OrderStatus
+    {
+        Completed, 
+        Cancel
     }
 }

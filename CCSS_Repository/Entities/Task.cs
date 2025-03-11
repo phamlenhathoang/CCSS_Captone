@@ -27,16 +27,17 @@ namespace CCSS_Repository.Entities
         public DateTime? UpdateDate { get; set; }
         public TaskStatus? Status { get; set; }
 
+        [ForeignKey("AccountId")]
+        public string AccountId { get; set; }
+        public Account Account { get; set; }
+
         [ForeignKey("EventCharacterId")]
-        public string? EventCharacterId { get; set; }
+        public string EventCharacterId { get; set; }
         public EventCharacter EventCharacter { get; set; }
 
         [ForeignKey("ContractCharacterId")]
         public string? ContractCharacterId { get; set; }
-        public ContractCharacter ContractCharacter { get; set; }
-
-
-
+        public ContractCharacter ContractCharacter { get; set; } 
     }
 
     public enum TaskStatus

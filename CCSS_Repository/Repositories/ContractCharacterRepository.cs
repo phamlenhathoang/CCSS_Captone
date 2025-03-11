@@ -11,60 +11,60 @@ namespace CCSS_Repository.Repositories
 {
     public interface IContractCharacterRepository
     {
-        Task<ContractCharacter> GetContractCharacterById(string contractCharacterId);
-        Task AddCharacterInContract(ContractCharacter contractCharacter);
-        Task<bool> AddListCharacterInContract(List<ContractCharacter> contractCharacters);
-        Task UpdateChracterInContract(ContractCharacter contractCharacter);
-        Task DeleteChracterInContract(ContractCharacter contractCharacter);
-        Task<int> CountCharactersInContractAsync(string contractId);
+        //Task<RequestCharacter> GetContractCharacterById(string contractCharacterId);
+        //Task AddCharacterInContract(RequestCharacter contractCharacter);
+        //Task<bool> AddListCharacterInContract(List<RequestCharacter> contractCharacters);
+        //Task UpdateChracterInContract(RequestCharacter contractCharacter);
+        //Task DeleteChracterInContract(RequestCharacter contractCharacter);
+        //Task<int> CountCharactersInContractAsync(string contractId);
     }
     public class ContractCharacterRepository: IContractCharacterRepository
     {
-        private readonly CCSSDbContext _dbContext;
+        //private readonly CCSSDbContext _dbContext;
 
-        public ContractCharacterRepository(CCSSDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        //public ContractCharacterRepository(CCSSDbContext dbContext)
+        //{
+        //    _dbContext = dbContext;
+        //}
 
-        public async Task<int> CountCharactersInContractAsync(string contractId)
-        {
-            if (string.IsNullOrEmpty(contractId))
-                return 0;
+        //public async Task<int> CountCharactersInContractAsync(string contractId)
+        //{
+        //    if (string.IsNullOrEmpty(contractId))
+        //        return 0;
 
-            var totalCharacters = await _dbContext.ContractCharacters
-                .Where(cc => cc.ContracId == contractId)
-                .SumAsync(cc => cc.Quantity); // Tính tổng số lượng nhân vật
+        //    var totalCharacters = await _dbContext.ContractCharacters
+        //        .Where(cc => cc.ContracId == contractId)
+        //        .SumAsync(cc => cc.Quantity); // Tính tổng số lượng nhân vật
 
-            return totalCharacters;
-        }
-        public async Task<ContractCharacter> GetContractCharacterById(string contractCharacterId)
-        {
-            return await _dbContext.ContractCharacters.FirstOrDefaultAsync(sc => sc.ContractCharacterId.Equals(contractCharacterId));
-        }
+        //    return totalCharacters;
+        //}
+        //public async Task<RequestCharacter> GetContractCharacterById(string contractCharacterId)
+        //{
+        //    return await _dbContext.ContractCharacters.FirstOrDefaultAsync(sc => sc.ContractCharacterId.Equals(contractCharacterId));
+        //}
 
-        public async Task AddCharacterInContract(ContractCharacter contractCharacter)
-        {
-            _dbContext.ContractCharacters.Add(contractCharacter);
-            await _dbContext.SaveChangesAsync();
-        }
+        //public async Task AddCharacterInContract(RequestCharacter contractCharacter)
+        //{
+        //    _dbContext.ContractCharacters.Add(contractCharacter);
+        //    await _dbContext.SaveChangesAsync();
+        //}
 
-        public async Task<bool> AddListCharacterInContract(List<ContractCharacter> contractCharacters)
-        {
-            _dbContext.ContractCharacters.AddRange(contractCharacters);
-            return await _dbContext.SaveChangesAsync() > 0;
-        }
+        //public async Task<bool> AddListCharacterInContract(List<RequestCharacter> contractCharacters)
+        //{
+        //    _dbContext.ContractCharacters.AddRange(contractCharacters);
+        //    return await _dbContext.SaveChangesAsync() > 0;
+        //}
 
-        public async Task UpdateChracterInContract(ContractCharacter contractCharacter)
-        {
-            _dbContext.ContractCharacters.Update(contractCharacter);
-            await _dbContext.SaveChangesAsync();
-        }
+        //public async Task UpdateChracterInContract(RequestCharacter contractCharacter)
+        //{
+        //    _dbContext.ContractCharacters.Update(contractCharacter);
+        //    await _dbContext.SaveChangesAsync();
+        //}
 
-        public async Task DeleteChracterInContract(ContractCharacter contractCharacter)
-        {
-            _dbContext.ContractCharacters.Remove(contractCharacter);
-            await _dbContext.SaveChangesAsync();
-        }
+        //public async Task DeleteChracterInContract(RequestCharacter contractCharacter)
+        //{
+        //    _dbContext.ContractCharacters.Remove(contractCharacter);
+        //    await _dbContext.SaveChangesAsync();
+        //}
     }
 }

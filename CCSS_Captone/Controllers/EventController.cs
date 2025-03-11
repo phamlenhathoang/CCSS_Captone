@@ -12,122 +12,122 @@ namespace CCSS_Captone.Controllers
     [ApiController]
     public class EventController : ControllerBase
     {
-        private readonly IEventService _eventService;
+        //private readonly IEventService _eventService;
 
-        public EventController(IEventService eventService)
-        {
-            _eventService = eventService;
-        }
+        //public EventController(IEventService eventService)
+        //{
+        //    _eventService = eventService;
+        //}
 
-        /// <summary>
-        /// Lấy danh sách tất cả sự kiện có thể tìm kiếm theo tên
-        /// </summary>
-        [HttpGet("GetAllEvents")]
-        public async Task<IActionResult> GetAllEvents([FromQuery] string? searchTerm)
-        {
-            try
-            {
-                // Gọi service để lấy dữ liệu, nếu searchTerm rỗng thì lấy tất cả sự kiện
-                var events = await _eventService.GetAllEvents(string.IsNullOrWhiteSpace(searchTerm) ? null : searchTerm);
+        ///// <summary>
+        ///// Lấy danh sách tất cả sự kiện có thể tìm kiếm theo tên
+        ///// </summary>
+        //[HttpGet("GetAllEvents")]
+        //public async Task<IActionResult> GetAllEvents([FromQuery] string? searchTerm)
+        //{
+        //    try
+        //    {
+        //        // Gọi service để lấy dữ liệu, nếu searchTerm rỗng thì lấy tất cả sự kiện
+        //        var events = await _eventService.GetAllEvents(string.IsNullOrWhiteSpace(searchTerm) ? null : searchTerm);
 
-                if (events == null || events.Count == 0)
-                {
-                    return NotFound("No events found.");
-                }
+        //        if (events == null || events.Count == 0)
+        //        {
+        //            return NotFound("No events found.");
+        //        }
 
-                return Ok(events);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal Server Error: {ex.Message}");
-            }
-        }
+        //        return Ok(events);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Internal Server Error: {ex.Message}");
+        //    }
+        //}
 
 
-        /// <summary>
-        /// Lấy thông tin chi tiết của một sự kiện theo ID
-        /// </summary>
-        [HttpGet("GetEvent/{id}")]
-        public async Task<IActionResult> GetEvent(string id)
-        {
-            try
-            {
-                var eventResponse = await _eventService.GetEvent(id);
-                if (eventResponse == null)
-                    return NotFound("Event not found");
+        ///// <summary>
+        ///// Lấy thông tin chi tiết của một sự kiện theo ID
+        ///// </summary>
+        //[HttpGet("GetEvent/{id}")]
+        //public async Task<IActionResult> GetEvent(string id)
+        //{
+        //    try
+        //    {
+        //        var eventResponse = await _eventService.GetEvent(id);
+        //        if (eventResponse == null)
+        //            return NotFound("Event not found");
 
-                return Ok(eventResponse);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal Server Error: {ex.Message}");
-            }
-        }
+        //        return Ok(eventResponse);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Internal Server Error: {ex.Message}");
+        //    }
+        //}
 
-        /// <summary>
-        /// Tạo một sự kiện mới
-        /// </summary>
-        [HttpPost("AddEvent")]
-        public async Task<IActionResult> AddEvent([FromForm] CreateEventRequest eventRequest)
-        {
-            if (eventRequest == null)
-                return BadRequest("Invalid request: Event data is null");
+        ///// <summary>
+        ///// Tạo một sự kiện mới
+        ///// </summary>
+        //[HttpPost("AddEvent")]
+        //public async Task<IActionResult> AddEvent([FromForm] CreateEventRequest eventRequest)
+        //{
+        //    if (eventRequest == null)
+        //        return BadRequest("Invalid request: Event data is null");
 
-            try
-            {
-                var result = await _eventService.AddEvent(eventRequest);
-                if (result.Contains("Success"))
-                    return Ok(result);
+        //    try
+        //    {
+        //        var result = await _eventService.AddEvent(eventRequest);
+        //        if (result.Contains("Success"))
+        //            return Ok(result);
 
-                return BadRequest(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal Server Error: {ex.Message}");
-            }
-        }
+        //        return BadRequest(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Internal Server Error: {ex.Message}");
+        //    }
+        //}
 
-        /// <summary>
-        /// Cập nhật thông tin sự kiện
-        /// </summary>
-        [HttpPut("UpdateEvent/{eventId}")]
-        public async Task<IActionResult> UpdateEvent(string eventId, [FromBody] UpdateEventRequest eventRequest)
-        {
-            if (eventRequest == null)
-                return BadRequest("Invalid request: Event data is null");
+        ///// <summary>
+        ///// Cập nhật thông tin sự kiện
+        ///// </summary>
+        //[HttpPut("UpdateEvent/{eventId}")]
+        //public async Task<IActionResult> UpdateEvent(string eventId, [FromBody] UpdateEventRequest eventRequest)
+        //{
+        //    if (eventRequest == null)
+        //        return BadRequest("Invalid request: Event data is null");
 
-            try
-            {
-                var result = await _eventService.UpdateEvent(eventId, eventRequest);
-                if (result.Contains("Success"))
-                    return Ok(result);
+        //    try
+        //    {
+        //        var result = await _eventService.UpdateEvent(eventId, eventRequest);
+        //        if (result.Contains("Success"))
+        //            return Ok(result);
 
-                return NotFound(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal Server Error: {ex.Message}");
-            }
-        }
+        //        return NotFound(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Internal Server Error: {ex.Message}");
+        //    }
+        //}
 
-        /// <summary>
-        /// Xóa một sự kiện theo ID
-        /// </summary>
-        [HttpDelete("DeleteEvent/{id}")]
-        public async Task<IActionResult> DeleteEvent(string id)
-        {
-            try
-            {
-                var isDeleted = await _eventService.DeleteEvent(id);
-                if (!isDeleted)
-                    return NotFound("Event not found or could not be deleted");
+        ///// <summary>
+        ///// Xóa một sự kiện theo ID
+        ///// </summary>
+        //[HttpDelete("DeleteEvent/{id}")]
+        //public async Task<IActionResult> DeleteEvent(string id)
+        //{
+        //    try
+        //    {
+        //        var isDeleted = await _eventService.DeleteEvent(id);
+        //        if (!isDeleted)
+        //            return NotFound("Event not found or could not be deleted");
 
-                return Ok("Delete Success");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal Server Error: {ex.Message}");
-            }
-        }
+        //        return Ok("Delete Success");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Internal Server Error: {ex.Message}");
+        //    }
+        //}
     }
 }

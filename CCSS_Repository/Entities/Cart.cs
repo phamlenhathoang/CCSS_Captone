@@ -20,7 +20,9 @@ namespace CCSS_Repository.Entities
         public Account Account { get; set; }
 
         public double TotalPrice { get; set; }
-        public Order Order { get; set; }
+        public DateTime? CreateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
+
         public ICollection<CartProduct> CartProducts { get; set; } = new List<CartProduct>();   
     }
 }
