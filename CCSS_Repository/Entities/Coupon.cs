@@ -18,10 +18,17 @@ namespace CCSS_Repository.Entities
         public double Amount { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string Type { get; set; }
+        public CouponType Type { get; set; }
 
-        public Order Order { get; set; }    
-        public ICollection<Request> Requests { get; set; } = new List<Request>();
+        //public Order Order { get; set; }    
+        //public ICollection<Request> Requests { get; set; } = new List<Request>();
+        
+        
         public ICollection<AccountCoupon> AccountCoupons { get; set; } = new List<AccountCoupon>();
+    }
+    public enum CouponType
+    {
+        ForContract,
+        ForOrder
     }
 }

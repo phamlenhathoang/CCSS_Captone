@@ -69,7 +69,9 @@ builder.Services.AddAutoMapper(typeof(PackageProfile),
                                typeof(EventProfile),
                                typeof(TicketProfile),
                                typeof(TicketAccountProfile),
-                               typeof(EventCharacterProfile));
+                               typeof(EventCharacterProfile),
+                               typeof(EventActivitProfile),
+                               typeof(ActivityProfile));
 
 builder.Services.AddSignalR();
 

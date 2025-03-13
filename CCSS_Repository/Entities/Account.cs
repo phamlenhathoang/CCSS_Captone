@@ -23,7 +23,7 @@ namespace CCSS_Repository.Entities
         public bool? OnTask {  get; set; }
         public bool? Leader {  get; set; }   
         public string? Code {  get; set; }
-        public string? ImageUrl {  get; set; }
+        
         public int? TaskQuantity { get; set; }
         public float? Height { get; set; }
         public float? Weight { get; set; }
@@ -33,8 +33,9 @@ namespace CCSS_Repository.Entities
         public string RoleId { get; set; }
         public Role Role { get; set; } 
         public Cart Cart { get; set; }
-        public Task Task { get; set; }
+        public ICollection<Task> Tasks { get; set; }
         public ICollection<TicketAccount> TicketAccounts { get; set; } = new List<TicketAccount>();
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
         public ICollection<Request> Requests { get; set; } = new List<Request>();
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();    
         public ICollection<AccountCoupon> AccountCoupons { get; set; } = new List<AccountCoupon>();
