@@ -5,10 +5,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace CCSS_Repository.Repositories
 {
-    public class RequestRepository
+    public interface IRequestRepository
+    {
+        Task<List<Request>> GetAllRequest();
+        Task<Request> GetRequestById(string id);
+        Task AddRequest(Request request);
+        Task UpdateRequest(Request request);
+        Task DeleteRequest(Request request);
+    }
+
+    public class RequestRepository: IRequestRepository
     {
         private readonly CCSSDbContext _context;
 
@@ -22,6 +32,27 @@ namespace CCSS_Repository.Repositories
             return await _context.Requests.ToListAsync();
         }
 
+        public async Task<Request> GetRequestById(string id)
+        {
+            return await _context.Requests.FirstOrDefaultAsync(sc => sc.RequestId.Equals(id));  
+        }
 
+        public async Task AddRequest( Request request)
+        {
+            _context.Requests.Add(request);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateRequest(Request request)
+        {
+            _context.Requests.Update(request);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteRequest(Request request)
+        {
+            _context.Requests.Remove(request);
+            await _context.SaveChangesAsync();
+        }
     }
 }
