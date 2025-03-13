@@ -42,6 +42,7 @@ builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IDashBoardRepository, DashBoardRepository>();
+builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 
 
 //Service
@@ -58,6 +59,7 @@ builder.Services.AddScoped<ITicketAccountService, TicketAccountService>();
 builder.Services.AddScoped<IImageService, ImageServices>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IDashBoardService, DashBoardService>();
+builder.Services.AddScoped<IRequestServices, RequestServices>();
 
 
 //AutoMapper
