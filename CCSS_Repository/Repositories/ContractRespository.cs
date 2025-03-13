@@ -15,9 +15,9 @@ namespace CCSS_Repository.Repositories
         //Task<Request> GetContractById(string id);
         //Task<Request> GetContractAndContractCharacter(string id);
         //Task<Contract> GetContractAndTasks(string contractId);
-        Task<bool> AddContract(Request contract);
-        Task<bool> UpdateContract(Request contract);
-        Task<bool> DeleteContract(Request contract);
+        //Task<bool> AddContract(Request contract);
+        //Task<bool> UpdateContract(Request contract);
+        //Task<bool> DeleteContract(Request contract);
 
     }
 
@@ -44,23 +44,23 @@ namespace CCSS_Repository.Repositories
         //    return await _context.Contracts.Include(c => c.ContractCharacters).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
         //}
 
-        public async Task<bool> AddContract(Request contract)
-        {
-            _context.Contracts.Add(contract);
-            return await _context.SaveChangesAsync() > 0;
-        }
+        //public async Task<bool> AddContract(Request contract)
+        //{
+        //    _context.Contracts.Add(contract);
+        //    return await _context.SaveChangesAsync() > 0;
+        //}
 
-        public async Task<bool> UpdateContract(Request contract)
-        {
-            _context.Contracts.Update(contract);
-            return await _context.SaveChangesAsync() > 0;
-        }
+        //public async Task<bool> UpdateContract(Request contract)
+        //{
+        //    _context.Contracts.Update(contract);
+        //    return await _context.SaveChangesAsync() > 0;
+        //}
 
-        public async Task<bool> DeleteContract(Request contract)
-        {
-            _context.Contracts.Remove(contract);
-            return await _context.SaveChangesAsync() > 0;
-        }
+        //public async Task<bool> DeleteContract(Request contract)
+        //{
+        //    _context.Contracts.Remove(contract);
+        //    return await _context.SaveChangesAsync() > 0;
+        //}
 
         //public async Task<Request> GetContractAndContractCharacter(string id)
         //{
