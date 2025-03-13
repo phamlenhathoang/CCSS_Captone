@@ -26,8 +26,9 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<Character> Characters { get; set; }
         public virtual DbSet<CharacterImage> CharacterImages { get; set; }
         public virtual DbSet<Contract> Contracts { get; set; }
+        public virtual DbSet<ContractCharacter> ContractCharacters { get; set; }
         public virtual DbSet<Request> Requests { get; set; }
-        public virtual DbSet<RequestCharacter> ContractCharacters { get; set; }
+        public virtual DbSet<RequestCharacter> RequestsCharacters { get; set; }
         public virtual DbSet<Coupon> Coupons { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<EventActivity> EventActivities { get; set; }

@@ -34,25 +34,26 @@ namespace CCSS_Service.Services
         Task<string> CodeValidation(string email, string code);
         Task<AccountResponse> GetAccountByAccountId(string accountId);
         Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest);
+        Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, DateTime startDate, DateTime endDate);
     }
     public class AccountService : IAccountService
     {
-        //private readonly ITaskRepository taskRepository;
+        private readonly ITaskRepository taskRepository;
         private readonly IAccountRepository accountRepository;
         //private readonly IContractRespository contractRespository;
-        //private readonly ICharacterRepository characterRepository;
+        private readonly ICharacterRepository characterRepository;
         //private readonly ICategoryRepository categoryRepository;
         private readonly IRefreshTokenRepository refreshTokenRepository;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IMapper mapper;
 
-        public AccountService(IAccountRepository accountRepository, IMapper mapper, /*ICharacterRepository characterRepository, IContractRespository contractRepository, ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
+        public AccountService(ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, /*IContractRespository contractRepository, ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
         {
-            //this.taskRepository = taskRepository;
+            this.taskRepository = taskRepository;
             this.accountRepository = accountRepository;
             this.mapper = mapper;
-            //this.characterRepository = characterRepository;
+            this.characterRepository = characterRepository;
             //this.contractRespository = contractRepository;
             //this.categoryRepository = categoryRepository;
             _configuration = configuration;
@@ -441,8 +442,43 @@ namespace CCSS_Service.Services
                 return false;
             }
             mapper.Map(updateAccountRequest, checkAccount);
+
+            checkAccount.Password = PasswordHash.ConvertToDecrypt(checkAccount.Password);
+
             bool result = await accountRepository.UpdateAccount(checkAccount);
             return result;  
+        }
+
+        public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                List<AccountByCharacterAndDateResponse> accountByCharacterAndDateResponses = new List<AccountByCharacterAndDateResponse>();
+
+                Character character = await characterRepository.GetCharacter(characterId);
+                if (character == null)
+                {
+                    throw new Exception("Character does not exist");
+                }
+
+                List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character);
+
+                foreach (Account account in accounts)
+                {
+                    bool result = await taskRepository.GetTasksByDate(account, startDate, endDate);
+                    if (result)
+                    {
+                        AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                        accountByCharacterAndDateResponses.Add(accountRespose); 
+                    }
+                }
+
+                return accountByCharacterAndDateResponses;  
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

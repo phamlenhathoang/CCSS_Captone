@@ -14,21 +14,23 @@ namespace CCSS_Repository.Repositories
     {
         //Task<Task> GetTask(string id);
         //Task<List<Task>> GetTaskByAccountId(string accountId);
-        //Task<bool> AddTask(CCSS_Repository.Entities.Task tasks);
+        Task<bool> AddTask(CCSS_Repository.Entities.Task tasks);
         //Task<bool> AddRangeTask(List<Task> task);
         //Task<bool> UpdateTask(CCSS_Repository.Entities.Task task);
         //Task<bool> DeleteTask(CCSS_Repository.Entities.Task task);
         //Task<List<Task>> GetTaskByAccountId(string accountId, string? taskId);
         //Task<List<Task>> GetTaslByContractId(string contractId);
+
+        Task<bool> GetTasksByDate(Account account, DateTime startDate, DateTime endDate);  
     }
     public class TaskRepository : ITaskRepository
     {
-        //private readonly CCSSDbContext _dbContext;
+        private readonly CCSSDbContext _dbContext;
 
-        //public TaskRepository(CCSSDbContext cCSSDbContext)
-        //{
-        //    _dbContext = cCSSDbContext;
-        //}
+        public TaskRepository(CCSSDbContext cCSSDbContext)
+        {
+            _dbContext = cCSSDbContext;
+        }
 
         //public async Task<bool> AddRangeTask(List<Task> tasks)
         //{
@@ -37,12 +39,79 @@ namespace CCSS_Repository.Repositories
         //    return result > 0 ? true : false;
         //}
 
-        //public async Task<bool> AddTask(Entities.Task task)
-        //{
-        //    await _dbContext.AddAsync(task);
-        //    int result = await _dbContext.SaveChangesAsync();
-        //    return result > 0 ? true : false;
-        //}
+        public async Task<bool> AddTask(Entities.Task task)
+        {
+            await _dbContext.AddAsync(task);
+            int result = await _dbContext.SaveChangesAsync();
+            return result > 0 ? true : false;
+        }
+
+        public async Task<bool> GetTasksByDate(Account account, DateTime startDate, DateTime endDate)
+        {
+
+            DateTime rangeStart = startDate.AddDays(-7);
+
+            var tasks = await _dbContext.Tasks
+                .Where(t => t.AccountId == account.AccountId 
+                       &&t.StartDate >= rangeStart)
+                .OrderBy(t => t.StartDate)
+                .ToListAsync();
+
+            if (!tasks.Any())
+            {
+                return true;
+            }
+            double totalHoursInDay = 0;
+            if (startDate.Date == endDate.Date)
+            {
+                totalHoursInDay = (endDate - startDate).TotalHours;
+            }
+
+            for (int i = 0; i < tasks.Count; i++)
+            {
+                if (i > 0)
+                {
+                    var previousTask = tasks[i - 1];
+
+                    if (startDate < previousTask.EndDate.GetValueOrDefault().AddHours(2))
+                    {
+                        return false; // Task trước chưa nghỉ đủ 2 giờ
+                    }
+
+                    // Kiểm tra tổng giờ làm nếu cùng ngày
+                    if (startDate.Date == previousTask.StartDate.GetValueOrDefault().Date && startDate.Date == previousTask.EndDate.GetValueOrDefault().Date)
+                    {
+                        totalHoursInDay = (previousTask.EndDate.GetValueOrDefault() - previousTask.StartDate.GetValueOrDefault()).TotalHours;
+                    }
+                }
+
+                
+                if (i < tasks.Count - 1)
+                {
+                    var nextTask = tasks[i + 1];
+
+                    if (endDate > nextTask.StartDate.GetValueOrDefault().AddHours(-2))
+                    {
+                        return false; // Task sau chưa chuẩn bị đủ 2 giờ
+                    }
+
+                    // Kiểm tra tổng giờ làm nếu cùng ngày
+                    if (startDate.Date == nextTask.EndDate.GetValueOrDefault().Date && startDate.Date == nextTask.StartDate.GetValueOrDefault().Date)
+                    {
+                        totalHoursInDay = (nextTask.EndDate.GetValueOrDefault() - nextTask.StartDate.GetValueOrDefault()).TotalHours;
+                        
+                    }
+                }
+
+                if (totalHoursInDay > 8)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+
+        }
 
         //public async Task<bool> DeleteTask(CCSS_Repository.Entities.Task task)
         //{

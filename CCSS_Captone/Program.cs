@@ -122,7 +122,7 @@ app.UseSwaggerUI();
 
 app.UseRouting();
 
-app.MapHub<TaskHub>("/taskHub");
+app.MapHub<NotificationHub>("/taskHub");
 
 app.UseHttpsRedirection();
 

@@ -14,4 +14,16 @@ namespace CCSS_Service.Model.Requests
         public string AccountId { get; set; }
         public string CharacterName { get; set; }
     }
+
+    public class AddTaskEventRequest
+    {
+        public string AccountId { get; set; }
+        public string EventCharacterId { get; set; }
+    }
+
+    public class AddTaskContractRequest
+    {
+        public string AccountId { get; set; }
+        public string ContractCharacterId { get; set; }
+    }
 }

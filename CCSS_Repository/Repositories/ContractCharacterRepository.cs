@@ -17,15 +17,17 @@ namespace CCSS_Repository.Repositories
         //Task UpdateChracterInContract(RequestCharacter contractCharacter);
         //Task DeleteChracterInContract(RequestCharacter contractCharacter);
         //Task<int> CountCharactersInContractAsync(string contractId);
-    }
-    public class ContractCharacterRepository: IContractCharacterRepository
-    {
-        //private readonly CCSSDbContext _dbContext;
 
-        //public ContractCharacterRepository(CCSSDbContext dbContext)
-        //{
-        //    _dbContext = dbContext;
-        //}
+        Task<ContractCharacter> GetContractCharacterById(string id);
+    }
+    public class ContractCharacterRepository : IContractCharacterRepository
+    {
+        private readonly CCSSDbContext _dbContext;
+
+        public ContractCharacterRepository(CCSSDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         //public async Task<int> CountCharactersInContractAsync(string contractId)
         //{
@@ -66,5 +68,9 @@ namespace CCSS_Repository.Repositories
         //    _dbContext.ContractCharacters.Remove(contractCharacter);
         //    await _dbContext.SaveChangesAsync();
         //}
+        public async Task<ContractCharacter> GetContractCharacterById(string id)
+        {
+            return await _dbContext.ContractCharacters.Include(c => c.Contract).FirstOrDefaultAsync(c => c.ContractCharacterId.Equals(id));
+        }
     }
 }

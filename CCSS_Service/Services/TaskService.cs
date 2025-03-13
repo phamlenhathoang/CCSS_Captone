@@ -32,27 +32,180 @@ namespace CCSS_Service.Services
         //Task<string> AddTaskForListAccount(List<AddTaskRequest> addTaskRequests);
         //Task<List<TaskResponse>> ViewAllTaskByAccountId(string accountId, string? taskId);
         //Task<List<TaskResponse>> ViewAllTaskByContractId(string contractId);
+
+        Task<string> AddTask(List<AddTaskEventRequest> taskEventRequests, List<AddTaskContractRequest> taskContractRequests);
     }
     public class TaskService : ITaskService
     {
-        //private readonly ITaskRepository taskRepository;
-        //private readonly IContractRespository contractRespository;
-        //private readonly IAccountRepository accountRepository;
-        //private readonly ICharacterRepository characterRepository;
-        //private readonly INotificationRepository notificationRepository;
-        //private readonly IMapper mapper;
-        //private readonly IHubContext<TaskHub> hubContext;
+        private readonly ITaskRepository taskRepository;
+        private readonly IContractRespository contractRespository;
+        private readonly IAccountRepository accountRepository;
+        private readonly ICharacterRepository characterRepository;
+        private readonly INotificationRepository notificationRepository;
+        private readonly IMapper mapper;
+        private readonly IHubContext<NotificationHub> hubContext;
+        private readonly IEventChacracterRepository eventChacracterRepository;
+        private readonly IContractCharacterRepository contractCharacterRepository;
 
-        //public TaskService(ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<TaskHub> hubContext, INotificationRepository notificationRepository)
-        //{
-        //    this.taskRepository = taskRepository;
-        //    this.contractRespository = contractRespository;
-        //    this.accountRepository = accountRepository;
-        //    this.characterRepository = characterRepository;
-        //    this.mapper = mapper;
-        //    this.hubContext = hubContext;
-        //    this.notificationRepository = notificationRepository;
-        //}
+        public TaskService(IContractCharacterRepository contractCharacterRepository, IEventChacracterRepository eventChacracterRepository, ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<NotificationHub> hubContext, INotificationRepository notificationRepository)
+        {
+            this.taskRepository = taskRepository;
+            this.contractRespository = contractRespository;
+            this.accountRepository = accountRepository;
+            this.characterRepository = characterRepository;
+            this.mapper = mapper;
+            this.hubContext = hubContext;
+            this.notificationRepository = notificationRepository;
+            this.eventChacracterRepository = eventChacracterRepository;
+            this.contractCharacterRepository = contractCharacterRepository;
+        }
+
+        private async Task<bool> AddTaskEvent(List<AddTaskEventRequest> taskEventRequests)
+        {
+            foreach (var taskRequest in taskEventRequests)
+            {
+                Account account = await accountRepository.GetAccount(taskRequest.AccountId);
+                if (account == null)
+                {
+                    throw new Exception("Account does not exist");
+                }
+                EventCharacter eventCharacter = await eventChacracterRepository.GetEventCharacterById(taskRequest.EventCharacterId);
+                if (eventCharacter == null)
+                {
+                    throw new Exception("EventCharacter does not exist");
+                }
+
+                Task task = new Task()
+                {
+                    EventCharacterId = taskRequest.EventCharacterId,
+                    AccountId = taskRequest.AccountId,
+                    CreateDate = eventCharacter.CreateDate,
+                    Description = eventCharacter.Description,
+                    EndDate = eventCharacter.Event.EndDate,
+                    StartDate = eventCharacter.Event.StartDate,
+                    TaskName = eventCharacter.CharacterId,
+                    Location = eventCharacter.Event.Location,
+                    IsActive = true,
+                    Status = TaskStatus.Assignment,
+                    Type = "Event",
+                    TaskId = Guid.NewGuid().ToString(),
+                    UpdateDate = null,
+                };
+
+                bool result = await taskRepository.AddTask(task);
+                if (result)
+                {
+                    throw new Exception($"Task {task.TaskId} đã xảy ra lỗi vào lúc {DateTime.Now}");
+                }
+            }
+
+            return true;
+        }
+
+        private async Task<bool> AddTaskContract(List<AddTaskContractRequest> taskContractRequests)
+        {
+            List<Task> tasks = new List<Task>();
+            foreach (var taskRequest in taskContractRequests)
+            {
+                Account account = await accountRepository.GetAccount(taskRequest.AccountId);
+                if (account == null)
+                {
+                    throw new Exception("Account does not exist");
+                }
+                ContractCharacter contractCharacter = await contractCharacterRepository.GetContractCharacterById(taskRequest.ContractCharacterId);
+                if (contractCharacter == null)
+                {
+                    throw new Exception("EventCharacter does not exist");
+                }
+                Task task = new Task()
+                {
+                    ContractCharacterId = taskRequest.ContractCharacterId,
+                    AccountId = taskRequest.AccountId,
+                    CreateDate = contractCharacter.CreateDate,
+                    Description = contractCharacter.Description,
+                    //EndDate = contractCharacter.Event.EndDate,
+                    //StartDate = contractCharacter.Event.StartDate,
+                    TaskName = contractCharacter.CharacterId,
+                    //Location = contractCharacter.Event.Location,
+                    IsActive = true,
+                    Status = TaskStatus.Assignment,
+                    Type = "Event",
+                    TaskId = Guid.NewGuid().ToString(),
+                    UpdateDate = null,
+                };
+                
+               tasks.Add(task);
+
+                bool check = await taskRepository.AddTask(task);
+                if (check)
+                {
+                    throw new Exception($"Task {task.TaskId} đã xảy ra lỗi vào lúc {DateTime.Now}");
+                }
+            }
+
+            bool result = await NortificationUser(tasks) ? true : false; 
+
+            return result;
+        }
+
+        private async Task<bool> NortificationUser(List<Task> tasks)
+        {
+            List<Notification> notificationList = new List<Notification>();
+
+            foreach (var task in tasks)
+            {
+                string connectionId = NotificationHub.GetConnectionId(task.AccountId);
+                string message = $"You have just received a new task";
+                if (!string.IsNullOrEmpty(connectionId))
+                {
+                    await hubContext.Clients.Client(connectionId).SendAsync("ReceiveTaskNotification", message);
+                }
+                else
+                {
+                    Console.WriteLine($"User {task.AccountId} không online, không thể gửi thông báo");
+                    var notification = new Notification()
+                    {
+                        AccountId = task.AccountId,
+                        Message = message,
+                        Id = Guid.NewGuid().ToString(),
+                    };
+                    notificationList.Add(notification);
+                }
+            }
+            bool result = await notificationRepository.AddRangeNotification(notificationList) ? true : false;
+
+            return result;
+        }
+
+        public async Task<string> AddTask(List<AddTaskEventRequest> taskEventRequests, List<AddTaskContractRequest> taskContractRequests)
+        {
+            try
+            {
+                if (taskEventRequests.Any())
+                {
+                    bool result = await AddTaskEvent(taskEventRequests) ? true : false;
+                    if (result)
+                    {
+                        return "Successfully";
+                    }
+                }
+
+                if (taskContractRequests.Any())
+                {
+                    bool result = await AddTaskContract(taskContractRequests) ? true : false;
+                    if (result)
+                    {
+                        return "Successfully";
+                    }
+                }
+
+                return "Failed";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
         //public async Task<string> AddTask(List<TaskRequest> taskRequests, int quantityAccount, string contractId)
         //{
