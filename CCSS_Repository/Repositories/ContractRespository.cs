@@ -12,7 +12,7 @@ namespace CCSS_Repository.Repositories
     public interface IContractRespository
     {
         //Task<List<Request>> GetAllContract(string searchterm);
-        //Task<Request> GetContractById(string id);
+        Task<Contract> GetContractById(string id);
         //Task<Request> GetContractAndContractCharacter(string id);
         //Task<Contract> GetContractAndTasks(string contractId);
         //Task<bool> AddContract(Request contract);
@@ -39,10 +39,10 @@ namespace CCSS_Repository.Repositories
         //    return await _context.Contracts.Where(sc => sc.ContractName.Contains(searchterm)).OrderByDescending(sc => sc.ContractName).ToListAsync();
         //}
 
-        //public async Task<Request> GetContractById(string id)
-        //{
-        //    return await _context.Contracts.Include(c => c.ContractCharacters).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
-        //}
+        public async Task<Contract> GetContractById(string id)
+        {
+            return await _context.Contracts.Include(c => c.ContractCharacters).Include(c => c.Request).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
+        }
 
         //public async Task<bool> AddContract(Request contract)
         //{

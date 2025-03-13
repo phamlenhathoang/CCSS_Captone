@@ -46,8 +46,9 @@ namespace CCSS_Service.Services
         private readonly IHubContext<NotificationHub> hubContext;
         private readonly IEventChacracterRepository eventChacracterRepository;
         private readonly IContractCharacterRepository contractCharacterRepository;
+        private readonly IRequestRepository requestRepository;
 
-        public TaskService(IContractCharacterRepository contractCharacterRepository, IEventChacracterRepository eventChacracterRepository, ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<NotificationHub> hubContext, INotificationRepository notificationRepository)
+        public TaskService(IRequestRepository requestRepository, IContractCharacterRepository contractCharacterRepository, IEventChacracterRepository eventChacracterRepository, ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<NotificationHub> hubContext, INotificationRepository notificationRepository)
         {
             this.taskRepository = taskRepository;
             this.contractRespository = contractRespository;
@@ -58,6 +59,7 @@ namespace CCSS_Service.Services
             this.notificationRepository = notificationRepository;
             this.eventChacracterRepository = eventChacracterRepository;
             this.contractCharacterRepository = contractCharacterRepository;
+            this.requestRepository = requestRepository;
         }
 
         private async Task<bool> AddTaskEvent(List<AddTaskEventRequest> taskEventRequests)
@@ -117,19 +119,20 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("EventCharacter does not exist");
                 }
+                Contract contract = await contractRespository.GetContractById(contractCharacter.Contract.ContractId);
                 Task task = new Task()
                 {
                     ContractCharacterId = taskRequest.ContractCharacterId,
                     AccountId = taskRequest.AccountId,
                     CreateDate = contractCharacter.CreateDate,
                     Description = contractCharacter.Description,
-                    //EndDate = contractCharacter.Event.EndDate,
-                    //StartDate = contractCharacter.Event.StartDate,
+                    EndDate = contractCharacter.Contract.Request.EndDate,
+                    StartDate = contractCharacter.Contract.Request.StartDate,
                     TaskName = contractCharacter.CharacterId,
-                    //Location = contractCharacter.Event.Location,
+                    Location = contractCharacter.Contract.Request.Location,
                     IsActive = true,
                     Status = TaskStatus.Assignment,
-                    Type = "Event",
+                    Type = "Contract",
                     TaskId = Guid.NewGuid().ToString(),
                     UpdateDate = null,
                 };

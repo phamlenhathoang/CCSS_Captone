@@ -25,7 +25,7 @@ namespace CCSS_Repository.Entities
         public RequestStatus Status { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-
+        public string? Location { get; set; }
         [ForeignKey("CouponId")]
         public string? CouponId { get; set;}
         public Coupon Coupon { get; set; }
@@ -40,7 +40,11 @@ namespace CCSS_Repository.Entities
         public Contract Contract { get; set; }
 
         public ICollection<RequestCharacter> RequestCharacters { get; set; } = new List<RequestCharacter>();
-        
+
+        public static implicit operator Request(Contract v)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public enum RequestStatus

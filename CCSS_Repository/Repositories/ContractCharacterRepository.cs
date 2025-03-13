@@ -70,7 +70,11 @@ namespace CCSS_Repository.Repositories
         //}
         public async Task<ContractCharacter> GetContractCharacterById(string id)
         {
-            return await _dbContext.ContractCharacters.Include(c => c.Contract).FirstOrDefaultAsync(c => c.ContractCharacterId.Equals(id));
+            return await _dbContext.ContractCharacters
+                .Include(c => c.Contract)
+                    .ThenInclude(contract => contract.Request) // Include luôn bảng Request
+                .FirstOrDefaultAsync(c => c.ContractCharacterId.Equals(id));
         }
+
     }
 }
