@@ -29,9 +29,13 @@ namespace CCSS_Repository.Entities
         public string? TicketAccountId { get; set; }
         public TicketAccount TicketAccount { get; set; }
 
-        [ForeignKey("RequestId")]
+        [ForeignKey("ContractId")]
         public string? ContractId { get; set; }
         public Contract Contract { get; set; }
+
+        [ForeignKey("AccountCouponID")]
+        public string? AccountCouponID { get; set; }
+        public AccountCoupon AccountCoupon { get; set; }
     }
 
     public enum PaymentStatus

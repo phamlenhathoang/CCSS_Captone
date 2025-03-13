@@ -12,16 +12,22 @@ namespace CCSS_Service.Profiles
 {
     public class EventProfile : Profile
     {
-        public EventProfile() 
+        public EventProfile()
         {
+            CreateMap<Event, EventResponse>()
+                .ForMember(dest => dest.EventCharacterResponses, opt => opt.MapFrom(src => src.EventCharacters))
+                .ForMember(dest => dest.EventImageResponses, opt => opt.MapFrom(src => src.EventImages))
+                .ForMember(dest => dest.EventActivityResponse, opt => opt.MapFrom(src => src.EventActivities))   
+                .ReverseMap();
 
-            CreateMap<Event, EventResponse>().ReverseMap();
             CreateMap<Event, CreateEventRequest>().ReverseMap();
             CreateMap<Event, UpdateEventRequest>().ReverseMap();
             CreateMap<Event, EventRequest>().ReverseMap();
-            CreateMap<Event, EventResponse>()
-    .ForMember(dest => dest.EventCharacterResponses, opt => opt.MapFrom(src => src.EventCharacters)) // ✅ Đảm bảo mapping danh sách EventCharacters
-    .ReverseMap();
+
+            
+
+            
         }
+
     }
 }
