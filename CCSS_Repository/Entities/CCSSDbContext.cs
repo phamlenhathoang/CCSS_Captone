@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,9 +26,12 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Character> Characters { get; set; }
         public virtual DbSet<CharacterImage> CharacterImages { get; set; }
-        public virtual DbSet<Contract> Contracts { get; set; }
+
         public virtual DbSet<Request> Requests { get; set; }
-        public virtual DbSet<RequestCharacter> ContractCharacters { get; set; }
+        public virtual DbSet<RequestCharacter> RequestCharacter { get; set; }
+        public virtual DbSet<Contract> Contracts { get; set; }
+        public virtual DbSet<ContractCharacter> ContractCharacters { get; set; }
+
         public virtual DbSet<Coupon> Coupons { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<EventActivity> EventActivities { get; set; }
@@ -47,8 +51,8 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<Ticket> Tickets { get; set; }
         public virtual DbSet<TicketAccount> TicketAccounts { get; set; }
-        
-        
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var configuration = new ConfigurationBuilder()
@@ -113,9 +117,9 @@ namespace CCSS_Repository.Entities
 
             //Account - Task
             modelBuilder.Entity<Account>()
-                .HasOne(a => a.Task)
-                .WithOne(r => r.Account)
-                .HasForeignKey<Task>(a => a.AccountId)
+                .HasMany(a => a.Tasks)  
+                .WithOne(t => t.Account) 
+                .HasForeignKey(t => t.AccountId) 
                 .OnDelete(DeleteBehavior.NoAction);
 
             //Account - TicketAccount
@@ -146,13 +150,13 @@ namespace CCSS_Repository.Entities
                 .HasForeignKey<Payment>(a => a.OrderId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            //Order - Coupon 
+            //Order - Account 
             modelBuilder.Entity<Order>()
-                .HasOne(a => a.Coupon)
-                .WithOne(r => r.Order)
-                .HasForeignKey<Order>(a => a.CouponId)
-                .OnDelete(DeleteBehavior.NoAction); 
-            
+                .HasOne(a => a.Account)
+                .WithMany(r => r.Orders)
+                .HasForeignKey(a => a.AccountId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             //Order - OrderProduct 
             modelBuilder.Entity<Order>()
                 .HasMany(a => a.OrderProducts)
@@ -173,7 +177,7 @@ namespace CCSS_Repository.Entities
                .WithOne(r => r.Product)
                .HasForeignKey(a => a.ProductId)
                .OnDelete(DeleteBehavior.NoAction);
-            
+
             //Product - OrderProduct
             modelBuilder.Entity<Product>()
                .HasMany(a => a.OrderProducts)
@@ -186,8 +190,8 @@ namespace CCSS_Repository.Entities
                .HasOne(a => a.Ticket)
                .WithOne(r => r.Event)
                .HasForeignKey<Ticket>(a => a.EventId)
-               .OnDelete(DeleteBehavior.NoAction); 
-            
+               .OnDelete(DeleteBehavior.NoAction);
+
             //Ticket - TicketAccount
             modelBuilder.Entity<Ticket>()
                 .HasMany(a => a.TicketAccounts)
@@ -265,18 +269,18 @@ namespace CCSS_Repository.Entities
                .HasForeignKey(a => a.CouponId)
                .OnDelete(DeleteBehavior.NoAction);
 
-            //Coupon - Request
-            modelBuilder.Entity<Coupon>()
-               .HasMany(a => a.Requests)
-               .WithOne(r => r.Coupon)
-               .HasForeignKey(a => a.CouponId)
-               .OnDelete(DeleteBehavior.NoAction);
+            //AccountCoupon - Payment
+            modelBuilder.Entity<AccountCoupon>()
+                 .HasOne(a => a.Payment)
+                 .WithOne(r => r.AccountCoupon)
+                 .HasForeignKey<Payment>(p => p.AccountCouponID) 
+                 .OnDelete(DeleteBehavior.NoAction);
 
             //Request - Service
             modelBuilder.Entity<Request>()
                .HasOne(a => a.Service)
                .WithMany(r => r.Requests)
-               .HasForeignKey(a => a.RequestId)
+               .HasForeignKey(a => a.ServiceId)
                .OnDelete(DeleteBehavior.NoAction);
 
             //Request - RequestCharacter
@@ -344,189 +348,770 @@ namespace CCSS_Repository.Entities
 
 
             // --- SEED DATA (Dữ liệu khởi tạo mẫu) ---
-            // Seed dữ liệu cho bảng Category
-            //modelBuilder.Entity<Category>().HasData(
-            //    new Category { CategoryId = "1", CategoryName = "Fantasy", Description = "Characters from fantasy world" },
-            //    new Category { CategoryId = "2", CategoryName = "Sci-Fi", Description = "Characters from sci-fi universe" }
-            //);
-            //// Seed dữ liệu cho bảng Package
-            //modelBuilder.Entity<Package>().HasData(
-            //    new Package
-            //    {
-            //        PackageId = "PKG001",
-            //        PackageName = "Basic Cosplay Package",
-            //        Description = "Includes basic costume and props",
-            //        Price = 100.0
-            //    },
-            //    new Package
-            //    {
-            //        PackageId = "PKG002",
-            //        PackageName = "Premium Cosplay Package",
-            //        Description = "Includes premium costume, props, and makeup",
-            //        Price = 300.0
-            //    }
-            //);
-            //// Seed dữ liệu cho bảng Role
-            //modelBuilder.Entity<Role>().HasData(
-            //    new Role { Id = "0", RoleName = RoleName.Admin, Description = "Admin" },
-            //    new Role { Id = "1", RoleName = RoleName.Manager, Description = "Manager" },
-            //    new Role { Id = "2", RoleName = RoleName.Consultant, Description = "Consultant" },
-            //    new Role { Id = "3", RoleName = RoleName.Cosplayer, Description = "Cosplayer" },
-            //    new Role { Id = "4", RoleName = RoleName.Customer, Description = "Customer" }
+            modelBuilder.Entity<Role>().HasData(
+                new Role { Id = "R001", RoleName = RoleName.Admin, Description = "System Administrator" },
+                new Role { Id = "R002", RoleName = RoleName.Manager, Description = "Event and Service Manager" },
+                new Role { Id = "R003", RoleName = RoleName.Consultant, Description = "Customer Service Consultant" },
+                new Role { Id = "R004", RoleName = RoleName.Cosplayer, Description = "Professional Cosplayer" },
+                new Role { Id = "R005", RoleName = RoleName.Customer, Description = "Regular Customer" }
+   );
+
+            modelBuilder.Entity<Account>().HasData(
+    new Account { AccountId = "A001", Name = "John Doe", Email = "john@example.com", Password = "hashedpassword", RoleId = "R004", SalaryIndex = 1.2 },
+    new Account { AccountId = "A002", Name = "Jane Smith", Email = "jane@example.com", Password = "hashedpassword", RoleId = "R001", SalaryIndex = null },
+    new Account { AccountId = "A003", Name = "Alice Johnson", Email = "alice@example.com", Password = "hashedpassword", RoleId = "R005", SalaryIndex = null },
+    new Account { AccountId = "A004", Name = "Bob Brown", Email = "bob@example.com", Password = "hashedpassword", RoleId = "R004", SalaryIndex = 1.3 },
+    new Account { AccountId = "A005", Name = "Charlie White", Email = "charlie@example.com", Password = "hashedpassword", RoleId = "R004", SalaryIndex = 1.4 },
+    new Account { AccountId = "A006", Name = "David Black", Email = "david@example.com", Password = "hashedpassword", RoleId = "R005", SalaryIndex = null },
+    new Account { AccountId = "A007", Name = "Emma Green", Email = "emma@example.com", Password = "hashedpassword", RoleId = "R004", SalaryIndex = 1.1 },
+    new Account { AccountId = "A008", Name = "Frank Blue", Email = "frank@example.com", Password = "hashedpassword", RoleId = "R004", SalaryIndex = 1.5 },
+    new Account { AccountId = "A009", Name = "Grace Pink", Email = "grace@example.com", Password = "hashedpassword", RoleId = "R001", SalaryIndex = null },
+    new Account { AccountId = "A010", Name = "Henry Purple", Email = "henry@example.com", Password = "hashedpassword", RoleId = "R004", SalaryIndex = 1.3 },
+    new Account { AccountId = "A011", Name = "Isla Red", Email = "isla@example.com", Password = "hashedpassword", RoleId = "R005", SalaryIndex = null },
+    new Account { AccountId = "A012", Name = "Jack Yellow", Email = "jack@example.com", Password = "hashedpassword", RoleId = "R004", SalaryIndex = 1.2 },
+    new Account { AccountId = "A013", Name = "Katie Orange", Email = "katie@example.com", Password = "hashedpassword", RoleId = "R004", SalaryIndex = 1.1 },
+    new Account { AccountId = "A014", Name = "Liam Gray", Email = "liam@example.com", Password = "hashedpassword", RoleId = "R005", SalaryIndex = null },
+    new Account { AccountId = "A015", Name = "Mia Cyan", Email = "mia@example.com", Password = "hashedpassword", RoleId = "R004", SalaryIndex = 1.4 }
+);
+
+
+
+            modelBuilder.Entity<Category>().HasData(
+    new Category { CategoryId = "C3", CategoryName = "Manga", Description = "Manga characters" },
+    new Category { CategoryId = "C4", CategoryName = "Movie", Description = "Movie characters" },
+    new Category { CategoryId = "C5", CategoryName = "Comic", Description = "Comic book characters" },
+    new Category { CategoryId = "C6", CategoryName = "Mythology", Description = "Mythological characters" },
+    new Category { CategoryId = "C7", CategoryName = "Fantasy", Description = "Fantasy world characters" },
+    new Category { CategoryId = "C8", CategoryName = "Sci-Fi", Description = "Science fiction characters" },
+    new Category { CategoryId = "C9", CategoryName = "Superhero", Description = "Superhero characters" },
+    new Category { CategoryId = "C10", CategoryName = "Villains", Description = "Famous villain characters" },
+    new Category { CategoryId = "C11", CategoryName = "Robot", Description = "AI and robot characters" },
+    new Category { CategoryId = "C12", CategoryName = "Historical", Description = "Historical figures in fiction" },
+    new Category { CategoryId = "C13", CategoryName = "Horror", Description = "Horror and thriller characters" },
+    new Category { CategoryId = "C14", CategoryName = "Detective", Description = "Famous detective characters" },
+    new Category { CategoryId = "C15", CategoryName = "Sports", Description = "Characters from sports anime/manga" },
+    new Category { CategoryId = "C16", CategoryName = "Magic", Description = "Characters using magic or spells" },
+    new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description = "Everyday life characters" }
+);
+
+
+            modelBuilder.Entity<Character>().HasData(
+     new Character { CharacterId = "CH001", CharacterName = "Naruto", CategoryId = "C3", Description = "Ninja from Konoha", Price = 100, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 50, Quantity = 5, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH002", CharacterName = "Sasuke", CategoryId = "C3", Description = "Naruto’s rival", Price = 120, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 3, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH003", CharacterName = "Goku", CategoryId = "C3", Description = "Saiyan warrior", Price = 150, IsActive = true, MaxHeight = 190, MinHeight = 170, MaxWeight = 90, MinWeight = 60, Quantity = 4, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH004", CharacterName = "Luffy", CategoryId = "C4", Description = "Pirate King", Price = 110, IsActive = true, MaxHeight = 175, MinHeight = 155, MaxWeight = 70, MinWeight = 45, Quantity = 6, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH005", CharacterName = "Ichigo", CategoryId = "C4", Description = "Soul Reaper", Price = 130, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 3, CreateDate = DateTime.UtcNow },
+
+     new Character { CharacterId = "CH006", CharacterName = "Mario", CategoryId = "C14", Description = "Plumber hero", Price = 80, IsActive = true, MaxHeight = 160, MinHeight = 140, MaxWeight = 70, MinWeight = 50, Quantity = 5, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH007", CharacterName = "Luigi", CategoryId = "C14", Description = "Mario’s brother", Price = 85, IsActive = true, MaxHeight = 170, MinHeight = 150, MaxWeight = 75, MinWeight = 55, Quantity = 4, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH008", CharacterName = "Link", CategoryId = "C14", Description = "Hero of Hyrule", Price = 140, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 50, Quantity = 2, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH009", CharacterName = "Zelda", CategoryId = "C16", Description = "Hyrule princess", Price = 135, IsActive = true, MaxHeight = 175, MinHeight = 155, MaxWeight = 70, MinWeight = 50, Quantity = 3, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH010", CharacterName = "Samus", CategoryId = "C16", Description = "Bounty hunter", Price = 145, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 3, CreateDate = DateTime.UtcNow },
+
+     new Character { CharacterId = "CH011", CharacterName = "Cloud", CategoryId = "C13", Description = "Ex-SOLDIER", Price = 125, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 3, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH012", CharacterName = "Sephiroth", CategoryId = "C13", Description = "One-Winged Angel", Price = 155, IsActive = true, MaxHeight = 190, MinHeight = 170, MaxWeight = 90, MinWeight = 60, Quantity = 2, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH013", CharacterName = "Kratos", CategoryId = "C8", Description = "God of War", Price = 160, IsActive = true, MaxHeight = 195, MinHeight = 175, MaxWeight = 100, MinWeight = 70, Quantity = 2, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH014", CharacterName = "Pikachu", CategoryId = "C8", Description = "Electric Pokemon", Price = 90, IsActive = true, MaxHeight = 50, MinHeight = 30, MaxWeight = 20, MinWeight = 10, Quantity = 10, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH015", CharacterName = "Kirby", CategoryId = "C8", Description = "Pink puffball", Price = 95, IsActive = true, MaxHeight = 60, MinHeight = 40, MaxWeight = 25, MinWeight = 15, Quantity = 8, CreateDate = DateTime.UtcNow }
+ );
+
+
+            modelBuilder.Entity<Service>().HasData(
+    new Service { ServiceId = "S001", ServiceName = "Character Rental", Description = "Rent characters for events and parties", CreateDate = DateTime.UtcNow },
+    new Service { ServiceId = "S002", ServiceName = "Cosplay Performance", Description = "Live cosplay performances at events", CreateDate = DateTime.UtcNow },
+    new Service { ServiceId = "S003", ServiceName = "Photography Session", Description = "Professional photoshoot with cosplayers", CreateDate = DateTime.UtcNow },
+    new Service { ServiceId = "S004", ServiceName = "Merchandise Selling", Description = "Selling exclusive cosplay-related merchandise", CreateDate = DateTime.UtcNow },
+    new Service { ServiceId = "S005", ServiceName = "Workshop & Training", Description = "Cosplay and makeup training sessions", CreateDate = DateTime.UtcNow }
+);
+
+
+            modelBuilder.Entity<Product>().HasData(
+    new Product { ProductId = "P001", ProductName = "Naruto Wig", Description = "A wig for Naruto cosplay", Price = 30, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P002", ProductName = "Mario Hat", Description = "A hat for Mario cosplay", Price = 20, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P003", ProductName = "Sasuke Costume", Description = "Complete costume for Sasuke cosplay", Price = 80, Quantity = 5, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P004", ProductName = "Zelda Sword", Description = "Replica sword from The Legend of Zelda", Price = 100, Quantity = 7, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P005", ProductName = "One Piece Straw Hat", Description = "Iconic straw hat from One Piece", Price = 25, Quantity = 20, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P006", ProductName = "Miku Wig", Description = "Hatsune Miku blue twin-tail wig", Price = 40, Quantity = 12, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P007", ProductName = "Demon Slayer Earrings", Description = "Tanjiro's iconic hanafuda earrings", Price = 15, Quantity = 30, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P008", ProductName = "Attack on Titan Jacket", Description = "Survey Corps uniform jacket", Price = 50, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P009", ProductName = "Pikachu Onesie", Description = "Cozy Pikachu-themed onesie", Price = 60, Quantity = 8, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P010", ProductName = "Cloud's Buster Sword", Description = "Final Fantasy VII replica sword", Price = 120, Quantity = 4, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P011", ProductName = "Genshin Impact Vision", Description = "LED Vision accessory from Genshin Impact", Price = 35, Quantity = 25, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P012", ProductName = "Jinx Wig", Description = "Jinx cosplay wig from Arcane", Price = 45, Quantity = 6, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P013", ProductName = "Sailor Moon Tiara", Description = "Golden tiara from Sailor Moon", Price = 18, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P014", ProductName = "Spider-Man Suit", Description = "High-quality Spider-Man suit", Price = 90, Quantity = 3, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P015", ProductName = "Harry Potter Wand", Description = "Replica wand from Harry Potter series", Price = 22, Quantity = 50, CreateDate = DateTime.UtcNow, IsActive = true }
+);
+
+
+            modelBuilder.Entity<Event>().HasData(
+    new Event { EventId = "E001", EventName = "New Year Festival", Description = "A grand celebration to welcome the new year", Location = "Times Square, New York", IsActive = true, StartDate = new DateTime(2025, 1, 1), EndDate = new DateTime(2025, 1, 2), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new Event { EventId = "E002", EventName = "Spring Blossom Fest", Description = "Experience the beauty of cherry blossoms", Location = "Kyoto, Japan", IsActive = true, StartDate = new DateTime(2025, 2, 10), EndDate = new DateTime(2025, 2, 12), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new Event { EventId = "E003", EventName = "Tech Innovation Summit", Description = "Showcasing the latest in technology and AI", Location = "Silicon Valley", IsActive = true, StartDate = new DateTime(2025, 3, 5), EndDate = new DateTime(2025, 3, 7), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new Event { EventId = "E004", EventName = "Music Fest", Description = "Live performances from top artists", Location = "Coachella, California", IsActive = true, StartDate = new DateTime(2025, 4, 15), EndDate = new DateTime(2025, 4, 17), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new Event { EventId = "E005", EventName = "Comic-Con International", Description = "A must-attend event for comic book fans", Location = "San Diego Convention Center", IsActive = true, StartDate = new DateTime(2025, 5, 22), EndDate = new DateTime(2025, 5, 24), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new Event { EventId = "E006", EventName = "Anime Expo", Description = "Largest anime convention in the world", Location = "Los Angeles Convention Center", IsActive = true, StartDate = new DateTime(2025, 6, 10), EndDate = new DateTime(2025, 6, 12), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new Event { EventId = "E007", EventName = "Gaming Expo", Description = "Latest trends and releases in gaming", Location = "Las Vegas Convention Center", IsActive = true, StartDate = new DateTime(2025, 7, 18), EndDate = new DateTime(2025, 7, 20), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new Event { EventId = "E008", EventName = "Summer Festival", Description = "A fun-filled summer celebration", Location = "Miami Beach, Florida", IsActive = true, StartDate = new DateTime(2025, 8, 8), EndDate = new DateTime(2025, 8, 10), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new Event { EventId = "E009", EventName = "Cosplay Festival", Description = "A paradise for cosplayers", Location = "Tokyo Big Sight", IsActive = true, StartDate = new DateTime(2025, 9, 12), EndDate = new DateTime(2025, 9, 14), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new Event { EventId = "E010", EventName = "Film Festival", Description = "Showcasing the best movies of the year", Location = "Cannes, France", IsActive = true, StartDate = new DateTime(2025, 10, 3), EndDate = new DateTime(2025, 10, 5), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new Event { EventId = "E011", EventName = "Halloween Night", Description = "Spooky celebrations and costume parties", Location = "Salem, Massachusetts", IsActive = true, StartDate = new DateTime(2025, 11, 1), EndDate = new DateTime(2025, 11, 2), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new Event { EventId = "E012", EventName = "Christmas Market", Description = "Festive shopping and holiday cheer", Location = "Nuremberg, Germany", IsActive = true, StartDate = new DateTime(2025, 12, 20), EndDate = new DateTime(2025, 12, 24), CreateDate = DateTime.UtcNow, CreateBy = "Admin" }
+);
+
+
+
+            modelBuilder.Entity<Order>().HasData(
+    new Order { OrderId = "O001", AccountId = "A003", OrderDate = "2024-03-01", TotalPrice = 250.0, OrderStatus = OrderStatus.Completed },
+    new Order { OrderId = "O002", AccountId = "A006", OrderDate = "2024-03-05", TotalPrice = 150.5, OrderStatus = OrderStatus.Completed },
+    new Order { OrderId = "O003", AccountId = "A011", OrderDate = "2024-03-10", TotalPrice = 300.0, OrderStatus = OrderStatus.Cancel },
+    new Order { OrderId = "O004", AccountId = "A014", OrderDate = "2024-03-12", TotalPrice = 400.0, OrderStatus = OrderStatus.Completed },
+    new Order { OrderId = "O005", AccountId = "A003", OrderDate = "2024-03-15", TotalPrice = 175.0, OrderStatus = OrderStatus.Cancel },
+    new Order { OrderId = "O006", AccountId = "A006", OrderDate = "2024-03-18", TotalPrice = 225.0, OrderStatus = OrderStatus.Completed },
+    new Order { OrderId = "O007", AccountId = "A011", OrderDate = "2024-03-20", TotalPrice = 350.0, OrderStatus = OrderStatus.Completed },
+    new Order { OrderId = "O008", AccountId = "A014", OrderDate = "2024-03-22", TotalPrice = 275.0, OrderStatus = OrderStatus.Cancel },
+    new Order { OrderId = "O009", AccountId = "A003", OrderDate = "2024-03-25", TotalPrice = 500.0, OrderStatus = OrderStatus.Completed },
+    new Order { OrderId = "O010", AccountId = "A006", OrderDate = "2024-03-28", TotalPrice = 125.0, OrderStatus = OrderStatus.Cancel },
+    new Order { OrderId = "O011", AccountId = "A011", OrderDate = "2024-03-30", TotalPrice = 325.0, OrderStatus = OrderStatus.Completed },
+    new Order { OrderId = "O012", AccountId = "A014", OrderDate = "2024-04-02", TotalPrice = 410.0, OrderStatus = OrderStatus.Completed },
+    new Order { OrderId = "O013", AccountId = "A003", OrderDate = "2024-04-05", TotalPrice = 280.0, OrderStatus = OrderStatus.Cancel },
+    new Order { OrderId = "O014", AccountId = "A006", OrderDate = "2024-04-07", TotalPrice = 350.0, OrderStatus = OrderStatus.Completed },
+    new Order { OrderId = "O015", AccountId = "A011", OrderDate = "2024-04-10", TotalPrice = 200.0, OrderStatus = OrderStatus.Completed }
+);
+
+
+            modelBuilder.Entity<Coupon>().HasData(
+    new Coupon { CouponId = "CP001", Condition = "Min order 500", Percent = 10, Amount = 50, StartDate = new DateTime(2024, 3, 1), EndDate = new DateTime(2024, 3, 31), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP002", Condition = "Min order 1000", Percent = 15, Amount = 150, StartDate = new DateTime(2024, 4, 1), EndDate = new DateTime(2024, 4, 30), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP003", Condition = "Min contract 2000", Percent = 20, Amount = 400, StartDate = new DateTime(2024, 5, 1), EndDate = new DateTime(2024, 5, 31), Type = CouponType.ForContract },
+    new Coupon { CouponId = "CP004", Condition = "Min order 1500", Percent = 12, Amount = 180, StartDate = new DateTime(2024, 6, 1), EndDate = new DateTime(2024, 6, 30), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP005", Condition = "Min contract 3000", Percent = 25, Amount = 750, StartDate = new DateTime(2024, 7, 1), EndDate = new DateTime(2024, 7, 31), Type = CouponType.ForContract },
+
+    new Coupon { CouponId = "CP006", Condition = "New customers only", Percent = 10, Amount = 100, StartDate = new DateTime(2024, 8, 1), EndDate = new DateTime(2024, 8, 31), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP007", Condition = "Holiday Special", Percent = 20, Amount = 200, StartDate = new DateTime(2024, 12, 1), EndDate = new DateTime(2024, 12, 25), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP008", Condition = "VIP customers", Percent = 30, Amount = 600, StartDate = new DateTime(2024, 9, 1), EndDate = new DateTime(2024, 9, 30), Type = CouponType.ForContract },
+    new Coupon { CouponId = "CP009", Condition = "Summer Sale", Percent = 15, Amount = 120, StartDate = new DateTime(2024, 6, 15), EndDate = new DateTime(2024, 7, 15), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP010", Condition = "Black Friday", Percent = 50, Amount = 1000, StartDate = new DateTime(2024, 11, 25), EndDate = new DateTime(2024, 11, 30), Type = CouponType.ForContract },
+
+    new Coupon { CouponId = "CP011", Condition = "Back to School", Percent = 10, Amount = 75, StartDate = new DateTime(2024, 8, 10), EndDate = new DateTime(2024, 9, 10), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP012", Condition = "Min contract 5000", Percent = 35, Amount = 1750, StartDate = new DateTime(2024, 10, 1), EndDate = new DateTime(2024, 10, 31), Type = CouponType.ForContract },
+    new Coupon { CouponId = "CP013", Condition = "Loyal Customers", Percent = 20, Amount = 250, StartDate = new DateTime(2024, 5, 1), EndDate = new DateTime(2024, 5, 31), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP014", Condition = "Cyber Monday", Percent = 40, Amount = 800, StartDate = new DateTime(2024, 11, 26), EndDate = new DateTime(2024, 11, 27), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP015", Condition = "Referral Bonus", Percent = 10, Amount = 50, StartDate = new DateTime(2024, 3, 1), EndDate = new DateTime(2024, 12, 31), Type = CouponType.ForOrder }
+);
+
+
+            modelBuilder.Entity<Ticket>().HasData(
+    new Ticket { TicketId = "T001", Quantity = 500, Price = 50.0, EventId = "E001" },
+    new Ticket { TicketId = "T002", Quantity = 300, Price = 40.0, EventId = "E002" },
+    new Ticket { TicketId = "T003", Quantity = 200, Price = 30.0, EventId = "E003" },
+    new Ticket { TicketId = "T004", Quantity = 600, Price = 60.0, EventId = "E004" },
+    new Ticket { TicketId = "T005", Quantity = 400, Price = 45.0, EventId = "E005" },
+    new Ticket { TicketId = "T006", Quantity = 350, Price = 55.0, EventId = "E006" },
+    new Ticket { TicketId = "T007", Quantity = 250, Price = 35.0, EventId = "E007" },
+    new Ticket { TicketId = "T008", Quantity = 450, Price = 50.0, EventId = "E008" },
+    new Ticket { TicketId = "T009", Quantity = 550, Price = 65.0, EventId = "E009" },
+    new Ticket { TicketId = "T010", Quantity = 700, Price = 70.0, EventId = "E010" },
+    new Ticket { TicketId = "T011", Quantity = 150, Price = 25.0, EventId = "E011" },
+    new Ticket { TicketId = "T012", Quantity = 800, Price = 75.0, EventId = "E012" }
+);
+
+
+            modelBuilder.Entity<Contract>().HasData(
+     new Contract { ContractId = "CT002", RequestId = "R002", Deposit = "100", TotalPrice = 500, CreateBy = "Admin", CreateDate = new DateTime(2025, 2, 1), ContractStatus = ContractStatus.Active },
+     new Contract { ContractId = "CT005", RequestId = "R005", Deposit = "150", TotalPrice = 700, CreateBy = "Admin", CreateDate = new DateTime(2025, 5, 1), ContractStatus = ContractStatus.Active },
+     new Contract { ContractId = "CT008", RequestId = "R008", Deposit = "70", TotalPrice = 350, CreateBy = "Admin", CreateDate = new DateTime(2025, 8, 10), ContractStatus = ContractStatus.Active },
+     new Contract { ContractId = "CT010", RequestId = "R010", Deposit = "50", TotalPrice = 200, CreateBy = "Admin", CreateDate = new DateTime(2025, 10, 20), ContractStatus = ContractStatus.Completed },
+     new Contract { ContractId = "CT014", RequestId = "R014", Deposit = "120", TotalPrice = 600, CreateBy = "Admin", CreateDate = new DateTime(2025, 6, 25), ContractStatus = ContractStatus.Active }
+ );
+
+
+            modelBuilder.Entity<Feedback>().HasData(
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Great experience!", CreateDate = new DateTime(2025, 2, 15), CreateBy = "A001", AccountId = "A001", ContractId = "CT002" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Loved the event!", CreateDate = new DateTime(2025, 3, 10), CreateBy = "A004", AccountId = "A004", ContractId = "CT005" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Nice cosplay session!", CreateDate = new DateTime(2025, 4, 5), CreateBy = "A005", AccountId = "A005", ContractId = "CT008" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Enjoyed the event!", CreateDate = new DateTime(2025, 6, 20), CreateBy = "A007", AccountId = "A007", ContractId = "CT010" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Would love to join again!", CreateDate = new DateTime(2025, 7, 15), CreateBy = "A008", AccountId = "A008", ContractId = "CT014" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "The atmosphere was amazing!", CreateDate = new DateTime(2025, 8, 25), CreateBy = "A010", AccountId = "A010", ContractId = "CT002" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Best cosplay event!", CreateDate = new DateTime(2025, 9, 10), CreateBy = "A012", AccountId = "A012", ContractId = "CT005" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Nice crowd and management!", CreateDate = new DateTime(2025, 10, 5), CreateBy = "A013", AccountId = "A013", ContractId = "CT008" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Amazing experience!", CreateDate = new DateTime(2025, 11, 20), CreateBy = "A015", AccountId = "A015", ContractId = "CT010" }
+);
+
+
+            modelBuilder.Entity<Notification>().HasData(
+    new Notification { Id = "N001", AccountId = "A001", Message = "Welcome to the system!", IsRead = false, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N002", AccountId = "A002", Message = "Your account has been upgraded.", IsRead = false, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N003", AccountId = "A003", Message = "New promotional offer available!", IsRead = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N004", AccountId = "A004", Message = "Your request has been approved.", IsRead = false, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N005", AccountId = "A005", Message = "System maintenance scheduled.", IsRead = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N006", AccountId = "A006", Message = "Your order has been shipped!", IsRead = false, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N007", AccountId = "A007", Message = "New event registration open.", IsRead = false, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N008", AccountId = "A008", Message = "Reminder: Payment due soon.", IsRead = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N009", AccountId = "A009", Message = "Your password was changed.", IsRead = false, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N010", AccountId = "A010", Message = "Admin announcement update.", IsRead = false, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N011", AccountId = "A011", Message = "New message from support.", IsRead = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N012", AccountId = "A012", Message = "Upcoming event invitation.", IsRead = false, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N013", AccountId = "A013", Message = "New cosplayer contest.", IsRead = false, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N014", AccountId = "A014", Message = "Loyalty points updated.", IsRead = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N015", AccountId = "A015", Message = "Your subscription expired.", IsRead = false, CreatedAt = DateTime.UtcNow }
+);
+
+
+            
+
+
+            modelBuilder.Entity<Cart>().HasData(
+    new Cart { CartId = "C001", AccountId = "A003", TotalPrice = 0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+    new Cart { CartId = "C002", AccountId = "A006", TotalPrice = 0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+    new Cart { CartId = "C003", AccountId = "A011", TotalPrice = 0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+    new Cart { CartId = "C004", AccountId = "A014", TotalPrice = 0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow }
+);
+
+
+            modelBuilder.Entity<Request>().HasData(
+    new Request { RequestId = "R001", AccountId = "A001", Name = "Rent Naruto Costume", Description = RequestDescription.RentCostumes, Price = 100, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 1, 10), EndDate = new DateTime(2025, 1, 15),  ServiceId = "S001", ContractId = "CT001" },
+    new Request { RequestId = "R002", AccountId = "A002", Name = "Rent Cosplayer for Event", Description = RequestDescription.RentCosplayer, Price = 500, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 2, 5), EndDate = new DateTime(2025, 2, 10),  ServiceId = "S002", ContractId = "CT002" },
+    new Request { RequestId = "R003", AccountId = "A003", Name = "Create Anime Festival", Description = RequestDescription.CreateEvent, Price = 2000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 3, 1), EndDate = new DateTime(2025, 3, 5),  ServiceId = "S003", ContractId = "CT003" },
+    new Request { RequestId = "R004", AccountId = "A004", Name = "Rent Samurai Armor", Description = RequestDescription.RentCostumes, Price = 150, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 4, 10), EndDate = new DateTime(2025, 4, 15),  ServiceId = "S004", ContractId = "CT004" },
+    new Request { RequestId = "R005", AccountId = "A005", Name = "Hire Professional Cosplayer", Description = RequestDescription.RentCosplayer, Price = 700, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 5, 3), EndDate = new DateTime(2025, 5, 7),  ServiceId = "S005", ContractId = "CT005" },
+    new Request { RequestId = "R006", AccountId = "A006", Name = "Organize Comic Convention", Description = RequestDescription.CreateEvent, Price = 5000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 6, 12), EndDate = new DateTime(2025, 6, 20),  ServiceId = "S001", ContractId = "CT006" },
+    new Request { RequestId = "R007", AccountId = "A007", Name = "Rent Victorian Costume", Description = RequestDescription.RentCostumes, Price = 120, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 7, 1), EndDate = new DateTime(2025, 7, 5),  ServiceId = "S002", ContractId = "CT007" },
+    new Request { RequestId = "R008", AccountId = "A008", Name = "Book Cosplayer for Birthday Party", Description = RequestDescription.RentCosplayer, Price = 350, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 8, 15), EndDate = new DateTime(2025, 8, 18),  ServiceId = "S003", ContractId = "CT008" },
+    new Request { RequestId = "R009", AccountId = "A009", Name = "Plan Fantasy Fair", Description = RequestDescription.CreateEvent, Price = 3000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 9, 10), EndDate = new DateTime(2025, 9, 15),  ServiceId = "S004", ContractId = "CT009" },
+    new Request { RequestId = "R010", AccountId = "A010", Name = "Rent Halloween Costumes", Description = RequestDescription.RentCostumes, Price = 200, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 10, 25), EndDate = new DateTime(2025, 10, 31),  ServiceId = "S005", ContractId = "CT010" },
+    new Request { RequestId = "R011", AccountId = "A011", Name = "Hire Cosplayer for Wedding", Description = RequestDescription.RentCosplayer, Price = 800, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 11, 20), EndDate = new DateTime(2025, 11, 25),  ServiceId = "S001", ContractId = "CT011" },
+    new Request { RequestId = "R012", AccountId = "A012", Name = "Create Sci-Fi Convention", Description = RequestDescription.CreateEvent, Price = 4500, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 12, 5), EndDate = new DateTime(2025, 12, 10),  ServiceId = "S002", ContractId = "CT012" },
+    new Request { RequestId = "R013", AccountId = "A013", Name = "Rent Santa Claus Costume", Description = RequestDescription.RentCostumes, Price = 130, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 20), EndDate = new DateTime(2025, 12, 25), ServiceId = "S003", ContractId = "CT013" },
+    new Request { RequestId = "R014", AccountId = "A014", Name = "Book Cosplayer for Product Launch", Description = RequestDescription.RentCosplayer, Price = 600, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 6, 30), EndDate = new DateTime(2025, 7, 2),  ServiceId = "S004", ContractId = "CT014" },
+    new Request { RequestId = "R015", AccountId = "A015", Name = "Host Christmas Event", Description = RequestDescription.CreateEvent, Price = 5500, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 15), EndDate = new DateTime(2025, 12, 31), ServiceId = "S005", ContractId = "CT015" }
+);
+
+
+            modelBuilder.Entity<Task>().HasData(
+    new Task { TaskId = "T001", TaskName = "Perform at Anime Fest", Location = "Tokyo", Description = "Cosplay as anime characters", IsActive = true, StartDate = DateTime.Now.AddDays(2), EndDate = DateTime.Now.AddDays(3), CreateDate = DateTime.Now, UpdateDate = DateTime.Now, Status = TaskStatus.Pending, AccountId = "A001", EventCharacterId = "EC001" },
+    new Task { TaskId = "T002", TaskName = "Comic Con Appearance", Location = "Los Angeles", Description = "Join cosplay contest", IsActive = true, StartDate = DateTime.Now.AddDays(4), EndDate = DateTime.Now.AddDays(5), CreateDate = DateTime.Now, UpdateDate = DateTime.Now, Status = TaskStatus.Assignment, AccountId = "A004", EventCharacterId = "EC002" },
+    new Task { TaskId = "T003", TaskName = "Cosplay Workshop", Location = "New York", Description = "Teach costume making", IsActive = true, StartDate = DateTime.Now.AddDays(6), EndDate = DateTime.Now.AddDays(7), CreateDate = DateTime.Now, UpdateDate = DateTime.Now, Status = TaskStatus.Progressing, AccountId = "A005", EventCharacterId = "EC003" },
+    new Task { TaskId = "T004", TaskName = "Live Stream Cosplay", Location = "Online", Description = "Host a live event", IsActive = true, StartDate = DateTime.Now.AddDays(1), EndDate = DateTime.Now.AddDays(1), CreateDate = DateTime.Now, UpdateDate = DateTime.Now, Status = TaskStatus.Completed, AccountId = "A007", EventCharacterId = "EC004" },
+    new Task { TaskId = "T005", TaskName = "Photoshoot Session", Location = "Paris", Description = "Professional cosplay photoshoot", IsActive = true, StartDate = DateTime.Now.AddDays(8), EndDate = DateTime.Now.AddDays(9), CreateDate = DateTime.Now, UpdateDate = DateTime.Now, Status = TaskStatus.Pending, AccountId = "A008", EventCharacterId = "EC005" },
+    new Task { TaskId = "T006", TaskName = "Guest Judge at Cosplay Contest", Location = "Berlin", Description = "Evaluate contestants", IsActive = true, StartDate = DateTime.Now.AddDays(10), EndDate = DateTime.Now.AddDays(11), CreateDate = DateTime.Now, UpdateDate = DateTime.Now, Status = TaskStatus.Assignment, AccountId = "A010", EventCharacterId = "EC006" },
+    new Task { TaskId = "T007", TaskName = "Cosplay Parade", Location = "Seoul", Description = "Walk in parade", IsActive = true, StartDate = DateTime.Now.AddDays(12), EndDate = DateTime.Now.AddDays(13), CreateDate = DateTime.Now, UpdateDate = DateTime.Now, Status = TaskStatus.Progressing, AccountId = "A012", EventCharacterId = "EC007" },
+    new Task { TaskId = "T008", TaskName = "TV Show Cosplay Segment", Location = "London", Description = "Perform on live TV", IsActive = true, StartDate = DateTime.Now.AddDays(14), EndDate = DateTime.Now.AddDays(15), CreateDate = DateTime.Now, UpdateDate = DateTime.Now, Status = TaskStatus.Completed, AccountId = "A013", EventCharacterId = "EC008" },
+    new Task { TaskId = "T009", TaskName = "Cosplay Charity Event", Location = "Sydney", Description = "Perform for charity", IsActive = true, StartDate = DateTime.Now.AddDays(16), EndDate = DateTime.Now.AddDays(17), CreateDate = DateTime.Now, UpdateDate = DateTime.Now, Status = TaskStatus.Cancel, AccountId = "A015", EventCharacterId = "EC009" },
+    new Task { TaskId = "T010", TaskName = "Cosplay Panel Discussion", Location = "San Diego", Description = "Talk about cosplay industry", IsActive = true, StartDate = DateTime.Now.AddDays(18), EndDate = DateTime.Now.AddDays(19), CreateDate = DateTime.Now, UpdateDate = DateTime.Now, Status = TaskStatus.Pending, AccountId = "A005", EventCharacterId = "EC010" },
+    new Task { TaskId = "T011", TaskName = "Cosplay Photoshoot", Location = "Bangkok", Description = "New character shoot", IsActive = true, StartDate = DateTime.Now.AddDays(20), EndDate = DateTime.Now.AddDays(21), CreateDate = DateTime.Now, UpdateDate = DateTime.Now, Status = TaskStatus.Assignment, AccountId = "A008", EventCharacterId = "EC011" },
+    new Task { TaskId = "T012", TaskName = "Anime Convention Hosting", Location = "Jakarta", Description = "Host main event", IsActive = true, StartDate = DateTime.Now.AddDays(22), EndDate = DateTime.Now.AddDays(23), CreateDate = DateTime.Now, UpdateDate = DateTime.Now, Status = TaskStatus.Progressing, AccountId = "A007", EventCharacterId = "EC012" }
+    
+);
+
+
+            modelBuilder.Entity<TicketAccount>().HasData(
+    new TicketAccount { TicketAccountId = "TA001", AccountId = "A003", TicketCode = "TC001", TicketId = "T001", Quantity = 2, TotalPrice = 100.0 },
+    new TicketAccount { TicketAccountId = "TA002", AccountId = "A006", TicketCode = "TC002", TicketId = "T002", Quantity = 1, TotalPrice = 40.0 },
+    new TicketAccount { TicketAccountId = "TA003", AccountId = "A011", TicketCode = "TC003", TicketId = "T003", Quantity = 3, TotalPrice = 90.0 },
+    new TicketAccount { TicketAccountId = "TA004", AccountId = "A014", TicketCode = "TC004", TicketId = "T004", Quantity = 2, TotalPrice = 120.0 },
+    new TicketAccount { TicketAccountId = "TA005", AccountId = "A003", TicketCode = "TC005", TicketId = "T005", Quantity = 4, TotalPrice = 180.0 },
+    new TicketAccount { TicketAccountId = "TA006", AccountId = "A006", TicketCode = "TC006", TicketId = "T006", Quantity = 2, TotalPrice = 110.0 },
+    new TicketAccount { TicketAccountId = "TA007", AccountId = "A011", TicketCode = "TC007", TicketId = "T007", Quantity = 1, TotalPrice = 35.0 },
+    new TicketAccount { TicketAccountId = "TA008", AccountId = "A014", TicketCode = "TC008", TicketId = "T008", Quantity = 3, TotalPrice = 150.0 },
+    new TicketAccount { TicketAccountId = "TA009", AccountId = "A003", TicketCode = "TC009", TicketId = "T009", Quantity = 2, TotalPrice = 130.0 },
+    new TicketAccount { TicketAccountId = "TA010", AccountId = "A006", TicketCode = "TC010", TicketId = "T010", Quantity = 1, TotalPrice = 70.0 },
+    new TicketAccount { TicketAccountId = "TA011", AccountId = "A011", TicketCode = "TC011", TicketId = "T011", Quantity = 5, TotalPrice = 125.0 },
+    new TicketAccount { TicketAccountId = "TA012", AccountId = "A014", TicketCode = "TC012", TicketId = "T012", Quantity = 2, TotalPrice = 150.0 },
+    new TicketAccount { TicketAccountId = "TA013", AccountId = "A003", TicketCode = "TC013", TicketId = "T003", Quantity = 3, TotalPrice = 90.0 },
+    new TicketAccount { TicketAccountId = "TA014", AccountId = "A006", TicketCode = "TC014", TicketId = "T005", Quantity = 2, TotalPrice = 90.0 },
+    new TicketAccount { TicketAccountId = "TA015", AccountId = "A011", TicketCode = "TC015", TicketId = "T007", Quantity = 1, TotalPrice = 35.0 }
+);
+
+
+
+
+            modelBuilder.Entity<ContractCharacter>().HasData(
+    // ContractId = CT002
+    new ContractCharacter { ContractCharacterId = "CC0021", CharacterId = "CH001", ContractId = "CT002", TotalPrice = 150, CreateDate = new DateTime(2025, 2, 2), Description = "Character 1 for CT002" },
+    new ContractCharacter { ContractCharacterId = "CC0022", CharacterId = "CH002", ContractId = "CT002", TotalPrice = 180, CreateDate = new DateTime(2025, 2, 2), Description = "Character 2 for CT002" },
+    new ContractCharacter { ContractCharacterId = "CC0023", CharacterId = "CH003", ContractId = "CT002", TotalPrice = 170, CreateDate = new DateTime(2025, 2, 2), Description = "Character 3 for CT002" },
+
+    // ContractId = CT005
+    new ContractCharacter { ContractCharacterId = "CC0051", CharacterId = "CH004", ContractId = "CT005", TotalPrice = 200, CreateDate = new DateTime(2025, 5, 2), Description = "Character 1 for CT005" },
+    new ContractCharacter { ContractCharacterId = "CC0052", CharacterId = "CH005", ContractId = "CT005", TotalPrice = 250, CreateDate = new DateTime(2025, 5, 2), Description = "Character 2 for CT005" },
+    new ContractCharacter { ContractCharacterId = "CC0053", CharacterId = "CH006", ContractId = "CT005", TotalPrice = 250, CreateDate = new DateTime(2025, 5, 2), Description = "Character 3 for CT005" },
+
+    // ContractId = CT008
+    new ContractCharacter { ContractCharacterId = "CC0081", CharacterId = "CH007", ContractId = "CT008", TotalPrice = 120, CreateDate = new DateTime(2025, 8, 11), Description = "Character 1 for CT008" },
+    new ContractCharacter { ContractCharacterId = "CC0082", CharacterId = "CH008", ContractId = "CT008", TotalPrice = 130, CreateDate = new DateTime(2025, 8, 11), Description = "Character 2 for CT008" },
+    new ContractCharacter { ContractCharacterId = "CC0083", CharacterId = "CH009", ContractId = "CT008", TotalPrice = 100, CreateDate = new DateTime(2025, 8, 11), Description = "Character 3 for CT008" },
+
+    // ContractId = CT010
+    new ContractCharacter { ContractCharacterId = "CC0101", CharacterId = "CH010", ContractId = "CT010", TotalPrice = 70, CreateDate = new DateTime(2025, 10, 21), Description = "Character 1 for CT010" },
+    new ContractCharacter { ContractCharacterId = "CC0102", CharacterId = "CH011", ContractId = "CT010", TotalPrice = 80, CreateDate = new DateTime(2025, 10, 21), Description = "Character 2 for CT010" },
+    new ContractCharacter { ContractCharacterId = "CC0103", CharacterId = "CH012", ContractId = "CT010", TotalPrice = 50, CreateDate = new DateTime(2025, 10, 21), Description = "Character 3 for CT010" },
+
+    // ContractId = CT014
+    new ContractCharacter { ContractCharacterId = "CC0141", CharacterId = "CH013", ContractId = "CT014", TotalPrice = 200, CreateDate = new DateTime(2025, 6, 26), Description = "Character 1 for CT014" },
+    new ContractCharacter { ContractCharacterId = "CC0142", CharacterId = "CH014", ContractId = "CT014", TotalPrice = 250, CreateDate = new DateTime(2025, 6, 26), Description = "Character 2 for CT014" },
+    new ContractCharacter { ContractCharacterId = "CC0143", CharacterId = "CH015", ContractId = "CT014", TotalPrice = 150, CreateDate = new DateTime(2025, 6, 26), Description = "Character 3 for CT014" }
+);
+
+
+            modelBuilder.Entity<EventCharacter>().HasData(
+    new EventCharacter { EventCharacterId = "EC001", EventId = "E001", CharacterId = "CH001" },
+    new EventCharacter { EventCharacterId = "EC002", EventId = "E002", CharacterId = "CH002" },
+    new EventCharacter { EventCharacterId = "EC003", EventId = "E003", CharacterId = "CH003" },
+    new EventCharacter { EventCharacterId = "EC004", EventId = "E004", CharacterId = "CH004" },
+    new EventCharacter { EventCharacterId = "EC005", EventId = "E005", CharacterId = "CH005" },
+    new EventCharacter { EventCharacterId = "EC006", EventId = "E006", CharacterId = "CH006" },
+    new EventCharacter { EventCharacterId = "EC007", EventId = "E007", CharacterId = "CH007" },
+    new EventCharacter { EventCharacterId = "EC008", EventId = "E008", CharacterId = "CH008" },
+    new EventCharacter { EventCharacterId = "EC009", EventId = "E009", CharacterId = "CH009" },
+    new EventCharacter { EventCharacterId = "EC010", EventId = "E010", CharacterId = "CH010" },
+    new EventCharacter { EventCharacterId = "EC011", EventId = "E011", CharacterId = "CH011" },
+    new EventCharacter { EventCharacterId = "EC012", EventId = "E012", CharacterId = "CH012" }
+    
+);
+
+
+            modelBuilder.Entity<EventActivity>().HasData(
+    new EventActivity { EventActivityId = "EA001", EventId = "E001", ActivityId = "ACT001", Description = "Yoga for a fresh start", CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new EventActivity { EventActivityId = "EA002", EventId = "E001", ActivityId = "ACT005", Description = "Tech trends in the new year", CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new EventActivity { EventActivityId = "EA003", EventId = "E002", ActivityId = "ACT004", Description = "Painting cherry blossoms", CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new EventActivity { EventActivityId = "EA004", EventId = "E003", ActivityId = "ACT013", Description = "AI and future coding", CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new EventActivity { EventActivityId = "EA005", EventId = "E004", ActivityId = "ACT009", Description = "Dance battles live", CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+
+    new EventActivity { EventActivityId = "EA006", EventId = "E005", ActivityId = "ACT003", Description = "Comic-Con live music", CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new EventActivity { EventActivityId = "EA007", EventId = "E006", ActivityId = "ACT007", Description = "Anime and book discussions", CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new EventActivity { EventActivityId = "EA008", EventId = "E007", ActivityId = "ACT010", Description = "Chess and gaming", CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new EventActivity { EventActivityId = "EA009", EventId = "E008", ActivityId = "ACT011", Description = "Outdoor movie fun", CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new EventActivity { EventActivityId = "EA010", EventId = "E009", ActivityId = "ACT015", Description = "Meditation for cosplayers", CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+
+    new EventActivity { EventActivityId = "EA011", EventId = "E010", ActivityId = "ACT012", Description = "Science in filmmaking", CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new EventActivity { EventActivityId = "EA012", EventId = "E011", ActivityId = "ACT006", Description = "Halloween charity run", CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new EventActivity { EventActivityId = "EA013", EventId = "E012", ActivityId = "ACT014", Description = "Christmas gardening", CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new EventActivity { EventActivityId = "EA014", EventId = "E004", ActivityId = "ACT002", Description = "Cooking for music lovers", CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new EventActivity { EventActivityId = "EA015", EventId = "E003", ActivityId = "ACT008", Description = "Photography in tech", CreateDate = DateTime.UtcNow, CreateBy = "Manager" }
+);
+
+
+            modelBuilder.Entity<AccountCoupon>().HasData(
+    new AccountCoupon { AccountCouponId = "AC001", AccountId = "A001", CouponId = "CP001", IsActive = true, StartDate = new DateTime(2024, 3, 1), EndDate = new DateTime(2024, 3, 31) },
+    new AccountCoupon { AccountCouponId = "AC002", AccountId = "A002", CouponId = "CP002", IsActive = false, StartDate = new DateTime(2024, 4, 1), EndDate = new DateTime(2024, 4, 30) },
+    new AccountCoupon { AccountCouponId = "AC003", AccountId = "A003", CouponId = "CP003", IsActive = true, StartDate = new DateTime(2024, 5, 1), EndDate = new DateTime(2024, 5, 31) },
+    new AccountCoupon { AccountCouponId = "AC004", AccountId = "A004", CouponId = "CP004", IsActive = true, StartDate = new DateTime(2024, 6, 1), EndDate = new DateTime(2024, 6, 30) },
+    new AccountCoupon { AccountCouponId = "AC005", AccountId = "A005", CouponId = "CP005", IsActive = false, StartDate = new DateTime(2024, 7, 1), EndDate = new DateTime(2024, 7, 31) },
+
+    new AccountCoupon { AccountCouponId = "AC006", AccountId = "A001", CouponId = "CP006", IsActive = true, StartDate = new DateTime(2024, 8, 1), EndDate = new DateTime(2024, 8, 31) },
+    new AccountCoupon { AccountCouponId = "AC007", AccountId = "A002", CouponId = "CP007", IsActive = true, StartDate = new DateTime(2024, 12, 1), EndDate = new DateTime(2024, 12, 25) },
+    new AccountCoupon { AccountCouponId = "AC008", AccountId = "A003", CouponId = "CP008", IsActive = false, StartDate = new DateTime(2024, 9, 1), EndDate = new DateTime(2024, 9, 30) },
+    new AccountCoupon { AccountCouponId = "AC009", AccountId = "A004", CouponId = "CP009", IsActive = true, StartDate = new DateTime(2024, 6, 15), EndDate = new DateTime(2024, 7, 15) },
+    new AccountCoupon { AccountCouponId = "AC010", AccountId = "A005", CouponId = "CP010", IsActive = true, StartDate = new DateTime(2024, 11, 25), EndDate = new DateTime(2024, 11, 30) },
+
+    new AccountCoupon { AccountCouponId = "AC011", AccountId = "A006", CouponId = "CP011", IsActive = false, StartDate = new DateTime(2024, 8, 10), EndDate = new DateTime(2024, 9, 10) },
+    new AccountCoupon { AccountCouponId = "AC012", AccountId = "A007", CouponId = "CP012", IsActive = true, StartDate = new DateTime(2024, 10, 1), EndDate = new DateTime(2024, 10, 31) },
+    new AccountCoupon { AccountCouponId = "AC013", AccountId = "A008", CouponId = "CP013", IsActive = true, StartDate = new DateTime(2024, 5, 1), EndDate = new DateTime(2024, 5, 31) },
+    new AccountCoupon { AccountCouponId = "AC014", AccountId = "A009", CouponId = "CP014", IsActive = false, StartDate = new DateTime(2024, 11, 26), EndDate = new DateTime(2024, 11, 27) },
+    new AccountCoupon { AccountCouponId = "AC015", AccountId = "A010", CouponId = "CP015", IsActive = true, StartDate = new DateTime(2024, 3, 1), EndDate = new DateTime(2024, 12, 31) }
+);
+
+            modelBuilder.Entity<AccountImage>().HasData(
+     new AccountImage { AccountImageId = "AI1", AccountId = "A001", UrlImage = "https://example.com/admin.jpg", CreateDate = DateTime.UtcNow },
+     new AccountImage { AccountImageId = "AI2", AccountId = "A002", UrlImage = "https://example.com/manager.jpg", CreateDate = DateTime.UtcNow },
+     new AccountImage { AccountImageId = "AI3", AccountId = "A003", UrlImage = "https://example.com/user1.jpg", CreateDate = DateTime.UtcNow },
+     new AccountImage { AccountImageId = "AI4", AccountId = "A004", UrlImage = "https://example.com/user2.jpg", CreateDate = DateTime.UtcNow },
+     new AccountImage { AccountImageId = "AI5", AccountId = "A005", UrlImage = "https://example.com/user3.jpg", CreateDate = DateTime.UtcNow },
+
+     new AccountImage { AccountImageId = "AI6", AccountId = "A006", UrlImage = "https://example.com/user4.jpg", CreateDate = DateTime.UtcNow },
+     new AccountImage { AccountImageId = "AI7", AccountId = "A007", UrlImage = "https://example.com/user5.jpg", CreateDate = DateTime.UtcNow },
+     new AccountImage { AccountImageId = "AI8", AccountId = "A008", UrlImage = "https://example.com/user6.jpg", CreateDate = DateTime.UtcNow },
+     new AccountImage { AccountImageId = "AI9", AccountId = "A009", UrlImage = "https://example.com/user7.jpg", CreateDate = DateTime.UtcNow },
+     new AccountImage { AccountImageId = "AI10", AccountId = "A010", UrlImage = "https://example.com/user8.jpg", CreateDate = DateTime.UtcNow },
+
+     new AccountImage { AccountImageId = "AI11", AccountId = "A011", UrlImage = "https://example.com/user9.jpg", CreateDate = DateTime.UtcNow },
+     new AccountImage { AccountImageId = "AI12", AccountId = "A012", UrlImage = "https://example.com/user10.jpg", CreateDate = DateTime.UtcNow },
+     new AccountImage { AccountImageId = "AI13", AccountId = "A013", UrlImage = "https://example.com/user11.jpg", CreateDate = DateTime.UtcNow },
+     new AccountImage { AccountImageId = "AI14", AccountId = "A014", UrlImage = "https://example.com/user12.jpg", CreateDate = DateTime.UtcNow },
+     new AccountImage { AccountImageId = "AI15", AccountId = "A015", UrlImage = "https://example.com/user13.jpg", CreateDate = DateTime.UtcNow }
+ );
+
+
+            modelBuilder.Entity<Activity>().HasData(
+     new Activity { ActivityId = "ACT001", Name = "Yoga Class", Description = "A relaxing yoga session", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+     new Activity { ActivityId = "ACT002", Name = "Cooking Workshop", Description = "Learn to cook delicious meals", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+     new Activity { ActivityId = "ACT003", Name = "Music Concert", Description = "Live music performance", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+     new Activity { ActivityId = "ACT004", Name = "Art Exhibition", Description = "Showcase of local artists", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+     new Activity { ActivityId = "ACT005", Name = "Tech Talk", Description = "Discussion on latest technology trends", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+
+     new Activity { ActivityId = "ACT006", Name = "Charity Run", Description = "5K run for a good cause", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+     new Activity { ActivityId = "ACT007", Name = "Book Club", Description = "Monthly book discussion", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+     new Activity { ActivityId = "ACT008", Name = "Photography Workshop", Description = "Learn photography skills", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+     new Activity { ActivityId = "ACT009", Name = "Dance Competition", Description = "Dance battle for all ages", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+     new Activity { ActivityId = "ACT010", Name = "Chess Tournament", Description = "Competitive chess matches", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+
+     new Activity { ActivityId = "ACT011", Name = "Movie Night", Description = "Outdoor movie screening", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+     new Activity { ActivityId = "ACT012", Name = "Science Fair", Description = "Showcase of scientific projects", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+     new Activity { ActivityId = "ACT013", Name = "Coding Bootcamp", Description = "Intensive coding workshop", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+     new Activity { ActivityId = "ACT014", Name = "Gardening Workshop", Description = "Learn gardening techniques", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow },
+     new Activity { ActivityId = "ACT015", Name = "Meditation Session", Description = "Guided meditation practice", CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow }
+ );
+
+
+            modelBuilder.Entity<CartProduct>().HasData(
+    // Cart C001
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C001", ProductId = "P001", Price = 30, Quantity = 2, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C001", ProductId = "P002", Price = 20, Quantity = 1, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C001", ProductId = "P003", Price = 80, Quantity = 1, CreatedDate = DateTime.UtcNow },
+
+    // Cart C002
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C002", ProductId = "P004", Price = 100, Quantity = 1, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C002", ProductId = "P005", Price = 25, Quantity = 3, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C002", ProductId = "P006", Price = 40, Quantity = 2, CreatedDate = DateTime.UtcNow },
+
+    // Cart C003
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C003", ProductId = "P007", Price = 15, Quantity = 5, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C003", ProductId = "P008", Price = 50, Quantity = 2, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C003", ProductId = "P009", Price = 60, Quantity = 1, CreatedDate = DateTime.UtcNow },
+
+    // Cart C004
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C004", ProductId = "P010", Price = 120, Quantity = 1, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C004", ProductId = "P011", Price = 35, Quantity = 2, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C004", ProductId = "P012", Price = 45, Quantity = 1, CreatedDate = DateTime.UtcNow }
+);
+
+
+            modelBuilder.Entity<CharacterImage>().HasData(
+    new CharacterImage { CharacterImageId = "CI001", UrlImage = "https://example.com/img1.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH001" },
+    new CharacterImage { CharacterImageId = "CI002", UrlImage = "https://example.com/img2.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH002" },
+    new CharacterImage { CharacterImageId = "CI003", UrlImage = "https://example.com/img3.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH003" },
+    new CharacterImage { CharacterImageId = "CI004", UrlImage = "https://example.com/img4.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH004" },
+    new CharacterImage { CharacterImageId = "CI005", UrlImage = "https://example.com/img5.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH005" },
+    new CharacterImage { CharacterImageId = "CI006", UrlImage = "https://example.com/img6.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH006" },
+    new CharacterImage { CharacterImageId = "CI007", UrlImage = "https://example.com/img7.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH007" },
+    new CharacterImage { CharacterImageId = "CI008", UrlImage = "https://example.com/img8.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH008" },
+    new CharacterImage { CharacterImageId = "CI009", UrlImage = "https://example.com/img9.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH009" },
+    new CharacterImage { CharacterImageId = "CI010", UrlImage = "https://example.com/img10.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH010" },
+    new CharacterImage { CharacterImageId = "CI011", UrlImage = "https://example.com/img11.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH011" },
+    new CharacterImage { CharacterImageId = "CI012", UrlImage = "https://example.com/img12.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH012" },
+    new CharacterImage { CharacterImageId = "CI013", UrlImage = "https://example.com/img13.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH013" },
+    new CharacterImage { CharacterImageId = "CI014", UrlImage = "https://example.com/img14.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH014" },
+    new CharacterImage { CharacterImageId = "CI015", UrlImage = "https://example.com/img15.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH015" }
+);
+
+
+            modelBuilder.Entity<EventImage>().HasData(
+    new EventImage { ImageId = "EI001", ImageUrl = "https://example.com/event1.jpg", CreateDate = DateTime.UtcNow, EventId = "E001" },
+    new EventImage { ImageId = "EI002", ImageUrl = "https://example.com/event2.jpg", CreateDate = DateTime.UtcNow, EventId = "E002" },
+    new EventImage { ImageId = "EI003", ImageUrl = "https://example.com/event3.jpg", CreateDate = DateTime.UtcNow, EventId = "E003" },
+    new EventImage { ImageId = "EI004", ImageUrl = "https://example.com/event4.jpg", CreateDate = DateTime.UtcNow, EventId = "E004" },
+    new EventImage { ImageId = "EI005", ImageUrl = "https://example.com/event5.jpg", CreateDate = DateTime.UtcNow, EventId = "E005" },
+    new EventImage { ImageId = "EI006", ImageUrl = "https://example.com/event6.jpg", CreateDate = DateTime.UtcNow, EventId = "E006" },
+    new EventImage { ImageId = "EI007", ImageUrl = "https://example.com/event7.jpg", CreateDate = DateTime.UtcNow, EventId = "E007" },
+    new EventImage { ImageId = "EI008", ImageUrl = "https://example.com/event8.jpg", CreateDate = DateTime.UtcNow, EventId = "E008" },
+    new EventImage { ImageId = "EI009", ImageUrl = "https://example.com/event9.jpg", CreateDate = DateTime.UtcNow, EventId = "E009" },
+    new EventImage { ImageId = "EI010", ImageUrl = "https://example.com/event10.jpg", CreateDate = DateTime.UtcNow, EventId = "E010" },
+    new EventImage { ImageId = "EI011", ImageUrl = "https://example.com/event11.jpg", CreateDate = DateTime.UtcNow, EventId = "E011" },
+    new EventImage { ImageId = "EI012", ImageUrl = "https://example.com/event12.jpg", CreateDate = DateTime.UtcNow, EventId = "E012" }
+   
+);
+
+
+            modelBuilder.Entity<OrderProduct>().HasData(
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O001", ProductId = "P001", Price = 30, Quantity = 3, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O001", ProductId = "P002", Price = 20, Quantity = 5, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O002", ProductId = "P003", Price = 80, Quantity = 1, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O002", ProductId = "P004", Price = 100, Quantity = 1, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O003", ProductId = "P005", Price = 25, Quantity = 2, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O003", ProductId = "P006", Price = 40, Quantity = 3, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O004", ProductId = "P007", Price = 15, Quantity = 4, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O004", ProductId = "P008", Price = 50, Quantity = 2, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O005", ProductId = "P009", Price = 60, Quantity = 1, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O005", ProductId = "P010", Price = 120, Quantity = 1, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O006", ProductId = "P011", Price = 35, Quantity = 2, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O006", ProductId = "P012", Price = 45, Quantity = 3, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O007", ProductId = "P013", Price = 18, Quantity = 5, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O007", ProductId = "P014", Price = 90, Quantity = 2, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O008", ProductId = "P015", Price = 22, Quantity = 4, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O008", ProductId = "P001", Price = 30, Quantity = 1, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O009", ProductId = "P002", Price = 20, Quantity = 6, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O009", ProductId = "P003", Price = 80, Quantity = 2, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O010", ProductId = "P004", Price = 100, Quantity = 1, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O010", ProductId = "P005", Price = 25, Quantity = 3, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O011", ProductId = "P006", Price = 40, Quantity = 2, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O011", ProductId = "P007", Price = 15, Quantity = 4, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O012", ProductId = "P008", Price = 50, Quantity = 2, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O012", ProductId = "P009", Price = 60, Quantity = 1, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O013", ProductId = "P010", Price = 120, Quantity = 1, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O013", ProductId = "P011", Price = 35, Quantity = 2, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O014", ProductId = "P012", Price = 45, Quantity = 3, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O014", ProductId = "P013", Price = 18, Quantity = 5, CreateDate = DateTime.UtcNow },
+
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015", ProductId = "P014", Price = 90, Quantity = 2, CreateDate = DateTime.UtcNow },
+    new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015", ProductId = "P015", Price = 22, Quantity = 4, CreateDate = DateTime.UtcNow }
+);
+
+
+            modelBuilder.Entity<Package>().HasData(
+    new Package { PackageId = "PKG001", PackageName = "Basic Character Rental", Description = "Rent a single character for an event", Price = 100.0, ServiceId = "S001" },
+    new Package { PackageId = "PKG002", PackageName = "Deluxe Character Rental", Description = "Rent multiple characters with costumes", Price = 250.0, ServiceId = "S001" },
+    new Package { PackageId = "PKG003", PackageName = "Ultimate Character Rental", Description = "Full-day character rental service", Price = 500.0, ServiceId = "S001" },
+
+    new Package { PackageId = "PKG004", PackageName = "Standard Cosplay Performance", Description = "Basic cosplay performance at an event", Price = 150.0, ServiceId = "S002" },
+    new Package { PackageId = "PKG005", PackageName = "Premium Cosplay Performance", Description = "Advanced performance with choreography", Price = 300.0, ServiceId = "S002" },
+    new Package { PackageId = "PKG006", PackageName = "VIP Cosplay Performance", Description = "Exclusive show with audience interaction", Price = 500.0, ServiceId = "S002" },
+
+    new Package { PackageId = "PKG007", PackageName = "Mini Photography Session", Description = "30-minute photoshoot with cosplayers", Price = 80.0, ServiceId = "S003" },
+    new Package { PackageId = "PKG008", PackageName = "Standard Photography Session", Description = "1-hour professional photoshoot", Price = 150.0, ServiceId = "S003" },
+    new Package { PackageId = "PKG009", PackageName = "Full Photography Package", Description = "Complete photoshoot with editing", Price = 300.0, ServiceId = "S003" },
+
+    new Package { PackageId = "PKG010", PackageName = "Basic Merchandise Pack", Description = "Includes exclusive cosplay merchandise", Price = 50.0, ServiceId = "S004" },
+    new Package { PackageId = "PKG011", PackageName = "Deluxe Merchandise Pack", Description = "Premium cosplay collectibles", Price = 150.0, ServiceId = "S004" },
+    new Package { PackageId = "PKG012", PackageName = "Ultimate Merchandise Pack", Description = "Limited edition cosplay items", Price = 300.0, ServiceId = "S004" },
+
+    new Package { PackageId = "PKG013", PackageName = "Cosplay Basics Workshop", Description = "Beginner-friendly cosplay training", Price = 100.0, ServiceId = "S005" },
+    new Package { PackageId = "PKG014", PackageName = "Advanced Cosplay Training", Description = "In-depth cosplay and makeup course", Price = 250.0, ServiceId = "S005" },
+    new Package { PackageId = "PKG015", PackageName = "Master Cosplay Workshop", Description = "Professional-level training for cosplayers", Price = 500.0, ServiceId = "S005" }
+);
+
+
+            modelBuilder.Entity<ProductImage>().HasData(
+    new ProductImage { ProductImageId = "IMG001", ProductId = "P001", UrlImage = "https://example.com/images/naruto_wig.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG002", ProductId = "P002", UrlImage = "https://example.com/images/mario_hat.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG003", ProductId = "P003", UrlImage = "https://example.com/images/sasuke_costume.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG004", ProductId = "P004", UrlImage = "https://example.com/images/zelda_sword.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG005", ProductId = "P005", UrlImage = "https://example.com/images/one_piece_hat.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG006", ProductId = "P006", UrlImage = "https://example.com/images/miku_wig.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG007", ProductId = "P007", UrlImage = "https://example.com/images/demon_slayer_earrings.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG008", ProductId = "P008", UrlImage = "https://example.com/images/aot_jacket.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG009", ProductId = "P009", UrlImage = "https://example.com/images/pikachu_onesie.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG010", ProductId = "P010", UrlImage = "https://example.com/images/buster_sword.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG011", ProductId = "P011", UrlImage = "https://example.com/images/genshin_vision.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG012", ProductId = "P012", UrlImage = "https://example.com/images/jinx_wig.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG013", ProductId = "P013", UrlImage = "https://example.com/images/sailor_moon_tiara.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG014", ProductId = "P014", UrlImage = "https://example.com/images/spiderman_suit.jpg", CreateDate = DateTime.UtcNow },
+    new ProductImage { ProductImageId = "IMG015", ProductId = "P015", UrlImage = "https://example.com/images/harry_potter_wand.jpg", CreateDate = DateTime.UtcNow }
+);
+
+
+            modelBuilder.Entity<RequestCharacter>().HasData(
+    new RequestCharacter { RequestCharacterId = "RC01", RequestId = "R001", CharacterId = "CH001", TotalPrice = 50.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH001", CosplayerId = "C001" },
+    new RequestCharacter { RequestCharacterId = "RC02", RequestId = "R002", CharacterId = "CH002", TotalPrice = 60.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH002", CosplayerId = "C002" },
+    new RequestCharacter { RequestCharacterId = "RC03", RequestId = "R003", CharacterId = "CH003", TotalPrice = 70.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH003", CosplayerId = "C003" },
+    new RequestCharacter { RequestCharacterId = "RC04", RequestId = "R004", CharacterId = "CH004", TotalPrice = 80.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH004", CosplayerId = "C004" },
+    new RequestCharacter { RequestCharacterId = "RC05", RequestId = "R005", CharacterId = "CH005", TotalPrice = 90.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH005", CosplayerId = "C005" },
+    new RequestCharacter { RequestCharacterId = "RC06", RequestId = "R006", CharacterId = "CH006", TotalPrice = 100.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH006", CosplayerId = "C006" },
+    new RequestCharacter { RequestCharacterId = "RC07", RequestId = "R007", CharacterId = "CH007", TotalPrice = 110.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH007", CosplayerId = "C007" },
+    new RequestCharacter { RequestCharacterId = "RC08", RequestId = "R008", CharacterId = "CH008", TotalPrice = 120.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH008", CosplayerId = "C008" },
+    new RequestCharacter { RequestCharacterId = "RC09", RequestId = "R009", CharacterId = "CH009", TotalPrice = 130.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH009", CosplayerId = "C009" },
+    new RequestCharacter { RequestCharacterId = "RC10", RequestId = "R010", CharacterId = "CH010", TotalPrice = 140.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH010", CosplayerId = "C010" },
+    new RequestCharacter { RequestCharacterId = "RC11", RequestId = "R011", CharacterId = "CH011", TotalPrice = 150.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH011", CosplayerId = "C011" },
+    new RequestCharacter { RequestCharacterId = "RC12", RequestId = "R012", CharacterId = "CH012", TotalPrice = 160.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH012", CosplayerId = "C012" },
+    new RequestCharacter { RequestCharacterId = "RC13", RequestId = "R013", CharacterId = "CH013", TotalPrice = 170.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH013", CosplayerId = "C013" },
+    new RequestCharacter { RequestCharacterId = "RC14", RequestId = "R014", CharacterId = "CH014", TotalPrice = 180.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH014", CosplayerId = "C014" },
+    new RequestCharacter { RequestCharacterId = "RC15", RequestId = "R015", CharacterId = "CH015", TotalPrice = 190.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH015", CosplayerId = "C015" }
+);
+            modelBuilder.Entity<Payment>().HasData(
+    new Payment { PaymentId = "P001", Type = "Online", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.BuyTicket, Amount = 250.0, TransactionId = "TXN001", CreatAt = new DateTime(2024, 3, 2), TicketAccountId = "TA001", AccountCouponID = "AC001" },
+    new Payment { PaymentId = "P002", Type = "Online", Status = PaymentStatus.Pending, Purpose = PaymentPurpose.BuyTicket, Amount = 150.5, TransactionId = "TXN002", CreatAt = new DateTime(2024, 3, 6), TicketAccountId = "TA002" },
+    new Payment { PaymentId = "P003", Type = "Cash", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.BuyTicket, Amount = 90.0, TransactionId = "TXN003", CreatAt = new DateTime(2024, 3, 11), TicketAccountId = "TA003" },
+    new Payment { PaymentId = "P004", Type = "Card", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.BuyTicket, Amount = 400.0, TransactionId = "TXN004", CreatAt = new DateTime(2024, 3, 13), TicketAccountId = "TA004", AccountCouponID = "AC012" },
+    new Payment { PaymentId = "P005", Type = "Online", Status = PaymentStatus.Cancel, Purpose = PaymentPurpose.BuyTicket, Amount = 175.0, TransactionId = "TXN005", CreatAt = new DateTime(2024, 3, 16), TicketAccountId = "TA005" },
+
+    new Payment { PaymentId = "P006", Type = "Cash", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.Order, Amount = 225.0, TransactionId = "TXN006", CreatAt = new DateTime(2024, 3, 19), OrderId = "O006", AccountCouponID = "AC003" },
+    new Payment { PaymentId = "P007", Type = "Online", Status = PaymentStatus.Pending, Purpose = PaymentPurpose.Order, Amount = 350.0, TransactionId = "TXN007", CreatAt = new DateTime(2024, 3, 21), OrderId = "O007" },
+    new Payment { PaymentId = "P008", Type = "Card", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.Order, Amount = 150.0, TransactionId = "TXN008", CreatAt = new DateTime(2024, 3, 23), OrderId = "O008" },
+    new Payment { PaymentId = "P009", Type = "Cash", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.Order, Amount = 500.0, TransactionId = "TXN009", CreatAt = new DateTime(2024, 3, 26), OrderId = "O009" },
+    new Payment { PaymentId = "P010", Type = "Online", Status = PaymentStatus.Cancel, Purpose = PaymentPurpose.Order, Amount = 125.0, TransactionId = "TXN010", CreatAt = new DateTime(2024, 3, 29), OrderId = "O010", AccountCouponID = "AC004" },
+
+    new Payment { PaymentId = "P011", Type = "Online", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.ContractDeposit, Amount = 325.0, TransactionId = "TXN011", CreatAt = new DateTime(2024, 3, 31), ContractId = "CT002" },
+    new Payment { PaymentId = "P012", Type = "Card", Status = PaymentStatus.Pending, Purpose = PaymentPurpose.ContractDeposit, Amount = 410.0, TransactionId = "TXN012", CreatAt = new DateTime(2024, 4, 3), ContractId = "CT005" },
+    new Payment { PaymentId = "P013", Type = "Cash", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.contractSettlement, Amount = 90.0, TransactionId = "TXN013", CreatAt = new DateTime(2024, 4, 6), ContractId = "CT008" },
+    new Payment { PaymentId = "P014", Type = "Online", Status = PaymentStatus.Cancel, Purpose = PaymentPurpose.contractSettlement, Amount = 350.0, TransactionId = "TXN014", CreatAt = new DateTime(2024, 4, 8), ContractId = "CT010" },
+    new Payment { PaymentId = "P015", Type = "Card", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.contractSettlement, Amount = 200.0, TransactionId = "TXN015", CreatAt = new DateTime(2024, 4, 11), ContractId = "CT002" }
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //    modelBuilder.Entity<Role>().HasData(
+            //    new Role { Id = "R001", RoleName = RoleName.Admin, Description = "System Administrator" },
+            //    new Role { Id = "R002", RoleName = RoleName.Manager, Description = "Event and Service Manager" },
+            //    new Role { Id = "R003", RoleName = RoleName.Consultant, Description = "Customer Service Consultant" },
+            //    new Role { Id = "R004", RoleName = RoleName.Cosplayer, Description = "Professional Cosplayer" },
+            //    new Role { Id = "R005", RoleName = RoleName.Customer, Description = "Regular Customer" }
             //);
 
-            //// Seed dữ liệu cho bảng Account
-            //modelBuilder.Entity<Account>().HasData(
-            //    new Account
-            //    {
-            //        AccountId = "1",
-            //        Name = "John Doe",
-            //        Email = "john@example.com",
-            //        Password = "ZkmcwLVZC7B06TE7qd/qoA==",
-            //        RoleId = "1",
-            //        IsActive = true,
-            //        Birthday = new DateTime(1995, 5, 20),
-            //        Phone = "123456789"
-            //    },
-            //    new Account
-            //    {
-            //        AccountId = "2",
-            //        Name = "Glenn Quagmire",
-            //        Email = "phuongnam26012002@gmail.com",
-            //        Password = "ZkmcwLVZC7B06TE7qd/qoA==",
-            //        RoleId = "4",
-            //        IsActive = true,
-            //        Birthday = new DateTime(1995, 5, 20),
-            //        Phone = "123456789"
-            //    }
-            //);
+            //    // Activity data
+            //    modelBuilder.Entity<Activity>().HasData(
+            //        new Activity { ActivityId = "ACT001", Name = "Meet and Greet", Description = "Meet your favorite characters", CreateDate = DateTime.Now.AddDays(-100) },
+            //        new Activity { ActivityId = "ACT002", Name = "Photo Session", Description = "Professional photoshoot with characters", CreateDate = DateTime.Now.AddDays(-95) },
+            //        new Activity { ActivityId = "ACT003", Name = "Cosplay Competition", Description = "Show off your cosplay skills", CreateDate = DateTime.Now.AddDays(-90) },
+            //        new Activity { ActivityId = "ACT004", Name = "Panel Discussion", Description = "Discuss topics with industry experts", CreateDate = DateTime.Now.AddDays(-85) },
+            //        new Activity { ActivityId = "ACT005", Name = "Workshop", Description = "Learn cosplay techniques", CreateDate = DateTime.Now.AddDays(-80) },
+            //        new Activity { ActivityId = "ACT006", Name = "Autograph Session", Description = "Get signatures from cosplayers", CreateDate = DateTime.Now.AddDays(-75) },
+            //        new Activity { ActivityId = "ACT007", Name = "Gaming Tournament", Description = "Compete in various games", CreateDate = DateTime.Now.AddDays(-70) },
+            //        new Activity { ActivityId = "ACT008", Name = "Costume Parade", Description = "Showcase costumes in a parade", CreateDate = DateTime.Now.AddDays(-65) },
+            //        new Activity { ActivityId = "ACT009", Name = "Anime Screening", Description = "Watch popular anime episodes", CreateDate = DateTime.Now.AddDays(-60) },
+            //        new Activity { ActivityId = "ACT010", Name = "Dance Performance", Description = "Watch choreographed performances", CreateDate = DateTime.Now.AddDays(-55) },
+            //        new Activity { ActivityId = "ACT011", Name = "Merchandise Fair", Description = "Buy character merchandise", CreateDate = DateTime.Now.AddDays(-50) },
+            //        new Activity { ActivityId = "ACT012", Name = "Q&A Session", Description = "Ask questions to cosplayers", CreateDate = DateTime.Now.AddDays(-45) },
+            //        new Activity { ActivityId = "ACT013", Name = "Karaoke Contest", Description = "Sing anime theme songs", CreateDate = DateTime.Now.AddDays(-40) },
+            //        new Activity { ActivityId = "ACT014", Name = "Art Exhibition", Description = "Display of fan art and original works", CreateDate = DateTime.Now.AddDays(-35) },
+            //        new Activity { ActivityId = "ACT015", Name = "Closing Ceremony", Description = "End of event celebration", CreateDate = DateTime.Now.AddDays(-30) }
+            //    );
 
-            //// Seed dữ liệu cho bảng Coupon
-            //modelBuilder.Entity<Coupon>().HasData(
-            //    new Coupon
-            //    {
-            //        CouponId = "CPN001",
-            //        Condition = "First order",
-            //        Percent = 10,
-            //        Amount = 5,
-            //        StartDate = DateTime.Now,
-            //        EndDate = DateTime.Now.AddMonths(1)
-            //    }
-            //);
+            //    // Category data
+            //    modelBuilder.Entity<Category>().HasData(
+            //        new Category { CategoryId = "CAT001", CategoryName = "Anime", Description = "Japanese animation characters" },
+            //        new Category { CategoryId = "CAT002", CategoryName = "Video Games", Description = "Characters from popular video games" },
+            //        new Category { CategoryId = "CAT003", CategoryName = "Comics", Description = "Comic book heroes and villains" },
+            //        new Category { CategoryId = "CAT004", CategoryName = "Movies", Description = "Film characters" },
+            //        new Category { CategoryId = "CAT005", CategoryName = "TV Shows", Description = "Television series characters" },
+            //        new Category { CategoryId = "CAT006", CategoryName = "Fantasy", Description = "Fantasy genre characters" },
+            //        new Category { CategoryId = "CAT007", CategoryName = "Sci-Fi", Description = "Science fiction characters" },
+            //        new Category { CategoryId = "CAT008", CategoryName = "Horror", Description = "Horror genre characters" },
+            //        new Category { CategoryId = "CAT009", CategoryName = "Historical", Description = "Historical figures and characters" },
+            //        new Category { CategoryId = "CAT010", CategoryName = "Original", Description = "Original character designs" },
+            //        new Category { CategoryId = "CAT011", CategoryName = "Mascots", Description = "Mascot characters" },
+            //        new Category { CategoryId = "CAT012", CategoryName = "Cartoon", Description = "Cartoon characters" },
+            //        new Category { CategoryId = "CAT013", CategoryName = "K-Pop", Description = "Korean pop culture characters" },
+            //        new Category { CategoryId = "CAT014", CategoryName = "Sports", Description = "Sports-themed characters" },
+            //        new Category { CategoryId = "CAT015", CategoryName = "Mecha", Description = "Mechanical and robot characters" }
+            //    );
 
-            //// Seed dữ liệu cho bảng Contract
-            //modelBuilder.Entity<Request>().HasData(
-            //    new Request
-            //    {
-            //        ContractId = "CON001",
-            //        AccountId = "2",
-            //        ContractName = "Hợp đồng thuê cosplayer",
-            //        ContractCode = "CT001",
-            //        Description = ContractDescription.RentCosplayer,
-            //        Price = 500.0,
-            //        Amount = 1,
-            //        Signature = true,
-            //        Deposit = "50%",
-            //        CharacterQuantity = 2,
-            //        Location = "Hà Nội",
-            //        Status = ContractStatus.Progressing,
-            //        StartDate = new DateTime(2025, 3, 10),
-            //        EndDate = new DateTime(2025, 3, 15),
-            //        PackageId = "PKG001",
-            //        CouponId = "CPN001"
-            //    }
-            //);
+            //    // Coupon data
+            //    modelBuilder.Entity<Coupon>().HasData(
+            //        new Coupon { CouponId = "CPN001", Condition = "First Time User", Percent = 15, Amount = 0, StartDate = DateTime.Now.AddDays(-30), EndDate = DateTime.Now.AddDays(60), Type = "Percentage" },
+            //        new Coupon { CouponId = "CPN002", Condition = "Holiday Special", Percent = 20, Amount = 0, StartDate = DateTime.Now.AddDays(-20), EndDate = DateTime.Now.AddDays(10), Type = "Percentage" },
+            //        new Coupon { CouponId = "CPN003", Condition = "VIP Member", Percent = 10, Amount = 0, StartDate = DateTime.Now.AddDays(-60), EndDate = DateTime.Now.AddDays(120), Type = "Percentage" },
+            //        new Coupon { CouponId = "CPN004", Condition = "Weekend Offer", Percent = 5, Amount = 0, StartDate = DateTime.Now.AddDays(-15), EndDate = DateTime.Now.AddDays(15), Type = "Percentage" },
+            //        new Coupon { CouponId = "CPN005", Condition = "Event Booking", Percent = 0, Amount = 50, StartDate = DateTime.Now.AddDays(-45), EndDate = DateTime.Now.AddDays(45), Type = "Fixed" },
+            //        new Coupon { CouponId = "CPN006", Condition = "Cosplay Service", Percent = 25, Amount = 0, StartDate = DateTime.Now.AddDays(-10), EndDate = DateTime.Now.AddDays(20), Type = "Percentage" },
+            //        new Coupon { CouponId = "CPN007", Condition = "Birthday Special", Percent = 0, Amount = 100, StartDate = DateTime.Now.AddDays(-5), EndDate = DateTime.Now.AddDays(25), Type = "Fixed" },
+            //        new Coupon { CouponId = "CPN008", Condition = "Referral Bonus", Percent = 15, Amount = 0, StartDate = DateTime.Now.AddDays(-30), EndDate = DateTime.Now.AddDays(60), Type = "Percentage" },
+            //        new Coupon { CouponId = "CPN009", Condition = "Seasonal Discount", Percent = 10, Amount = 0, StartDate = DateTime.Now.AddDays(-40), EndDate = DateTime.Now.AddDays(20), Type = "Percentage" },
+            //        new Coupon { CouponId = "CPN010", Condition = "Product Purchase", Percent = 0, Amount = 25, StartDate = DateTime.Now.AddDays(-25), EndDate = DateTime.Now.AddDays(35), Type = "Fixed" },
+            //        new Coupon { CouponId = "CPN011", Condition = "Loyalty Reward", Percent = 20, Amount = 0, StartDate = DateTime.Now.AddDays(-15), EndDate = DateTime.Now.AddDays(75), Type = "Percentage" },
+            //        new Coupon { CouponId = "CPN012", Condition = "Group Booking", Percent = 30, Amount = 0, StartDate = DateTime.Now.AddDays(-5), EndDate = DateTime.Now.AddDays(25), Type = "Percentage" },
+            //        new Coupon { CouponId = "CPN013", Condition = "Flash Sale", Percent = 50, Amount = 0, StartDate = DateTime.Now.AddDays(-2), EndDate = DateTime.Now.AddDays(3), Type = "Percentage" },
+            //        new Coupon { CouponId = "CPN014", Condition = "Newsletter Signup", Percent = 5, Amount = 0, StartDate = DateTime.Now.AddDays(-60), EndDate = DateTime.Now.AddDays(30), Type = "Percentage" },
+            //        new Coupon { CouponId = "CPN015", Condition = "App Download", Percent = 0, Amount = 15, StartDate = DateTime.Now.AddDays(-30), EndDate = DateTime.Now.AddDays(60), Type = "Fixed" }
+            //    );
 
-            //// Seed dữ liệu cho bảng Event
-            //modelBuilder.Entity<Event>().HasData(
-            //    new Event
-            //    {
-            //        EventId = "E1",
-            //        EventName = "Cosplay Festival",
-            //        Description = "Annual cosplay event",
-            //        Location = "Tokyo",
-            //        StartDate = DateTime.Now,
-            //        EndDate = DateTime.Now.AddDays(3),
-            //        CreateDate = DateTime.Now,
-            //        IsActive = true
-            //    }
-            //);
+            //    // Event data
+            //    modelBuilder.Entity<Event>().HasData(
+            //        new Event { EventId = "EVT001", EventName = "Anime Expo 2025", Description = "Largest anime convention", Location = "Tokyo Convention Center", IsActive = true, StartDate = DateTime.Now.AddDays(30), EndDate = DateTime.Now.AddDays(33), CreateDate = DateTime.Now.AddDays(-60), CreateBy = "R001" },
+            //        new Event { EventId = "EVT002", EventName = "Comic Festival", Description = "Comic book fan gathering", Location = "New York Exhibition Hall", IsActive = true, StartDate = DateTime.Now.AddDays(45), EndDate = DateTime.Now.AddDays(47), CreateDate = DateTime.Now.AddDays(-55), CreateBy = "R002" },
+            //        new Event { EventId = "EVT003", EventName = "Gaming Con", Description = "Video game character showcase", Location = "Los Angeles Center", IsActive = true, StartDate = DateTime.Now.AddDays(60), EndDate = DateTime.Now.AddDays(62), CreateDate = DateTime.Now.AddDays(-50), CreateBy = "R001" },
+            //        new Event { EventId = "EVT004", EventName = "Cosplay Competition", Description = "Annual cosplay contest", Location = "Paris Convention Hall", IsActive = true, StartDate = DateTime.Now.AddDays(90), EndDate = DateTime.Now.AddDays(91), CreateDate = DateTime.Now.AddDays(-45), CreateBy = "R002" },
+            //        new Event { EventId = "EVT005", EventName = "Fantasy Fair", Description = "Fantasy character showcase", Location = "London Exhibition Center", IsActive = true, StartDate = DateTime.Now.AddDays(120), EndDate = DateTime.Now.AddDays(123), CreateDate = DateTime.Now.AddDays(-40), CreateBy = "R001" },
+            //        new Event { EventId = "EVT006", EventName = "Character Meet & Greet", Description = "Meet your favorite characters", Location = "Berlin Convention Center", IsActive = true, StartDate = DateTime.Now.AddDays(15), EndDate = DateTime.Now.AddDays(16), CreateDate = DateTime.Now.AddDays(-35), CreateBy = "R002" },
+            //        new Event { EventId = "EVT007", EventName = "Sci-Fi Convention", Description = "Science fiction character expo", Location = "Sydney Exhibition Hall", IsActive = true, StartDate = DateTime.Now.AddDays(75), EndDate = DateTime.Now.AddDays(77), CreateDate = DateTime.Now.AddDays(-30), CreateBy = "R001" },
+            //        new Event { EventId = "EVT008", EventName = "Cosplay Workshop", Description = "Learn cosplay techniques", Location = "Toronto Convention Center", IsActive = true, StartDate = DateTime.Now.AddDays(40), EndDate = DateTime.Now.AddDays(41), CreateDate = DateTime.Now.AddDays(-25), CreateBy = "R002" },
+            //        new Event { EventId = "EVT009", EventName = "Anime Movie Festival", Description = "Screening of popular anime films", Location = "Seoul Media Center", IsActive = true, StartDate = DateTime.Now.AddDays(100), EndDate = DateTime.Now.AddDays(103), CreateDate = DateTime.Now.AddDays(-20), CreateBy = "R001" },
+            //        new Event { EventId = "EVT010", EventName = "Character Design Expo", Description = "Original character designs", Location = "Hong Kong Exhibition Center", IsActive = true, StartDate = DateTime.Now.AddDays(85), EndDate = DateTime.Now.AddDays(86), CreateDate = DateTime.Now.AddDays(-15), CreateBy = "R002" },
+            //        new Event { EventId = "EVT011", EventName = "Gaming Character Showcase", Description = "Meet game characters", Location = "Singapore Convention Hall", IsActive = true, StartDate = DateTime.Now.AddDays(110), EndDate = DateTime.Now.AddDays(112), CreateDate = DateTime.Now.AddDays(-10), CreateBy = "R001" },
+            //        new Event { EventId = "EVT012", EventName = "Costume Ball", Description = "Cosplay formal event", Location = "Rome Grand Hall", IsActive = true, StartDate = DateTime.Now.AddDays(130), EndDate = DateTime.Now.AddDays(130), CreateDate = DateTime.Now.AddDays(-5), CreateBy = "R002" },
+            //        new Event { EventId = "EVT013", EventName = "Character Photo Day", Description = "Photo sessions with characters", Location = "Barcelona Media Center", IsActive = false, StartDate = DateTime.Now.AddDays(-15), EndDate = DateTime.Now.AddDays(-15), CreateDate = DateTime.Now.AddDays(-60), CreateBy = "R001" },
+            //        new Event { EventId = "EVT014", EventName = "Anime Music Concert", Description = "Live performances of anime themes", Location = "Vienna Concert Hall", IsActive = false, StartDate = DateTime.Now.AddDays(-30), EndDate = DateTime.Now.AddDays(-29), CreateDate = DateTime.Now.AddDays(-90), CreateBy = "R002" },
+            //        new Event { EventId = "EVT015", EventName = "Manga Exhibition", Description = "Display of manga artwork", Location = "Amsterdam Gallery", IsActive = false, StartDate = DateTime.Now.AddDays(-45), EndDate = DateTime.Now.AddDays(-43), CreateDate = DateTime.Now.AddDays(-120), CreateBy = "R001" }
+            //    );
 
-            //// Seed dữ liệu cho bảng Cart
-            //modelBuilder.Entity<Cart>().HasData(
-            //    new Cart { CartId = "CART001", AccountId = "1", TotalPrice = 100.0 },
-            //    new Cart { CartId = "CART002", AccountId = "2", TotalPrice = 200.0 }
-            //);
+            //    // Product data
+            //    modelBuilder.Entity<Product>().HasData(
+            //        new Product { ProductId = "PRD001", ProductName = "Character T-Shirt", Description = "Official anime character t-shirt", Quantity = 100, Price = 24.99, CreateDate = DateTime.Now.AddDays(-60), IsActive = true },
+            //        new Product { ProductId = "PRD002", ProductName = "Costume Accessory Set", Description = "Essential accessories for cosplayers", Quantity = 50, Price = 39.99, CreateDate = DateTime.Now.AddDays(-55), IsActive = true },
+            //        new Product { ProductId = "PRD003", ProductName = "Character Figurine", Description = "Detailed character figurine", Quantity = 30, Price = 59.99, CreateDate = DateTime.Now.AddDays(-50), IsActive = true },
+            //        new Product { ProductId = "PRD004", ProductName = "Cosplay Wig", Description = "High-quality costume wig", Quantity = 80, Price = 45.99, CreateDate = DateTime.Now.AddDays(-45), IsActive = true },
+            //        new Product { ProductId = "PRD005", ProductName = "Character Poster", Description = "Limited edition poster", Quantity = 200, Price = 19.99, CreateDate = DateTime.Now.AddDays(-40), IsActive = true },
+            //        new Product { ProductId = "PRD006", ProductName = "Makeup Kit", Description = "Professional cosplay makeup", Quantity = 40, Price = 34.99, CreateDate = DateTime.Now.AddDays(-35), IsActive = true },
+            //        new Product { ProductId = "PRD007", ProductName = "Character Plushie", Description = "Soft character plush toy", Quantity = 150, Price = 29.99, CreateDate = DateTime.Now.AddDays(-30), IsActive = true },
+            //        new Product { ProductId = "PRD008", ProductName = "Costume Props", Description = "Authentic costume props", Quantity = 60, Price = 49.99, CreateDate = DateTime.Now.AddDays(-25), IsActive = true },
+            //        new Product { ProductId = "PRD009", ProductName = "Character Keychain", Description = "Collectible keychain", Quantity = 300, Price = 9.99, CreateDate = DateTime.Now.AddDays(-20), IsActive = true },
+            //        new Product { ProductId = "PRD010", ProductName = "Costume Shoes", Description = "Specialized costume footwear", Quantity = 70, Price = 69.99, CreateDate = DateTime.Now.AddDays(-15), IsActive = true },
+            //        new Product { ProductId = "PRD011", ProductName = "Character Mug", Description = "Themed coffee mug", Quantity = 120, Price = 14.99, CreateDate = DateTime.Now.AddDays(-10), IsActive = true },
+            //        new Product { ProductId = "PRD012", ProductName = "Cosplay Jewelry Set", Description = "Character-inspired jewelry", Quantity = 90, Price = 29.99, CreateDate = DateTime.Now.AddDays(-5), IsActive = true },
+            //        new Product { ProductId = "PRD013", ProductName = "Character Hoodie", Description = "Comfortable character hoodie", Quantity = 80, Price = 54.99, CreateDate = DateTime.Now.AddDays(-3), IsActive = true },
+            //        new Product { ProductId = "PRD014", ProductName = "Costume Care Kit", Description = "Maintenance kit for costumes", Quantity = 40, Price = 19.99, CreateDate = DateTime.Now.AddDays(-2), IsActive = true },
+            //        new Product { ProductId = "PRD015", ProductName = "Character Art Book", Description = "Illustrated character guide", Quantity = 50, Price = 39.99, CreateDate = DateTime.Now.AddDays(-1), IsActive = true }
+            //    );
 
-            //// Seed dữ liệu cho bảng Product
-            //modelBuilder.Entity<Product>().HasData(
-            //    new Product
-            //    {
-            //        ProductId = "P1",
-            //        ProductName = "Cosplay Sword",
-            //        Description = "A high-quality cosplay sword",
-            //        Quantity = 10,
-            //        Price = 50,
-            //        CreateDate = DateTime.Now,
-            //        IsActive = true
-            //    }
-            //);
+            //    // Service data
+            //    modelBuilder.Entity<Service>().HasData(
+            //        new Service { ServiceId = "SRV001", ServiceName = "Character Performance", Description = "In-character performance", CreateDate = DateTime.Now.AddDays(-60) },
+            //        new Service { ServiceId = "SRV002", ServiceName = "Photoshoot", Description = "Professional character photoshoot", CreateDate = DateTime.Now.AddDays(-55) },
+            //        new Service { ServiceId = "SRV003", ServiceName = "Birthday Party", Description = "Character appearance at birthday party", CreateDate = DateTime.Now.AddDays(-50) },
+            //        new Service { ServiceId = "SRV004", ServiceName = "Corporate Event", Description = "Character appearance at corporate events", CreateDate = DateTime.Now.AddDays(-45) },
+            //        new Service { ServiceId = "SRV005", ServiceName = "Convention Appearance", Description = "Character appearance at conventions", CreateDate = DateTime.Now.AddDays(-40) },
+            //        new Service { ServiceId = "SRV006", ServiceName = "Character Meet & Greet", Description = "Personal character interaction", CreateDate = DateTime.Now.AddDays(-35) },
+            //        new Service { ServiceId = "SRV007", ServiceName = "School Visit", Description = "Character appearance at schools", CreateDate = DateTime.Now.AddDays(-30) },
+            //        new Service { ServiceId = "SRV008", ServiceName = "Charity Event", Description = "Character appearance at charity functions", CreateDate = DateTime.Now.AddDays(-25) },
+            //        new Service { ServiceId = "SRV009", ServiceName = "Video Message", Description = "Personalized in-character video message", CreateDate = DateTime.Now.AddDays(-20) },
+            //        new Service { ServiceId = "SRV010", ServiceName = "Wedding Appearance", Description = "Character appearance at weddings", CreateDate = DateTime.Now.AddDays(-15) },
+            //        new Service { ServiceId = "SRV011", ServiceName = "Store Opening", Description = "Character appearance at store openings", CreateDate = DateTime.Now.AddDays(-10) },
+            //        new Service { ServiceId = "SRV012", ServiceName = "Hospital Visit", Description = "Character visit to hospitals", CreateDate = DateTime.Now.AddDays(-5) },
+            //        new Service { ServiceId = "SRV013", ServiceName = "Theme Park Appearance", Description = "Character appearance at theme parks", CreateDate = DateTime.Now.AddDays(-3) },
+            //        new Service { ServiceId = "SRV014", ServiceName = "Product Launch", Description = "Character appearance at product launches", CreateDate = DateTime.Now.AddDays(-2) },
+            //        new Service { ServiceId = "SRV015", ServiceName = "Online Streaming", Description = "Character appearance in online streams", CreateDate = DateTime.Now.AddDays(-1) }
+            //    );
 
-            //// Seed dữ liệu cho bảng Character
-            //modelBuilder.Entity<Character>().HasData(
-            //    new Character
-            //    {
-            //        CharacterId = "CH1",
-            //        CategoryId = "1",
-            //        CharacterName = "Elf Warrior",
-            //        Description = "A fantasy elf warrior",
-            //        Price = 100,
-            //        IsActive = true,
-            //        CreateDate = DateTime.Now,
-            //        Quantity = 50
-            //    }
-            //);
+            //    // Character data
+            //    modelBuilder.Entity<Character>().HasData(
+            //        new Character { CharacterId = "CHR001", CategoryId = "CAT001", CharacterName = "Anime Hero", Description = "Popular anime protagonist", Price = 150.00, IsActive = true, MaxHeight = 180, MaxWeight = 75, MinHeight = 170, MinWeight = 60, Quantity = 5, CreateDate = DateTime.Now.AddDays(-60) },
+            //        new Character { CharacterId = "CHR002", CategoryId = "CAT002", CharacterName = "Game Warrior", Description = "Famous video game character", Price = 180.00, IsActive = true, MaxHeight = 190, MaxWeight = 85, MinHeight = 175, MinWeight = 70, Quantity = 3, CreateDate = DateTime.Now.AddDays(-55) },
+            //        new Character { CharacterId = "CHR003", CategoryId = "CAT003", CharacterName = "Comic Superhero", Description = "Iconic comic book hero", Price = 200.00, IsActive = true, MaxHeight = 185, MaxWeight = 80, MinHeight = 175, MinWeight = 65, Quantity = 4, CreateDate = DateTime.Now.AddDays(-50) },
+            //        new Character { CharacterId = "CHR004", CategoryId = "CAT004", CharacterName = "Movie Villain", Description = "Recognizable movie antagonist", Price = 170.00, IsActive = true, MaxHeight = 175, MaxWeight = 70, MinHeight = 165, MinWeight = 60, Quantity = 2, CreateDate = DateTime.Now.AddDays(-45) },
+            //        new Character { CharacterId = "CHR005", CategoryId = "CAT005", CharacterName = "TV Show Protagonist", Description = "Main character from TV series", Price = 160.00, IsActive = true, MaxHeight = 175, MaxWeight = 75, MinHeight = 165, MinWeight = 60, Quantity = 3, CreateDate = DateTime.Now.AddDays(-40) },
+            //        new Character { CharacterId = "CHR006", CategoryId = "CAT006", CharacterName = "Fantasy Magician", Description = "Magical character from fantasy", Price = 190.00, IsActive = true, MaxHeight = 180, MaxWeight = 75, MinHeight = 170, MinWeight = 60, Quantity = 2, CreateDate = DateTime.Now.AddDays(-35) },
+            //        new Character { CharacterId = "CHR007", CategoryId = "CAT007", CharacterName = "Sci-Fi Robot", Description = "Futuristic robot character", Price = 220.00, IsActive = true, MaxHeight = 195, MaxWeight = 90, MinHeight = 180, MinWeight = 70, Quantity = 1, CreateDate = DateTime.Now.AddDays(-30) },
+            //        new Character { CharacterId = "CHR008", CategoryId = "CAT008", CharacterName = "Horror Monster", Description = "Scary horror character", Price = 175.00, IsActive = true, MaxHeight = 200, MaxWeight = 95, MinHeight = 185, MinWeight = 75, Quantity = 2, CreateDate = DateTime.Now.AddDays(-25) },
+            //        new Character { CharacterId = "CHR009", CategoryId = "CAT009", CharacterName = "Historical Figure", Description = "Character from history", Price = 160.00, IsActive = true, MaxHeight = 180, MaxWeight = 80, MinHeight = 170, MinWeight = 65, Quantity = 3, CreateDate = DateTime.Now.AddDays(-20) },
+            //        new Character { CharacterId = "CHR010", CategoryId = "CAT010", CharacterName = "Original Design", Description = "Unique character creation", Price = 210.00, IsActive = true, MaxHeight = 185, MaxWeight = 80, MinHeight = 175, MinWeight = 65, Quantity = 1, CreateDate = DateTime.Now.AddDays(-15) },
+            //        new Character { CharacterId = "CHR011", CategoryId = "CAT011", CharacterName = "Cute Mascot", Description = "Adorable mascot character", Price = 140.00, IsActive = true, MaxHeight = 165, MaxWeight = 65, MinHeight = 155, MinWeight = 50, Quantity = 4, CreateDate = DateTime.Now.AddDays(-10) },
+            //        new Character { CharacterId = "CHR012", CategoryId = "CAT012", CharacterName = "Cartoon Icon", Description = "Famous cartoon character", Price = 150.00, IsActive = true, MaxHeight = 170, MaxWeight = 70, MinHeight = 160, MinWeight = 55, Quantity = 3, CreateDate = DateTime.Now.AddDays(-5) },
+            //        new Character { CharacterId = "CHR013", CategoryId = "CAT013", CharacterName = "K-Pop Idol", Description = "Popular K-pop inspired character", Price = 180.00, IsActive = true, MaxHeight = 175, MaxWeight = 65, MinHeight = 165, MinWeight = 50, Quantity = 2, CreateDate = DateTime.Now.AddDays(-3) },
+            //        new Character { CharacterId = "CHR014", CategoryId = "CAT014", CharacterName = "Sports Hero", Description = "Sports-themed character", Price = 155.00, IsActive = true, MaxHeight = 185, MaxWeight = 80, MinHeight = 175, MinWeight = 70, Quantity = 3, CreateDate = DateTime.Now.AddDays(-2) },
+            //        new Character { CharacterId = "CHR015", CategoryId = "CAT015", CharacterName = "Mecha Warrior", Description = "Mechanical battle character", Price = 230.00, IsActive = true, MaxHeight = 200, MaxWeight = 100, MinHeight = 185, MinWeight = 80, Quantity = 1, CreateDate = DateTime.Now.AddDays(-1) }
+            //    );
 
-            //// Seed dữ liệu cho bảng Ticket
-            //modelBuilder.Entity<Ticket>().HasData(
-            //    new Ticket
-            //    {
-            //        TicketId = "T1",
-            //        EventId = "E1",
-            //        Quantity = 100,
-            //        Price = 20
-            //    }
-            //);
+            //    // Account data
+            //    modelBuilder.Entity<Account>().HasData(
+            //        new Account { AccountId = "ACC001", Name = "Admin User", Email = "admin@cosplay.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-30), Phone = "1234567890", IsActive = true, ImageUrl = "admin.jpg", RoleId = "R001" },
+            //        new Account { AccountId = "ACC002", Name = "Manager User", Email = "manager@cosplay.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-28), Phone = "2345678901", IsActive = true, ImageUrl = "manager.jpg", RoleId = "R002" },
+            //        new Account { AccountId = "ACC003", Name = "Consultant User", Email = "consultant@cosplay.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-26), Phone = "3456789012", IsActive = true, ImageUrl = "consultant.jpg", RoleId = "R003" },
+            //        new Account { AccountId = "ACC004", Name = "Cosplayer One", Email = "cosplayer1@cosplay.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-25), Phone = "4567890123", IsActive = true, Height = 175, Weight = 65, AverageStar = 4.8, SalaryIndex = 1.2, OnTask = false, ImageUrl = "cosplayer1.jpg", RoleId = "R004" },
+            //        new Account { AccountId = "ACC005", Name = "Cosplayer Two", Email = "cosplayer2@cosplay.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-23), Phone = "5678901234", IsActive = true, Height = 180, Weight = 70, AverageStar = 4.5, SalaryIndex = 1.1, OnTask = false, ImageUrl = "cosplayer2.jpg", RoleId = "R004" },
+            //        new Account { AccountId = "ACC006", Name = "Cosplayer Three", Email = "cosplayer3@cosplay.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-27), Phone = "6789012345", IsActive = true, Height = 170, Weight = 60, AverageStar = 4.7, SalaryIndex = 1.15, OnTask = false, ImageUrl = "cosplayer3.jpg", RoleId = "R004" },
+            //        new Account { AccountId = "ACC007", Name = "Cosplayer Four", Email = "cosplayer4@cosplay.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-22), Phone = "7890123456", IsActive = true, Height = 165, Weight = 55, AverageStar = 4.9, SalaryIndex = 1.25, OnTask = true, ImageUrl = "cosplayer4.jpg", RoleId = "R004" },
+            //        new Account { AccountId = "ACC008", Name = "Cosplayer Five", Email = "cosplayer5@cosplay.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-24), Phone = "8901234567", IsActive = true, Height = 185, Weight = 75, AverageStar = 4.6, SalaryIndex = 1.1, OnTask = true, ImageUrl = "cosplayer5.jpg", RoleId = "R004" },
+            //        new Account { AccountId = "ACC009", Name = "Customer One", Email = "customer1@example.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-35), Phone = "9012345678", IsActive = true, ImageUrl = "customer1.jpg", RoleId = "R005" },
+            //        new Account { AccountId = "ACC010", Name = "Customer Two", Email = "customer2@example.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-29), Phone = "0123456789", IsActive = true, ImageUrl = "customer2.jpg", RoleId = "R005" },
+            //        new Account { AccountId = "ACC011", Name = "Customer Three", Email = "customer3@example.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-31), Phone = "1230456789", IsActive = true, ImageUrl = "customer3.jpg", RoleId = "R005" },
+            //        new Account { AccountId = "ACC012", Name = "Customer Four", Email = "customer4@example.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-27), Phone = "2340567891", IsActive = true, ImageUrl = "customer4.jpg", RoleId = "R005" },
+            //        new Account { AccountId = "ACC013", Name = "Customer Five", Email = "customer5@example.com", Password = "hashed_password_here", Birthday = DateTime.Now.AddYears(-33), Phone = "3450678912", IsActive = true, ImageUrl = "customer5.jpg", RoleId = "R005" }
 
-            //// Seed dữ liệu cho bảng TicketAccount
-            //modelBuilder.Entity<TicketAccount>().HasData(
-            //    new TicketAccount { TicketAccountId = "1", AccountId = "2", TicketCode = "TCK001", Quantity = 2, TotalPrice = 100.0, TicketId = "T1" }
-            //);
-
-            //// Seed dữ liệu cho bảng CartProduct
-            //modelBuilder.Entity<CartProduct>().HasData(
-            //    new CartProduct { CartProductId = "1", ProductId = "P1", CartId = "CART001" }
-            //);
-
-            //// Seed dữ liệu cho bảng ContractCharacter
-            //modelBuilder.Entity<RequestCharacter>().HasData(
-            //    new RequestCharacter { ContractCharacterId = "CC1", ContracId = "CON001", AccountId = "1", CharacterId = "CH1", Quantity = 2 }
-            //);
-
-            //// Seed dữ liệu cho bảng Feedback
-            //modelBuilder.Entity<Feedback>().HasData(
-            //    new Feedback { FeedbackId = "F1", Star = 5, Description = "Great!", CreateDate = DateTime.UtcNow, ContractId = "CON001" }
-            //);
-
-            //// Seed dữ liệu cho bảng Payment
-            //modelBuilder.Entity<Payment>().HasData(
-            //    new Payment { PaymentId = "P1", Type = "Credit Card", Status = PaymentStatus.Cancel, Purpose = 0, Amount = 100.0, OrderId = "O1", CreatAt = DateTime.UtcNow }
-            //);
-
-            //// Seed dữ liệu cho bảng Task
-            //modelBuilder.Entity<Task>().HasData(
-            //    new Task { TaskId = "T1", TaskName = "Setup Booth", Location = "Event Hall", Description = "Prepare the booth for the event", IsActive = true, StartDate = DateTime.UtcNow, EndDate = DateTime.UtcNow.AddDays(1), Status = TaskStatus.Progressing, ContractCharacterId = "CC1" }
-            //);
+            //        );
 
 
             base.OnModelCreating(modelBuilder);

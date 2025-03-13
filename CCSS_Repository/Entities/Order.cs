@@ -15,9 +15,9 @@ namespace CCSS_Repository.Entities
         public string OrderId { get; set; }
         public Payment Payment { get; set; }
 
-        [ForeignKey("CouponId")]
-        public string CouponId { get; set; }
-        public Coupon Coupon { get; set; }
+        [ForeignKey("AccountId")]
+        public string AccountId { get; set; }
+        public Account Account { get; set; }
 
         public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
 
