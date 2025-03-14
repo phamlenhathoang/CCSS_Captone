@@ -9,20 +9,22 @@ using System.Threading.Tasks;
 namespace CCSS_Service.Model.Requests
 {
     public class RequestDtos
-    {
-        public string RequestId { get; set; } = Guid.NewGuid().ToString();
-
-    
+    {   
         public string? AccountId { get; set; }
-
         public string Name { get; set; }
-        public RequestDescription? Description { get; set; }
-        public double? Price { get; set; }
-        public RequestStatus Status { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }           
-        public string? ServiceId { get; set; }          
-        public string? ContractId { get; set; }
-          
+        //public RequestDescription? Description { get; set; }
+        public double? Price { get; set; }      
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+        public string? Location { get; set; }
+        public string? ServiceId { get; set; }
+        public List<CharacterList> ListRequestCharacters { get; set; }
+
+    }
+
+    public class CharacterList
+    {
+        public string CharacterId { get; set; }
+        public string? CosplayerId { get; set; }
     }
 }

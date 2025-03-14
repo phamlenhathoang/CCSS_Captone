@@ -1,4 +1,5 @@
-﻿using CCSS_Service.Model.Requests;
+﻿using CCSS_Repository.Entities;
+using CCSS_Service.Model.Requests;
 using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,11 +40,12 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRequest(RequestDtos requestDtos)
+        public async Task<IActionResult> CreateRequest(RequestDtos requestDtos, RequestDescription requestDescription)
+
         {
             if (ModelState.IsValid)
             {
-                var result = await _services.AddRequest(requestDtos);
+                var result = await _services.AddRequest(requestDtos, requestDescription);
                 return Ok(result);
             }
             return BadRequest(ModelState);
