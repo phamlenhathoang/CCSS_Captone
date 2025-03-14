@@ -20,12 +20,12 @@ namespace CCSS_Service.Profiles
             .ForMember(dest => dest.StartDate,
                 opt => opt.MapFrom(src =>
                     src.StartDate.HasValue
-                        ? src.StartDate.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        ? src.StartDate.Value.ToString("HH:mm dd/MM/yyyy", CultureInfo.InvariantCulture)
                         : string.Empty))
             .ForMember(dest => dest.EndDate,
                 opt => opt.MapFrom(src =>
                     src.EndDate.HasValue
-                        ? src.EndDate.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        ? src.EndDate.Value.ToString("HH:mm dd/MM/yyyy", CultureInfo.InvariantCulture)
                         : string.Empty))
             .ForMember(dest => dest.CreateDate,
                 opt => opt.MapFrom(src =>

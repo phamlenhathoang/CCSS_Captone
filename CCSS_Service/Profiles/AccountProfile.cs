@@ -24,6 +24,9 @@ namespace CCSS_Service.Profiles
                                 : string.Empty))
                     .ReverseMap();
 
+
+            CreateMap<Account, AccountByCharacterAndDateResponse>()
+                    .ReverseMap();
             //Request 
             CreateMap<Account, UpdateAccountRequest>().ReverseMap();
         }

@@ -11,8 +11,8 @@ namespace CCSS_Service.Model.Requests
 {
     public class TaskRequest
     {
-        public string AccountId { get; set; }
-        public string CharacterName { get; set; }
+        public List<AddTaskEventRequest>? AddTaskEventRequests { get; set; }
+        public List<AddTaskContractRequest>? AddTaskContractRequests { get; set; }
     }
 
     public class AddTaskEventRequest

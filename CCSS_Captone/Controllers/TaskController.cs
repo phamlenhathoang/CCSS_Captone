@@ -51,17 +51,17 @@ namespace CCSS_Captone.Controllers
         //}
 
         [HttpPost]
-        public async Task<ActionResult<TaskResponse>> AddTask(List<AddTaskEventRequest>? addTaskEventRequests, List<AddTaskContractRequest>? addTaskContractRequests)
+        public async Task<ActionResult<TaskResponse>> AddTask(TaskRequest taskRequests)
         {
-            var task = await taskService.AddTask(addTaskEventRequests, addTaskContractRequests);
+            var task = await taskService.AddTask(taskRequests.AddTaskEventRequests, taskRequests.AddTaskContractRequests);
             return Ok(task);
         }
 
-        //[HttpGet("contractId")]
-        //public async Task<ActionResult> ViewAllTaskByContractId(string contractId)
-        //{
-        //    var task = await taskService.ViewAllTaskByContractId(contractId);
-        //    return Ok(task);
-        //}
+        [HttpGet]
+        public async Task<ActionResult> GetAllTask()
+        {
+            var task = await taskService.GetAllTasks();
+            return Ok(task);
+        }
     }
 }

@@ -30,7 +30,7 @@ namespace CCSS_Service.Services
         //Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId);
         //Task<bool> ChangeAccountForTask(string taskId, string accountId);
         Task<AccountLoginResponse> Login(string email, string password);
-        Task<string> Register(AccountRequest accountRequest, string role); 
+        Task<string> Register(AccountRequest accountRequest); 
         Task<string> CodeValidation(string email, string code);
         Task<AccountResponse> GetAccountByAccountId(string accountId);
         Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest);
@@ -346,9 +346,9 @@ namespace CCSS_Service.Services
             return code;
         }
 
-        public async Task<string> Register(AccountRequest accountRequest, string role)
+        public async Task<string> Register(AccountRequest accountRequest)
         {
-            if (string.IsNullOrEmpty(accountRequest.Email) || string.IsNullOrEmpty(accountRequest.Password) || string.IsNullOrEmpty(role))
+            if (string.IsNullOrEmpty(accountRequest.Email) || string.IsNullOrEmpty(accountRequest.Password))
             {
                 return "Email and password cannot null!!!";
             }
@@ -383,16 +383,7 @@ namespace CCSS_Service.Services
                 account.Password = PasswordHash.ConvertToEncrypt(accountRequest.Password);
                 account.Birthday = date;
                 account.Phone = accountRequest.Phone;
-
-                if (role.ToLower() == RoleName.Customer.ToString().ToLower())
-                {
-                    account.RoleId = "4";
-                }
-                else
-                {
-                    account.RoleId = "3";
-                    account.Leader = false;
-                }
+                account.RoleId = "R005";
 
 
                 bool result = await accountRepository.AddAccount(account);
@@ -465,7 +456,7 @@ namespace CCSS_Service.Services
 
                 foreach (Account account in accounts)
                 {
-                    bool result = await taskRepository.GetTasksByDate(account, startDate, endDate);
+                    bool result = await taskRepository.CheckTaskIsValid(account, startDate, endDate);
                     if (result)
                     {
                         AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);

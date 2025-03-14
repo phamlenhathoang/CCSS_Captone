@@ -72,7 +72,8 @@ namespace CCSS_Repository.Repositories
         {
             return await _dbContext.ContractCharacters
                 .Include(c => c.Contract)
-                    .ThenInclude(contract => contract.Request) // Include luôn bảng Request
+                    .ThenInclude(contract => contract.Request)
+                .Include(c => c.Character)
                 .FirstOrDefaultAsync(c => c.ContractCharacterId.Equals(id));
         }
 

@@ -16,6 +16,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> CreateCharacter(Character character);
         Task<bool> UpdateCharacter(Character character);
         Task<bool> DeleteCharacter(Character character);
+        Task<bool> CheckCharacterForAccount(Account account, string characterId);
     }
     public class CharacterRepository : ICharacterRepository
     {
@@ -55,6 +56,23 @@ namespace CCSS_Repository.Repositories
         {
             _context.Characters.Remove(character);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> CheckCharacterForAccount(Account a, string characterId)
+        {
+            Character character = await _context.Characters.FirstOrDefaultAsync(c => c.CharacterId.Equals(characterId) && c.IsActive == true);
+
+            if (character == null)
+            {
+                return false;
+            }
+
+            if(character.MinHeight < a.Height && a.Height < character.MaxHeight && character.MinWeight < a.Weight && a.Weight < character.MaxHeight)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

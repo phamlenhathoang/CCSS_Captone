@@ -4,6 +4,7 @@ using CCSS_Repository.Repositories;
 using CCSS_Service.Hubs;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
+using iText.Layout.Element;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.Update;
 using Microsoft.Identity.Client;
@@ -33,6 +34,7 @@ namespace CCSS_Service.Services
         //Task<List<TaskResponse>> ViewAllTaskByAccountId(string accountId, string? taskId);
         //Task<List<TaskResponse>> ViewAllTaskByContractId(string contractId);
 
+        Task<List<TaskResponse>> GetAllTasks();
         Task<string> AddTask(List<AddTaskEventRequest> taskEventRequests, List<AddTaskContractRequest> taskContractRequests);
     }
     public class TaskService : ITaskService
@@ -64,6 +66,20 @@ namespace CCSS_Service.Services
 
         private async Task<bool> AddTaskEvent(List<AddTaskEventRequest> taskEventRequests)
         {
+            List<Task> tasks = new List<Task>();
+
+            var uniqueElements = new HashSet<string>();
+
+            foreach (var taskEventRequest in taskEventRequests)
+            {
+                bool checkAccount = uniqueElements.Add(taskEventRequest.AccountId);
+
+                if (!checkAccount)
+                {
+                    throw new Exception("Account is duplicate");
+                }
+            }
+
             foreach (var taskRequest in taskEventRequests)
             {
                 Account account = await accountRepository.GetAccount(taskRequest.AccountId);
@@ -76,6 +92,18 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("EventCharacter does not exist");
                 }
+                if (eventCharacter.IsAssign == true)
+                {
+                    throw new Exception("EventCharacter assigned");
+                }
+
+                bool checkCharacter = await characterRepository.CheckCharacterForAccount(account, eventCharacter.CharacterId);
+
+                if (!CheckCharacterForAccount(account, eventCharacter.Character))
+                {
+                    throw new Exception("Account does not suitable character");
+                }
+
 
                 Task task = new Task()
                 {
@@ -85,7 +113,7 @@ namespace CCSS_Service.Services
                     Description = eventCharacter.Description,
                     EndDate = eventCharacter.Event.EndDate,
                     StartDate = eventCharacter.Event.StartDate,
-                    TaskName = eventCharacter.CharacterId,
+                    TaskName = eventCharacter.Character.CharacterName,
                     Location = eventCharacter.Event.Location,
                     IsActive = true,
                     Status = TaskStatus.Assignment,
@@ -94,19 +122,51 @@ namespace CCSS_Service.Services
                     UpdateDate = null,
                 };
 
-                bool result = await taskRepository.AddTask(task);
-                if (result)
+                bool checkTask = await taskRepository.CheckTaskIsValid(account, task.StartDate.Value, task.EndDate.Value);
+                if (!checkTask)
+                {
+                    throw new Exception("Task is invalid");
+                }
+
+                bool check = await taskRepository.AddTask(task);
+
+                if (!check)
                 {
                     throw new Exception($"Task {task.TaskId} đã xảy ra lỗi vào lúc {DateTime.Now}");
                 }
+                tasks.Add(task);
             }
 
-            return true;
+            bool result = await NortificationUser(tasks) ? true : false;
+
+            return result;
+        }
+
+        private bool CheckCharacterForAccount(Account account, Character character)
+        {
+            if (character.MinHeight < account.Height && account.Height < character.MaxHeight && character.MinWeight < account.Weight && account.Weight < character.MaxHeight)
+            {
+                return true;
+            }
+            return false;
         }
 
         private async Task<bool> AddTaskContract(List<AddTaskContractRequest> taskContractRequests)
         {
             List<Task> tasks = new List<Task>();
+
+            var uniqueElements = new HashSet<string>();
+
+            foreach (var taskEventRequest in taskContractRequests)
+            {
+                bool checkAccount = uniqueElements.Add(taskEventRequest.AccountId);
+
+                if (!checkAccount)
+                {
+                    throw new Exception("Account is duplicate");
+                }
+            }
+
             foreach (var taskRequest in taskContractRequests)
             {
                 Account account = await accountRepository.GetAccount(taskRequest.AccountId);
@@ -120,30 +180,40 @@ namespace CCSS_Service.Services
                     throw new Exception("EventCharacter does not exist");
                 }
                 Contract contract = await contractRespository.GetContractById(contractCharacter.Contract.ContractId);
-                Task task = new Task()
+
+                if (!CheckCharacterForAccount(account, contractCharacter.Character))
                 {
-                    ContractCharacterId = taskRequest.ContractCharacterId,
-                    AccountId = taskRequest.AccountId,
-                    CreateDate = contractCharacter.CreateDate,
-                    Description = contractCharacter.Description,
-                    EndDate = contractCharacter.Contract.Request.EndDate,
-                    StartDate = contractCharacter.Contract.Request.StartDate,
-                    TaskName = contractCharacter.CharacterId,
-                    Location = contractCharacter.Contract.Request.Location,
-                    IsActive = true,
-                    Status = TaskStatus.Assignment,
-                    Type = "Contract",
-                    TaskId = Guid.NewGuid().ToString(),
-                    UpdateDate = null,
-                };
+                    throw new Exception("Account does not suitable character");
+                }
+
+                Task task = new Task();
+
+                task.ContractCharacterId = taskRequest.ContractCharacterId;
+                task.AccountId = taskRequest.AccountId;
+                task.CreateDate = contractCharacter.CreateDate;
+                task.Description = contractCharacter.Description;
+                task.EndDate = contractCharacter.Contract.Request.EndDate;
+                task.StartDate = contractCharacter.Contract.Request.StartDate;
+                task.TaskName = contractCharacter.CharacterId;
+                task.Location = contractCharacter.Contract.Request.Location;
+                task.IsActive = true;
+                task.Status = TaskStatus.Assignment;
+                task.Type = "Contract";
+                task.TaskId = Guid.NewGuid().ToString();
                 
-               tasks.Add(task);
+                bool checkTask = await taskRepository.CheckTaskIsValid(account, task.StartDate.Value, task.EndDate.Value);
+                if (!checkTask)
+                {
+                    throw new Exception("Task is invalid");
+                }
 
                 bool check = await taskRepository.AddTask(task);
-                if (check)
+                if (!check)
                 {
                     throw new Exception($"Task {task.TaskId} đã xảy ra lỗi vào lúc {DateTime.Now}");
                 }
+
+                tasks.Add(task);
             }
 
             bool result = await NortificationUser(tasks) ? true : false; 
@@ -208,6 +278,11 @@ namespace CCSS_Service.Services
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<List<TaskResponse>> GetAllTasks()
+        {
+            return mapper.Map<List<TaskResponse>>(await taskRepository.GetAllTask());
         }
 
         //public async Task<string> AddTask(List<TaskRequest> taskRequests, int quantityAccount, string contractId)
