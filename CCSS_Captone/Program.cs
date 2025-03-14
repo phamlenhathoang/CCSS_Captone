@@ -43,6 +43,7 @@ builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IDashBoardRepository, DashBoardRepository>();
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
+builder.Services.AddScoped<IRequestCharacterRepository, RequestCharacterRepository>();
 builder.Services.AddScoped<IEventChacracterRepository, EventChacracterRepository>();
 
 
