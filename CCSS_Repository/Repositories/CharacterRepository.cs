@@ -37,7 +37,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Character> GetCharacterByCharacterName(string characterName)
         {
-            return await _context.Characters.Include(c => c.Category).FirstOrDefaultAsync(c => c.CharacterName == characterName && c.IsActive == true);
+            return await _context.Characters.Include(c => c.Category).FirstOrDefaultAsync(c => c.CharacterName.ToLower() == characterName && c.IsActive == true);
         }
 
         public async Task<bool> CreateCharacter(Character character)
