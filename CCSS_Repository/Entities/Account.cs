@@ -23,7 +23,6 @@ namespace CCSS_Repository.Entities
         public bool? OnTask {  get; set; }
         public bool? Leader {  get; set; }   
         public string? Code {  get; set; }
-        
         public int? TaskQuantity { get; set; }
         public float? Height { get; set; }
         public float? Weight { get; set; }

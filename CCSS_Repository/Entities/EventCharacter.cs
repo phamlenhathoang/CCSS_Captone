@@ -21,7 +21,11 @@ namespace CCSS_Repository.Entities
         [ForeignKey("CharacterId")]
         public string CharacterId { get; set; }
         public Character Character { get; set; } 
-
         public Task Task { get; set; }
+
+        public DateTime? CreateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
+        public string? Description { get; set; }
+        public bool? IsAssign { get; set; }
     }
 }

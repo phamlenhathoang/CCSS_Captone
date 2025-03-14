@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CCSS_Service.Hubs
 {
-    public class TaskHub : Hub
+    public class NotificationHub : Hub
     {
         private static readonly ConcurrentDictionary<string, string> _userConnections = new();
 

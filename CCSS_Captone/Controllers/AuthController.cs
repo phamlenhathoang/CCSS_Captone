@@ -23,10 +23,10 @@ namespace CCSS_Captone.Controllers
             return Ok(account);
         }
 
-        [HttpPost("register/{role}")]
-        public async Task<IActionResult> Register(AccountRequest accountRequest, string role)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(AccountRequest accountRequest)
         {
-            var account = await accountService.Register(accountRequest, role);
+            var account = await accountService.Register(accountRequest);
             return Ok(account);
         }
 

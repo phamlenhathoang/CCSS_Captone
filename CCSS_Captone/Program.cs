@@ -43,6 +43,7 @@ builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IDashBoardRepository, DashBoardRepository>();
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
+builder.Services.AddScoped<IEventChacracterRepository, EventChacracterRepository>();
 
 
 //Service
@@ -126,7 +127,7 @@ app.UseSwaggerUI();
 
 app.UseRouting();
 
-app.MapHub<TaskHub>("/taskHub");
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.UseHttpsRedirection();
 
