@@ -374,7 +374,7 @@ namespace CCSS_Repository.Entities
     new Account { AccountId = "A010", Name = "Henry Purple", Email = "henry@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 178, Weight = 77 },
     new Account { AccountId = "A011", Name = "Isla Red", Email = "isla@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true },
     new Account { AccountId = "A012", Name = "Jack Yellow", Email = "jack@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 172, Weight = 70 },
-    new Account { AccountId = "A013", Name = "Katie Orange", Email = "katie@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, Height = 165, Weight = 55 },
+    new Account { AccountId = "A013", Name = "Katie Orange", Email = "katie@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1,IsActive = true, Height = 165, Weight = 55 },
     new Account { AccountId = "A014", Name = "Liam Gray", Email = "liam@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true },
     new Account { AccountId = "A015", Name = "Mia Cyan", Email = "mia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 170, Weight = 65 },
     new Account { AccountId = "A016", Name = "Noah Silver", Email = "noah@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 175, Weight = 70 },

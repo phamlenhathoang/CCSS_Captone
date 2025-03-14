@@ -104,7 +104,6 @@ namespace CCSS_Service.Services
                     throw new Exception("Account does not suitable character");
                 }
 
-
                 Task task = new Task()
                 {
                     EventCharacterId = taskRequest.EventCharacterId,

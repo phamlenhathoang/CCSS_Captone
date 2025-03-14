@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using CCSS_Service;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,8 +117,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.EnableAnnotations(); 
+    options.EnableAnnotations();
 });
+
 builder.Services.AddScoped<IVNPayService, VNPayService>();
 var app = builder.Build();
 

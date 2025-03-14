@@ -1,5 +1,6 @@
 ﻿using CCSS_Repository.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -54,30 +55,9 @@ namespace CCSS_Repository.Repositories
 
         public async Task<bool> CheckTaskIsValid(Account account, DateTime startDate, DateTime endDate)
         {
-            //if (startDate.Date == endDate.Date)
-            //{
-            //    double totalInHour = 0;
-            //    var checkTasks = await _dbContext.Tasks.Where(a => a.AccountId.Equals(account.AccountId) 
-            //    && a.StartDate.HasValue && a.StartDate.Value.Date == startDate.Date 
-            //    && a.EndDate.HasValue && a.EndDate.Value.Date == startDate.Date).ToListAsync();
-            //    if (checkTasks.Any())
-            //    {
-            //        foreach (var task in checkTasks)
-            //        {
-            //            totalInHour += (task.EndDate.GetValueOrDefault() - task.StartDate.GetValueOrDefault()).TotalHours;
-            //        }
-            //    }
-
-            //    totalInHour += (endDate - startDate).TotalHours;
-
-            //    if (totalInHour > 8)
-            //    {
-            //        return false;
-            //    }
-            //}
-
             DateTime rangeStart = startDate.AddDays(-7);
-
+            double totalHourTask = (endDate - startDate).TotalHours;
+            double totalHourInDay = 0;
             var tasks = await _dbContext.Tasks
                 .Where(t => t.AccountId == account.AccountId
                        && t.StartDate >= rangeStart && t.IsActive == true)
@@ -93,44 +73,112 @@ namespace CCSS_Repository.Repositories
             {
                 var currentTask = tasks[i];
 
-                if (endDate.AddHours(2) > currentTask.StartDate.GetValueOrDefault())
+                if (currentTask.StartDate.GetValueOrDefault().Date < startDate.Date)
                 {
-                    return false; // Task trước chưa nghỉ đủ 2 giờ
+                    if (currentTask.EndDate.GetValueOrDefault() > startDate.AddHours(-2))
+                    {
+                        return false; // Task trước chưa nghỉ đủ 2 giờ
+                    }
+
+                    if (totalHourTask >= 8 && startDate.Date == endDate.Date)
+                    {
+
+                        if (currentTask.EndDate.GetValueOrDefault() > startDate.AddHours(-2))
+                        {
+                            return false; // Task trước chưa nghỉ đủ 2 giờ
+                        }
+
+                        if (currentTask.EndDate.GetValueOrDefault().AddDays(1) == startDate.Date)
+                        {
+                            var nextTask = tasks[i + 1];
+
+                            if (endDate.AddDays(1) > nextTask.StartDate.GetValueOrDefault())
+                            {
+                                return false;
+                            }
+
+                            if (endDate.AddDays(1).AddHours(2) > nextTask.StartDate.GetValueOrDefault())
+                            {
+                                return false;
+                            }
+                        }
+                    }
                 }
 
-                if (currentTask.EndDate.GetValueOrDefault() > startDate.AddHours(-2))
+                if (startDate.Date < currentTask.StartDate.GetValueOrDefault().Date )
                 {
-                    return false; // Task trước chưa nghỉ đủ 2 giờ
+                    if (endDate.AddHours(2) > currentTask.StartDate.GetValueOrDefault())
+                    {
+                        return false; // Task trước chưa nghỉ đủ 2 giờ
+                    }
                 }
 
-                //if (currentTask.StartDate.GetValueOrDefault().Date == startDate.Date && startDate.Date == endDate.Date)
-                //{
+                if (currentTask.StartDate.GetValueOrDefault().Date == startDate.Date)
+                {
+                    if(currentTask.EndDate.GetValueOrDefault().Hour < endDate.Hour)
+                    {
+                        if (currentTask.EndDate.GetValueOrDefault().AddHours(2) > startDate)
+                        {
+                            return false;
+                        }
+                    }
 
-                //    if (startDate.Date > currentTask.EndDate.GetValueOrDefault().AddHours(2).Date)
-                //    {
-                //        return false;
-                //    }
+                    if (endDate.Hour > currentTask.StartDate.GetValueOrDefault().Hour)
+                    {
+                        if (endDate.AddHours(2) > currentTask.StartDate.GetValueOrDefault())
+                        {
+                            return false;
+                        }
+                    }
 
-                //    if (endDate.Date > currentTask.StartDate.GetValueOrDefault().AddHours(2).Date)
-                //    {
-                //        return false;
-                //    }
-                //}
+                    if (startDate.Date == endDate.Date && startDate.Date == currentTask.EndDate.GetValueOrDefault().Date)
+                    {
+                        if (totalHourTask < 8)
+                        {
+                            double totalHour = (currentTask.EndDate.GetValueOrDefault() - currentTask.StartDate.GetValueOrDefault()).TotalHours;
+
+                            totalHourInDay = totalHourInDay + totalHour;
+
+                            if (totalHourInDay > 8)
+                            {
+                                return false;
+                            }
+
+                            if (totalHourInDay <= 8)
+                            {
+                                double totalHourTaskDay = totalHourInDay;
+                                totalHourTaskDay += totalHourTask;
+                                if (totalHourTaskDay > 8)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
 
                 if (i > 0)
                 {
                     var previousTask = tasks[i - 1];
 
-                    if (startDate < previousTask.EndDate.GetValueOrDefault().AddHours(2))
+                    if (previousTask.EndDate.GetValueOrDefault().Date < startDate.Date)
                     {
-                        return false; // Task trước chưa nghỉ đủ 2 giờ
+                        if(previousTask.EndDate.GetValueOrDefault().AddHours(2) > startDate)
+                        {
+                            return false;
+                        } 
                     }
 
-                    // Kiểm tra tổng giờ làm nếu cùng ngày
-                    //if (startDate.Date == previousTask.StartDate.GetValueOrDefault().Date && startDate.Date == previousTask.EndDate.GetValueOrDefault().Date)
-                    //{
-                    //    totalHoursInDay = (previousTask.EndDate.GetValueOrDefault() - previousTask.StartDate.GetValueOrDefault()).TotalHours;
-                    //}
+                    if(previousTask.EndDate.GetValueOrDefault().Date == startDate.Date)
+                    {
+                        if(previousTask.EndDate.GetValueOrDefault().Hour <= startDate.Hour)
+                        {
+                            if(previousTask.EndDate.GetValueOrDefault().AddHours(2) > startDate)
+                            {
+                                return false;
+                            }
+                        }
+                    }
                 }
 
 
@@ -138,23 +186,25 @@ namespace CCSS_Repository.Repositories
                 {
                     var nextTask = tasks[i + 1];
 
-                    if (endDate > nextTask.StartDate.GetValueOrDefault().AddHours(-2))
+                    if(nextTask.StartDate.GetValueOrDefault().Date > startDate.Date)
                     {
-                        return false; // Task sau chưa chuẩn bị đủ 2 giờ
+                        if (endDate.AddHours(2) > nextTask.StartDate.GetValueOrDefault())
+                        {
+                            return false; // Task sau chưa chuẩn bị đủ 2 giờ
+                        }
                     }
 
-                    // Kiểm tra tổng giờ làm nếu cùng ngày
-                    //if (startDate.Date == nextTask.EndDate.GetValueOrDefault().Date && startDate.Date == nextTask.StartDate.GetValueOrDefault().Date)
-                    //{
-                    //    totalHoursInDay = (nextTask.EndDate.GetValueOrDefault() - nextTask.StartDate.GetValueOrDefault()).TotalHours;
-
-                    //}
+                    if (nextTask.StartDate.GetValueOrDefault().Date == startDate.Date)
+                    {
+                        if (endDate.Hour < nextTask.StartDate.GetValueOrDefault().Hour)
+                        {
+                            if (endDate.AddHours(2) > nextTask.StartDate.GetValueOrDefault())
+                            {
+                                return false;
+                            }
+                        }
+                    }
                 }
-
-                //if (totalHoursInDay > 8)
-                //{
-                //    return false;
-                //}
             }
 
             return true;
