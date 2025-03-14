@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using CCSS_Service;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,8 @@ builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IDashBoardRepository, DashBoardRepository>();
 builder.Services.AddScoped<IAccountCouponRepository, AccountCouponRepository>();
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
+builder.Services.AddScoped<IRequestCharacterRepository, RequestCharacterRepository>();
+builder.Services.AddScoped<IEventChacracterRepository, EventChacracterRepository>();
 
 
 
@@ -117,8 +120,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.EnableAnnotations(); 
+    options.EnableAnnotations();
 });
+
 builder.Services.AddScoped<IVNPayService, VNPayService>();
 var app = builder.Build();
 
@@ -128,7 +132,7 @@ app.UseSwaggerUI();
 
 app.UseRouting();
 
-app.MapHub<TaskHub>("/taskHub");
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.UseHttpsRedirection();
 

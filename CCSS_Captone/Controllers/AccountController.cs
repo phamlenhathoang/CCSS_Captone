@@ -67,5 +67,19 @@ namespace CCSS_Captone.Controllers
             var account = await accountService.UpdateAccountByAccountId(accountId, updateAccountRequest);
             return Ok(account);
         }
+
+        [HttpGet("characterId")]
+        public async Task<IActionResult> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate)
+        {
+            var account = await accountService.GetAccountByCharacterAndDate(characterId, startDate, endDate);
+            return Ok(account);
+        }
+
+        [HttpGet("characterName")]
+        public async Task<IActionResult> ViewAllAccountByCharacterName(string characterName, string? start, string? end)
+        {
+            var account = await accountService.ViewAllAccountByCharacterName(characterName.ToLower(),start, end);
+            return Ok(account);
+        }
     }
 }

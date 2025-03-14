@@ -16,10 +16,10 @@ namespace CCSS_Service.Model.Responses
         public string? Location { get; set; }
         public string? Description { get; set; }
         public bool? IsActive { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public DateTime? CreateDate { get; set; }
-        public DateTime? UpdateDate { get; set; }
+        public string? StartDate { get; set; }
+        public string? EndDate { get; set; }
+        public string? CreateDate { get; set; }
+        public string? UpdateDate { get; set; }
         public string? Status { get; set; }
         public string? EventId { get; set; }
         public string? ContractId { get; set; }

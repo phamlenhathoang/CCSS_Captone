@@ -30,34 +30,36 @@ namespace CCSS_Service.Services
         //Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId);
         //Task<bool> ChangeAccountForTask(string taskId, string accountId);
         Task<AccountLoginResponse> Login(string email, string password);
-        Task<string> Register(AccountRequest accountRequest, string role); 
+        Task<string> Register(AccountRequest accountRequest); 
         Task<string> CodeValidation(string email, string code);
         Task<AccountResponse> GetAccountByAccountId(string accountId);
         Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest);
+        Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate);
+        Task<List<AccountByCharacterAndDateResponse>> ViewAllAccountByCharacterName(string characterName, string? start, string? end);
     }
     public class AccountService : IAccountService
     {
-        //private readonly ITaskRepository taskRepository;
+        private readonly ITaskRepository taskRepository;
         private readonly IAccountRepository accountRepository;
         //private readonly IContractRespository contractRespository;
-        //private readonly ICharacterRepository characterRepository;
+        private readonly ICharacterRepository characterRepository;
         //private readonly ICategoryRepository categoryRepository;
         private readonly IRefreshTokenRepository refreshTokenRepository;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IMapper mapper;
 
-        public AccountService(IAccountRepository accountRepository, IMapper mapper, /*ICharacterRepository characterRepository, IContractRespository contractRepository, ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
+        public AccountService(ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, /*IContractRespository contractRepository, ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
         {
-            //this.taskRepository = taskRepository;
+            this.taskRepository = taskRepository;
             this.accountRepository = accountRepository;
             this.mapper = mapper;
-            //this.characterRepository = characterRepository;
+            this.characterRepository = characterRepository;
             //this.contractRespository = contractRepository;
             //this.categoryRepository = categoryRepository;
             _configuration = configuration;
             this.refreshTokenRepository = refreshTokenRepository;
-            this._emailService = emailService;
+            _emailService = emailService;
         }
 
         //public async Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId)
@@ -345,9 +347,9 @@ namespace CCSS_Service.Services
             return code;
         }
 
-        public async Task<string> Register(AccountRequest accountRequest, string role)
+        public async Task<string> Register(AccountRequest accountRequest)
         {
-            if (string.IsNullOrEmpty(accountRequest.Email) || string.IsNullOrEmpty(accountRequest.Password) || string.IsNullOrEmpty(role))
+            if (string.IsNullOrEmpty(accountRequest.Email) || string.IsNullOrEmpty(accountRequest.Password))
             {
                 return "Email and password cannot null!!!";
             }
@@ -382,16 +384,7 @@ namespace CCSS_Service.Services
                 account.Password = PasswordHash.ConvertToEncrypt(accountRequest.Password);
                 account.Birthday = date;
                 account.Phone = accountRequest.Phone;
-
-                if (role.ToLower() == RoleName.Customer.ToString().ToLower())
-                {
-                    account.RoleId = "4";
-                }
-                else
-                {
-                    account.RoleId = "3";
-                    account.Leader = false;
-                }
+                account.RoleId = "R005";
 
 
                 bool result = await accountRepository.AddAccount(account);
@@ -441,8 +434,105 @@ namespace CCSS_Service.Services
                 return false;
             }
             mapper.Map(updateAccountRequest, checkAccount);
+
+            checkAccount.Password = PasswordHash.ConvertToDecrypt(checkAccount.Password);
+
             bool result = await accountRepository.UpdateAccount(checkAccount);
             return result;  
         }
+
+        public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate)
+        {
+            try
+            {
+                List<AccountByCharacterAndDateResponse> accountByCharacterAndDateResponses = new List<AccountByCharacterAndDateResponse>();
+
+                Character character = await characterRepository.GetCharacter(characterId);
+                if (character == null)
+                {
+                    throw new Exception("Character does not exist");
+                }
+
+                List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character);
+
+                string format = "HH:mm dd/MM/yyyy"; 
+                CultureInfo culture = CultureInfo.InvariantCulture;
+
+                DateTime start = DateTime.ParseExact(startDate, format, culture);
+                DateTime end = DateTime.ParseExact(endDate, format, culture);
+
+                if(start > end)
+                {
+                    throw new Exception("Start can not greater than EndDate");
+                }
+
+                foreach (Account account in accounts)
+                {
+                    bool result = await taskRepository.CheckTaskIsValid(account, start, end);
+                    if (result)
+                    {
+                        AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                        accountByCharacterAndDateResponses.Add(accountRespose); 
+                    }
+                }
+
+                return accountByCharacterAndDateResponses;  
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<AccountByCharacterAndDateResponse>> ViewAllAccountByCharacterName(string characterName, string? start, string? end)
+        {
+            List<AccountByCharacterAndDateResponse> accountByCharacterAndDateResponses = new List<AccountByCharacterAndDateResponse>();
+
+            Character character = await characterRepository.GetCharacterByCharacterName(characterName);
+            if (character == null)
+            {
+                throw new Exception("Character not found!");
+            }
+            List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character);
+
+            if (!string.IsNullOrEmpty(start) && !string.IsNullOrEmpty(end))
+            {
+                string format = "HH:mm dd/MM/yyyy";
+                CultureInfo culture = CultureInfo.InvariantCulture;
+
+                try
+                {
+                    DateTime startDate = DateTime.ParseExact(start, format, culture);
+                    DateTime endDate = DateTime.ParseExact(end, format, culture);
+
+                    if (startDate > endDate)
+                    {
+                        throw new Exception("Start date cannot be greater than end date.");
+                    }
+
+                    foreach (Account account in accounts)
+                    {
+                        bool result = await taskRepository.CheckTaskIsValid(account, startDate, endDate);
+                        if (result)
+                        {
+                            // Map và thêm vào danh sách kết quả
+                            AccountByCharacterAndDateResponse accountResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                            accountByCharacterAndDateResponses.Add(accountResponse);
+                        }
+                    }
+                }
+                catch (FormatException)
+                {
+                    throw new Exception("Invalid date format. Please use 'HH:mm dd/MM/yyyy'.");
+                }
+            }
+            else
+            {
+                accountByCharacterAndDateResponses = mapper.Map<List<AccountByCharacterAndDateResponse>>(accounts);
+            }
+
+            return accountByCharacterAndDateResponses;
+        }
+
     }
 }

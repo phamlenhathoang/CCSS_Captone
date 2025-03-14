@@ -14,7 +14,7 @@ namespace CCSS_Repository.Repositories
     {
         //Task<List<Account>> GetAccountByCategoryId(string categoryId, string? accountId);
         Task<Account> GetAccount(string accountId);
-        Task<List<Account>> GetAllAccountLeader();
+        //Task<List<Account>> GetAllAccountLeader();
         //Task<Account> GetAccountIncludeAccountCategory(string accountId);
         Task<Account> GetAccountByAccountId(string accountId);
         //Task<Account> GetAccountByAccountIdIncludeTask(string acountId, string? taskId);
@@ -23,6 +23,7 @@ namespace CCSS_Repository.Repositories
         Task<Account> GetAccountByEmailAndCode(string email, string code);
         Task<bool> AddAccount(Account account);
         Task<bool> UpdateAccount(Account account);
+        Task<List<Account>> GetAllAccountsByCharacter(Character character);
     }
     public class AccountRepository : IAccountRepository
     {
@@ -40,7 +41,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Account> GetAccount(string accountId)
         {
-            return await dbContext.Accounts.FirstOrDefaultAsync(x => x.AccountId == accountId && x.Leader == true && x.IsActive == true);   
+            return await dbContext.Accounts.FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsActive == true);   
         }
 
         public async Task<Account> GetAccountByAccountId(string accountId)
@@ -92,15 +93,21 @@ namespace CCSS_Repository.Repositories
             return await dbContext.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email && a.Password == password);   
         }
 
+        public async Task<List<Account>> GetAllAccountsByCharacter(Character character)
+        {
+            return await dbContext.Accounts.Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight
+                                                        && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight).ToListAsync();
+        }
+
         //public async Task<Account> GetAccountIncludeAccountCategory(string accountId)
         //{
         //    return await dbContext.Accounts.Include(a => a.AccountCategories).FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsActive == true);
         //}
 
-        public async Task<List<Account>> GetAllAccountLeader()
-        {
-            return await dbContext.Accounts.Include(a => a.Role).Where(a => a.Leader == true && a.IsActive == true).OrderBy(a => a.TaskQuantity).ToListAsync();
-        }
+        //public async Task<List<Account>> GetAllAccountLeader()
+        //{
+        //    return await dbContext.Accounts.Include(a => a.Role).Where(a => a.Leader == true && a.IsActive == true).OrderBy(a => a.TaskQuantity).ToListAsync();
+        //}
 
         public async Task<bool> UpdateAccount(Account account)
         {

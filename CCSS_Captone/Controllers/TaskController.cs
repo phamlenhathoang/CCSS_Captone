@@ -11,12 +11,12 @@ namespace CCSS_Captone.Controllers
     [ApiController]
     public class TaskController : ControllerBase
     {
-        //private readonly ITaskService taskService;
+        private readonly ITaskService taskService;
 
-        //public TaskController(ITaskService taskService)
-        //{
-        //    this.taskService = taskService;
-        //}
+        public TaskController(ITaskService taskService)
+        {
+            this.taskService = taskService;
+        }
 
         //[HttpPut]
         //public async Task<ActionResult<TaskResponse>> UpdateStatusTask(string taskId, int taskStatus, string accountId)
@@ -50,18 +50,18 @@ namespace CCSS_Captone.Controllers
         //    return Ok(task);
         //}
 
-        //[HttpPost]
-        //public async Task<ActionResult<TaskResponse>> AddTaskForListAccount(List<AddTaskRequest> addTaskRequests)
-        //{
-        //    var task = await taskService.AddTaskForListAccount(addTaskRequests);
-        //    return Ok(task);
-        //}
+        [HttpPost]
+        public async Task<ActionResult<TaskResponse>> AddTask(TaskRequest taskRequests)
+        {
+            var task = await taskService.AddTask(taskRequests.AddTaskEventRequests, taskRequests.AddTaskContractRequests);
+            return Ok(task);
+        }
 
-        //[HttpGet("contractId")]
-        //public async Task<ActionResult> ViewAllTaskByContractId(string contractId)
-        //{
-        //    var task = await taskService.ViewAllTaskByContractId(contractId);
-        //    return Ok(task);
-        //}
+        [HttpGet]
+        public async Task<ActionResult> GetAllTask()
+        {
+            var task = await taskService.GetAllTasks();
+            return Ok(task);
+        }
     }
 }
