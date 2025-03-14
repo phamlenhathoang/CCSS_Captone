@@ -1,4 +1,5 @@
-﻿using CCSS_Service.Services;
+﻿using CCSS_Service.Model.Requests;
+using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,6 +33,16 @@ namespace CCSS_Captone.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _services.GetRequestById(id);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        public async Task<IActionResult> CreateRequest(RequestDtos requestDtos)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.AddRequest(requestDtos);
                 return Ok(result);
             }
             return BadRequest(ModelState);
