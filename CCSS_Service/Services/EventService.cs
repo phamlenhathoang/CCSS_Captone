@@ -118,7 +118,7 @@ namespace CCSS_Service.Services
                 {
                     return "Failed to add event to database";
                 }
-                ImageRequest image = new ImageRequest();
+                //ImageRequest image = new ImageRequest();
                 //image.ImageUrl = eventRequest.ImageUrl;
                 //image.EventId = newEvent.EventId.ToString();
                 //await _imageService.AddImage(image);
@@ -212,6 +212,27 @@ namespace CCSS_Service.Services
                     }).ToList();
 
                     existingEvent.EventCharacters = newEventCharacters;
+                }
+                if (eventRequest.EventActivityRequests != null)
+                {
+                    var createDate = existingEvent.EventActivities.FirstOrDefault()?.CreateDate;
+
+                    // 🔥 Xóa toàn bộ EventActivity cũ
+                    await _repository.DeleteEventActivityByEventId(existingEvent.EventId);
+
+                    // 🔥 Thêm EventActivity mới từ danh sách request
+                    var newEventActivity = eventRequest.EventActivityRequests.Select(ec => new EventActivity
+                    {
+                        EventActivityId = Guid.NewGuid().ToString(),
+                        EventId = existingEvent.EventId, // ✅ Đảm bảo EventId không null
+                        ActivityId = ec.ActivityId,
+                        CreateDate = createDate,
+                        UpdateDate = DateTime.UtcNow,
+                        Description = ec.Description,
+                        CreateBy = ec.CreateBy
+                    }).ToList();
+
+                    existingEvent.EventActivities = newEventActivity;
                 }
 
                 await _repository.UpdateEvent(existingEvent);
