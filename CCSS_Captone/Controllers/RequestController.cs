@@ -38,6 +38,7 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreateRequest(RequestDtos requestDtos)
         {
             if (ModelState.IsValid)

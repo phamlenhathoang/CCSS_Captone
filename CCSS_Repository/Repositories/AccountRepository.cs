@@ -95,8 +95,8 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Account>> GetAllAccountsByCharacter(Character character)
         {
-            return await dbContext.Accounts.Where(a => character.MinHeight < a.Height && a.Height < character.MaxHeight
-                                                        && character.MinWeight < a.Weight && a.Weight < character.MaxHeight).ToListAsync();
+            return await dbContext.Accounts.Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight
+                                                        && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight).ToListAsync();
         }
 
         //public async Task<Account> GetAccountIncludeAccountCategory(string accountId)

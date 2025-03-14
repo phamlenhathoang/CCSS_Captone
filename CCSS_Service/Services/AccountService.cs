@@ -34,7 +34,8 @@ namespace CCSS_Service.Services
         Task<string> CodeValidation(string email, string code);
         Task<AccountResponse> GetAccountByAccountId(string accountId);
         Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest);
-        Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, DateTime startDate, DateTime endDate);
+        Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate);
+        Task<List<AccountByCharacterAndDateResponse>> ViewAllAccountByCharacterName(string characterName, string? start, string? end);
     }
     public class AccountService : IAccountService
     {
@@ -58,7 +59,7 @@ namespace CCSS_Service.Services
             //this.categoryRepository = categoryRepository;
             _configuration = configuration;
             this.refreshTokenRepository = refreshTokenRepository;
-            this._emailService = emailService;
+            _emailService = emailService;
         }
 
         //public async Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId)
@@ -440,7 +441,7 @@ namespace CCSS_Service.Services
             return result;  
         }
 
-        public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, DateTime startDate, DateTime endDate)
+        public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate)
         {
             try
             {
@@ -454,9 +455,20 @@ namespace CCSS_Service.Services
 
                 List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character);
 
+                string format = "HH:mm dd/MM/yyyy"; 
+                CultureInfo culture = CultureInfo.InvariantCulture;
+
+                DateTime start = DateTime.ParseExact(startDate, format, culture);
+                DateTime end = DateTime.ParseExact(endDate, format, culture);
+
+                if(start > end)
+                {
+                    throw new Exception("Start can not greater than EndDate");
+                }
+
                 foreach (Account account in accounts)
                 {
-                    bool result = await taskRepository.CheckTaskIsValid(account, startDate, endDate);
+                    bool result = await taskRepository.CheckTaskIsValid(account, start, end);
                     if (result)
                     {
                         AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
@@ -471,5 +483,56 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<List<AccountByCharacterAndDateResponse>> ViewAllAccountByCharacterName(string characterName, string? start, string? end)
+        {
+            List<AccountByCharacterAndDateResponse> accountByCharacterAndDateResponses = new List<AccountByCharacterAndDateResponse>();
+
+            Character character = await characterRepository.GetCharacterByCharacterName(characterName);
+            if (character == null)
+            {
+                throw new Exception("Character not found!");
+            }
+            List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character);
+
+            if (!string.IsNullOrEmpty(start) && !string.IsNullOrEmpty(end))
+            {
+                string format = "HH:mm dd/MM/yyyy";
+                CultureInfo culture = CultureInfo.InvariantCulture;
+
+                try
+                {
+                    DateTime startDate = DateTime.ParseExact(start, format, culture);
+                    DateTime endDate = DateTime.ParseExact(end, format, culture);
+
+                    if (startDate > endDate)
+                    {
+                        throw new Exception("Start date cannot be greater than end date.");
+                    }
+
+                    foreach (Account account in accounts)
+                    {
+                        bool result = await taskRepository.CheckTaskIsValid(account, startDate, endDate);
+                        if (result)
+                        {
+                            // Map và thêm vào danh sách kết quả
+                            AccountByCharacterAndDateResponse accountResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                            accountByCharacterAndDateResponses.Add(accountResponse);
+                        }
+                    }
+                }
+                catch (FormatException)
+                {
+                    throw new Exception("Invalid date format. Please use 'HH:mm dd/MM/yyyy'.");
+                }
+            }
+            else
+            {
+                accountByCharacterAndDateResponses = mapper.Map<List<AccountByCharacterAndDateResponse>>(accounts);
+            }
+
+            return accountByCharacterAndDateResponses;
+        }
+
     }
 }
