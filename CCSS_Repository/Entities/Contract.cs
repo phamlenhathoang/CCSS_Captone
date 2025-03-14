@@ -17,6 +17,11 @@ namespace CCSS_Repository.Entities
         [ForeignKey("RequestId")]
         public string? RequestId { get; set; }
         public Request? Request { get; set; }
+
+        [ForeignKey("AccountCouponId")]
+        public string? AccountCouponId { get; set; }
+        public AccountCoupon AccountCoupon { get; set; }
+
         public string? Deposit {  get; set; }
         public double? TotalPrice { get; set; }
         public string? CreateBy { get; set; }

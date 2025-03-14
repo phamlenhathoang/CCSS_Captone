@@ -19,7 +19,7 @@ namespace CCSS_Repository.Entities
         public Account Account { get; set; }
 
         [ForeignKey("CouponId")]
-        public string CouponId { get; set; }    
+        public string? CouponId { get; set; }    
         public Coupon Coupon { get; set; }
 
         public bool? IsActive { get; set; }

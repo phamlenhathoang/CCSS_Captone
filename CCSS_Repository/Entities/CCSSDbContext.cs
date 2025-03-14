@@ -259,6 +259,13 @@ namespace CCSS_Repository.Entities
                .WithOne(r => r.Contract)
                .HasForeignKey(a => a.ContractId)
                .OnDelete(DeleteBehavior.NoAction);
+            
+            //Contract - AccountCoupon
+            modelBuilder.Entity<Contract>()
+               .HasOne(a => a.AccountCoupon)
+               .WithOne(r => r.Contract)
+               .HasForeignKey<Contract>(a => a.AccountCouponId)
+               .OnDelete(DeleteBehavior.NoAction);
 
             //Coupon - AccountCoupon
             modelBuilder.Entity<Coupon>()
