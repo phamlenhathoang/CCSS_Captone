@@ -141,6 +141,24 @@ namespace CCSS_Service.Services
             else
             {
                 newRequest.Description = RequestDescription.RentCostumes;
+                if (requestDtos.ListRequestCharacters != null && requestDtos.ListRequestCharacters.Any())
+                {
+                    var characteInRequest = requestDtos.ListRequestCharacters.Select(r => new RequestCharacter
+                    {
+                        RequestCharacterId = Guid.NewGuid().ToString(),
+                        RequestId = newRequest.RequestId,
+                        CharacterId = r.CharacterId,
+                        CreateDate = newRequest.StartDate,
+                        CosplayerId = null,
+
+                    }).ToList();
+
+                    var requestCharacterAdd = await _requestCharacterRepository.AddListRequestCharacter(characteInRequest);
+                    if (!requestCharacterAdd)
+                    {
+                        return "Failed to add characters.";
+                    }
+                }
                 await _repository.AddRequest(newRequest);
             }
 
