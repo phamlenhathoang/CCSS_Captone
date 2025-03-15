@@ -63,6 +63,7 @@ builder.Services.AddScoped<IImageService, ImageServices>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IDashBoardService, DashBoardService>();
 builder.Services.AddScoped<IRequestServices, RequestServices>();
+//builder.Services.AddScoped<IPdfService, PdfService>();
 
 
 //AutoMapper
