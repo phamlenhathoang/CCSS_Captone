@@ -37,6 +37,6 @@ namespace CCSS_Repository.Entities
         Cancel,
         Active,
         Expired,
-        Completed,
+        Completed, 
     }
 }

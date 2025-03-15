@@ -319,12 +319,6 @@ namespace CCSS_Service.Services
             }
         }
 
-        // Lưu ý:
-        // - Đổi Encoding.ASCII thành Encoding.UTF8 để đảm bảo mã hóa chính xác.
-        // - Đảm bảo giá trị secret key trùng khớp ở cả phía tạo và validate token.
-
-        // Sau khi sửa xong, bạn hãy tạo token mới và thử validate lại nhé! 🚀
-
 
         private string GenerateRefreshToken()
         {

@@ -25,6 +25,8 @@ namespace CCSS_Service.Services
         //Task<string> UpdateStatusContract(string contracId, ContractStatus newStatus);
         //Task<string> UploadImageToFirebase(IFormFile file);
 
+        Task<string> AddContract(Request request, string deposit);
+
     }
     public class ContractServices : IContractServices
     {
@@ -232,7 +234,7 @@ namespace CCSS_Service.Services
         //    switch (contract.Status)
         //    {
         //        case ContractStatus.Pending:
-                        
+
         //            if (newStatus != ContractStatus.Browsed && newStatus != ContractStatus.Cancel)
         //            {
         //                return "Pending contracts can only be changed to Browsed or Canceled.";
@@ -262,5 +264,16 @@ namespace CCSS_Service.Services
 
         //    return $"Update status {newStatus} of contract is completed";
         //}
+        public async Task<string> AddContract(Request request, string deposit)
+        {
+            if(request.Status != RequestStatus.Browsed)
+            {
+                throw new Exception("Request does not browsed");
+            }
+
+
+
+            return "Failed";
+        }
     }
 }
