@@ -61,6 +61,7 @@ builder.Services.AddScoped<ITicketAccountService, TicketAccountService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IDashBoardService, DashBoardService>();
 builder.Services.AddScoped<IRequestServices, RequestServices>();
+builder.Services.AddScoped<IRequestCharacterService, RequestCharacterService>();
 //builder.Services.AddScoped<IPdfService, PdfService>();
 
 
