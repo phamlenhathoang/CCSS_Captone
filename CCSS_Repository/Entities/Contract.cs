@@ -24,8 +24,10 @@ namespace CCSS_Repository.Entities
 
         public string? Deposit {  get; set; }
         public double? TotalPrice { get; set; }
+        public double? Amount {  get; set; }
         public string? CreateBy { get; set; }
         public DateTime? CreateDate { get; set; }
+
         public ContractStatus ContractStatus { get; set; }
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
         public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();

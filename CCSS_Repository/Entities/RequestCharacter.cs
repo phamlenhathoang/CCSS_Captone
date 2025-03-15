@@ -28,5 +28,6 @@ namespace CCSS_Repository.Entities
         public DateTime? UpdateDate { get; set; }
         public string? Description { get; set; }
         public string? CosplayerId { get; set; }
+        public string? Quantity { get; set; }
     }
 }
