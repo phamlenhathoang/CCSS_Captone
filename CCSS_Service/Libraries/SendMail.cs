@@ -131,5 +131,96 @@ namespace CCSS_Service.Libraries
                 return false; // ❌ Gửi email thất bại
             }
         }
+        public async Task<bool> SendContractExpiredEmail(string toEmail, string contractName, string accountName)
+        {
+            try
+            {
+                var configuration = new ConfigurationBuilder()
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                   .Build();
+
+                string fromEmail = configuration["FromEmail:Email"];
+                string emailPassword = configuration["FromEmail:Password"];
+
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("CCSS", fromEmail));
+                message.To.Add(new MailboxAddress("", toEmail));
+                message.Subject = "⚠ Hợp đồng đã hết hạn thanh toán";
+
+                string emailBody = $@"
+<div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
+    <h2 style='color: #dc3545; text-align: center;'>⏳ Hợp đồng đã hết hạn thanh toán!</h2>
+    <div style='background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);'>
+        <p><strong>📄 Tên hợp đồng:</strong> {contractName}</p>
+        <p><strong>📌 Khách hàng:</strong> {accountName}</p>
+        <p style='color: #dc3545; font-weight: bold;'>⚠ Vui lòng kiểm tra và thực hiện thanh toán sớm nhất có thể!</p>
+    </div>
+
+    <div style='text-align: center; margin-top: 20px;'>
+        <p style='color: #6c757d;'>Nếu bạn đã thanh toán, vui lòng bỏ qua email này.</p>
+        <p style='margin-top: 15px; font-weight: bold;'>🙏 Cảm ơn Quý khách đã sử dụng dịch vụ của chúng tôi! 🙌</p>
+    </div>
+</div>";
+
+                message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
+
+                using var smtp = new SmtpClient();
+                await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(fromEmail, emailPassword);
+                await smtp.SendAsync(message);
+                await smtp.DisconnectAsync(true);
+
+                return true; // ✅ Gửi email thành công
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi gửi email: {ex.Message}");
+                return false; // ❌ Gửi email thất bại
+            }
+        }
+        public async Task<bool> SendAccountVerificationEmail(string toEmail, string verificationCode)
+        {
+            try
+            {
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .Build();
+
+                string fromEmail = configuration["FromEmail:Email"];
+                string emailPassword = configuration["FromEmail:Password"];
+
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("CCSS", fromEmail));
+                message.To.Add(new MailboxAddress("", toEmail));
+                message.Subject = "🔐 Xác nhận đăng ký tài khoản";
+
+                string emailBody = $@"
+        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+            <h2 style='color: #007bff;'>Chào mừng bạn đến với hệ thống của chúng tôi! 🎉</h2>
+            <p>Vui lòng sử dụng mã xác nhận bên dưới để hoàn tất đăng ký tài khoản:</p>
+            <h3 style='color: #28a745; font-size: 24px; font-weight: bold;'>{verificationCode}</h3>
+            <p>Mã này có hiệu lực trong vòng 10 phút.</p>
+            <p>👉 Nếu bạn không yêu cầu đăng ký, vui lòng bỏ qua email này.</p>
+        </div>";
+
+                message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
+
+                using var smtp = new SmtpClient();
+                await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(fromEmail, emailPassword);
+                await smtp.SendAsync(message);
+                await smtp.DisconnectAsync(true);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi gửi email: {ex.Message}");
+                return false;
+            }
+        }
+
     }
 }
