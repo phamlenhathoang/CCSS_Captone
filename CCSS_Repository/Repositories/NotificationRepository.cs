@@ -15,6 +15,7 @@ namespace CCSS_Repository.Repositories
         Task<List<Notification>> GetAllNotificationsByAccountId(string accountId);  
         Task<Notification> GetNotification(string notificationId);
         Task<List<Notification>> GetNotifications();
+        Task<bool> AddNotification(Notification notification);
     }
     public class NotificationRepository : INotificationRepository
     {
@@ -24,6 +25,13 @@ namespace CCSS_Repository.Repositories
         {
             _context = context;
         }
+
+        public async Task<bool> AddNotification(Notification notification)
+        {
+            await _context.AddAsync(notification);
+            return _context.SaveChanges() > 0 ? true : false;
+        }
+
         public async Task<bool> AddRangeNotification(List<Notification> notifications)
         {
             await _context.Notifications.AddRangeAsync(notifications);

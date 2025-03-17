@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using CCSS_Service;
 using Microsoft.OpenApi.Models;
+using CCSS_Service.Libraries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,7 +47,8 @@ builder.Services.AddScoped<IAccountCouponRepository, AccountCouponRepository>();
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IRequestCharacterRepository, RequestCharacterRepository>();
 builder.Services.AddScoped<IEventChacracterRepository, EventChacracterRepository>();
-
+builder.Services.AddScoped<IAccountCouponRepository, AccountCouponRepository>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 
 
 //Service
@@ -64,7 +66,12 @@ builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IDashBoardService, DashBoardService>();
 builder.Services.AddScoped<IRequestServices, RequestServices>();
 builder.Services.AddScoped<IRequestCharacterService, RequestCharacterService>();
-//builder.Services.AddScoped<IPdfService, PdfService>();
+builder.Services.AddScoped<IPdfService, Pdf>();
+
+
+//Libraries
+builder.Services.AddScoped<Image>();
+builder.Services.AddScoped<Pdf>();
 
 
 //AutoMapper

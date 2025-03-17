@@ -16,6 +16,8 @@ namespace CCSS_Repository.Repositories
         Task AddRequest(Request request);
         Task UpdateRequest(Request request);
         Task DeleteRequest(Request request);
+
+        Task<Request> GetRequestByIdInclude(string id);
     }
 
     public class RequestRepository: IRequestRepository
@@ -53,6 +55,14 @@ namespace CCSS_Repository.Repositories
         {
             _context.Requests.Remove(request);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Request> GetRequestByIdInclude(string id)
+        {
+            return await _context.Requests.Include(a => a.Account)
+                                          .Include(s => s.Service)
+                                          .Include(rc => rc.RequestCharacters)
+                                          .FirstOrDefaultAsync(sc => sc.RequestId.Equals(id));
         }
     }
 }

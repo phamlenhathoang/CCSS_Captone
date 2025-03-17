@@ -36,9 +36,10 @@ namespace CCSS_Service.Services
         private readonly IAccountRepository _accountRepository;
         private readonly IAccountCouponRepository _accountCouponRepository;
         private readonly IEventRepository _eventrepository;
+        private readonly IContractRespository _contractRespository;
 
 
-        public MomoService(IOptions<MomoOptionModel> options, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IAccountRepository accountRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository)
+        public MomoService(IOptions<MomoOptionModel> options, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IAccountRepository accountRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IContractRespository contractRespository)
         {
             _options = options;
             _ticketAccountService = ticketAccountService;
@@ -46,6 +47,7 @@ namespace CCSS_Service.Services
             _accountRepository = accountRepository;
             _eventrepository = eventrepository;
             _accountCouponRepository = accountCouponRepository;
+            _contractRespository = contractRespository;
         }
         public async Task<MomoCreatePaymentResponse> CreatePaymentAsync(OrderInfoModel model)
         {
@@ -80,7 +82,10 @@ namespace CCSS_Service.Services
                 AccountId = model.AccountId,
                 TicketId = model.TicketId,
                 TicketQuantity = model.TicketQuantity,
-                AccountCoupon = model.AccountCouponId
+                AccountCoupon = model.AccountCouponId,
+                ContractId = model.ContractId,
+                OrderPaymentID = model.OrderpaymentId
+
             };
             string extraData = JsonConvert.SerializeObject(extraDataObj);
             var rawData =
@@ -156,6 +161,8 @@ namespace CCSS_Service.Services
             // Mặc định giá trị null
             string? accountId = null;
             string? ticketId = null;
+            string? contractId = null;
+            string? OrderPaymentId = null;
             int? ticketQuantity = null;
             double? amount = null;
             string? accountCouponId = null;
@@ -168,6 +175,8 @@ namespace CCSS_Service.Services
                     var extraDataObj = JsonConvert.DeserializeObject<dynamic>(extraData);
                     accountId = extraDataObj?.AccountId;
                     ticketId = extraDataObj?.TicketId;
+                    contractId = extraDataObj?.ContractId;
+                    OrderPaymentId = extraDataObj?.OrderPaymentID;
                     accountCouponId = extraDataObj?.AccountCoupon;
 
                     // Chuyển đổi ticketQuantity từ string sang int?
@@ -200,7 +209,14 @@ namespace CCSS_Service.Services
             {
                 return "Không tìm thấy payment để cập nhật!";
             }
-
+            var account = await _accountRepository.GetAccountByAccountId(accountId);
+            var sendMail = new SendMail();
+            Contract contract = new Contract();
+            if (contractId != null)
+            {
+                 contract = await _contractRespository.GetContractById(contractId);
+            }
+            existingPayment.Status = PaymentStatus.Complete;
             switch (purpose)
             {
                 case PaymentPurpose.BuyTicket: // mua vé
@@ -225,27 +241,36 @@ namespace CCSS_Service.Services
                     //    Amount = amount.GetValueOrDefault(),
                     //    TicketAccountId = addTicketResult.TicketAccountId
                     //};
-                    existingPayment.Status = PaymentStatus.Complete;
+                   
                     existingPayment.TicketAccountId = addTicketResult.TicketAccountId;
 
                     await _paymentRepository.UpdatePayment(existingPayment);
 
-                    var account = await _accountRepository.GetAccountByAccountId(accountId);
-                    var event1 = await _eventrepository.GetEventByTicketId(ticketId);
-                    var sendMail = new SendMail();
-                    Console.WriteLine(purpose);
-                    Console.WriteLine(account.Email);
-                    Console.WriteLine(addTicketResult.TicketCode);
-                    Console.WriteLine(event1.EventName);
-                    Console.WriteLine(event1.Location);
-                    Console.WriteLine(event1.StartDate);
-                    Console.WriteLine(addTicketResult.Quantity);
                     
-                    await sendMail.SendEmailNotification(purpose, account.Email, addTicketResult.TicketCode, event1.EventName, event1.Location, event1.StartDate, addTicketResult.Quantity);
+                    var event1 = await _eventrepository.GetEventByTicketId(ticketId);
+                    
+                    
+                    
+                    await sendMail.SendEmailNotification(purpose, account.Email, addTicketResult.TicketCode, event1.EventName, event1.Location, event1.StartDate, addTicketResult.Quantity, null, null);
                     return "mua vé thành công";
 
                 case PaymentPurpose.ContractDeposit: // đặt cọc hợp đồng
+                    
+                    existingPayment.ContractId = contractId;
+                    await _paymentRepository.UpdatePayment(existingPayment);
+                    
+                    await sendMail.SendEmailNotification(purpose, account.Email, null, contract.ContractName, null, DateTime.Now, null, amount, account.Name);
+
+                    return "Đặt cọc thành công ";
+
                 case PaymentPurpose.contractSettlement:  // tất toán hợp đồng
+
+                    
+                    existingPayment.ContractId = contractId;
+                    await _paymentRepository.UpdatePayment(existingPayment);
+                    await sendMail.SendEmailNotification(purpose, account.Email, null, contract.ContractName, null, DateTime.Now, null, amount, account.Name);
+                    return "Thanh toán thành công ";
+
                 case PaymentPurpose.Order:      // mua hàng
                     var accountCoupon = await _accountCouponRepository.GetAccountCoupon(accountCouponId);
                     accountCoupon.IsActive = false;

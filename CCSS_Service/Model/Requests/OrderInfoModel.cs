@@ -19,5 +19,7 @@ namespace CCSS_Service.Model.Requests
         public string? AccountCouponId { get; set; }
         public string? TicketId { get; set; }
         public string? TicketQuantity { get; set; }
+        public string? ContractId {  get; set; }
+        public string? OrderpaymentId { get; set; }
     }
 }

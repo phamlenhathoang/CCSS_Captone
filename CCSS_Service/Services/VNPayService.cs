@@ -181,7 +181,7 @@ namespace CCSS_Service.Services
                     var account = await _accountRepository.GetAccountByAccountId(response.AccountId);
                     var event1 = await _eventrepository.GetEventByTicketId(response.TicketId);
                     var sendMail = new SendMail();
-                    await sendMail.SendEmailNotification(purpose, account.Email, addTicketResult.TicketCode, event1.EventName, event1.Location, event1.StartDate, addTicketResult.Quantity);
+                    //await sendMail.SendEmailNotification(purpose, account.Email, addTicketResult.TicketCode, event1.EventName, event1.Location, event1.StartDate, addTicketResult.Quantity);
                     return "mua vé thành công";
 
                 case PaymentPurpose.ContractDeposit: // đặt cọc hợp đồng
