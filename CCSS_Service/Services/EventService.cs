@@ -120,6 +120,7 @@ namespace CCSS_Service.Services
                 }
                 // Lưu vào database
                 bool isAdded = await _repository.AddEvent(newEvent);
+
                 if (eventRequest.EventCharacterRequest != null && eventRequest.EventCharacterRequest.Any())
                 {
                     var taskEventRequests = eventRequest.EventCharacterRequest.Select((ec, index) => new AddTaskEventRequest

@@ -14,7 +14,7 @@ namespace CCSS_Service.Libraries
 {
     public class SendMail
     {
-        public async Task<bool> SendEmailNotification(PaymentPurpose? purpose, string toEmail, string ticketCode, string eventName, string location, DateTime startDate, int quantity)
+        public async Task<bool> SendEmailNotification(PaymentPurpose? purpose, string toEmail, string ticketCode, string eventOrContractName, string location, DateTime Date, int? quantity, double? price, string? accountname )
         {
             try
             {
@@ -47,7 +47,7 @@ namespace CCSS_Service.Libraries
         <table style='margin: 0 auto; text-align: left;'>
             <tr>
                 <td style='padding: 5px;'><strong>🌟 Sự kiện:</strong></td>
-                <td style='padding: 5px;'>{eventName}</td>
+                <td style='padding: 5px;'>{eventOrContractName}</td>
             </tr>
             <tr>
                 <td style='padding: 5px;'><strong>📍 Địa điểm:</strong></td>
@@ -55,7 +55,7 @@ namespace CCSS_Service.Libraries
             </tr>
             <tr>
                 <td style='padding: 5px;'><strong>📆 Ngày diễn ra:</strong></td>
-                <td style='padding: 5px;'>{startDate:HH:mm dd/M/yyyy}</td>
+                <td style='padding: 5px;'>{Date:HH:mm dd/M/yyyy}</td>
             </tr>
             <tr>
                 <td style='padding: 5px;'><strong>🎟 Mã vé:</strong></td>
@@ -78,10 +78,10 @@ namespace CCSS_Service.Libraries
                 <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
     <h2 style='color: #007bff; text-align: center;'>📄 Xác nhận đặt cọc hợp đồng thành công!</h2>
     <div style='background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);'>
-        <p><strong>📝 Số hợp đồng:</strong>..............</p>
-        <p><strong>📌 Khách hàng:</strong>................</p>
-        <p><strong>💰 Số tiền đặt cọc:</strong> .............. VNĐ</p>
-        <p><strong>📆 Ngày đặt cọc:</strong> .....................</p>
+        <p><strong>📝 Tên hợp đồng:</strong>{eventOrContractName}</p>
+        <p><strong>📌 Khách hàng:</strong>{accountname}</p>
+        <p><strong>💰 Số tiền đặt cọc:</strong>{price}VNĐ</p>
+        <p><strong>📆 Ngày đặt cọc:</strong>{Date:HH:mm dd/M/yyyy}</p>
     </div>
 
     <div style='text-align: center; margin-top: 20px;'>
@@ -95,10 +95,10 @@ namespace CCSS_Service.Libraries
                 <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
     <h2 style='color: #28a745; text-align: center;'>🎉 Hợp đồng của bạn đã được tất toán thành công!</h2>
     <div style='background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);'>
-        <p><strong>📑 Số hợp đồng:</strong> ....................</p>
-        <p><strong>📌 Khách hàng:</strong> .................</p>
-        <p><strong>💰 Tổng số tiền đã thanh toán:</strong> ................... VNĐ</p>
-        <p><strong>📆 Ngày tất toán:</strong> .................</p>
+        <p><strong>📑 Tên hợp đồng:</strong>{eventOrContractName}</p>
+        <p><strong>📌 Khách hàng:</strong>{accountname}</p>
+        <p><strong>💰 Số tiền còn lại đã thanh toán:</strong>{price}VNĐ</p>
+        <p><strong>📆 Ngày tất toán:</strong> {Date:HH:mm dd/M/yyyy}</p>
     </div>
 
     <div style='text-align: center; margin-top: 20px;'>

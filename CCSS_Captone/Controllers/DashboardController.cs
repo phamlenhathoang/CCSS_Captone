@@ -52,7 +52,7 @@ namespace CCSS_Api.Controllers
         //    var result = await _dashBoardService.Get5PopularCosplayers(filterType);
         //    return Ok(result);
         //}
-        
+
         //[HttpGet("total-average-star")]
         //public async Task<IActionResult> GetAverageStarByContractDescription()
         //{
