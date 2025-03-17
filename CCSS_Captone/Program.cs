@@ -72,6 +72,7 @@ builder.Services.AddScoped<IPdfService, Pdf>();
 //Libraries
 builder.Services.AddScoped<Image>();
 builder.Services.AddScoped<Pdf>();
+builder.Services.AddScoped<SendMail>();
 
 
 //AutoMapper
@@ -93,6 +94,7 @@ builder.Services.AddDbContext<CCSSDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddHostedService<NotificationBackgroundService>();
+builder.Services.AddHostedService<ContractBackgroudService>();
 
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];

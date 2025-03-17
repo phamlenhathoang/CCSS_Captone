@@ -11,12 +11,12 @@ namespace CCSS_Captone.Controllers
     [ApiController]
     public class ContractController : ControllerBase
     {
-        //private readonly IContractServices _services;
+        private readonly IContractServices _services;
 
-        //public ContractController(IContractServices services)
-        //{
-        //    _services = services;
-        //}
+        public ContractController(IContractServices services)
+        {
+            _services = services;
+        }
 
         //[HttpGet]
         //public async Task<IActionResult> GetAllContract(string? searchterm)
@@ -55,16 +55,16 @@ namespace CCSS_Captone.Controllers
         //    return BadRequest(ModelState);
         //}
 
-        //[HttpPut]
-        //public async Task<IActionResult> UpdateContract(string contracId, ContractResponse contractResponse)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await _services.UpdateContract(contracId, contractResponse);
-        //        return Ok(result);
-        //    }
-        //    return BadRequest(ModelState);
-        //}
+        [HttpPut]
+        public async Task<IActionResult> UpdateContract(string contracId, string status)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.UpdateStatusContract(contracId, status, null);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
 
         //[HttpPut("Status")]
         //public async Task<IActionResult> UpdateStatusContract(string contractId, ContractStatus contractStatus)
