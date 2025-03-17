@@ -1,4 +1,8 @@
-﻿using CCSS_Service.Services;
+﻿//using Azure;
+//using CCSS_Service.Libraries;
+using CCSS_Repository.Entities;
+using CCSS_Service.Libraries;
+using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PdfSharpCore;
@@ -11,30 +15,17 @@ namespace CCSS_Captone.Controllers
     [ApiController]
     public class PdfController : ControllerBase
     {
-        //private readonly IPdfService pdfService;
+        private readonly IPdfService pdfService;
 
-        //public PdfController(IPdfService pdfService)
-        //{
-        //    this.pdfService = pdfService;
-        //}
-
-        [HttpGet]
-        public IActionResult GenerateInvoicePdf()
+        public PdfController(IPdfService pdf)
         {
-            using (var document = new PdfDocument())
-            {
-                string HtmlContent = "<h1>Welcome</h1>";
-                PdfGenerator.AddPdfPages(document, HtmlContent, PageSize.A4);
-                byte[]? response = null;
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    document.Save(ms);
-                    response = ms.ToArray();
-                }
-                string FileName = "Contract.pdf";
-                return File(response, "application/pdf", FileName);
-            }
+            this.pdfService = pdf;
         }
+
+        //[HttpGet]
+        //public async Task<IFormFile> GenerateInvoicePdf(string requestId, int deposit)
+        //{
+        //    return await pdfService.ConvertBytesToIFormFile(requestId, deposit);
+        //}
     }
 }

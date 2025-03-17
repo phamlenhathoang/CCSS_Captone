@@ -1,15 +1,22 @@
 ﻿using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Hubs;
+using CCSS_Service.Libraries;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Threading.Tasks;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
+using Contract = CCSS_Repository.Entities.Contract;
 using Request = CCSS_Repository.Entities.Request;
 using Task = System.Threading.Tasks.Task;
 
@@ -25,25 +32,40 @@ namespace CCSS_Service.Services
         //Task<string> UpdateStatusContract(string contracId, ContractStatus newStatus);
         //Task<string> UploadImageToFirebase(IFormFile file);
 
-        Task<string> AddContract(Request request, string deposit);
+        Task<string> AddContract(string requestId, int deposit);
 
     }
     public class ContractServices : IContractServices
     {
-        //private readonly IContractRespository _respository;
-        //private readonly IContractCharacterRepository _contractCharacterRepository;
-        //private readonly ICharacterRepository _characterRepository;
-        //private readonly string _projectId = "miracles-ef238";
-        //private readonly string _bucketName = "miracles-ef238.appspot.com";
+        private readonly IContractRespository _respository;
+        private readonly IContractCharacterRepository _contractCharacterRepository;
+        private readonly ICharacterRepository _characterRepository;
+        private readonly IRequestRepository _requestRepository;
+        private readonly IAccountCouponRepository accountCouponRepository;
+        private readonly IServiceRepository _serviceRepository;
+        private readonly IAccountRepository _accountRepository; 
+        private readonly IPdfService pdfService;
+        private readonly Image Image;
+        private readonly IHubContext<NotificationHub> hubContext;
+        private readonly INotificationRepository notificationRepository;
+        private readonly string _projectId = "miracles-ef238";
+        private readonly string _bucketName = "miracles-ef238.appspot.com";
 
 
-        //public ContractServices(IContractRespository respository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
-        //{
-        //    _respository = respository;
-        //    _contractCharacterRepository = contractCharacterRepository;
-        //    _characterRepository = characterRepository;
-
-        //}
+        public ContractServices(INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository respository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
+        {
+            _respository = respository;
+            _contractCharacterRepository = contractCharacterRepository;
+            _characterRepository = characterRepository;
+            this._requestRepository = _requestRepository;
+            this.accountCouponRepository = accountCouponRepository; 
+            this.pdfService = pdfService;
+            this.Image = Image;
+            this._serviceRepository = _serviceRepository;
+            this._accountRepository = _accountRepository;
+            this.hubContext = hubContext;
+            this.notificationRepository = notificationRepository;
+        }
         //private string GenerateCode(int length = 6)
         //{
         //    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -264,16 +286,105 @@ namespace CCSS_Service.Services
 
         //    return $"Update status {newStatus} of contract is completed";
         //}
-        public async Task<string> AddContract(Request request, string deposit)
+        public async Task<string> AddContract(string requestId, int deposit)
         {
-            if(request.Status != RequestStatus.Browsed)
+            try
             {
-                throw new Exception("Request does not browsed");
+                Request request = await _requestRepository.GetRequestByIdInclude(requestId);
+                if (request == null)
+                {
+                    throw new Exception("Request does not exist");
+                }
+                if (request.Status != RequestStatus.Browsed)
+                {
+                    throw new Exception("Request not browsed yet");
+                }
+
+                if (request.AccountCoupon == null) 
+                {
+                    throw new Exception("AcccountCoupon does not exist");
+                }
+                if(request.AccountCoupon.Coupon.Type != CouponType.ForContract)
+                {
+                    throw new Exception("Coupon not belong for contract");
+                }
+
+                if (request.Service == null) 
+                {
+                    throw new Exception("Service does not exist");
+                }
+
+                if (request.Account == null)
+                {
+                    throw new Exception("Account does not exist");
+                }
+
+                double totalPrice = (double)(request.Price * request.AccountCoupon.Coupon.Amount) / 100;
+
+                var urlPdf = await Image.UploadImageToFirebase(await pdfService.ConvertBytesToIFormFile(request, deposit));
+
+                Contract contract = new Contract()
+                {
+                    Deposit = deposit.ToString(),
+                    TotalPrice = totalPrice,
+                    Amount = (double)(totalPrice * deposit) / 100,
+                    RequestId = requestId,
+                    CreateBy = request.AccountId,
+                    ContractId = Guid.NewGuid().ToString(),
+                    CreateDate = DateTime.Now,
+                    ContractStatus = ContractStatus.Active,
+                    ContractName = request.Service.ServiceName,
+                    UrlPdf = urlPdf
+                };
+
+
+                bool result = await _respository.AddContract(contract);
+                if (result)
+                {
+                    return "Success";
+                }
+                return "Failed";
             }
+            catch(Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
+        private async Task<bool> NortificationCustomer(Contract contract)
+        {
 
+            try
+            {
+                if (contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
 
-            return "Failed";
+                Notification notification = new Notification();
+
+                string connectionId = NotificationHub.GetConnectionId(contract.CreateBy);
+                string message = $"Your request has been approved. Please log in to the system to view contract information and make payment.";
+
+                if (!string.IsNullOrEmpty(connectionId))
+                {
+                    await hubContext.Clients.Client(connectionId).SendAsync("ReceiveTaskNotification", message);
+                }
+                else
+                {
+                    Console.WriteLine($"User {contract.CreateBy} không online, không thể gửi thông báo");
+                    notification.AccountId = contract.CreateBy;
+                    notification.Message = message;
+                    notification.Id = Guid.NewGuid().ToString();
+                }
+                bool result = await notificationRepository.AddNotification(notification) ? true : false;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

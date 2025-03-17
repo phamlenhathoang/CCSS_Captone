@@ -18,16 +18,13 @@ namespace CCSS_Repository.Entities
         public string? RequestId { get; set; }
         public Request? Request { get; set; }
 
-        [ForeignKey("AccountCouponId")]
-        public string? AccountCouponId { get; set; }
-        public AccountCoupon AccountCoupon { get; set; }
-
         public string? Deposit {  get; set; }
         public double? TotalPrice { get; set; }
         public double? Amount {  get; set; }
         public string? CreateBy { get; set; }
+        public string? UrlPdf { get; set; }
         public DateTime? CreateDate { get; set; }
-
+        public string? ContractName { get; set; }
         public ContractStatus ContractStatus { get; set; }
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
         public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
@@ -38,7 +35,8 @@ namespace CCSS_Repository.Entities
     {
         Cancel,
         Active,
+        Progressing,
+        Completed,
         Expired,
-        Completed, 
     }
 }

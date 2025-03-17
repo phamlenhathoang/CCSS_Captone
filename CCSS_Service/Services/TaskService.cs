@@ -87,6 +87,10 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("Account does not exist");
                 }
+                if (account.Role.RoleName != RoleName.Cosplayer)
+                {
+                    throw new Exception("Account must be cosplayer");
+                }
                 EventCharacter eventCharacter = await eventChacracterRepository.GetEventCharacterById(taskRequest.EventCharacterId);
                 if (eventCharacter == null)
                 {
@@ -96,8 +100,6 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("EventCharacter assigned");
                 }
-
-                bool checkCharacter = await characterRepository.CheckCharacterForAccount(account, eventCharacter.CharacterId);
 
                 if (!CheckCharacterForAccount(account, eventCharacter.Character))
                 {
@@ -178,11 +180,10 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("EventCharacter does not exist");
                 }
-                Contract contract = await contractRespository.GetContractById(contractCharacter.Contract.ContractId);
 
                 if (!CheckCharacterForAccount(account, contractCharacter.Character))
                 {
-                    throw new Exception("Account does not suitable character");
+                    throw new Exception("Cosplayer does not suitable character");
                 }
 
                 Task task = new Task();
@@ -270,7 +271,6 @@ namespace CCSS_Service.Services
                         return "Successfully";
                     }
                 }
-
                 return "Failed";
             }
             catch (Exception ex)
