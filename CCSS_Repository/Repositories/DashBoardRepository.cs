@@ -97,10 +97,10 @@ namespace CCSS_Repository.Repositories
         //public async Task<List<Account>> GetTop5AccountsWithMostPaymentsAsync()
         //{
         //    return await _context.Accounts
-        //        .Where(a => a.Contracts.Any(c => c.Payments.Any(p => (int?)p.Status == 1 && (int?)p.Purpose == 2))) 
+        //        .Where(a => a.Contracts.Any(c => c.Payments.Any(p => (int?)p.Status == 1 && (int?)p.Purpose == 2)))
         //        .Include(a => a.Contracts)
         //        .ThenInclude(c => c.Payments)
-        //        .OrderByDescending(a => a.Contracts.SelectMany(c => c.Payments).Count(p => (int?)p.Status == 1 && (int?)p.Purpose == 2)) 
+        //        .OrderByDescending(a => a.Contracts.SelectMany(c => c.Payments).Count(p => (int?)p.Status == 1 && (int?)p.Purpose == 2))
         //        .Take(5)
         //        .ToListAsync();
         //}
