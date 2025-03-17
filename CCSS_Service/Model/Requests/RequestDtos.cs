@@ -26,5 +26,7 @@ namespace CCSS_Service.Model.Requests
     {
         public string CharacterId { get; set; }
         public string? CosplayerId { get; set; }
+        public string? Description { get; set; }
+        public int? Quantity { get; set; }
     }
 }
