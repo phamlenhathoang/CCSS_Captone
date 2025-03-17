@@ -13,10 +13,13 @@ namespace CCSS_Repository.Repositories
     {
         Task<List<RequestCharacter>> GetAllRequestCharacter();
         Task<RequestCharacter> GetRequestCharacterById(string id);
+        Task<RequestCharacter> GetRequestCharacter(string requestId, string characterId);
         Task<List<RequestCharacter>> GetListCharacterByRequest(string requestId);
         Task<bool> AddListRequestCharacter(List<RequestCharacter> requestCharacters);
+        Task<bool> AddRequestCharacter(RequestCharacter requestCharacter);
+        Task<bool> UpdateRequestCharacter(RequestCharacter requestCharacters);
         Task<bool> UpdateListRequestCharacter(List<RequestCharacter> requestCharacters);
-        Task DeleteListRequestCharacter(List<RequestCharacter> requestCharacters);
+        Task<bool> DeleteRequestCharacter(RequestCharacter requestCharacters);
     }
 
 
@@ -39,6 +42,11 @@ namespace CCSS_Repository.Repositories
             return await _context.RequestsCharacters.FirstOrDefaultAsync(sc => sc.RequestCharacterId.Equals(id));
         }
 
+        public async Task<RequestCharacter> GetRequestCharacter(string requestId, string characterId)
+        {
+            return await _context.RequestsCharacters.FirstOrDefaultAsync(sc => sc.RequestId.Equals(requestId) && sc.CharacterId.Equals(characterId));
+        }
+
         public async Task<List<RequestCharacter>> GetListCharacterByRequest(string requestId)
         {
             return await _context.RequestsCharacters.Where(sc => sc.RequestId.Equals(requestId)).ToListAsync();
@@ -50,16 +58,28 @@ namespace CCSS_Repository.Repositories
            return await _context.SaveChangesAsync() > 0;
         }
 
+        public async Task<bool> AddRequestCharacter(RequestCharacter requestCharacter)
+        {
+            _context.RequestsCharacters.Add(requestCharacter);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
         public async Task<bool> UpdateListRequestCharacter(List<RequestCharacter> requestCharacters)
         {
             _context.RequestsCharacters.UpdateRange(requestCharacters);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> UpdateRequestCharacter(RequestCharacter requestCharacters)
+        {
+            _context.RequestsCharacters.Update(requestCharacters);
            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task DeleteListRequestCharacter(List<RequestCharacter> requestCharacters)
+        public async Task<bool> DeleteRequestCharacter(RequestCharacter requestCharacters)
         {
-            _context.RequestsCharacters.RemoveRange(requestCharacters);
-            await _context.SaveChangesAsync();
+            _context.RequestsCharacters.Remove(requestCharacters);
+           return await _context.SaveChangesAsync() > 0;
         }
     }
 }

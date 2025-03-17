@@ -24,16 +24,18 @@ namespace CCSS_Service.Services
     public class EventService : IEventService
     {
         private readonly IEventRepository _repository;
-        private readonly IImageService _imageService;
+       
         private readonly IMapper _mapper;
         private readonly ITaskService _taskService;
+        //private readonly IImageService _imageService;
 
-        public EventService(IEventRepository repository, IMapper mapper, IImageService imageService, ITaskService taskService)
+        public EventService(IEventRepository repository, IMapper mapper, ITaskService taskService)
         {
             _repository = repository;
             _mapper = mapper;
-            _imageService = imageService;
+            //_imageService = imageService;
             _taskService = taskService;
+
         }
 
         public async Task<List<EventResponse>> GetAllEvents(string searchTerm)
