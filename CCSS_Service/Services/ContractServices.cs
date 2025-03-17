@@ -33,7 +33,8 @@ namespace CCSS_Service.Services
         //Task<string> UploadImageToFirebase(IFormFile file);
 
         Task<string> AddContract(string requestId, int deposit);
-        Task<bool> UpdateStatusContract(string contractId, string status);
+        Task<bool> UpdateStatusContract(string contractId, string status, double amount);
+        Task<bool> UpdateStatusContract(string? contractId, string status, double? amount);
     }
     public class ContractServices : IContractServices
     {
@@ -351,7 +352,7 @@ namespace CCSS_Service.Services
             }
         }
 
-        public async Task<bool> UpdateStatusContract(string contractId, string status)
+        public async Task<bool> UpdateStatusContract(string contractId, string status, double? amount)
         {
             try
             {
@@ -376,6 +377,7 @@ namespace CCSS_Service.Services
                     if (contract.ContractStatus == ContractStatus.Active)
                     {
                         contract.ContractStatus = ContractStatus.Progressing;
+                        contract.Amount = contract.TotalPrice - amount; 
                     }
                     else
                     {
