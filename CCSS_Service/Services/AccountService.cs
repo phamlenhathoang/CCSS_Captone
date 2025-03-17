@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Libraries;
 using CCSS_Service.Model;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
+using Google.Apis.Storage.v1.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
@@ -386,7 +388,8 @@ namespace CCSS_Service.Services
                 {
                     return "Cannot save account";
                 }
-                await _emailService.SendEmailAsync(accountRequest.Email, "Confirm your account", $"Here is your code: {account.Code}. Please enter this code to authenticate your account.", true);
+                SendMail _sendMail = new SendMail();
+                await _sendMail.SendAccountVerificationEmail(account.Email, account.Code);
                 return "Please enter code";
             }
         }

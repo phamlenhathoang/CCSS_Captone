@@ -1,5 +1,6 @@
 ﻿using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Libraries;
 using CCSS_Service.Services;
 using Google.Apis.Storage.v1.Data;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,16 +36,10 @@ namespace CCSS_Service.BackgroundServices
                 {
                     using (var scope = _serviceProvider.CreateScope())
                     {
-                        //var dbContext = scope.ServiceProvider.GetRequiredService<CCSSDbContext>();
-
-                        //// Lấy thông báo chưa đọc
-                        //var unreadNotifications = dbContext.Notifications
-                        //    .Where(n => n.IsRead)
-                        //    .ToList();
-
                         var _contractRepository = scope.ServiceProvider.GetRequiredService<IContractRespository>();
                         var _emailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
                         var _accountRepository = scope.ServiceProvider.GetService<IAccountRepository>();
+                        var _sendMail = scope.ServiceProvider.GetService<SendMail>();
 
                         List<Contract> contracts = await _contractRepository.GetContracts();
 
@@ -52,17 +47,20 @@ namespace CCSS_Service.BackgroundServices
                         {
                             foreach (var contract in contracts)
                             {
-                                if (DateTime.Now.Date >= contract.CreateDate.GetValueOrDefault().Date.AddDays(3))
+                                if(contract.ContractStatus == ContractStatus.Active)
                                 {
-                                    contract.ContractStatus = ContractStatus.Expired;
-                                    bool result = await _contractRepository.UpdateContract(contract);
-                                    if (!result)
+                                    if (DateTime.Now.Date >= contract.CreateDate.GetValueOrDefault().Date.AddDays(3))
                                     {
-                                        throw new Exception($"Can not update status of {contract.ContractId}");
+                                        contract.ContractStatus = ContractStatus.Expired;
+                                        bool result = await _contractRepository.UpdateContract(contract);
+                                        if (!result)
+                                        {
+                                            throw new Exception($"Can not update status of {contract.ContractId}");
+                                        }
+                                        Account account = await _accountRepository.GetAccount(contract.CreateBy);
+                                        await _sendMail.SendContractExpiredEmail(account.Email, contract.ContractName, account.Name);
+                                        _logger.LogInformation($"Notification {account.Email}");
                                     }
-                                    Account account = await _accountRepository.GetAccount(contract.CreateBy);
-                                    await _emailService.SendEmailAsync(account.Email, "New task", $"You have new task. Please check in the system to check about your task", true);
-                                    _logger.LogInformation($"Notification {account.Email}");
                                 }
                             }
                         }
