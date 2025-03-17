@@ -16,6 +16,7 @@ namespace CCSS_Service.Model.Requests
         public PaymentPurpose Purpose { get; set; }
 
         public string AccountId { get; set; }
+        public string? AccountCouponId { get; set; }
         public string? TicketId { get; set; }
         public string? TicketQuantity { get; set; }
     }

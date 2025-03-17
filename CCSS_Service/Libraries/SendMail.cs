@@ -41,19 +41,36 @@ namespace CCSS_Service.Libraries
                 string emailBody = purpose switch
                 {
                     PaymentPurpose.BuyTicket => $@"
-                <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
+<div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
     <h2 style='color: #5a189a; text-align: center;'>🎉 Chúc mừng, bạn đã đặt vé thành công! 🎉</h2>
-    <div style='background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);'>
-        <p><strong>🌟 Sự kiện:</strong> {eventName}</p>
-        <p><strong>📍 Địa điểm:</strong> {location}</p>
-        <p><strong>📆 Ngày diễn ra:</strong> {startDate:HH:mm dd/M/yyyy}</p>
-        <p><strong>🎟 Mã vé:</strong> <span style='color: #d63384; font-size: 18px;'>{ticketCode}</span></p>
-        <p><strong>👥 Số lượng vé:</strong> {quantity}</p>
+    <div style='background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); display: inline-block;'>
+        <table style='margin: 0 auto; text-align: left;'>
+            <tr>
+                <td style='padding: 5px;'><strong>🌟 Sự kiện:</strong></td>
+                <td style='padding: 5px;'>{eventName}</td>
+            </tr>
+            <tr>
+                <td style='padding: 5px;'><strong>📍 Địa điểm:</strong></td>
+                <td style='padding: 5px;'>{location}</td>
+            </tr>
+            <tr>
+                <td style='padding: 5px;'><strong>📆 Ngày diễn ra:</strong></td>
+                <td style='padding: 5px;'>{startDate:HH:mm dd/M/yyyy}</td>
+            </tr>
+            <tr>
+                <td style='padding: 5px;'><strong>🎟 Mã vé:</strong></td>
+                <td style='padding: 5px;'><span style='color: #d63384; font-size: 18px;'>{ticketCode}</span></td>
+            </tr>
+            <tr>
+                <td style='padding: 5px;'><strong>👥 Số lượng vé:</strong></td>
+                <td style='padding: 5px;'>{quantity}</td>
+            </tr>
+        </table>
     </div>
 
     <div style='text-align: center; margin-top: 20px;'>
         <p style='font-size: 16px; font-weight: bold'>📢 Vui lòng mang theo mã vé khi tham dự để check-in.</p>
-        <p style='margin-top: 15px; ;'>🥰 Cảm ơn Quý khách đã sử dụng dịch vụ của chúng tôi, hẹn gặp bạn tại sự kiện sắp tới!! 😘</p>
+        <p style='margin-top: 15px;'>🥰 Cảm ơn Quý khách đã sử dụng dịch vụ của chúng tôi, hẹn gặp bạn tại sự kiện sắp tới!! 😘</p>
     </div>
 </div>",
 

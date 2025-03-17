@@ -42,9 +42,11 @@ builder.Services.AddScoped<IEventCharacterRepository, EventCharacterRepository>(
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IDashBoardRepository, DashBoardRepository>();
+builder.Services.AddScoped<IAccountCouponRepository, AccountCouponRepository>();
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IRequestCharacterRepository, RequestCharacterRepository>();
 builder.Services.AddScoped<IEventChacracterRepository, EventChacracterRepository>();
+
 
 
 //Service
