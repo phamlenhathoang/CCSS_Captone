@@ -26,12 +26,14 @@ namespace CCSS_Service.Services
         private readonly IEventRepository _repository;
         private readonly IImageService _imageService;
         private readonly IMapper _mapper;
+        private readonly ITaskService _taskService;
 
-        public EventService(IEventRepository repository, IMapper mapper, IImageService imageService)
+        public EventService(IEventRepository repository, IMapper mapper, IImageService imageService, ITaskService taskService)
         {
             _repository = repository;
             _mapper = mapper;
             _imageService = imageService;
+            _taskService = taskService;
         }
 
         public async Task<List<EventResponse>> GetAllEvents(string searchTerm)
@@ -84,17 +86,21 @@ namespace CCSS_Service.Services
                     newEvent.Ticket = newTicket;
 
                 }
+                List<EventCharacter> eventCharacters = null;
                 if (eventRequest.EventCharacterRequest != null && eventRequest.EventCharacterRequest.Any())
                 {
-                    // Duyệt qua danh sách EventCharacterRequest và tạo danh sách EventCharacter
-                    var eventCharacters = eventRequest.EventCharacterRequest.Select(ec => new EventCharacter
+                    // Tạo danh sách EventCharacter
+                    eventCharacters = eventRequest.EventCharacterRequest.Select(ec => new EventCharacter
                     {
                         EventCharacterId = Guid.NewGuid().ToString(),
                         EventId = newEvent.EventId,
-                        CharacterId = ec.CharacterId
+                        CharacterId = ec.CharacterId,
+                        CreateDate = DateTime.Now,
+                        UpdateDate = null,
+                        Description = ec.Description,
+                        IsAssign = false
                     }).ToList();
 
-                    // Gán danh sách vào Event
                     newEvent.EventCharacters = eventCharacters;
                 }
                 if (eventRequest.EventActivityRequests != null && eventRequest.EventActivityRequests.Any())
@@ -112,12 +118,22 @@ namespace CCSS_Service.Services
                 }
                 // Lưu vào database
                 bool isAdded = await _repository.AddEvent(newEvent);
+                if (eventRequest.EventCharacterRequest != null && eventRequest.EventCharacterRequest.Any())
+                {
+                    var taskEventRequests = eventRequest.EventCharacterRequest.Select((ec, index) => new AddTaskEventRequest
+                    {
+                        AccountId = ec.CosplayerId, // Lấy CosplayerId từ EventCharacterRequest
+                        EventCharacterId = eventCharacters[index].EventCharacterId // Lấy EventCharacterId tương ứng
+                    }).ToList();
 
+                    await _taskService.AddTask(taskEventRequests, null);
+                }
                 // Kiểm tra kết quả lưu database
                 if (!isAdded)
                 {
                     return "Failed to add event to database";
                 }
+               
                 //ImageRequest image = new ImageRequest();
                 //image.ImageUrl = eventRequest.ImageUrl;
                 //image.EventId = newEvent.EventId.ToString();

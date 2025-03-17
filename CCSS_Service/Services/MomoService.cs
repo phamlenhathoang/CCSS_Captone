@@ -49,25 +49,27 @@ namespace CCSS_Service.Services
         }
         public async Task<MomoCreatePaymentResponse> CreatePaymentAsync(OrderInfoModel model)
         {
-            var accountCoupon = await _accountCouponRepository.GetAccountCoupon(model.AccountCouponId);
-            if (model.Purpose == PaymentPurpose.Order && accountCoupon.Coupon.Type == CouponType.ForContract)
+            if (model.AccountCouponId != null)
             {
-                return new MomoCreatePaymentResponse { IsSuccess = false, ErrorMessage = "Mã giảm giá không áp dụng cho đơn hàng." };
+                var accountCoupon = await _accountCouponRepository.GetAccountCoupon(model.AccountCouponId);
+                if (model.Purpose == PaymentPurpose.Order && accountCoupon.Coupon.Type == CouponType.ForContract)
+                {
+                    return new MomoCreatePaymentResponse { IsSuccess = false, ErrorMessage = "Mã giảm giá không áp dụng cho đơn hàng." };
+                }
+                else if ((model.Purpose == PaymentPurpose.ContractDeposit || model.Purpose == PaymentPurpose.contractSettlement)
+                         && accountCoupon.Coupon.Type == CouponType.ForOrder)
+                {
+                    return new MomoCreatePaymentResponse { IsSuccess = false, ErrorMessage = "Mã giảm giá không áp dụng cho hợp đồng." };
+                }
+                else if (accountCoupon.IsActive == false)
+                {
+                    return new MomoCreatePaymentResponse { IsSuccess = false, ErrorMessage = "Mã giảm giá không khả dụng." };
+                }
+                else if (model.Purpose == PaymentPurpose.Order && accountCoupon.Coupon.Type == CouponType.ForOrder)
+                {
+                    model.Amount -= (model.Amount * accountCoupon.Coupon.Percent) / 100;
+                }
             }
-            else if ((model.Purpose == PaymentPurpose.ContractDeposit || model.Purpose == PaymentPurpose.contractSettlement)
-                     && accountCoupon.Coupon.Type == CouponType.ForOrder)
-            {
-                return new MomoCreatePaymentResponse { IsSuccess = false, ErrorMessage = "Mã giảm giá không áp dụng cho hợp đồng." };
-            }
-            else if (accountCoupon.IsActive == false)
-            {
-                return new MomoCreatePaymentResponse { IsSuccess = false, ErrorMessage = "Mã giảm giá không khả dụng." };
-            }
-            else if (model.Purpose == PaymentPurpose.Order && accountCoupon.Coupon.Type == CouponType.ForOrder)
-            {
-                model.Amount -= (model.Amount*accountCoupon.Coupon.Percent)/100;
-            }
-            
 
 
             model.OrderId = DateTime.UtcNow.Ticks.ToString();
@@ -231,6 +233,14 @@ namespace CCSS_Service.Services
                     var account = await _accountRepository.GetAccountByAccountId(accountId);
                     var event1 = await _eventrepository.GetEventByTicketId(ticketId);
                     var sendMail = new SendMail();
+                    Console.WriteLine(purpose);
+                    Console.WriteLine(account.Email);
+                    Console.WriteLine(addTicketResult.TicketCode);
+                    Console.WriteLine(event1.EventName);
+                    Console.WriteLine(event1.Location);
+                    Console.WriteLine(event1.StartDate);
+                    Console.WriteLine(addTicketResult.Quantity);
+                    
                     await sendMail.SendEmailNotification(purpose, account.Email, addTicketResult.TicketCode, event1.EventName, event1.Location, event1.StartDate, addTicketResult.Quantity);
                     return "mua vé thành công";
 

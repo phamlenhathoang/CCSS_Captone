@@ -36,6 +36,7 @@ namespace CCSS_Service.Model.Requests
         public DateTime EndDate { get; set; }
         public string? CreateBy { get; set; }
         public TicketRequest Ticket { get; set; }
+        
         //public IFormFile ImageUrl { get; set; }
         //public ICollection<ImageRequest> Images { get; set; } = new List<ImageRequest>();
         public ICollection<EventCharacterRequest> EventCharacterRequest { get; set; } = new List<EventCharacterRequest>();
