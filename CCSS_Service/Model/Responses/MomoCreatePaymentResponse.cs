@@ -10,7 +10,6 @@ namespace CCSS_Service.Model.Responses
     {
         public string RequestId { get; set; }
         public int ErrorCode { get; set; }
-        //public string CartId { get; set; }
         public string OrderId { get; set; }
         public string Message { get; set; }
         public string LocalMessage { get; set; }
@@ -20,5 +19,7 @@ namespace CCSS_Service.Model.Responses
         public string QrCodeUrl { get; set; }
         public string Deeplink { get; set; }
         public string DeeplinkWebInApp { get; set; }
+        public bool? IsSuccess { get; set; }
+        public string? ErrorMessage { get; set; }
     }
 }

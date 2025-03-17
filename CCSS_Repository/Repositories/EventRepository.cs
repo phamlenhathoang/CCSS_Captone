@@ -15,6 +15,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> UpdateEvent(Event eventObj);
         Task<bool> DeleteEvent(string id);
         Task<bool> DeleteEventCharactersByEventId(string id);
+        Task<bool> DeleteEventActivityByEventId(string id);
         Task<bool> DeleteTicketByEventId(string id);
     }
 
@@ -123,6 +124,19 @@ namespace CCSS_Repository.Repositories
             }
 
             return false; // Không có EventCharacter nào để xóa
+        }
+        public async Task<bool> DeleteEventActivityByEventId(string eventId)
+        {
+            var eventActivitys = _dbContext.EventActivities.Where(ec => ec.EventId == eventId).ToList();
+
+            if (eventActivitys.Any()) // Kiểm tra xem có EventActivity nào không
+            {
+                _dbContext.EventActivities.RemoveRange(eventActivitys);
+                int affectedRows = await _dbContext.SaveChangesAsync();
+                return affectedRows > 0; // Trả về true nếu có bản ghi bị xóa
+            }
+
+            return false; // Không có EventActivity nào để xóa
         }
         public async Task<bool> DeleteTicketByEventId(string eventId)
         {
