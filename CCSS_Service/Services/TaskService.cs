@@ -178,7 +178,7 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("EventCharacter does not exist");
                 }
-                Contract contract = await contractRespository.GetContractById(contractCharacter.Contract.ContractId);
+                //Contract contract = await contractRespository.GetContractById(contractCharacter.Contract.ContractId);
 
                 if (!CheckCharacterForAccount(account, contractCharacter.Character))
                 {

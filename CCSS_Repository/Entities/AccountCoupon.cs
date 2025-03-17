@@ -26,6 +26,6 @@ namespace CCSS_Repository.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public Payment Payment { get; set; }
-        public Contract Contract { get; set; }
+        public ICollection<Request> Requests { get; set; } = new List<Request>();
     }
 }

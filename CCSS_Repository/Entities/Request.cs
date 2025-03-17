@@ -36,12 +36,11 @@ namespace CCSS_Repository.Entities
         public string? ContractId { get; set; }
         public Contract Contract { get; set; }
 
-        public ICollection<RequestCharacter> RequestCharacters { get; set; } = new List<RequestCharacter>();
+        [ForeignKey("AccountCouponId")]
+        public string? AccountCouponId { get; set; }
+        public AccountCoupon AccountCoupon { get; set; }
 
-        public static implicit operator Request(Contract v)
-        {
-            throw new NotImplementedException();
-        }
+        public ICollection<RequestCharacter> RequestCharacters { get; set; } = new List<RequestCharacter>();
     }
 
     public enum RequestStatus
