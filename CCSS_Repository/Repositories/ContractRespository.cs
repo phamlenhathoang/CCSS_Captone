@@ -13,6 +13,8 @@ namespace CCSS_Repository.Repositories
     {
         Task<Contract> GetContractById(string id);
         Task<bool> AddContract(Contract contract);
+        Task<bool> UpdateContract(Contract contract);
+        Task<List<Contract>> GetContracts();
     }
 
     public class ContractRespository: IContractRespository
@@ -31,8 +33,19 @@ namespace CCSS_Repository.Repositories
 
         public async Task<bool> AddContract(Contract contract)
         {
-            _context.Contracts.Add(contract);
+            await _context.Contracts.AddAsync(contract);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> UpdateContract(Contract contract)
+        {
+            _context.Contracts.Update(contract);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<List<Contract>> GetContracts()
+        {
+            return await _context.Contracts.ToListAsync();
         }
     }
 }

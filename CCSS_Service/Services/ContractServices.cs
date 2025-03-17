@@ -33,11 +33,11 @@ namespace CCSS_Service.Services
         //Task<string> UploadImageToFirebase(IFormFile file);
 
         Task<string> AddContract(string requestId, int deposit);
-
+        Task<bool> UpdateStatusContract(string contractId, string status);
     }
     public class ContractServices : IContractServices
     {
-        private readonly IContractRespository _respository;
+        private readonly IContractRespository _contractRespository;
         private readonly IContractCharacterRepository _contractCharacterRepository;
         private readonly ICharacterRepository _characterRepository;
         private readonly IRequestRepository _requestRepository;
@@ -52,9 +52,9 @@ namespace CCSS_Service.Services
         private readonly string _bucketName = "miracles-ef238.appspot.com";
 
 
-        public ContractServices(INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository respository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
+        public ContractServices(INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
         {
-            _respository = respository;
+            this._contractRespository = _contractRespository;
             _contractCharacterRepository = contractCharacterRepository;
             _characterRepository = characterRepository;
             this._requestRepository = _requestRepository;
@@ -338,7 +338,7 @@ namespace CCSS_Service.Services
                 };
 
 
-                bool result = await _respository.AddContract(contract);
+                bool result = await _contractRespository.AddContract(contract);
                 if (result)
                 {
                     return "Success";
@@ -346,6 +346,61 @@ namespace CCSS_Service.Services
                 return "Failed";
             }
             catch(Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> UpdateStatusContract(string contractId, string status)
+        {
+            try
+            {
+                Contract contract = await _contractRespository.GetContractById(contractId);
+                if (contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
+                if (status.ToUpper() == ContractStatus.Cancel.ToString().ToUpper())
+                {
+                    if (contract.ContractStatus == ContractStatus.Active)
+                    {
+                        contract.ContractStatus = ContractStatus.Cancel;
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update contract status");
+                    }
+                }
+                if (status.ToUpper() == ContractStatus.Progressing.ToString().ToUpper())
+                {
+                    if (contract.ContractStatus == ContractStatus.Active)
+                    {
+                        contract.ContractStatus = ContractStatus.Progressing;
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update contract status");
+                    }
+                }
+                if (status.ToUpper() == ContractStatus.Completed.ToString().ToUpper())
+                {
+                    if (contract.ContractStatus == ContractStatus.Progressing)
+                    {
+                        contract.ContractStatus = ContractStatus.Completed;
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update contract status");
+                    }
+                }
+                bool result = await _contractRespository.UpdateContract(contract);
+                if (result) 
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

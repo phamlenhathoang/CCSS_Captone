@@ -258,9 +258,6 @@ namespace CCSS_Service.Services
 
         }
 
-
-
-
         private string ComputeHmacSha256(string message, string secretKey)
         {
             var keyBytes = Encoding.UTF8.GetBytes(secretKey);
