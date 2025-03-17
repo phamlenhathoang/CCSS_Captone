@@ -40,15 +40,78 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRequest(RequestDtos requestDtos, RequestDescription requestDescription)
+        public async Task<IActionResult> CreateRequest([FromBody] RequestDtos requestDtos, [FromQuery] RequestDescription requestDescription)
 
         {
-            if (ModelState.IsValid)
+            try
             {
-                var result = await _services.AddRequest(requestDtos, requestDescription);
+
+
+                if (ModelState.IsValid)
+                {
+                    var result = await _services.AddRequest(requestDtos, requestDescription);
+                    return Ok(result);
+                }
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateRequest([FromQuery] string RequestId, [FromBody] UpdateRequestDtos updateRequestDtos)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var result = await _services.UpdateRequest(RequestId, updateRequestDtos);
                 return Ok(result);
             }
-            return BadRequest(ModelState);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut("Status")]
+        public async Task<IActionResult> UpdateStatusRequest(string requestId, RequestStatus requestStatus)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var result = await _services.UpdateStatusRequest(requestId, requestStatus);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{requestId}")]
+        public async Task<IActionResult> DeleteRequest(string requestId)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var result = await _services.DeleteRequest(requestId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }
