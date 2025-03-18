@@ -36,6 +36,10 @@ namespace CCSS_Repository.Entities
         public string? ContractId { get; set; }
         public Contract Contract { get; set; }
 
+        [ForeignKey("PackageId")]
+        public string? PackageId { get; set; }
+        public Package Package { get; set; }
+
         [ForeignKey("AccountCouponId")]
         public string? AccountCouponId { get; set; }
         public AccountCoupon AccountCoupon { get; set; }
