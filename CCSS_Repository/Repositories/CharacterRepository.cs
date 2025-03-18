@@ -66,8 +66,8 @@ namespace CCSS_Repository.Repositories
             {
                 return false;
             }
-
-            if(character.MinHeight < a.Height && a.Height < character.MaxHeight && character.MinWeight < a.Weight && a.Weight < character.MaxHeight)
+            
+            if(character.MinHeight <= a.Height && a.Height <= character.MaxHeight && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight)
             {
                 return true;
             }
