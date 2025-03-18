@@ -1,6 +1,7 @@
 ﻿using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
 using CCSS_Service.Model.Requests;
+using CCSS_Service.Model.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace CCSS_Service.Services
 {
     public interface IRequestServices
     {
-        Task<List<Request>> GetAllRequest();
+        Task<List<RequestResponse>> GetAllRequest();
         Task<Request> GetRequestById(string id);
         Task<string> DeleteRequest(string id);
         Task<string> AddRequest(RequestDtos requestDtos, RequestDescription requestDescription);
@@ -34,9 +35,31 @@ namespace CCSS_Service.Services
             _accountRepository = accountRepository;
         }
 
-        public async Task<List<Request>> GetAllRequest()
+        public async Task<List<RequestResponse>> GetAllRequest()
         {
-            return await _repository.GetAllRequest();
+           List<RequestResponse> listRequest = new List<RequestResponse>();
+            var request = await _repository.GetAllRequest();
+            foreach ( var item in request)
+            {
+                var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
+                RequestResponse response = new RequestResponse()
+                {
+                    RequestId = item.RequestId,
+                    AccountId = item.AccountId,
+                    Name = item.Name,
+                    Description = item.Description,
+                    Price = item.Price,
+                    Status = item.Status,
+                    StartDate = item.StartDate,
+                    EndDate = item.EndDate,
+                    Location = item.Location,
+                    ServiceId = item.ServiceId,
+                    ContractId = item.ContractId,
+                  
+                };
+                listRequest.Add(response); ;
+            }
+            return listRequest;
         }
 
         public async Task<Request> GetRequestById(string id)

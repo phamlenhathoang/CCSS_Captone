@@ -29,7 +29,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Request>> GetAllRequest()
         {
-            return await _context.Requests.ToListAsync();
+            return await _context.Requests.Include(sc => sc.RequestCharacters).ToListAsync();
         }
 
         public async Task<Request> GetRequestById(string id)
