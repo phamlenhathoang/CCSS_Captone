@@ -14,7 +14,7 @@ namespace CCSS_Service.Services
     public interface IRequestServices
     {
         Task<List<RequestResponse>> GetAllRequest();
-        Task<Request> GetRequestById(string id);
+        Task<RequestResponse> GetRequestById(string id);
         Task<string> DeleteRequest(string id);
         Task<string> AddRequest(RequestDtos requestDtos, RequestDescription requestDescription);
         Task<string> UpdateRequest(string requestId, UpdateRequestDtos requestDtos);
@@ -39,11 +39,20 @@ namespace CCSS_Service.Services
 
         public async Task<List<RequestResponse>> GetAllRequest()
         {
-           List<RequestResponse> listRequest = new List<RequestResponse>();
+            List<RequestResponse> listRequest = new List<RequestResponse>();
             var request = await _repository.GetAllRequest();
-            foreach ( var item in request)
+            foreach (var item in request)
             {
                 var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
+
+                List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(item.RequestId)).Select(c => new CharacterRequestResponse()
+                {
+                    CharacterId = c.CharacterId,
+                    CosplayerId = c.CosplayerId,
+                    Description = c.Description,
+                    Quantity = c.Quantity
+                }).ToList();
+
                 RequestResponse response = new RequestResponse()
                 {
                     RequestId = item.RequestId,
@@ -56,19 +65,47 @@ namespace CCSS_Service.Services
                     EndDate = item.EndDate,
                     Location = item.Location,
                     ServiceId = item.ServiceId,
+                    PackageId = item.PackageId,
                     ContractId = item.ContractId,
-                  
+                    CharactersListResponse = characterResponses
                 };
                 listRequest.Add(response); ;
             }
             return listRequest;
         }
 
-        public async Task<Request> GetRequestById(string id)
+        public async Task<RequestResponse> GetRequestById(string id)
         {
-            return await _repository.GetRequestById(id);
-        }
+            var request = await _repository.GetRequestById(id);
+            var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
 
+            List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(request.RequestId)).Select(c => new CharacterRequestResponse()
+            {
+                CharacterId = c.CharacterId,
+                CosplayerId = c.CosplayerId,
+                Description = c.Description,
+                Quantity = c.Quantity
+            }).ToList();
+
+            var response = new RequestResponse()
+            {
+                RequestId = request.RequestId,
+                AccountId = request.AccountId,
+                Name = request.Name,
+                Description = request.Description,
+                Price = request.Price,
+                Status = request.Status,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                Location = request.Location,
+                ServiceId = request.ServiceId,
+                PackageId = request.PackageId,
+                ContractId = request.ContractId,
+                CharactersListResponse = characterResponses
+            };
+            return response;
+        }
+        
         private (bool IsValid, string ErrorMessage, DateTime StartDate, DateTime EndDate) ValidateAndParseDates(string startDateStr, string endDateStr)
         {
             DateTime StartDate = DateTime.Now;
@@ -92,11 +129,11 @@ namespace CCSS_Service.Services
                 {
                     return (false, "Date format is incorrect. Please enter the right format DateTime.", StartDate, EndDate);
                 }
-                if (StartDate < DateTime.Now.Date)
+                if (StartDate < DateTime.Now)
                 {
                     return (false, "Start date cannot be in the past.", StartDate, EndDate);
                 }
-                if (EndDate < DateTime.Now.Date)
+                if (EndDate < DateTime.Now)
                 {
                     return (false, "End date cannot be in the past.", StartDate, EndDate);
                 }
@@ -110,14 +147,47 @@ namespace CCSS_Service.Services
         }
         public async Task<string> AddRequest(RequestDtos requestDtos, RequestDescription requestDescription)
         {
-            var (isValid, errorMessage, StartDate, EndDate) = ValidateAndParseDates(requestDtos.StartDate, requestDtos.EndDate);
+            DateTime StartDate = DateTime.Now;
+            DateTime EndDate = DateTime.Now;
 
-            foreach(var character in requestDtos.ListRequestCharacters)
+            if (!string.IsNullOrEmpty(requestDtos.StartDate) || !string.IsNullOrEmpty(requestDtos.EndDate))
             {
-                if(character.CosplayerId != null)
+                string[] dateFormats = { "HH:mm dd/MM/yyyy", "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
+
+                bool isValidDate = DateTime.TryParseExact(requestDtos.StartDate, dateFormats,
+                                                          System.Globalization.CultureInfo.InvariantCulture,
+                                                          System.Globalization.DateTimeStyles.None,
+                                                          out StartDate);
+
+                bool isValidEndDate = DateTime.TryParseExact(requestDtos.EndDate, dateFormats,
+                                                             System.Globalization.CultureInfo.InvariantCulture,
+                                                             System.Globalization.DateTimeStyles.None,
+                                                             out EndDate);
+
+                if (!isValidDate || !isValidEndDate)
+                {
+                    return ("Date format is incorrect. Please enter the right format DateTime.");
+                }
+                if (StartDate < DateTime.Now)
+                {
+                    return ("Start date cannot be in the past.");
+                }
+                if (EndDate < DateTime.Now)
+                {
+                    return ("End date cannot be in the past.");
+                }
+                if (StartDate > EndDate)
+                {
+                    return ("End date must be greater than event date.");
+                }
+            }
+
+            foreach (var character in requestDtos.ListRequestCharacters)
+            {
+                if (character.CosplayerId != null)
                 {
                     Character checkCharacter = await _characterRepository.GetCharacter(character.CharacterId);
-                    if(checkCharacter == null)
+                    if (checkCharacter == null)
                     {
                         return "Character does not exist";
                     }
@@ -153,7 +223,9 @@ namespace CCSS_Service.Services
                 EndDate = EndDate,
                 Location = requestDtos.Location,
                 ServiceId = requestDtos.ServiceId,
+                PackageId = requestDtos.PackageId,
                 ContractId = null,
+                AccountCouponId = null
             };
 
             if (requestDescription == RequestDescription.RentCosplayer)
@@ -174,7 +246,7 @@ namespace CCSS_Service.Services
                         }
                         if (characteInRequest.Any(c => c.CosplayerId == r.CosplayerId))
                         {
-                             await _repository.DeleteRequest(newRequest);
+                            await _repository.DeleteRequest(newRequest);
                             return $"Cosplayer with ID {r.CosplayerId} is already added.";
                         }
                         // Nếu CosplayerId hợp lệ, thêm vào danh sách
@@ -187,7 +259,11 @@ namespace CCSS_Service.Services
                             CreateDate = newRequest.StartDate,
                             Quantity = r.Quantity,
                             CosplayerId = r.CosplayerId,
-                        });                     
+                        });
+                        if (r.Quantity > 1)
+                        {
+                            return "Rent Cosplayer just only 1 Character for 1 Cosplayer";
+                        }
                     }
 
                     var requestCharacterAdd = await _requestCharacterRepository.AddListRequestCharacter(characteInRequest);
@@ -279,7 +355,7 @@ namespace CCSS_Service.Services
         {
             var (isValid, errorMessage, StartDate, EndDate) = ValidateAndParseDates(UpdateRequestDtos.StartDate, UpdateRequestDtos.EndDate);
 
-            var requestExisting = await GetRequestById(requestId);
+            var requestExisting = await _repository.GetRequestById(requestId);
             if (requestExisting == null)
             {
                 return "Request is not found";
@@ -341,14 +417,14 @@ namespace CCSS_Service.Services
                 return "Request not found";
             }
             request.Status = requestStatus;
-            
+
             await _repository.UpdateRequest(request);
 
             return "Status is update success";
         }
         public async Task<string> DeleteRequest(string id)
         {
-            var request = await GetRequestById(id);
+            var request = await _repository.GetRequestById(id);
             if (request == null)
             {
                 return "Request not found";
@@ -356,7 +432,5 @@ namespace CCSS_Service.Services
             await _repository.DeleteRequest(request);
             return "Delete Request Success";
         }
-
-
     }
 }

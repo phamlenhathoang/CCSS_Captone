@@ -19,7 +19,8 @@ namespace CCSS_Service.Model.Responses
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string? Location { get; set; }     
-        public string? ServiceId { get; set; }       
+        public string? ServiceId { get; set; }
+        public string? PackageId { get; set; }
         public string? ContractId { get; set; }   
         public List<CharacterRequestResponse> CharactersListResponse { get; set; } 
     }

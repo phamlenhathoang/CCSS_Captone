@@ -18,6 +18,7 @@ namespace CCSS_Service.Model.Requests
         public string EndDate { get; set; }
         public string? Location { get; set; }
         public string? ServiceId { get; set; }
+        public string? PackageId { get; set; }
         public List<CharacterList> ListRequestCharacters { get; set; }
 
     }
