@@ -52,7 +52,7 @@ namespace CCSS_Captone.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _services.UpdateStatusContract(contracId, status, null);
+                var result = await _services.UpdateStatusContract(contracId, status);
                 return Ok(result);
             }
             return BadRequest(ModelState);
