@@ -25,13 +25,15 @@ namespace CCSS_Service.Services
         private readonly IRequestCharacterRepository _requestCharacterRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly ICharacterRepository _characterRepository;
+        private readonly ITaskRepository taskRepository;
 
-        public RequestServices(IRequestRepository repository, IRequestCharacterRepository requestCharacterRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository)
+        public RequestServices(ITaskRepository taskRepository, IRequestRepository repository, IRequestCharacterRepository requestCharacterRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository)
         {
             _repository = repository;
             _characterRepository = characterRepository;
             _requestCharacterRepository = requestCharacterRepository;
             _accountRepository = accountRepository;
+            this.taskRepository = taskRepository;
         }
 
         public async Task<List<Request>> GetAllRequest()
@@ -86,6 +88,31 @@ namespace CCSS_Service.Services
         public async Task<string> AddRequest(RequestDtos requestDtos, RequestDescription requestDescription)
         {
             var (isValid, errorMessage, StartDate, EndDate) = ValidateAndParseDates(requestDtos.StartDate, requestDtos.EndDate);
+
+            foreach(var character in requestDtos.ListRequestCharacters)
+            {
+                if(character.CosplayerId != null)
+                {
+                    Character checkCharacter = await _characterRepository.GetCharacter(character.CharacterId);
+                    if(checkCharacter == null)
+                    {
+                        return "Character does not exist";
+                    }
+
+                    Account account = await _accountRepository.GetAccount(character.CosplayerId);
+                    bool checkAccount = await _characterRepository.CheckCharacterForAccount(account, character.CharacterId);
+                    if (!checkAccount)
+                    {
+                        return "Cosplayer does not suitable.";
+                    }
+
+                    bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
+                    if (!checkTask)
+                    {
+                        return "This cosplayer is has another job. Please change datetime.";
+                    }
+                }
+            }
 
             if (requestDtos == null)
             {

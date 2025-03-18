@@ -49,6 +49,7 @@ builder.Services.AddScoped<IRequestCharacterRepository, RequestCharacterReposito
 builder.Services.AddScoped<IEventChacracterRepository, EventChacracterRepository>();
 builder.Services.AddScoped<IAccountCouponRepository, AccountCouponRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 
 
 //Service
@@ -66,6 +67,8 @@ builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IDashBoardService, DashBoardService>();
 builder.Services.AddScoped<IRequestServices, RequestServices>();
 builder.Services.AddScoped<IRequestCharacterService, RequestCharacterService>();
+builder.Services.AddScoped<IFeedbackService, FeebackService>();
+builder.Services.AddScoped<IContractCharacterService, ContractCharacterService>();
 builder.Services.AddScoped<IPdfService, Pdf>();
 
 
