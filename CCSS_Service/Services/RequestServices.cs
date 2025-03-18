@@ -225,7 +225,7 @@ namespace CCSS_Service.Services
                 ServiceId = requestDtos.ServiceId,
                 PackageId = requestDtos.PackageId,
                 ContractId = null,
-                AccountCouponId = null
+                AccountCouponId = requestDtos.AccountCouponId,
             };
 
             if (requestDescription == RequestDescription.RentCosplayer)
@@ -300,6 +300,7 @@ namespace CCSS_Service.Services
                             Description = r.Description,
                             Quantity = r.Quantity,
                             CosplayerId = null,
+                            
                         });
                     }
 
