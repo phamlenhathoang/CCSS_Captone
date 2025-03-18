@@ -35,7 +35,7 @@ namespace CCSS_Service.Services
         //Task<List<TaskResponse>> ViewAllTaskByContractId(string contractId);
 
         Task<List<TaskResponse>> GetAllTasks();
-        Task<string> AddTask(List<AddTaskEventRequest> taskEventRequests, List<AddTaskContractRequest> taskContractRequests);
+        Task<string> AddTask(List<AddTaskEventRequest> taskEventRequests, List<ContractCharacter> contractCharacters);
     }
     public class TaskService : ITaskService
     {
@@ -103,7 +103,7 @@ namespace CCSS_Service.Services
 
                 if (!CheckCharacterForAccount(account, eventCharacter.Character))
                 {
-                    throw new Exception("Account does not suitable character");
+                    throw new Exception("Cosplayer does not suitable character");
                 }
 
                 Task task = new Task()
@@ -152,15 +152,15 @@ namespace CCSS_Service.Services
             return false;
         }
 
-        private async Task<bool> AddTaskContract(List<AddTaskContractRequest> taskContractRequests)
+        private async Task<bool> AddTaskContract(List<ContractCharacter> contractCharacters)
         {
             List<Task> tasks = new List<Task>();
 
             var uniqueElements = new HashSet<string>();
 
-            foreach (var taskEventRequest in taskContractRequests)
+            foreach (var taskEventRequest in contractCharacters)
             {
-                bool checkAccount = uniqueElements.Add(taskEventRequest.AccountId);
+                bool checkAccount = uniqueElements.Add(taskEventRequest.CosplayerId);
 
                 if (!checkAccount)
                 {
@@ -168,19 +168,22 @@ namespace CCSS_Service.Services
                 }
             }
 
-            foreach (var taskRequest in taskContractRequests)
+            foreach (var taskRequest in contractCharacters)
             {
-                Account account = await accountRepository.GetAccount(taskRequest.AccountId);
+                Account account = await accountRepository.GetAccount(taskRequest.CosplayerId);
                 if (account == null)
                 {
                     throw new Exception("Account does not exist");
                 }
+                if (account.Role.RoleName != RoleName.Cosplayer)
+                {
+                    throw new Exception("Account must be cosplayer");
+                }
                 ContractCharacter contractCharacter = await contractCharacterRepository.GetContractCharacterById(taskRequest.ContractCharacterId);
                 if (contractCharacter == null)
                 {
-                    throw new Exception("EventCharacter does not exist");
+                    throw new Exception("ContractCharacter does not exist");
                 }
-
                 if (!CheckCharacterForAccount(account, contractCharacter.Character))
                 {
                     throw new Exception("Cosplayer does not suitable character");
@@ -189,7 +192,7 @@ namespace CCSS_Service.Services
                 Task task = new Task();
 
                 task.ContractCharacterId = taskRequest.ContractCharacterId;
-                task.AccountId = taskRequest.AccountId;
+                task.AccountId = taskRequest.CosplayerId;
                 task.CreateDate = contractCharacter.CreateDate;
                 task.Description = contractCharacter.Description;
                 task.EndDate = contractCharacter.Contract.Request.EndDate;
@@ -250,7 +253,7 @@ namespace CCSS_Service.Services
             return result;
         }
 
-        public async Task<string> AddTask(List<AddTaskEventRequest> taskEventRequests, List<AddTaskContractRequest> taskContractRequests)
+        public async Task<string> AddTask(List<AddTaskEventRequest> taskEventRequests, List<ContractCharacter> contractCharacters)
         {
             try
             {
@@ -263,9 +266,9 @@ namespace CCSS_Service.Services
                     }
                 }
 
-                if (taskContractRequests.Any())
+                if (contractCharacters.Any())
                 {
-                    bool result = await AddTaskContract(taskContractRequests) ? true : false;
+                    bool result = await AddTaskContract(contractCharacters) ? true : false;
                     if (result)
                     {
                         return "Successfully";

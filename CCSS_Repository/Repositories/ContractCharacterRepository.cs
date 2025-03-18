@@ -19,6 +19,7 @@ namespace CCSS_Repository.Repositories
         //Task<int> CountCharactersInContractAsync(string contractId);
 
         Task<ContractCharacter> GetContractCharacterById(string id);
+        Task<bool> AddListContractCharacter(List<ContractCharacter> listContractCharacter);
     }
     public class ContractCharacterRepository : IContractCharacterRepository
     {
@@ -27,6 +28,12 @@ namespace CCSS_Repository.Repositories
         public ContractCharacterRepository(CCSSDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<bool> AddListContractCharacter(List<ContractCharacter> listContractCharacter)
+        {
+            await _dbContext.AddRangeAsync(listContractCharacter);
+            return _dbContext.SaveChanges() > 0 ? true : false; 
         }
 
         //public async Task<int> CountCharactersInContractAsync(string contractId)

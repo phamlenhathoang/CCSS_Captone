@@ -13,6 +13,7 @@ namespace CCSS_Repository.Entities
     {
         [Key]
         public string FeedbackId { get; set; } = Guid.NewGuid().ToString(); 
+        public int? Star {  get; set; } 
         public string? Description { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }

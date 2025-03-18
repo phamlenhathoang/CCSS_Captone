@@ -40,20 +40,12 @@ namespace CCSS_Captone.Controllers
         //    return BadRequest(ModelState);
         //}
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddContract(ContractRequest contractRequest)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (contractRequest == null || contractRequest.contractCharacterRequests == null || !contractRequest.contractCharacterRequests.Any())
-        //        {
-        //            return BadRequest("Invalid contract data.");
-        //        }
-        //        var result = await _services.AddContract(contractRequest);
-        //        return Ok(result);
-        //    }
-        //    return BadRequest(ModelState);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> AddContract(string requestId, int deposit)
+        {
+            var result = await _services.AddContract(requestId, deposit);
+            return Ok(result);
+        }
 
         [HttpPut]
         public async Task<IActionResult> UpdateContract(string contracId, string status)

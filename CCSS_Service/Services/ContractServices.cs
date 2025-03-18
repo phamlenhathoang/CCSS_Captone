@@ -33,7 +33,7 @@ namespace CCSS_Service.Services
         //Task<string> UploadImageToFirebase(IFormFile file);
 
         Task<string> AddContract(string requestId, int deposit);
-        Task<bool> UpdateStatusContract(string? contractId, string status, double? amount);
+        Task<bool> UpdateStatusContract(string contractId, string status, double? amount);
     }
     public class ContractServices : IContractServices
     {
@@ -48,11 +48,12 @@ namespace CCSS_Service.Services
         private readonly Image Image;
         private readonly IHubContext<NotificationHub> hubContext;
         private readonly INotificationRepository notificationRepository;
+        private readonly IContractCharacterService contractCharacterService;
         private readonly string _projectId = "miracles-ef238";
         private readonly string _bucketName = "miracles-ef238.appspot.com";
 
 
-        public ContractServices(INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
+        public ContractServices(IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
         {
             this._contractRespository = _contractRespository;
             _contractCharacterRepository = contractCharacterRepository;
@@ -65,6 +66,7 @@ namespace CCSS_Service.Services
             this._accountRepository = _accountRepository;
             this.hubContext = hubContext;
             this.notificationRepository = notificationRepository;
+            this.contractCharacterService = contractCharacterService;
         }
         //private string GenerateCode(int length = 6)
         //{
@@ -300,15 +302,6 @@ namespace CCSS_Service.Services
                     throw new Exception("Request not browsed yet");
                 }
 
-                if (request.AccountCoupon == null) 
-                {
-                    throw new Exception("AcccountCoupon does not exist");
-                }
-                if(request.AccountCoupon.Coupon.Type != CouponType.ForContract)
-                {
-                    throw new Exception("Coupon not belong for contract");
-                }
-
                 if (request.Service == null) 
                 {
                     throw new Exception("Service does not exist");
@@ -319,24 +312,31 @@ namespace CCSS_Service.Services
                     throw new Exception("Account does not exist");
                 }
 
-                double totalPrice = (double)(request.Price * request.AccountCoupon.Coupon.Amount) / 100;
+                double totalPrice = (double)request.Price;
 
-                var urlPdf = await Image.UploadImageToFirebase(await pdfService.ConvertBytesToIFormFile(request, deposit));
+                if(request.AccountCouponId != null)
+                {
+                    AccountCoupon accountCoupon = await accountCouponRepository.GetAccountCoupon(request.AccountCouponId);
+                    if (accountCoupon == null)
+                    {
+                        throw new Exception("AccountCoupon does not exist");
+                    }
+                    totalPrice = (totalPrice * accountCoupon.Coupon.Amount) / 100;
+                }
 
                 Contract contract = new Contract()
                 {
                     Deposit = deposit.ToString(),
                     TotalPrice = totalPrice,
-                    Amount = (double)(totalPrice * deposit) / 100,
+                    Amount = totalPrice - ((totalPrice * deposit) / 100),
                     RequestId = requestId,
                     CreateBy = request.AccountId,
                     ContractId = Guid.NewGuid().ToString(),
                     CreateDate = DateTime.Now,
                     ContractStatus = ContractStatus.Active,
                     ContractName = request.Service.ServiceName,
-                    UrlPdf = urlPdf
+                    UrlPdf = await Image.UploadImageToFirebase(await pdfService.ConvertBytesToIFormFile(request, deposit)),
                 };
-
 
                 bool result = await _contractRespository.AddContract(contract);
                 if (result)
@@ -376,7 +376,10 @@ namespace CCSS_Service.Services
                     if (contract.ContractStatus == ContractStatus.Active)
                     {
                         contract.ContractStatus = ContractStatus.Progressing;
-                        contract.Amount = contract.TotalPrice - amount; 
+                        if (amount.HasValue)
+                        {
+                            contract.Amount = contract.TotalPrice - amount;
+                        }
                     }
                     else
                     {
@@ -394,12 +397,23 @@ namespace CCSS_Service.Services
                         throw new Exception("Can not update contract status");
                     }
                 }
+
                 bool result = await _contractRespository.UpdateContract(contract);
-                if (result) 
+                if (!result)
                 {
-                    return true;
+                    return false;
                 }
-                return false;
+
+                if (contract.ContractStatus == ContractStatus.Progressing)
+                {
+                    bool checkAddContractCharacter = await contractCharacterService.AddListContractCharacter(contract);
+                    if (!checkAddContractCharacter)
+                    {
+                        throw new Exception("Cannot add ContractCharacter");
+                    }
+                }
+
+                return true;
             }
             catch (Exception ex)
             {
