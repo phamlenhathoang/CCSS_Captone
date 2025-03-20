@@ -27,15 +27,20 @@ namespace CCSS_Service.Services
        
         private readonly IMapper _mapper;
         private readonly ITaskService _taskService;
+        private readonly ITaskRepository _taskRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly ICharacterRepository _characterRepository;
         //private readonly IImageService _imageService;
 
-        public EventService(IEventRepository repository, IMapper mapper, ITaskService taskService)
+        public EventService(IEventRepository repository, IMapper mapper, ITaskService taskService, ITaskRepository taskRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository)
         {
             _repository = repository;
             _mapper = mapper;
             //_imageService = imageService;
             _taskService = taskService;
-
+            _taskRepository = taskRepository;
+            _accountRepository = accountRepository;
+            _characterRepository = characterRepository;
         }
 
         public async Task<List<EventResponse>> GetAllEvents(string searchTerm)
@@ -88,23 +93,39 @@ namespace CCSS_Service.Services
                     newEvent.Ticket = newTicket;
 
                 }
-                List<EventCharacter> eventCharacters = null;
+
+                List<EventCharacter> eventCharacters = new List<EventCharacter>();
+
                 if (eventRequest.EventCharacterRequest != null && eventRequest.EventCharacterRequest.Any())
                 {
-                    // Tạo danh sách EventCharacter
-                    eventCharacters = eventRequest.EventCharacterRequest.Select(ec => new EventCharacter
+                    foreach (var ec in eventRequest.EventCharacterRequest)
                     {
-                        EventCharacterId = Guid.NewGuid().ToString(),
-                        EventId = newEvent.EventId,
-                        CharacterId = ec.CharacterId,
-                        CreateDate = DateTime.Now,
-                        UpdateDate = null,
-                        Description = ec.Description,
-                        IsAssign = false
-                    }).ToList();
+                        Account cosplayer = await _accountRepository.GetAccountByAccountId(ec.CosplayerId);
+                        bool checkTaskIsValid = await _taskRepository.CheckTaskIsValid(cosplayer, eventRequest.StartDate, eventRequest.EndDate);
+                        if (!checkTaskIsValid) 
+                        {
+                            return "Cosplayer "+ cosplayer.Name + " không phù hợp với thời gian sự kiện";
+                        }
+                        Character character = await _characterRepository.GetCharacter(ec.CharacterId);
+                        if (cosplayer.Height < character.MinHeight || cosplayer.Height > character.MaxHeight || cosplayer.Weight < character.MinWeight || cosplayer.Weight > character.MaxHeight)
+                        {
+                            return "Cosplayer " + cosplayer.Name + " không phù hợp với nhân vật " + character.CharacterName;
+                        }
+                        eventCharacters.Add(new EventCharacter
+                        {
+                            EventCharacterId = Guid.NewGuid().ToString(),
+                            EventId = newEvent.EventId,
+                            CharacterId = ec.CharacterId,
+                            CreateDate = DateTime.Now,
+                            UpdateDate = null,
+                            Description = ec.Description,
+                            IsAssign = false
+                        });
+                    }
 
                     newEvent.EventCharacters = eventCharacters;
                 }
+
                 if (eventRequest.EventActivityRequests != null && eventRequest.EventActivityRequests.Any())
                 {
                     var eventActivities = eventRequest.EventActivityRequests.Select(ea => new EventActivity
