@@ -40,6 +40,7 @@ namespace CCSS_Service.Services
         Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate);
         Task<List<AccountByCharacterAndDateResponse>> ViewAllAccountByCharacterName(string characterName, string? start, string? end);
         Task<List<AccountByCharacterAndDateResponse>> ViewAllCosplayerByContractId(string contractId);
+        Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId);
     }
     public class AccountService : IAccountService
     {
@@ -567,6 +568,11 @@ namespace CCSS_Service.Services
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId)
+        {
+            return mapper.Map<List<AccountResponse>>(await accountRepository.GetAllAccountsByRoleId(roleId));
         }
     }
 }

@@ -12,6 +12,7 @@ namespace CCSS_Repository.Repositories
     public interface IContractRespository
     {
         Task<Contract> GetContractById(string id);
+        Task<Contract> GetContractByIdThenIncludeFeedback(string id);
         Task<bool> AddContract(Contract contract);
         Task<bool> UpdateContract(Contract contract);
         Task<List<Contract>> GetContracts();
@@ -46,6 +47,11 @@ namespace CCSS_Repository.Repositories
         public async Task<List<Contract>> GetContracts()
         {
             return await _context.Contracts.ToListAsync();
+        }
+
+        public async Task<Contract> GetContractByIdThenIncludeFeedback(string id)
+        {
+            return await _context.Contracts.Include(c => c.ContractCharacters).ThenInclude(f => f.Feedback).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
         }
     }
 }
