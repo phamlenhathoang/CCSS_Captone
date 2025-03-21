@@ -314,33 +314,11 @@ namespace CCSS_Service.Services
                     throw new Exception("Account does not exist");
                 }
 
-                double totalPrice = (double)request.Price;
-
-                if(request.AccountCouponId != null)
-                {
-                    AccountCoupon accountCoupon = await accountCouponRepository.GetAccountCoupon(request.AccountCouponId);
-                    if (accountCoupon == null)
-                    {
-                        throw new Exception("AccountCoupon does not exist");
-                    }
-                    totalPrice = (totalPrice * accountCoupon.Coupon.Amount) / 100;
-                }
-
-                if (request.PackageId != null)
-                {
-                    Package package = await packageRepository.GetPackage(request.PackageId);
-                    if (package == null)
-                    {
-                        throw new Exception("Package does not exist");
-                    }
-                    totalPrice = (totalPrice + (double)package.Price);
-                }
-
                 Contract contract = new Contract()
                 {
                     Deposit = deposit.ToString(),
-                    TotalPrice = totalPrice,
-                    Amount = totalPrice - ((totalPrice * deposit) / 100),
+                    TotalPrice = request.Price,
+                    Amount = request.Price - ((request.Price * deposit) / 100),
                     RequestId = requestId,
                     CreateBy = request.AccountId,
                     ContractId = Guid.NewGuid().ToString(),

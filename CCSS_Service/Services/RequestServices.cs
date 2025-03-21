@@ -19,6 +19,7 @@ namespace CCSS_Service.Services
         Task<string> AddRequest(RequestDtos requestDtos, RequestDescription requestDescription);
         Task<string> UpdateRequest(string requestId, UpdateRequestDtos requestDtos);
         Task<string> UpdateStatusRequest(string requestId, RequestStatus requestStatus);
+        Task<double> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices);
     }
     public class RequestServices : IRequestServices
     {
@@ -432,6 +433,61 @@ namespace CCSS_Service.Services
             }
             await _repository.DeleteRequest(request);
             return "Delete Request Success";
+        }
+
+        public async Task<double> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices)
+        {
+            try
+            {
+                DateTime StartDate = DateTime.Now;
+                DateTime EndDate = DateTime.Now;
+
+                if (!string.IsNullOrEmpty(startDate) || !string.IsNullOrEmpty(endDate))
+                {
+                    string[] dateFormats = { "HH:mm dd/MM/yyyy", "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
+
+                    bool isValidDate = DateTime.TryParseExact(startDate, dateFormats,
+                                                              System.Globalization.CultureInfo.InvariantCulture,
+                                                              System.Globalization.DateTimeStyles.None,
+                                                              out StartDate);
+
+                    bool isValidEndDate = DateTime.TryParseExact(endDate, dateFormats,
+                                                                 System.Globalization.CultureInfo.InvariantCulture,
+                                                                 System.Globalization.DateTimeStyles.None,
+                                                                 out EndDate);
+
+                    if (!isValidDate || !isValidEndDate)
+                    {
+                        throw new Exception("Date format is incorrect. Please enter the right format DateTime.");
+                    }
+                    if (StartDate < DateTime.Now)
+                    {
+                        throw new Exception("Start date cannot be in the past.");
+                    }
+                    if (EndDate < DateTime.Now)
+                    {
+                        throw new Exception("End date cannot be in the past.");
+                    }
+                    if (StartDate > EndDate)
+                    {
+                        throw new Exception("End date must be greater than event date.");
+                    }
+                }
+
+                int totalDay = (int)Math.Ceiling((EndDate - StartDate).TotalDays);
+                double totalPrice = 0;
+
+                foreach (var request in requestTotalPrices)
+                {
+                    totalPrice += request.CharacterPrice * (request.SalaryIndex != 0 ? request.SalaryIndex : 1);
+                }
+
+                return totalDay * totalPrice + packagePrice + accountCouponPrice;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

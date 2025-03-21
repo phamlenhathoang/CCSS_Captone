@@ -153,8 +153,8 @@ namespace CCSS_Service.Libraries
                             <td>{account.Name}</td>
                             <td>Cosplayer</td>
                             <td>-</td>
-                            <td>{character.Price * account.SalaryIndex}</td>
-                            <td>{character.Price * account.SalaryIndex}</td>
+                            <td>{character.Price * account.SalaryIndex - character.Price}</td>
+                            <td>{character.Price * account.SalaryIndex - character.Price}</td>
                         </tr>";
                             index++;
                         }
@@ -245,7 +245,7 @@ namespace CCSS_Service.Libraries
                 if (requestCharacter.CosplayerId != null)
                 {
                     Account account = await accountRepository.GetAccount(requestCharacter.CosplayerId);
-                    totalAmount += (double)character.Price * (double)account.SalaryIndex;
+                    totalAmount += (double)character.Price * (double)account.SalaryIndex - (double)character.Price;
                 }
             }
             double parsedAmount;
