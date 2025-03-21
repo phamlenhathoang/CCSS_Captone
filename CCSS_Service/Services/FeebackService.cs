@@ -246,7 +246,7 @@ namespace CCSS_Service.Services
 
         public async Task<List<FeedbackResponse>> ViewFeedbackByCosplayerId(string cosplayerId)
         {
-            return mapper.Map<List<FeedbackResponse>>(await _feedbackRepository.GetAllFeedbacksByCosplayerId(cosplayerId))
+            return mapper.Map<List<FeedbackResponse>>(await _feedbackRepository.GetAllFeedbacksByCosplayerId(cosplayerId));
         }
     }
 }

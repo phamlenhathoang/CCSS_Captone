@@ -57,6 +57,7 @@ namespace CCSS_Service.Services
                         TotalPrice = requestCharacter.TotalPrice,   
                         UpdateDate = null,
                         CosplayerId = requestCharacter.CosplayerId,
+                        Quantity = requestCharacter.Quantity,
                     };
 
                     contractCharacters.Add(character);

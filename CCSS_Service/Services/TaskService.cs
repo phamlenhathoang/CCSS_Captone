@@ -101,10 +101,10 @@ namespace CCSS_Service.Services
                     throw new Exception("EventCharacter assigned");
                 }
 
-                if (!CheckCharacterForAccount(account, eventCharacter.Character))
-                {
-                    throw new Exception("Cosplayer does not suitable character");
-                }
+                //if (!CheckCharacterForAccount(account, eventCharacter.Character))
+                //{
+                //    throw new Exception("Cosplayer does not suitable character");
+                //}
 
                 Task task = new Task()
                 {
@@ -123,11 +123,11 @@ namespace CCSS_Service.Services
                     UpdateDate = null,
                 };
 
-                bool checkTask = await taskRepository.CheckTaskIsValid(account, task.StartDate.Value, task.EndDate.Value);
-                if (!checkTask)
-                {
-                    throw new Exception("Task is invalid");
-                }
+                //bool checkTask = await taskRepository.CheckTaskIsValid(account, task.StartDate.Value, task.EndDate.Value);
+                //if (!checkTask)
+                //{
+                //    throw new Exception("Task is invalid");
+                //}
 
                 bool check = await taskRepository.AddTask(task);
 
@@ -145,7 +145,7 @@ namespace CCSS_Service.Services
 
         private bool CheckCharacterForAccount(Account account, Character character)
         {
-            if (character.MinHeight < account.Height && account.Height < character.MaxHeight && character.MinWeight < account.Weight && account.Weight < character.MaxHeight)
+            if (character.MinHeight <= account.Height && account.Height <= character.MaxHeight && character.MinWeight <= account.Weight && account.Weight <= character.MaxHeight)
             {
                 return true;
             }
@@ -184,10 +184,10 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("ContractCharacter does not exist");
                 }
-                if (!CheckCharacterForAccount(account, contractCharacter.Character))
-                {
-                    throw new Exception("Cosplayer does not suitable character");
-                }
+                //if (!CheckCharacterForAccount(account, contractCharacter.Character))
+                //{
+                //    throw new Exception("Cosplayer does not suitable character");
+                //}
 
                 Task task = new Task();
 
@@ -204,11 +204,11 @@ namespace CCSS_Service.Services
                 task.Type = "Contract";
                 task.TaskId = Guid.NewGuid().ToString();
                 
-                bool checkTask = await taskRepository.CheckTaskIsValid(account, task.StartDate.Value, task.EndDate.Value);
-                if (!checkTask)
-                {
-                    throw new Exception("Task is invalid");
-                }
+                //bool checkTask = await taskRepository.CheckTaskIsValid(account, task.StartDate.Value, task.EndDate.Value);
+                //if (!checkTask)
+                //{
+                //    throw new Exception("Task is invalid");
+                //}
 
                 bool check = await taskRepository.AddTask(task);
                 if (!check)

@@ -1,4 +1,5 @@
-﻿using CCSS_Repository.Entities;
+﻿using AutoMapper;
+using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
 using CCSS_Service.Hubs;
 using CCSS_Service.Libraries;
@@ -24,7 +25,7 @@ namespace CCSS_Service.Services
 {
     public interface IContractServices
     {
-        //Task<List<Request>> GetAllContract(string searchterm);
+        ////Task<List<Request>> GetAllContract(string searchterm);
         //Task<Request> GetContract(string id);
         //Task<string> AddContract(ContractRequest contractRequest);
         //Task<string> UpdateContract(string contractId, ContractResponse contractResponse);
@@ -34,6 +35,8 @@ namespace CCSS_Service.Services
 
         Task<string> AddContract(string requestId, int deposit);
         Task<bool> UpdateStatusContract(string contractId, string status);
+        Task<bool> DeleteContract(string contractId, string reason);   
+        Task<List<ContractResponse>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate,string? accountId, string? contractId);
     }
     public class ContractServices : IContractServices
     {
@@ -50,11 +53,12 @@ namespace CCSS_Service.Services
         private readonly INotificationRepository notificationRepository;
         private readonly IContractCharacterService contractCharacterService;
         private readonly IPackageRepository packageRepository;
+        private readonly IMapper mapper;
         private readonly string _projectId = "miracles-ef238";
         private readonly string _bucketName = "miracles-ef238.appspot.com";
 
 
-        public ContractServices(IPackageRepository packageRepository, IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
+        public ContractServices(IMapper mapper, IPackageRepository packageRepository, IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
         {
             this._contractRespository = _contractRespository;
             _contractCharacterRepository = contractCharacterRepository;
@@ -69,6 +73,7 @@ namespace CCSS_Service.Services
             this.notificationRepository = notificationRepository;
             this.contractCharacterService = contractCharacterService;
             this.packageRepository = packageRepository;
+            this.mapper = mapper;
         }
         //private string GenerateCode(int length = 6)
         //{
@@ -336,6 +341,119 @@ namespace CCSS_Service.Services
                 return "Failed";
             }
             catch(Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> DeleteContract(string contractId, string reason)
+        {
+            try
+            {
+                Contract contract = await _contractRespository.GetContractById(contractId);
+                if (contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
+                if (contract.ContractStatus != ContractStatus.Active)
+                {
+                    throw new Exception("Contract can not delete");
+                }
+                contract.ContractStatus = ContractStatus.Cancel;
+                contract.Reason = reason;
+                bool result = await _contractRespository.UpdateContract(contract);
+                if (result)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<ContractResponse>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId)
+        {
+            try
+            {
+                List<ContractResponse> crs = new List<ContractResponse>();
+                List<ListContractCharcterResponse> listContractCharcterResponses = new List<ListContractCharcterResponse>();
+                List<Contract> contracts = await _contractRespository.GetContract(contractName, contractStatus, startDate, endDate, accountId, contractId);
+                if (contracts == null)
+                {
+                    return crs;
+                }
+                Package package = null;
+                foreach (var contract in contracts)
+                {
+                    if (contract.Request.PackageId != null)
+                    {
+                        package = await packageRepository.GetPackage(contract.Request.PackageId);
+                        if (package == null)
+                        {
+                            throw new Exception("Package does not exist");
+                        }
+                    }
+
+                    ContractResponse crsItem = new ContractResponse()
+                    {
+                        Amount = (double)contract.Amount,
+                        ContractName = contract.ContractName,
+                        Deposit = contract.Deposit,
+                        EndDate = contract.Request.EndDate.ToString("HH:mm dd/MM/yyyy"),
+                        StartDate = contract.Request.StartDate.ToString("HH:mm dd/MM/yyyy"),
+                        PackageName = package.PackageName,
+                        Price = (double)contract.TotalPrice,
+                        Status = contract.ContractStatus.ToString(),
+                        Reason = contract.Reason,
+                    };
+
+                    foreach (var contractCharacter in contract.ContractCharacters)
+                    {
+                        Account account = new Account();
+                        if (contractCharacter.CosplayerId != null)
+                        {
+                            account = await _accountRepository.GetAccount(contractCharacter.CosplayerId);
+                            if(account == null)
+                            {
+                                throw new Exception("Account does not exist");
+                            }
+                        }
+                        Character character = await _characterRepository.GetCharacter(contractCharacter.CharacterId);
+                        if (character == null)
+                        {
+                            throw new Exception("Character does not exist");
+                        }
+
+                        ListContractCharcterResponse listContractCharcterResponse = new ListContractCharcterResponse()
+                        {
+                            CharacterName = character.CharacterName,
+                            Quantity = (int)contractCharacter.Quantity,
+                        };
+
+                        if (account != null)
+                        {
+                            listContractCharcterResponse.CosplayerName = account.Name;
+                        }
+                        else
+                        {
+                            listContractCharcterResponse.CosplayerName = null;
+                        }
+
+                        listContractCharcterResponses.Add(listContractCharcterResponse);
+
+                    }
+
+                    crsItem.ContractCharacters = listContractCharcterResponses;
+
+                    crs.Add(crsItem);
+                }
+
+                return crs;
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
