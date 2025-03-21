@@ -29,8 +29,9 @@ namespace CCSS_Service.Services
         private readonly ICharacterRepository _characterRepository;
         private readonly ITaskRepository taskRepository;
         private readonly IServiceRepository _serviceRepository;
+        private readonly IAccountCouponRepository _accountCouponRepository;
 
-        public RequestServices(ITaskRepository taskRepository, IRequestRepository repository, IRequestCharacterRepository requestCharacterRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, IServiceRepository serviceRepository)
+        public RequestServices(ITaskRepository taskRepository, IRequestRepository repository, IRequestCharacterRepository requestCharacterRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, IServiceRepository serviceRepository, IAccountCouponRepository accountCouponRepository)
         {
             _repository = repository;
             _characterRepository = characterRepository;
@@ -38,8 +39,9 @@ namespace CCSS_Service.Services
             _accountRepository = accountRepository;
             this.taskRepository = taskRepository;
             _serviceRepository = serviceRepository;
+            _accountCouponRepository = accountCouponRepository;
         }
-
+        #region GetAll Request
         public async Task<List<RequestResponse>> GetAllRequest()
         {
             List<RequestResponse> listRequest = new List<RequestResponse>();
@@ -76,7 +78,9 @@ namespace CCSS_Service.Services
             }
             return listRequest;
         }
+        #endregion
 
+        #region Get Request By Id
         public async Task<RequestResponse> GetRequestById(string id)
         {
             var request = await _repository.GetRequestById(id);
@@ -108,7 +112,9 @@ namespace CCSS_Service.Services
             };
             return response;
         }
+        #endregion
 
+        #region Add Request
         public async Task<string> AddRequest(RequestDtos requestDtos)
         {
             DateTime StartDate = DateTime.Now;
@@ -159,6 +165,19 @@ namespace CCSS_Service.Services
             {
                 requestDtos.PackageId = null;
             }
+            var accountCoupon = await _accountCouponRepository.GetAccountCouponById(requestDtos.AccountCouponId);
+            if (accountCoupon == null)
+            {
+                return "This Account is not found";
+            }
+            if (accountCoupon.Coupon.Type != CouponType.ForContract)
+            {
+                return "This coupon not use for contract";
+            }
+            if (accountCoupon.IsActive == true)
+            {
+                return "This coupon be used";
+            }
 
             foreach (var r in requestDtos.ListRequestCharacters)
             {
@@ -207,48 +226,56 @@ namespace CCSS_Service.Services
                 ContractId = null,
                 AccountCouponId = requestDtos.AccountCouponId,
             };
-            await _repository.AddRequest(newRequest);
-
-            if (requestDtos.ListRequestCharacters != null && requestDtos.ListRequestCharacters.Any())
+            var result = await _repository.AddRequest(newRequest);
+            if (!result)
             {
-                List<RequestCharacter> characteInRequest = new List<RequestCharacter>();
-
-                foreach (var r in requestDtos.ListRequestCharacters)
-                {
-                    if (characteInRequest.Any(c => c.CosplayerId == r.CosplayerId))
-                    {
-                        await _repository.DeleteRequest(newRequest);
-                        return $"Cosplayer with ID {r.CosplayerId} is already added.";
-                    }
-                    if (service.ServiceId == "S001")
-                    {
-                        r.CosplayerId = null;
-                    }
-                    if (service.ServiceId != "S001")
-                    {
-                        r.Quantity = 1;
-                    }
-                    // Nếu CosplayerId hợp lệ, thêm vào danh sách
-                    characteInRequest.Add(new RequestCharacter
-                    {
-                        RequestCharacterId = Guid.NewGuid().ToString(),
-                        RequestId = newRequest.RequestId,
-                        Description = r.Description,
-                        CharacterId = r.CharacterId,
-                        CreateDate = newRequest.StartDate,
-                        Quantity = r.Quantity,
-                        CosplayerId = r.CosplayerId,
-                    });
-                }
-                var requestCharacterAdd = await _requestCharacterRepository.AddListRequestCharacter(characteInRequest);
-                if (!requestCharacterAdd)
-                {
-                    return "Failed to add characters.";
-                }
+                return "Add Request Failed";
             }
-            return "Add Request Success";
-        }
+            else
+            {
+                if (requestDtos.ListRequestCharacters != null && requestDtos.ListRequestCharacters.Any())
+                {
+                    List<RequestCharacter> characteInRequest = new List<RequestCharacter>();
 
+                    foreach (var r in requestDtos.ListRequestCharacters)
+                    {
+                        if (characteInRequest.Any(c => c.CosplayerId == r.CosplayerId))
+                        {
+                            await _repository.DeleteRequest(newRequest);
+                            return $"Cosplayer with ID {r.CosplayerId} is already added.";
+                        }
+                        if (service.ServiceId == "S001")
+                        {
+                            r.CosplayerId = null;
+                        }
+                        if (service.ServiceId != "S001")
+                        {
+                            r.Quantity = 1;
+                        }
+                        // Nếu CosplayerId hợp lệ, thêm vào danh sách
+                        characteInRequest.Add(new RequestCharacter
+                        {
+                            RequestCharacterId = Guid.NewGuid().ToString(),
+                            RequestId = newRequest.RequestId,
+                            Description = r.Description,
+                            CharacterId = r.CharacterId,
+                            CreateDate = newRequest.StartDate,
+                            Quantity = r.Quantity,
+                            CosplayerId = r.CosplayerId,
+                        });
+                    }
+                    var requestCharacterAdd = await _requestCharacterRepository.AddListRequestCharacter(characteInRequest);
+                    if (!requestCharacterAdd)
+                    {
+                        return "Failed to add characters in Request";
+                    }
+                }
+                return "Add Request Success";
+            }
+        }
+        #endregion
+
+        #region Update Request
         public async Task<string> UpdateRequest(string requestId, UpdateRequestDtos UpdateRequestDtos)
         {
             DateTime StartDate = DateTime.Now;
@@ -339,7 +366,9 @@ namespace CCSS_Service.Services
             return "Update request Success";
 
         }
+        #endregion
 
+        #region Update Request Status
         public async Task<string> UpdateStatusRequest(string requestId, RequestStatus requestStatus)
         {
             var request = await _repository.GetRequestById(requestId);
@@ -353,6 +382,9 @@ namespace CCSS_Service.Services
 
             return "Status is update success";
         }
+        #endregion
+
+        #region Delete Request
         public async Task<string> DeleteRequest(string id)
         {
             var request = await _repository.GetRequestById(id);
@@ -363,6 +395,7 @@ namespace CCSS_Service.Services
             await _repository.DeleteRequest(request);
             return "Delete Request Success";
         }
+        #endregion
 
         public async Task<double> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices)
         {
