@@ -14,6 +14,7 @@ namespace CCSS_Repository.Repositories
     {
         Task<AccountCoupon> GetAccountCoupon(string id);
         Task<List<AccountCoupon>> GetAllAccountCoupons();
+        Task<AccountCoupon> GetAccountCouponById(string accountCouponId);
         Task<bool> AddAccountCoupon(AccountCoupon accountCoupon);
         Task<bool> UpdateAccountCoupon(AccountCoupon accountCoupon);
         Task<bool> DeleteAccountCoupon(AccountCoupon accountCoupon);
@@ -34,6 +35,11 @@ namespace CCSS_Repository.Repositories
                 .Where(ac => ac.AccountCouponId == id)
                 .Include(ac => ac.Coupon)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<AccountCoupon> GetAccountCouponById(string accountCouponId)
+        {
+            return await _dbContext.AccountCoupons.Include(c => c.Coupon).FirstOrDefaultAsync(sc => sc.AccountCouponId.Equals(accountCouponId));
         }
 
         public async Task<List<AccountCoupon>> GetAllAccountCoupons()

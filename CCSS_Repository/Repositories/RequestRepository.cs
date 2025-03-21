@@ -13,7 +13,7 @@ namespace CCSS_Repository.Repositories
     {
         Task<List<Request>> GetAllRequest();
         Task<Request> GetRequestById(string id);
-        Task AddRequest(Request request);
+        Task<bool> AddRequest(Request request);
         Task UpdateRequest(Request request);
         Task DeleteRequest(Request request);
         Task<Request> GetRequestIncludeRequestCharacter(string requestId);
@@ -39,10 +39,10 @@ namespace CCSS_Repository.Repositories
             return await _context.Requests.FirstOrDefaultAsync(sc => sc.RequestId.Equals(id));  
         }
 
-        public async Task AddRequest( Request request)
+        public async Task<bool> AddRequest( Request request)
         {
             _context.Requests.Add(request);
-            await _context.SaveChangesAsync();
+           return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task UpdateRequest(Request request)
