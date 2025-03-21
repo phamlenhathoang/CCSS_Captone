@@ -13,7 +13,7 @@ namespace CCSS_Service.Model.Responses
         public string RequestId { get; set; } = Guid.NewGuid().ToString();    
         public string? AccountId { get; set; }   
         public string Name { get; set; }
-        public RequestDescription? Description { get; set; }
+        public string? Description { get; set; }
         public double? Price { get; set; }
         public RequestStatus Status { get; set; }
         public DateTime StartDate { get; set; }

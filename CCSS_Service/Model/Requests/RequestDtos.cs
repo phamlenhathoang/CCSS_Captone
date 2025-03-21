@@ -12,7 +12,7 @@ namespace CCSS_Service.Model.Requests
     {   
         public string? AccountId { get; set; }
         public string Name { get; set; }
-        //public RequestDescription? Description { get; set; }
+        public string? Description { get; set; }
         public double? Price { get; set; }      
         public string StartDate { get; set; }
         public string EndDate { get; set; }

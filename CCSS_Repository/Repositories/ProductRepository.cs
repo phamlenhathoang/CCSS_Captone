@@ -1,4 +1,5 @@
 ﻿using CCSS_Repository.Entities;
+using Microsoft.CodeAnalysis.FlowAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,16 @@ using Task = System.Threading.Tasks.Task;
 
 namespace CCSS_Repository.Repositories
 {
-    public class ProductRepository
+    public interface IProductRepository
+    {
+        Task<List<Product>> GetAllProduct(string searchterm);
+        Task<Product> GetProductById(string productId);
+        Task<bool> AddProduct(Product product);
+        Task UpdateProduct(Product product);
+        Task DeleteProduct(Product product);
+    }
+
+    public class ProductRepository: IProductRepository
     {
         private readonly CCSSDbContext _context;
 
@@ -35,10 +45,10 @@ namespace CCSS_Repository.Repositories
             return await _context.Products.FirstOrDefaultAsync(sc => sc.ProductId.Equals(productId));
         }
 
-        public async Task AddProduct(Product product)
+        public async Task<bool> AddProduct(Product product)
         {
             _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+           return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task UpdateProduct(Product product)
