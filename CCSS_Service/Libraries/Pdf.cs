@@ -160,9 +160,11 @@ namespace CCSS_Service.Libraries
                         }
                     }
 
+                    double packagePrice = (package?.Price ?? 0);
+
                     htmlContent += $@"<tr>
-                    <td colspan='5' class='right-align'>{package.PackageName}</td>
-                    <td>{package.Price}</td>
+                    <td colspan='5' class='right-align'>Package</td>
+                    <td>{packagePrice}</td>
                 </tr>";
 
                     // Xử lý coupon
@@ -175,7 +177,7 @@ namespace CCSS_Service.Libraries
                 </tr>";
 
                     // Tính tổng số tiền
-                    double totalAmount = await CalculateTotalAmount(request, formattedAmount, (double)package.Price);
+                    double totalAmount = await CalculateTotalAmount(request, formattedAmount, packagePrice);
 
                     htmlContent += $@"<tr>
                     <td colspan='5' class='right-align'>Tổng</td>

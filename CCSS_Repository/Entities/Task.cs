@@ -33,7 +33,7 @@ namespace CCSS_Repository.Entities
         public Account Account { get; set; }
 
         [ForeignKey("EventCharacterId")]
-        public string EventCharacterId { get; set; }
+        public string? EventCharacterId { get; set; }
         public EventCharacter EventCharacter { get; set; }
 
         [ForeignKey("ContractCharacterId")]

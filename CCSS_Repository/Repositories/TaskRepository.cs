@@ -15,7 +15,7 @@ namespace CCSS_Repository.Repositories
     {
         //Task<Task> GetTask(string id);
         //Task<List<Task>> GetTaskByAccountId(string accountId);
-        Task<bool> AddTask(CCSS_Repository.Entities.Task tasks);
+        Task<bool> AddTask(Task task);
         //Task<bool> AddRangeTask(List<Task> task);
         //Task<bool> UpdateTask(CCSS_Repository.Entities.Task task);
         //Task<bool> DeleteTask(CCSS_Repository.Entities.Task task);
@@ -41,11 +41,18 @@ namespace CCSS_Repository.Repositories
         //    return result > 0 ? true : false;
         //}
 
-        public async Task<bool> AddTask(Entities.Task task)
+        public async Task<bool> AddTask(Task task)
         {
-            await _dbContext.AddAsync(task);
-            int result = await _dbContext.SaveChangesAsync();
-            return result > 0 ? true : false;
+            try
+            {
+                await _dbContext.AddAsync(task);
+                int result = await _dbContext.SaveChangesAsync();
+                return result > 0 ? true : false;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<List<Task>> GetAllTask()

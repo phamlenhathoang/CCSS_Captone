@@ -61,7 +61,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Request> GetRequestByIdInclude(string id)
         {
-            return await _context.Requests.Include(a => a.Account)
+            return await _context.Requests.Include(a => a.Account).Include(c => c.Contract)
                                           .Include(s => s.Service)
                                           .Include(rc => rc.RequestCharacters)
                                           .FirstOrDefaultAsync(sc => sc.RequestId.Equals(id));

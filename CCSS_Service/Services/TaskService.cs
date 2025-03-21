@@ -35,7 +35,7 @@ namespace CCSS_Service.Services
         //Task<List<TaskResponse>> ViewAllTaskByContractId(string contractId);
 
         Task<List<TaskResponse>> GetAllTasks();
-        Task<string> AddTask(List<AddTaskEventRequest> taskEventRequests, List<ContractCharacter> contractCharacters);
+        Task<string> AddTask(List<AddTaskEventRequest>? taskEventRequests, List<ContractCharacter>? contractCharacters);
     }
     public class TaskService : ITaskService
     {
@@ -110,7 +110,7 @@ namespace CCSS_Service.Services
                 {
                     EventCharacterId = taskRequest.EventCharacterId,
                     AccountId = taskRequest.AccountId,
-                    CreateDate = eventCharacter.CreateDate,
+                    CreateDate = DateTime.Now,
                     Description = eventCharacter.Description,
                     EndDate = eventCharacter.Event.EndDate,
                     StartDate = eventCharacter.Event.StartDate,
@@ -160,63 +160,60 @@ namespace CCSS_Service.Services
 
             foreach (var taskEventRequest in contractCharacters)
             {
-                bool checkAccount = uniqueElements.Add(taskEventRequest.CosplayerId);
-
-                if (!checkAccount)
+                if(taskEventRequest.CosplayerId != null)
                 {
-                    throw new Exception("Account is duplicate");
+                    bool checkAccount = uniqueElements.Add(taskEventRequest.CosplayerId);
+
+                    if (!checkAccount)
+                    {
+                        throw new Exception("Account is duplicate");
+                    }
                 }
             }
 
             foreach (var taskRequest in contractCharacters)
             {
-                Account account = await accountRepository.GetAccount(taskRequest.CosplayerId);
-                if (account == null)
+                if (taskRequest.CosplayerId != null)
                 {
-                    throw new Exception("Account does not exist");
-                }
-                if (account.Role.RoleName != RoleName.Cosplayer)
-                {
-                    throw new Exception("Account must be cosplayer");
-                }
-                ContractCharacter contractCharacter = await contractCharacterRepository.GetContractCharacterById(taskRequest.ContractCharacterId);
-                if (contractCharacter == null)
-                {
-                    throw new Exception("ContractCharacter does not exist");
-                }
-                //if (!CheckCharacterForAccount(account, contractCharacter.Character))
-                //{
-                //    throw new Exception("Cosplayer does not suitable character");
-                //}
+                    Account account = await accountRepository.GetAccount(taskRequest.CosplayerId);
+                    if (account == null)
+                    {
+                        throw new Exception("Account does not exist");
+                    }
+                    if (account.Role.RoleName != RoleName.Cosplayer)
+                    {
+                        throw new Exception("Account must be cosplayer");
+                    }
+                    ContractCharacter contractCharacter = await contractCharacterRepository.GetContractCharacterById(taskRequest.ContractCharacterId);
+                    if (contractCharacter == null)
+                    {
+                        throw new Exception("ContractCharacter does not exist");
+                    }
 
-                Task task = new Task();
+                    Task task = new Task();
 
-                task.ContractCharacterId = taskRequest.ContractCharacterId;
-                task.AccountId = taskRequest.CosplayerId;
-                task.CreateDate = contractCharacter.CreateDate;
-                task.Description = contractCharacter.Description;
-                task.EndDate = contractCharacter.Contract.Request.EndDate;
-                task.StartDate = contractCharacter.Contract.Request.StartDate;
-                task.TaskName = contractCharacter.CharacterId;
-                task.Location = contractCharacter.Contract.Request.Location;
-                task.IsActive = true;
-                task.Status = TaskStatus.Assignment;
-                task.Type = "Contract";
-                task.TaskId = Guid.NewGuid().ToString();
-                
-                //bool checkTask = await taskRepository.CheckTaskIsValid(account, task.StartDate.Value, task.EndDate.Value);
-                //if (!checkTask)
-                //{
-                //    throw new Exception("Task is invalid");
-                //}
+                    task.ContractCharacterId = taskRequest.ContractCharacterId;
+                    task.AccountId = taskRequest.CosplayerId;
+                    task.CreateDate = DateTime.Now;
+                    task.Description = contractCharacter.Description;
+                    task.EndDate = contractCharacter.Contract.Request.EndDate;
+                    task.StartDate = contractCharacter.Contract.Request.StartDate;
+                    task.TaskName = contractCharacter.CharacterId;
+                    task.Location = contractCharacter.Contract.Request.Location;
+                    task.IsActive = true;
+                    task.Status = TaskStatus.Assignment;
+                    task.Type = "Contract";
+                    task.TaskId = Guid.NewGuid().ToString();
+                    task.UpdateDate = null;
 
-                bool check = await taskRepository.AddTask(task);
-                if (!check)
-                {
-                    throw new Exception($"Task {task.TaskId} đã xảy ra lỗi vào lúc {DateTime.Now}");
+                    bool check = await taskRepository.AddTask(task);
+                    if (!check)
+                    {
+                        throw new Exception($"Task {task.TaskId} đã xảy ra lỗi vào lúc {DateTime.Now}");
+                    }
+
+                    tasks.Add(task);
                 }
-
-                tasks.Add(task);
             }
 
             bool result = await NortificationUser(tasks) ? true : false; 
@@ -253,11 +250,11 @@ namespace CCSS_Service.Services
             return result;
         }
 
-        public async Task<string> AddTask(List<AddTaskEventRequest> taskEventRequests, List<ContractCharacter> contractCharacters)
+        public async Task<string> AddTask(List<AddTaskEventRequest>? taskEventRequests, List<ContractCharacter>? contractCharacters)
         {
             try
             {
-                if (taskEventRequests.Any())
+                if (taskEventRequests != null)
                 {
                     bool result = await AddTaskEvent(taskEventRequests) ? true : false;
                     if (result)
@@ -266,7 +263,7 @@ namespace CCSS_Service.Services
                     }
                 }
 
-                if (contractCharacters.Any())
+                if (contractCharacters != null)
                 {
                     bool result = await AddTaskContract(contractCharacters) ? true : false;
                     if (result)

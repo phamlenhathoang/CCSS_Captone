@@ -31,10 +31,7 @@ namespace CCSS_Repository.Entities
         [ForeignKey("ServiceId")]
         public string? ServiceId { get; set; }
         public Service Service { get; set; }
-
-        [ForeignKey("ContractId")]
-        public string? ContractId { get; set; }
-        public Contract Contract { get; set; }
+       
 
         [ForeignKey("PackageId")]
         public string? PackageId { get; set; }
@@ -43,7 +40,7 @@ namespace CCSS_Repository.Entities
         [ForeignKey("AccountCouponId")]
         public string? AccountCouponId { get; set; }
         public AccountCoupon AccountCoupon { get; set; }
-
+        public Contract Contract { get; set; }
         public ICollection<RequestCharacter> RequestCharacters { get; set; } = new List<RequestCharacter>();
     }
 
