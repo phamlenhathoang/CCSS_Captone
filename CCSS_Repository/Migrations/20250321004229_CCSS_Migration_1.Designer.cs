@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CCSS_Repository.Migrations
 {
     [DbContext(typeof(CCSSDbContext))]
-    [Migration("20250318151054_CCSS_Migration_1")]
+    [Migration("20250321004229_CCSS_Migration_1")]
     partial class CCSS_Migration_1
     {
         /// <inheritdoc />
@@ -749,105 +749,105 @@ namespace CCSS_Repository.Migrations
                         {
                             AccountImageId = "AI1",
                             AccountId = "A001",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1933),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1267),
                             UrlImage = "https://example.com/admin.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI2",
                             AccountId = "A002",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1935),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1269),
                             UrlImage = "https://example.com/manager.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI3",
                             AccountId = "A003",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1937),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1271),
                             UrlImage = "https://example.com/user1.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI4",
                             AccountId = "A004",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1940),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1273),
                             UrlImage = "https://example.com/user2.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI5",
                             AccountId = "A005",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1942),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1276),
                             UrlImage = "https://example.com/user3.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI6",
                             AccountId = "A006",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1943),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1277),
                             UrlImage = "https://example.com/user4.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI7",
                             AccountId = "A007",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1945),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1279),
                             UrlImage = "https://example.com/user5.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI8",
                             AccountId = "A008",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1946),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1280),
                             UrlImage = "https://example.com/user6.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI9",
                             AccountId = "A009",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1948),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1283),
                             UrlImage = "https://example.com/user7.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI10",
                             AccountId = "A010",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1949),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1284),
                             UrlImage = "https://example.com/user8.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI11",
                             AccountId = "A011",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1951),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1286),
                             UrlImage = "https://example.com/user9.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI12",
                             AccountId = "A012",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1954),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1287),
                             UrlImage = "https://example.com/user10.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI13",
                             AccountId = "A013",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1955),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1290),
                             UrlImage = "https://example.com/user11.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI14",
                             AccountId = "A014",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1983),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1292),
                             UrlImage = "https://example.com/user12.jpg"
                         },
                         new
                         {
                             AccountImageId = "AI15",
                             AccountId = "A015",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1986),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1293),
                             UrlImage = "https://example.com/user13.jpg"
                         });
                 });
@@ -879,122 +879,122 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ActivityId = "ACT001",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2013),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1359),
                             Description = "A relaxing yoga session",
                             Name = "Yoga Class",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2013)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1361)
                         },
                         new
                         {
                             ActivityId = "ACT002",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2015),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1363),
                             Description = "Learn to cook delicious meals",
                             Name = "Cooking Workshop",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2016)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1363)
                         },
                         new
                         {
                             ActivityId = "ACT003",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2018),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1365),
                             Description = "Live music performance",
                             Name = "Music Concert",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2018)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1366)
                         },
                         new
                         {
                             ActivityId = "ACT004",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2020),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1368),
                             Description = "Showcase of local artists",
                             Name = "Art Exhibition",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2020)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1368)
                         },
                         new
                         {
                             ActivityId = "ACT005",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2024),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1370),
                             Description = "Discussion on latest technology trends",
                             Name = "Tech Talk",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2024)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1370)
                         },
                         new
                         {
                             ActivityId = "ACT006",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2026),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1374),
                             Description = "5K run for a good cause",
                             Name = "Charity Run",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2026)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1374)
                         },
                         new
                         {
                             ActivityId = "ACT007",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2028),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1376),
                             Description = "Monthly book discussion",
                             Name = "Book Club",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2028)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1376)
                         },
                         new
                         {
                             ActivityId = "ACT008",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2030),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1378),
                             Description = "Learn photography skills",
                             Name = "Photography Workshop",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2030)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1378)
                         },
                         new
                         {
                             ActivityId = "ACT009",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2032),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1380),
                             Description = "Dance battle for all ages",
                             Name = "Dance Competition",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2032)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1380)
                         },
                         new
                         {
                             ActivityId = "ACT010",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2034),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1382),
                             Description = "Competitive chess matches",
                             Name = "Chess Tournament",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2034)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1382)
                         },
                         new
                         {
                             ActivityId = "ACT011",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2036),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1384),
                             Description = "Outdoor movie screening",
                             Name = "Movie Night",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2036)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1384)
                         },
                         new
                         {
                             ActivityId = "ACT012",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2038),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1386),
                             Description = "Showcase of scientific projects",
                             Name = "Science Fair",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2038)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1386)
                         },
                         new
                         {
                             ActivityId = "ACT013",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2041),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1388),
                             Description = "Intensive coding workshop",
                             Name = "Coding Bootcamp",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2041)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1389)
                         },
                         new
                         {
                             ActivityId = "ACT014",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2043),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1392),
                             Description = "Learn gardening techniques",
                             Name = "Gardening Workshop",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2043)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1392)
                         },
                         new
                         {
                             ActivityId = "ACT015",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2045),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1394),
                             Description = "Guided meditation practice",
                             Name = "Meditation Session",
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2045)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1394)
                         });
                 });
 
@@ -1028,33 +1028,33 @@ namespace CCSS_Repository.Migrations
                         {
                             CartId = "C001",
                             AccountId = "A003",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1287),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(670),
                             TotalPrice = 0.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1288)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(670)
                         },
                         new
                         {
                             CartId = "C002",
                             AccountId = "A006",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1289),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(672),
                             TotalPrice = 0.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1290)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(673)
                         },
                         new
                         {
                             CartId = "C003",
                             AccountId = "A011",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1293),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(675),
                             TotalPrice = 0.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1294)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(675)
                         },
                         new
                         {
                             CartId = "C004",
                             AccountId = "A014",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1295),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(678),
                             TotalPrice = 0.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1296)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(679)
                         });
                 });
 
@@ -1091,108 +1091,108 @@ namespace CCSS_Repository.Migrations
                     b.HasData(
                         new
                         {
-                            CartProductId = "34d0241e-6415-4410-9069-197be1ef5416",
+                            CartProductId = "bedf49c8-3699-4148-975a-441cddaac419",
                             CartId = "C001",
-                            CreatedDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2073),
+                            CreatedDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1426),
                             Price = 30.0,
                             ProductId = "P001",
                             Quantity = 2
                         },
                         new
                         {
-                            CartProductId = "f4049655-847f-429f-bbff-9e6c0e9a0efa",
+                            CartProductId = "0b371c4e-8ae3-42a1-89d5-d64e1fcae918",
                             CartId = "C001",
-                            CreatedDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2076),
+                            CreatedDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1429),
                             Price = 20.0,
                             ProductId = "P002",
                             Quantity = 1
                         },
                         new
                         {
-                            CartProductId = "34960164-dabd-45d9-b38f-28aa3f060076",
+                            CartProductId = "96741ff8-57f7-4276-ae25-8baf6a148120",
                             CartId = "C001",
-                            CreatedDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2080),
+                            CreatedDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1432),
                             Price = 80.0,
                             ProductId = "P003",
                             Quantity = 1
                         },
                         new
                         {
-                            CartProductId = "d42c567b-d7b2-4b9f-a506-406918c99b5b",
+                            CartProductId = "38368a12-edc9-4b04-b99d-32c995bc925f",
                             CartId = "C002",
-                            CreatedDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2083),
+                            CreatedDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1436),
                             Price = 100.0,
                             ProductId = "P004",
                             Quantity = 1
                         },
                         new
                         {
-                            CartProductId = "c5b2a653-2988-4c67-a2a0-7cf7bde777cf",
+                            CartProductId = "7c5f4aa5-605c-41ae-9ce9-5976646e9b1d",
                             CartId = "C002",
-                            CreatedDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2086),
+                            CreatedDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1439),
                             Price = 25.0,
                             ProductId = "P005",
                             Quantity = 3
                         },
                         new
                         {
-                            CartProductId = "870acf04-86d5-4aee-87bf-499d0f1f46c4",
+                            CartProductId = "cbbb8c61-891b-4195-919a-9007e675f41e",
                             CartId = "C002",
-                            CreatedDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2089),
+                            CreatedDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1442),
                             Price = 40.0,
                             ProductId = "P006",
                             Quantity = 2
                         },
                         new
                         {
-                            CartProductId = "cbff2688-3ad9-46c4-ae0a-cf3ad2cb0029",
+                            CartProductId = "29621574-e033-4203-b058-e1fd32aca0dd",
                             CartId = "C003",
-                            CreatedDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2093),
+                            CreatedDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1445),
                             Price = 15.0,
                             ProductId = "P007",
                             Quantity = 5
                         },
                         new
                         {
-                            CartProductId = "e3561ab9-cabb-4ade-9e3b-cf2354427199",
+                            CartProductId = "2e306dd2-9f79-4bbe-abfa-299cbd463b89",
                             CartId = "C003",
-                            CreatedDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2095),
+                            CreatedDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1449),
                             Price = 50.0,
                             ProductId = "P008",
                             Quantity = 2
                         },
                         new
                         {
-                            CartProductId = "a14e464f-c934-432e-9f84-0ebba6408f29",
+                            CartProductId = "7349e281-75ae-41f9-9bad-92a32f4abded",
                             CartId = "C003",
-                            CreatedDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2098),
+                            CreatedDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1451),
                             Price = 60.0,
                             ProductId = "P009",
                             Quantity = 1
                         },
                         new
                         {
-                            CartProductId = "4bcfead3-f98d-431d-b6af-9b0032368423",
+                            CartProductId = "e3f97e59-e968-49f1-a283-263183b511fc",
                             CartId = "C004",
-                            CreatedDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2101),
+                            CreatedDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1454),
                             Price = 120.0,
                             ProductId = "P010",
                             Quantity = 1
                         },
                         new
                         {
-                            CartProductId = "4ae83acc-424f-400f-803a-b944234656a9",
+                            CartProductId = "582b03e7-b950-4889-bf5c-3a45c13f87ac",
                             CartId = "C004",
-                            CreatedDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2105),
+                            CreatedDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1457),
                             Price = 35.0,
                             ProductId = "P011",
                             Quantity = 2
                         },
                         new
                         {
-                            CartProductId = "7f6a2288-342f-435f-ae73-1104cb58398c",
+                            CartProductId = "9de3a2da-f15e-4f24-a405-1ab5e903369f",
                             CartId = "C004",
-                            CreatedDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2138),
+                            CreatedDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1461),
                             Price = 45.0,
                             ProductId = "P012",
                             Quantity = 1
@@ -1360,7 +1360,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH001",
                             CategoryId = "C3",
                             CharacterName = "Naruto",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(551),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 300, DateTimeKind.Utc).AddTicks(9942),
                             Description = "Ninja from Konoha",
                             IsActive = true,
                             MaxHeight = 180f,
@@ -1375,7 +1375,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH002",
                             CategoryId = "C3",
                             CharacterName = "Sasuke",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(559),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 300, DateTimeKind.Utc).AddTicks(9979),
                             Description = "Naruto’s rival",
                             IsActive = true,
                             MaxHeight = 185f,
@@ -1390,7 +1390,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH003",
                             CategoryId = "C3",
                             CharacterName = "Goku",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(564),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 300, DateTimeKind.Utc).AddTicks(9983),
                             Description = "Saiyan warrior",
                             IsActive = true,
                             MaxHeight = 190f,
@@ -1405,7 +1405,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH004",
                             CategoryId = "C4",
                             CharacterName = "Luffy",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(567),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 300, DateTimeKind.Utc).AddTicks(9986),
                             Description = "Pirate King",
                             IsActive = true,
                             MaxHeight = 175f,
@@ -1420,7 +1420,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH005",
                             CategoryId = "C4",
                             CharacterName = "Ichigo",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(571),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 300, DateTimeKind.Utc).AddTicks(9990),
                             Description = "Soul Reaper",
                             IsActive = true,
                             MaxHeight = 185f,
@@ -1435,7 +1435,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH006",
                             CategoryId = "C14",
                             CharacterName = "Mario",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(575),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 300, DateTimeKind.Utc).AddTicks(9993),
                             Description = "Plumber hero",
                             IsActive = true,
                             MaxHeight = 160f,
@@ -1450,7 +1450,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH007",
                             CategoryId = "C14",
                             CharacterName = "Luigi",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(578),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 300, DateTimeKind.Utc).AddTicks(9996),
                             Description = "Mario’s brother",
                             IsActive = true,
                             MaxHeight = 170f,
@@ -1465,7 +1465,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH008",
                             CategoryId = "C14",
                             CharacterName = "Link",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(582),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 300, DateTimeKind.Utc).AddTicks(9999),
                             Description = "Hero of Hyrule",
                             IsActive = true,
                             MaxHeight = 180f,
@@ -1480,7 +1480,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH009",
                             CategoryId = "C16",
                             CharacterName = "Zelda",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(588),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(3),
                             Description = "Hyrule princess",
                             IsActive = true,
                             MaxHeight = 175f,
@@ -1495,7 +1495,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH010",
                             CategoryId = "C16",
                             CharacterName = "Samus",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(591),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(7),
                             Description = "Bounty hunter",
                             IsActive = true,
                             MaxHeight = 185f,
@@ -1510,7 +1510,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH011",
                             CategoryId = "C13",
                             CharacterName = "Cloud",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(594),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(11),
                             Description = "Ex-SOLDIER",
                             IsActive = true,
                             MaxHeight = 185f,
@@ -1525,7 +1525,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH012",
                             CategoryId = "C13",
                             CharacterName = "Sephiroth",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(597),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(14),
                             Description = "One-Winged Angel",
                             IsActive = true,
                             MaxHeight = 190f,
@@ -1540,7 +1540,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH013",
                             CategoryId = "C8",
                             CharacterName = "Kratos",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(600),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(18),
                             Description = "God of War",
                             IsActive = true,
                             MaxHeight = 195f,
@@ -1555,7 +1555,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH014",
                             CategoryId = "C8",
                             CharacterName = "Pikachu",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(603),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(25),
                             Description = "Electric Pokemon",
                             IsActive = true,
                             MaxHeight = 50f,
@@ -1570,7 +1570,7 @@ namespace CCSS_Repository.Migrations
                             CharacterId = "CH015",
                             CategoryId = "C8",
                             CharacterName = "Kirby",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(607),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(28),
                             Description = "Pink puffball",
                             IsActive = true,
                             MaxHeight = 60f,
@@ -1611,105 +1611,105 @@ namespace CCSS_Repository.Migrations
                         {
                             CharacterImageId = "CI001",
                             CharacterId = "CH001",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2167),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1565),
                             UrlImage = "https://example.com/img1.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI002",
                             CharacterId = "CH002",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2169),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1567),
                             UrlImage = "https://example.com/img2.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI003",
                             CharacterId = "CH003",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2171),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1569),
                             UrlImage = "https://example.com/img3.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI004",
                             CharacterId = "CH004",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2172),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1570),
                             UrlImage = "https://example.com/img4.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI005",
                             CharacterId = "CH005",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2174),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1573),
                             UrlImage = "https://example.com/img5.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI006",
                             CharacterId = "CH006",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2177),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1575),
                             UrlImage = "https://example.com/img6.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI007",
                             CharacterId = "CH007",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2178),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1578),
                             UrlImage = "https://example.com/img7.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI008",
                             CharacterId = "CH008",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2180),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1579),
                             UrlImage = "https://example.com/img8.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI009",
                             CharacterId = "CH009",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2181),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1581),
                             UrlImage = "https://example.com/img9.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI010",
                             CharacterId = "CH010",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2183),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1582),
                             UrlImage = "https://example.com/img10.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI011",
                             CharacterId = "CH011",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2184),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1584),
                             UrlImage = "https://example.com/img11.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI012",
                             CharacterId = "CH012",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2186),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1585),
                             UrlImage = "https://example.com/img12.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI013",
                             CharacterId = "CH013",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2187),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1587),
                             UrlImage = "https://example.com/img13.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI014",
                             CharacterId = "CH014",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2190),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1588),
                             UrlImage = "https://example.com/img14.jpg"
                         },
                         new
                         {
                             CharacterImageId = "CI015",
                             CharacterId = "CH015",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2192),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1591),
                             UrlImage = "https://example.com/img15.jpg"
                         });
                 });
@@ -2207,7 +2207,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventId = "E001",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(781),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(220),
                             Description = "A grand celebration to welcome the new year",
                             EndDate = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EventName = "New Year Festival",
@@ -2219,7 +2219,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventId = "E002",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(785),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(224),
                             Description = "Experience the beauty of cherry blossoms",
                             EndDate = new DateTime(2025, 2, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EventName = "Spring Blossom Fest",
@@ -2231,7 +2231,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventId = "E003",
                             CreateBy = "Manager",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(789),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(226),
                             Description = "Showcasing the latest in technology and AI",
                             EndDate = new DateTime(2025, 3, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EventName = "Tech Innovation Summit",
@@ -2243,7 +2243,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventId = "E004",
                             CreateBy = "Manager",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(792),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(231),
                             Description = "Live performances from top artists",
                             EndDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EventName = "Music Fest",
@@ -2255,7 +2255,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventId = "E005",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(794),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(233),
                             Description = "A must-attend event for comic book fans",
                             EndDate = new DateTime(2025, 5, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EventName = "Comic-Con International",
@@ -2267,7 +2267,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventId = "E006",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(796),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(236),
                             Description = "Largest anime convention in the world",
                             EndDate = new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EventName = "Anime Expo",
@@ -2279,7 +2279,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventId = "E007",
                             CreateBy = "Manager",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(799),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(238),
                             Description = "Latest trends and releases in gaming",
                             EndDate = new DateTime(2025, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EventName = "Gaming Expo",
@@ -2291,7 +2291,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventId = "E008",
                             CreateBy = "Manager",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(802),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(241),
                             Description = "A fun-filled summer celebration",
                             EndDate = new DateTime(2025, 8, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EventName = "Summer Festival",
@@ -2303,7 +2303,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventId = "E009",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(804),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(243),
                             Description = "A paradise for cosplayers",
                             EndDate = new DateTime(2025, 9, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EventName = "Cosplay Festival",
@@ -2315,7 +2315,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventId = "E010",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(808),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(246),
                             Description = "Showcasing the best movies of the year",
                             EndDate = new DateTime(2025, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EventName = "Film Festival",
@@ -2327,7 +2327,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventId = "E011",
                             CreateBy = "Manager",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(811),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(248),
                             Description = "Spooky celebrations and costume parties",
                             EndDate = new DateTime(2025, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EventName = "Halloween Night",
@@ -2339,7 +2339,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventId = "E012",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(842),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(252),
                             Description = "Festive shopping and holiday cheer",
                             EndDate = new DateTime(2025, 12, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EventName = "Christmas Market",
@@ -2386,7 +2386,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA001",
                             ActivityId = "ACT001",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1776),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1088),
                             Description = "Yoga for a fresh start",
                             EventId = "E001"
                         },
@@ -2395,7 +2395,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA002",
                             ActivityId = "ACT005",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1781),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1090),
                             Description = "Tech trends in the new year",
                             EventId = "E001"
                         },
@@ -2404,7 +2404,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA003",
                             ActivityId = "ACT004",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1783),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1094),
                             Description = "Painting cherry blossoms",
                             EventId = "E002"
                         },
@@ -2413,7 +2413,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA004",
                             ActivityId = "ACT013",
                             CreateBy = "Manager",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1785),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1096),
                             Description = "AI and future coding",
                             EventId = "E003"
                         },
@@ -2422,7 +2422,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA005",
                             ActivityId = "ACT009",
                             CreateBy = "Manager",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1787),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1098),
                             Description = "Dance battles live",
                             EventId = "E004"
                         },
@@ -2431,7 +2431,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA006",
                             ActivityId = "ACT003",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1788),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1099),
                             Description = "Comic-Con live music",
                             EventId = "E005"
                         },
@@ -2440,7 +2440,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA007",
                             ActivityId = "ACT007",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1790),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1101),
                             Description = "Anime and book discussions",
                             EventId = "E006"
                         },
@@ -2449,7 +2449,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA008",
                             ActivityId = "ACT010",
                             CreateBy = "Manager",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1792),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1103),
                             Description = "Chess and gaming",
                             EventId = "E007"
                         },
@@ -2458,7 +2458,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA009",
                             ActivityId = "ACT011",
                             CreateBy = "Manager",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1793),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1105),
                             Description = "Outdoor movie fun",
                             EventId = "E008"
                         },
@@ -2467,7 +2467,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA010",
                             ActivityId = "ACT015",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1835),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1106),
                             Description = "Meditation for cosplayers",
                             EventId = "E009"
                         },
@@ -2476,7 +2476,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA011",
                             ActivityId = "ACT012",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1837),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1109),
                             Description = "Science in filmmaking",
                             EventId = "E010"
                         },
@@ -2485,7 +2485,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA012",
                             ActivityId = "ACT006",
                             CreateBy = "Manager",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1839),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1174),
                             Description = "Halloween charity run",
                             EventId = "E011"
                         },
@@ -2494,7 +2494,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA013",
                             ActivityId = "ACT014",
                             CreateBy = "Admin",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1842),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1176),
                             Description = "Christmas gardening",
                             EventId = "E012"
                         },
@@ -2503,7 +2503,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA014",
                             ActivityId = "ACT002",
                             CreateBy = "Manager",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1843),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1178),
                             Description = "Cooking for music lovers",
                             EventId = "E004"
                         },
@@ -2512,7 +2512,7 @@ namespace CCSS_Repository.Migrations
                             EventActivityId = "EA015",
                             ActivityId = "ACT008",
                             CreateBy = "Manager",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1845),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1180),
                             Description = "Photography in tech",
                             EventId = "E003"
                         });
@@ -2556,7 +2556,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventCharacterId = "EC001",
                             CharacterId = "CH001",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1718),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(1036),
                             EventId = "E001",
                             IsAssign = true
                         },
@@ -2564,7 +2564,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventCharacterId = "EC002",
                             CharacterId = "CH002",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1722),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(1040),
                             EventId = "E002",
                             IsAssign = true
                         },
@@ -2572,7 +2572,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventCharacterId = "EC003",
                             CharacterId = "CH003",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1724),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(1042),
                             EventId = "E003",
                             IsAssign = true
                         },
@@ -2580,7 +2580,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventCharacterId = "EC004",
                             CharacterId = "CH004",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1726),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(1044),
                             EventId = "E004",
                             IsAssign = true
                         },
@@ -2588,7 +2588,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventCharacterId = "EC005",
                             CharacterId = "CH005",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1728),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(1046),
                             EventId = "E005",
                             IsAssign = true
                         },
@@ -2596,7 +2596,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventCharacterId = "EC006",
                             CharacterId = "CH006",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1731),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(1048),
                             EventId = "E006",
                             IsAssign = true
                         },
@@ -2604,7 +2604,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventCharacterId = "EC007",
                             CharacterId = "CH007",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1733),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(1052),
                             EventId = "E007",
                             IsAssign = true
                         },
@@ -2612,7 +2612,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventCharacterId = "EC008",
                             CharacterId = "CH008",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1734),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(1054),
                             EventId = "E008",
                             IsAssign = true
                         },
@@ -2620,7 +2620,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventCharacterId = "EC009",
                             CharacterId = "CH009",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1736),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(1056),
                             EventId = "E009",
                             IsAssign = true
                         },
@@ -2628,7 +2628,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventCharacterId = "EC010",
                             CharacterId = "CH010",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1738),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(1058),
                             EventId = "E010",
                             IsAssign = true
                         },
@@ -2636,7 +2636,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventCharacterId = "EC011",
                             CharacterId = "CH011",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1740),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(1059),
                             EventId = "E011",
                             IsAssign = true
                         },
@@ -2644,7 +2644,7 @@ namespace CCSS_Repository.Migrations
                         {
                             EventCharacterId = "EC012",
                             CharacterId = "CH012",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1743),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(1062),
                             EventId = "E012",
                             IsAssign = true
                         });
@@ -2677,84 +2677,84 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ImageId = "EI001",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2221),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1621),
                             EventId = "E001",
                             ImageUrl = "https://example.com/event1.jpg"
                         },
                         new
                         {
                             ImageId = "EI002",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2223),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1624),
                             EventId = "E002",
                             ImageUrl = "https://example.com/event2.jpg"
                         },
                         new
                         {
                             ImageId = "EI003",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2225),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1626),
                             EventId = "E003",
                             ImageUrl = "https://example.com/event3.jpg"
                         },
                         new
                         {
                             ImageId = "EI004",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2226),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1628),
                             EventId = "E004",
                             ImageUrl = "https://example.com/event4.jpg"
                         },
                         new
                         {
                             ImageId = "EI005",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2228),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1629),
                             EventId = "E005",
                             ImageUrl = "https://example.com/event5.jpg"
                         },
                         new
                         {
                             ImageId = "EI006",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2229),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1631),
                             EventId = "E006",
                             ImageUrl = "https://example.com/event6.jpg"
                         },
                         new
                         {
                             ImageId = "EI007",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2232),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1632),
                             EventId = "E007",
                             ImageUrl = "https://example.com/event7.jpg"
                         },
                         new
                         {
                             ImageId = "EI008",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2234),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1635),
                             EventId = "E008",
                             ImageUrl = "https://example.com/event8.jpg"
                         },
                         new
                         {
                             ImageId = "EI009",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2235),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1636),
                             EventId = "E009",
                             ImageUrl = "https://example.com/event9.jpg"
                         },
                         new
                         {
                             ImageId = "EI010",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2236),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1638),
                             EventId = "E010",
                             ImageUrl = "https://example.com/event10.jpg"
                         },
                         new
                         {
                             ImageId = "EI011",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2238),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1639),
                             EventId = "E011",
                             ImageUrl = "https://example.com/event11.jpg"
                         },
                         new
                         {
                             ImageId = "EI012",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2239),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1641),
                             EventId = "E012",
                             ImageUrl = "https://example.com/event12.jpg"
                         });
@@ -2768,7 +2768,7 @@ namespace CCSS_Repository.Migrations
                     b.Property<string>("AccountId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ContractId")
+                    b.Property<string>("ContractCharacterId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreateBy")
@@ -2790,88 +2790,90 @@ namespace CCSS_Repository.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("ContractId");
+                    b.HasIndex("ContractCharacterId")
+                        .IsUnique()
+                        .HasFilter("[ContractCharacterId] IS NOT NULL");
 
                     b.ToTable("Feedback");
 
                     b.HasData(
                         new
                         {
-                            FeedbackId = "ae6e56e2-7f31-4486-8d40-b9d53f968ed3",
+                            FeedbackId = "31cd6d9a-b765-4462-aa17-83d075d00b91",
                             AccountId = "A001",
-                            ContractId = "CT002",
+                            ContractCharacterId = "CC0021",
                             CreateBy = "A001",
                             CreateDate = new DateTime(2025, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Great experience!"
                         },
                         new
                         {
-                            FeedbackId = "0b15d42f-512a-4161-888f-dbd0be390b12",
+                            FeedbackId = "f3c28c92-06fa-457d-b304-0cbfd4b60b8e",
                             AccountId = "A004",
-                            ContractId = "CT005",
+                            ContractCharacterId = "CC0022",
                             CreateBy = "A004",
                             CreateDate = new DateTime(2025, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Loved the event!"
                         },
                         new
                         {
-                            FeedbackId = "c1831d3a-ef94-4c2f-b568-bf148bb1d6f1",
+                            FeedbackId = "f0a2f010-2f89-43c0-9e35-680c829dbdf3",
                             AccountId = "A005",
-                            ContractId = "CT008",
+                            ContractCharacterId = "CC0023",
                             CreateBy = "A005",
                             CreateDate = new DateTime(2025, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Nice cosplay session!"
                         },
                         new
                         {
-                            FeedbackId = "3e9c2391-64c0-422d-8546-245e12c21f62",
+                            FeedbackId = "04558b9f-bd91-472c-ad44-a095a354ff4e",
                             AccountId = "A007",
-                            ContractId = "CT010",
+                            ContractCharacterId = "CC0051",
                             CreateBy = "A007",
                             CreateDate = new DateTime(2025, 6, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Enjoyed the event!"
                         },
                         new
                         {
-                            FeedbackId = "9ece916d-35be-4370-ac33-80385d89cb96",
+                            FeedbackId = "bb97d5cb-60eb-439f-b9ed-dc989727aabd",
                             AccountId = "A008",
-                            ContractId = "CT014",
+                            ContractCharacterId = "CC0052",
                             CreateBy = "A008",
                             CreateDate = new DateTime(2025, 7, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Would love to join again!"
                         },
                         new
                         {
-                            FeedbackId = "6502d1b5-a679-43f7-a6f4-331da102cd11",
+                            FeedbackId = "f8bf6094-c218-45f6-afc3-869811a98282",
                             AccountId = "A010",
-                            ContractId = "CT002",
+                            ContractCharacterId = "CC0053",
                             CreateBy = "A010",
                             CreateDate = new DateTime(2025, 8, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "The atmosphere was amazing!"
                         },
                         new
                         {
-                            FeedbackId = "fe56f7df-372f-4f18-a124-32ff8307a4d0",
+                            FeedbackId = "13054cca-a771-4bc1-998b-2488ab31af08",
                             AccountId = "A012",
-                            ContractId = "CT005",
+                            ContractCharacterId = "CC0081",
                             CreateBy = "A012",
                             CreateDate = new DateTime(2025, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Best cosplay event!"
                         },
                         new
                         {
-                            FeedbackId = "4f8e1c1f-79b2-479b-ad93-3571ef346df8",
+                            FeedbackId = "20cd9343-e4e9-46b3-99b5-b0e34ce4d1f3",
                             AccountId = "A013",
-                            ContractId = "CT008",
+                            ContractCharacterId = "CC0082",
                             CreateBy = "A013",
                             CreateDate = new DateTime(2025, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Nice crowd and management!"
                         },
                         new
                         {
-                            FeedbackId = "7c16f7d7-d815-418b-b261-7dbf033916ea",
+                            FeedbackId = "6b969a34-2c8d-49ce-8955-c2a929b94b3c",
                             AccountId = "A015",
-                            ContractId = "CT010",
+                            ContractCharacterId = "CC0083",
                             CreateBy = "A015",
                             CreateDate = new DateTime(2025, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Amazing experience!"
@@ -2908,7 +2910,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N001",
                             AccountId = "A001",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1195),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(585),
                             IsRead = false,
                             Message = "Welcome to the system!"
                         },
@@ -2916,7 +2918,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N002",
                             AccountId = "A002",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1199),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(587),
                             IsRead = false,
                             Message = "Your account has been upgraded."
                         },
@@ -2924,7 +2926,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N003",
                             AccountId = "A003",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1201),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(591),
                             IsRead = true,
                             Message = "New promotional offer available!"
                         },
@@ -2932,7 +2934,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N004",
                             AccountId = "A004",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1202),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(593),
                             IsRead = false,
                             Message = "Your request has been approved."
                         },
@@ -2940,7 +2942,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N005",
                             AccountId = "A005",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1204),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(595),
                             IsRead = true,
                             Message = "System maintenance scheduled."
                         },
@@ -2948,7 +2950,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N006",
                             AccountId = "A006",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1206),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(597),
                             IsRead = false,
                             Message = "Your order has been shipped!"
                         },
@@ -2956,7 +2958,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N007",
                             AccountId = "A007",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1208),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(598),
                             IsRead = false,
                             Message = "New event registration open."
                         },
@@ -2964,7 +2966,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N008",
                             AccountId = "A008",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1209),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(600),
                             IsRead = true,
                             Message = "Reminder: Payment due soon."
                         },
@@ -2972,7 +2974,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N009",
                             AccountId = "A009",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1211),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(602),
                             IsRead = false,
                             Message = "Your password was changed."
                         },
@@ -2980,7 +2982,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N010",
                             AccountId = "A010",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1242),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(604),
                             IsRead = false,
                             Message = "Admin announcement update."
                         },
@@ -2988,7 +2990,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N011",
                             AccountId = "A011",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1244),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(607),
                             IsRead = true,
                             Message = "New message from support."
                         },
@@ -2996,7 +2998,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N012",
                             AccountId = "A012",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1246),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(609),
                             IsRead = false,
                             Message = "Upcoming event invitation."
                         },
@@ -3004,7 +3006,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N013",
                             AccountId = "A013",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1247),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(632),
                             IsRead = false,
                             Message = "New cosplayer contest."
                         },
@@ -3012,7 +3014,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N014",
                             AccountId = "A014",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1249),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(634),
                             IsRead = true,
                             Message = "Loyalty points updated."
                         },
@@ -3020,7 +3022,7 @@ namespace CCSS_Repository.Migrations
                         {
                             Id = "N015",
                             AccountId = "A015",
-                            CreatedAt = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(1251),
+                            CreatedAt = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(636),
                             IsRead = false,
                             Message = "Your subscription expired."
                         });
@@ -3206,8 +3208,8 @@ namespace CCSS_Repository.Migrations
                     b.HasData(
                         new
                         {
-                            OrderProductId = "b7000749-343d-4c00-ab24-8cedc6a5695c",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2269),
+                            OrderProductId = "ac77d918-2b72-453b-82a6-52e79678aa66",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1672),
                             OrderId = "O001",
                             Price = 30.0,
                             ProductId = "P001",
@@ -3215,8 +3217,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "3c09b8e6-2321-4048-a325-54db95760743",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2273),
+                            OrderProductId = "681831f9-c918-4e8a-a2e3-97d45a4d260a",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1676),
                             OrderId = "O001",
                             Price = 20.0,
                             ProductId = "P002",
@@ -3224,8 +3226,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "bcfb7680-1ac9-4aaa-a09e-1339dafb2a51",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2276),
+                            OrderProductId = "5c2c2fc6-a251-4c42-9302-402aca61c6dc",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1679),
                             OrderId = "O002",
                             Price = 80.0,
                             ProductId = "P003",
@@ -3233,8 +3235,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "d93f1940-1966-499e-9b40-f40073af2676",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2278),
+                            OrderProductId = "7ebb03b6-be02-4572-b7e0-3e42301ab950",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1681),
                             OrderId = "O002",
                             Price = 100.0,
                             ProductId = "P004",
@@ -3242,8 +3244,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "57edacd1-d875-48a9-9053-1b83ded660ba",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2281),
+                            OrderProductId = "afa178bc-b44b-421b-ad44-ab36e1540525",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1684),
                             OrderId = "O003",
                             Price = 25.0,
                             ProductId = "P005",
@@ -3251,8 +3253,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "da3d5499-36b8-419a-9668-3b5523ff5119",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2314),
+                            OrderProductId = "9aa8c0a3-34b8-47d8-a3cf-3800e4e8a171",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1688),
                             OrderId = "O003",
                             Price = 40.0,
                             ProductId = "P006",
@@ -3260,8 +3262,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "c86b65cc-41be-4a9d-9fe5-29cd106d0133",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2316),
+                            OrderProductId = "c8e82f02-1b50-4acf-b545-12696cae83de",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1744),
                             OrderId = "O004",
                             Price = 15.0,
                             ProductId = "P007",
@@ -3269,8 +3271,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "b7f39d84-cd6c-471d-9bca-6ae2c83af3da",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2319),
+                            OrderProductId = "8d8a6d11-9aa4-4f7f-9e66-91f7e931db48",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1747),
                             OrderId = "O004",
                             Price = 50.0,
                             ProductId = "P008",
@@ -3278,8 +3280,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "bd2a8b52-c014-4e3c-a35e-a9b75055e223",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2321),
+                            OrderProductId = "f6cf780d-b7ce-418b-8b69-359684b63826",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1750),
                             OrderId = "O005",
                             Price = 60.0,
                             ProductId = "P009",
@@ -3287,8 +3289,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "824483ec-37f4-42cd-9c93-1831f68d93be",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2325),
+                            OrderProductId = "d4f5254c-7d2b-4a29-91ec-c9ee97b4b10a",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1768),
                             OrderId = "O005",
                             Price = 120.0,
                             ProductId = "P010",
@@ -3296,8 +3298,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "c70998a1-dd0a-40b1-8645-48e9a663bd4d",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2327),
+                            OrderProductId = "59cfe32b-e3e7-4b28-98fe-35b028410166",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1771),
                             OrderId = "O006",
                             Price = 35.0,
                             ProductId = "P011",
@@ -3305,8 +3307,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "7350f21b-5a2e-4958-bf3c-74af9945d3ed",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2330),
+                            OrderProductId = "beaf6149-bab3-4026-9fcb-669dc02070d4",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1773),
                             OrderId = "O006",
                             Price = 45.0,
                             ProductId = "P012",
@@ -3314,8 +3316,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "d8e65dbe-e8ad-4c6c-9504-277f917f818e",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2332),
+                            OrderProductId = "4e82c50c-ec5e-44b5-911f-557902324539",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1776),
                             OrderId = "O007",
                             Price = 18.0,
                             ProductId = "P013",
@@ -3323,8 +3325,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "1d81c9cc-e13e-4b62-b998-81823f321e22",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2336),
+                            OrderProductId = "ea9442dd-3b78-4edd-95f6-8c39e9d5cfe6",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1780),
                             OrderId = "O007",
                             Price = 90.0,
                             ProductId = "P014",
@@ -3332,8 +3334,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "81f5d38c-2e90-426c-a1f9-6481ca38dad0",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2338),
+                            OrderProductId = "6a9bcdae-dfb8-4af3-85af-84347fe65069",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1783),
                             OrderId = "O008",
                             Price = 22.0,
                             ProductId = "P015",
@@ -3341,8 +3343,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "3efb3a60-7f65-40eb-92d7-64ab935f4646",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2340),
+                            OrderProductId = "66b7abb2-207e-4191-a2cb-a513ed2da1a5",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1785),
                             OrderId = "O008",
                             Price = 30.0,
                             ProductId = "P001",
@@ -3350,8 +3352,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "6eeb12bf-3436-485b-9981-8688bb31dde6",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2343),
+                            OrderProductId = "91773e8b-7503-4fcb-b0b5-f4cc9a6c3b37",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1788),
                             OrderId = "O009",
                             Price = 20.0,
                             ProductId = "P002",
@@ -3359,8 +3361,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "8f43b93c-e489-499c-8024-bbdc543cbcf9",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2346),
+                            OrderProductId = "de60a88a-9031-4367-b1ab-2a3d26a574ce",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1792),
                             OrderId = "O009",
                             Price = 80.0,
                             ProductId = "P003",
@@ -3368,8 +3370,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "20adc881-1caa-4d8b-b925-00ccade17df1",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2349),
+                            OrderProductId = "1f5ce400-8691-4f0b-a8fb-3fbed54f653a",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1795),
                             OrderId = "O010",
                             Price = 100.0,
                             ProductId = "P004",
@@ -3377,8 +3379,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "93058b9e-4f7c-4b2a-8cc0-70f0c270244a",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2351),
+                            OrderProductId = "fa7037a9-83bd-498d-aabc-b2457a42d3ee",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1797),
                             OrderId = "O010",
                             Price = 25.0,
                             ProductId = "P005",
@@ -3386,8 +3388,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "3dd4363f-4cf1-4876-a4a3-128df55dc0d9",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2353),
+                            OrderProductId = "40b123e1-4f4f-4cfa-800d-ffe5d3b8e6cf",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1800),
                             OrderId = "O011",
                             Price = 40.0,
                             ProductId = "P006",
@@ -3395,8 +3397,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "99e1719b-e97a-49cf-a059-077e10ae8b89",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2357),
+                            OrderProductId = "76a6665d-4051-4151-a9e9-72a97a5c593a",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1804),
                             OrderId = "O011",
                             Price = 15.0,
                             ProductId = "P007",
@@ -3404,8 +3406,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "08be1226-ab84-4ea2-a7d8-b2a424f28ba8",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2364),
+                            OrderProductId = "4b607360-ffcc-484b-ae3c-e76609d2e70f",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1808),
                             OrderId = "O012",
                             Price = 50.0,
                             ProductId = "P008",
@@ -3413,8 +3415,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "af02f803-1f16-4c60-b179-8cd024ebe559",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2367),
+                            OrderProductId = "f363d0e5-850f-4378-b5f5-ec1b59e70acb",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1811),
                             OrderId = "O012",
                             Price = 60.0,
                             ProductId = "P009",
@@ -3422,8 +3424,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "2e6fc858-0b3d-4643-b7f4-2a41e9524475",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2369),
+                            OrderProductId = "47cb5777-7855-4060-9bf1-9ca1fd0c24b9",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1813),
                             OrderId = "O013",
                             Price = 120.0,
                             ProductId = "P010",
@@ -3431,8 +3433,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "53f7835f-be8b-44e7-8328-7c5f3b5730d3",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2373),
+                            OrderProductId = "97da230e-33b7-424e-9afe-b0446c0cac73",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1817),
                             OrderId = "O013",
                             Price = 35.0,
                             ProductId = "P011",
@@ -3440,8 +3442,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "834cbb76-faaa-4e28-9724-84efc9bc908e",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2376),
+                            OrderProductId = "bd1a4fbf-877b-4bbf-b1f8-4a466cf4c751",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1820),
                             OrderId = "O014",
                             Price = 45.0,
                             ProductId = "P012",
@@ -3449,8 +3451,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "94ea0eec-a293-4709-b24b-29a79eafb509",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2378),
+                            OrderProductId = "bc8bbf7d-8d1c-4d36-8b4d-5d75ca268dd5",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1823),
                             OrderId = "O014",
                             Price = 18.0,
                             ProductId = "P013",
@@ -3458,8 +3460,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "030d70cf-5617-4478-8c65-27a553a0ba07",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2380),
+                            OrderProductId = "fa09f262-4521-4e8a-bd79-67454250278d",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1825),
                             OrderId = "O015",
                             Price = 90.0,
                             ProductId = "P014",
@@ -3467,8 +3469,8 @@ namespace CCSS_Repository.Migrations
                         },
                         new
                         {
-                            OrderProductId = "a6edfe37-a32f-4ac4-8d5b-5d326e759118",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2384),
+                            OrderProductId = "a2a196ee-3876-4207-97fe-3c5d2c5c60bb",
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1829),
                             OrderId = "O015",
                             Price = 22.0,
                             ProductId = "P015",
@@ -3861,7 +3863,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P001",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(673),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(92),
                             Description = "A wig for Naruto cosplay",
                             IsActive = true,
                             Price = 30.0,
@@ -3871,7 +3873,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P002",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(678),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(96),
                             Description = "A hat for Mario cosplay",
                             IsActive = true,
                             Price = 20.0,
@@ -3881,7 +3883,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P003",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(681),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(100),
                             Description = "Complete costume for Sasuke cosplay",
                             IsActive = true,
                             Price = 80.0,
@@ -3891,7 +3893,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P004",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(710),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(102),
                             Description = "Replica sword from The Legend of Zelda",
                             IsActive = true,
                             Price = 100.0,
@@ -3901,7 +3903,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P005",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(713),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(147),
                             Description = "Iconic straw hat from One Piece",
                             IsActive = true,
                             Price = 25.0,
@@ -3911,7 +3913,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P006",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(718),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(150),
                             Description = "Hatsune Miku blue twin-tail wig",
                             IsActive = true,
                             Price = 40.0,
@@ -3921,7 +3923,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P007",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(721),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(153),
                             Description = "Tanjiro's iconic hanafuda earrings",
                             IsActive = true,
                             Price = 15.0,
@@ -3931,7 +3933,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P008",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(723),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(155),
                             Description = "Survey Corps uniform jacket",
                             IsActive = true,
                             Price = 50.0,
@@ -3941,7 +3943,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P009",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(725),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(158),
                             Description = "Cozy Pikachu-themed onesie",
                             IsActive = true,
                             Price = 60.0,
@@ -3951,7 +3953,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P010",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(730),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(160),
                             Description = "Final Fantasy VII replica sword",
                             IsActive = true,
                             Price = 120.0,
@@ -3961,7 +3963,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P011",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(732),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(165),
                             Description = "LED Vision accessory from Genshin Impact",
                             IsActive = true,
                             Price = 35.0,
@@ -3971,7 +3973,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P012",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(735),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(167),
                             Description = "Jinx cosplay wig from Arcane",
                             IsActive = true,
                             Price = 45.0,
@@ -3981,7 +3983,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P013",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(737),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(170),
                             Description = "Golden tiara from Sailor Moon",
                             IsActive = true,
                             Price = 18.0,
@@ -3991,7 +3993,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P014",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(740),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(172),
                             Description = "High-quality Spider-Man suit",
                             IsActive = true,
                             Price = 90.0,
@@ -4001,7 +4003,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductId = "P015",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(742),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(175),
                             Description = "Replica wand from Harry Potter series",
                             IsActive = true,
                             Price = 22.0,
@@ -4039,105 +4041,105 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ProductImageId = "IMG001",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2500),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1953),
                             ProductId = "P001",
                             UrlImage = "https://example.com/images/naruto_wig.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG002",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2502),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1955),
                             ProductId = "P002",
                             UrlImage = "https://example.com/images/mario_hat.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG003",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2503),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1957),
                             ProductId = "P003",
                             UrlImage = "https://example.com/images/sasuke_costume.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG004",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2505),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1959),
                             ProductId = "P004",
                             UrlImage = "https://example.com/images/zelda_sword.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG005",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2506),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1960),
                             ProductId = "P005",
                             UrlImage = "https://example.com/images/one_piece_hat.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG006",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2508),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1962),
                             ProductId = "P006",
                             UrlImage = "https://example.com/images/miku_wig.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG007",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2509),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1963),
                             ProductId = "P007",
                             UrlImage = "https://example.com/images/demon_slayer_earrings.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG008",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2513),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1965),
                             ProductId = "P008",
                             UrlImage = "https://example.com/images/aot_jacket.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG009",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2514),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1968),
                             ProductId = "P009",
                             UrlImage = "https://example.com/images/pikachu_onesie.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG010",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2517),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1970),
                             ProductId = "P010",
                             UrlImage = "https://example.com/images/buster_sword.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG011",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2518),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1971),
                             ProductId = "P011",
                             UrlImage = "https://example.com/images/genshin_vision.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG012",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2520),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1973),
                             ProductId = "P012",
                             UrlImage = "https://example.com/images/jinx_wig.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG013",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2521),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1974),
                             ProductId = "P013",
                             UrlImage = "https://example.com/images/sailor_moon_tiara.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG014",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2523),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1976),
                             ProductId = "P014",
                             UrlImage = "https://example.com/images/spiderman_suit.jpg"
                         },
                         new
                         {
                             ProductImageId = "IMG015",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2524),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(1977),
                             ProductId = "P015",
                             UrlImage = "https://example.com/images/harry_potter_wand.jpg"
                         });
@@ -4488,165 +4490,165 @@ namespace CCSS_Repository.Migrations
                             RequestCharacterId = "RC01",
                             CharacterId = "CH001",
                             CosplayerId = "C001",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2554),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2011),
                             Description = "Yêu cầu cosplay nhân vật CH001",
                             RequestId = "R001",
                             TotalPrice = 50.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2555)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2012)
                         },
                         new
                         {
                             RequestCharacterId = "RC02",
                             CharacterId = "CH002",
                             CosplayerId = "C002",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2559),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2016),
                             Description = "Yêu cầu cosplay nhân vật CH002",
                             RequestId = "R002",
                             TotalPrice = 60.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2559)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2017)
                         },
                         new
                         {
                             RequestCharacterId = "RC03",
                             CharacterId = "CH003",
                             CosplayerId = "C003",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2562),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2019),
                             Description = "Yêu cầu cosplay nhân vật CH003",
                             RequestId = "R003",
                             TotalPrice = 70.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2562)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2020)
                         },
                         new
                         {
                             RequestCharacterId = "RC04",
                             CharacterId = "CH004",
                             CosplayerId = "C004",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2564),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2022),
                             Description = "Yêu cầu cosplay nhân vật CH004",
                             RequestId = "R004",
                             TotalPrice = 80.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2565)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2023)
                         },
                         new
                         {
                             RequestCharacterId = "RC05",
                             CharacterId = "CH005",
                             CosplayerId = "C005",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2567),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2025),
                             Description = "Yêu cầu cosplay nhân vật CH005",
                             RequestId = "R005",
                             TotalPrice = 90.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2567)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2025)
                         },
                         new
                         {
                             RequestCharacterId = "RC06",
                             CharacterId = "CH006",
                             CosplayerId = "C006",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2569),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2028),
                             Description = "Yêu cầu cosplay nhân vật CH006",
                             RequestId = "R006",
                             TotalPrice = 100.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2570)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2028)
                         },
                         new
                         {
                             RequestCharacterId = "RC07",
                             CharacterId = "CH007",
                             CosplayerId = "C007",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2572),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2030),
                             Description = "Yêu cầu cosplay nhân vật CH007",
                             RequestId = "R007",
                             TotalPrice = 110.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2572)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2031)
                         },
                         new
                         {
                             RequestCharacterId = "RC08",
                             CharacterId = "CH008",
                             CosplayerId = "C008",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2575),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2033),
                             Description = "Yêu cầu cosplay nhân vật CH008",
                             RequestId = "R008",
                             TotalPrice = 120.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2575)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2033)
                         },
                         new
                         {
                             RequestCharacterId = "RC09",
                             CharacterId = "CH009",
                             CosplayerId = "C009",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2605),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2036),
                             Description = "Yêu cầu cosplay nhân vật CH009",
                             RequestId = "R009",
                             TotalPrice = 130.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2605)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2036)
                         },
                         new
                         {
                             RequestCharacterId = "RC10",
                             CharacterId = "CH010",
                             CosplayerId = "C010",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2608),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2087),
                             Description = "Yêu cầu cosplay nhân vật CH010",
                             RequestId = "R010",
                             TotalPrice = 140.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2608)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2088)
                         },
                         new
                         {
                             RequestCharacterId = "RC11",
                             CharacterId = "CH011",
                             CosplayerId = "C011",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2610),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2090),
                             Description = "Yêu cầu cosplay nhân vật CH011",
                             RequestId = "R011",
                             TotalPrice = 150.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2611)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2091)
                         },
                         new
                         {
                             RequestCharacterId = "RC12",
                             CharacterId = "CH012",
                             CosplayerId = "C012",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2613),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2093),
                             Description = "Yêu cầu cosplay nhân vật CH012",
                             RequestId = "R012",
                             TotalPrice = 160.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2613)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2094)
                         },
                         new
                         {
                             RequestCharacterId = "RC13",
                             CharacterId = "CH013",
                             CosplayerId = "C013",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2615),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2096),
                             Description = "Yêu cầu cosplay nhân vật CH013",
                             RequestId = "R013",
                             TotalPrice = 170.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2616)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2096)
                         },
                         new
                         {
                             RequestCharacterId = "RC14",
                             CharacterId = "CH014",
                             CosplayerId = "C014",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2618),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2099),
                             Description = "Yêu cầu cosplay nhân vật CH014",
                             RequestId = "R014",
                             TotalPrice = 180.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2619)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2100)
                         },
                         new
                         {
                             RequestCharacterId = "RC15",
                             CharacterId = "CH015",
                             CosplayerId = "C015",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2622),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2103),
                             Description = "Yêu cầu cosplay nhân vật CH015",
                             RequestId = "R015",
                             TotalPrice = 190.0,
-                            UpdateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(2622)
+                            UpdateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(2103)
                         });
                 });
 
@@ -4725,21 +4727,21 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             ServiceId = "S001",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(637),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(56),
                             Description = "Rent characters for events and parties",
                             ServiceName = "Character Rental"
                         },
                         new
                         {
                             ServiceId = "S002",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(645),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(61),
                             Description = "Live cosplay performances at events",
                             ServiceName = "Cosplay Rental"
                         },
                         new
                         {
                             ServiceId = "S003",
-                            CreateDate = new DateTime(2025, 3, 18, 15, 10, 53, 362, DateTimeKind.Utc).AddTicks(646),
+                            CreateDate = new DateTime(2025, 3, 21, 0, 42, 29, 301, DateTimeKind.Utc).AddTicks(62),
                             Description = "Professional photoshoot with cosplayers",
                             ServiceName = "Create event"
                         });
@@ -4809,181 +4811,181 @@ namespace CCSS_Repository.Migrations
                         {
                             TaskId = "T001",
                             AccountId = "A001",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1487),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(793),
                             Description = "Cosplay as anime characters",
-                            EndDate = new DateTime(2025, 3, 21, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1486),
+                            EndDate = new DateTime(2025, 3, 24, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(792),
                             EventCharacterId = "EC001",
                             IsActive = true,
                             Location = "Tokyo",
-                            StartDate = new DateTime(2025, 3, 20, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1471),
+                            StartDate = new DateTime(2025, 3, 23, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(776),
                             Status = 0,
                             TaskName = "Perform at Anime Fest",
-                            UpdateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1487)
+                            UpdateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(794)
                         },
                         new
                         {
                             TaskId = "T002",
                             AccountId = "A004",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1494),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(802),
                             Description = "Join cosplay contest",
-                            EndDate = new DateTime(2025, 3, 23, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1493),
+                            EndDate = new DateTime(2025, 3, 26, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(801),
                             EventCharacterId = "EC002",
                             IsActive = true,
                             Location = "Los Angeles",
-                            StartDate = new DateTime(2025, 3, 22, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1493),
+                            StartDate = new DateTime(2025, 3, 25, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(800),
                             Status = 1,
                             TaskName = "Comic Con Appearance",
-                            UpdateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1494)
+                            UpdateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(802)
                         },
                         new
                         {
                             TaskId = "T003",
                             AccountId = "A005",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1501),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(831),
                             Description = "Teach costume making",
-                            EndDate = new DateTime(2025, 3, 25, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1501),
+                            EndDate = new DateTime(2025, 3, 28, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(831),
                             EventCharacterId = "EC003",
                             IsActive = true,
                             Location = "New York",
-                            StartDate = new DateTime(2025, 3, 24, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1497),
+                            StartDate = new DateTime(2025, 3, 27, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(830),
                             Status = 2,
                             TaskName = "Cosplay Workshop",
-                            UpdateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1502)
+                            UpdateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(832)
                         },
                         new
                         {
                             TaskId = "T004",
                             AccountId = "A007",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1505),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(836),
                             Description = "Host a live event",
-                            EndDate = new DateTime(2025, 3, 19, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1505),
+                            EndDate = new DateTime(2025, 3, 22, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(835),
                             EventCharacterId = "EC004",
                             IsActive = true,
                             Location = "Online",
-                            StartDate = new DateTime(2025, 3, 19, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1504),
+                            StartDate = new DateTime(2025, 3, 22, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(834),
                             Status = 3,
                             TaskName = "Live Stream Cosplay",
-                            UpdateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1506)
+                            UpdateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(836)
                         },
                         new
                         {
                             TaskId = "T005",
                             AccountId = "A008",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1509),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(840),
                             Description = "Professional cosplay photoshoot",
-                            EndDate = new DateTime(2025, 3, 27, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1509),
+                            EndDate = new DateTime(2025, 3, 30, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(839),
                             EventCharacterId = "EC005",
                             IsActive = true,
                             Location = "Paris",
-                            StartDate = new DateTime(2025, 3, 26, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1508),
+                            StartDate = new DateTime(2025, 3, 29, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(839),
                             Status = 0,
                             TaskName = "Photoshoot Session",
-                            UpdateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1510)
+                            UpdateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(840)
                         },
                         new
                         {
                             TaskId = "T006",
                             AccountId = "A010",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1513),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(844),
                             Description = "Evaluate contestants",
-                            EndDate = new DateTime(2025, 3, 29, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1512),
+                            EndDate = new DateTime(2025, 4, 1, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(843),
                             EventCharacterId = "EC006",
                             IsActive = true,
                             Location = "Berlin",
-                            StartDate = new DateTime(2025, 3, 28, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1512),
+                            StartDate = new DateTime(2025, 3, 31, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(843),
                             Status = 1,
                             TaskName = "Guest Judge at Cosplay Contest",
-                            UpdateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1513)
+                            UpdateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(844)
                         },
                         new
                         {
                             TaskId = "T007",
                             AccountId = "A012",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1517),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(848),
                             Description = "Walk in parade",
-                            EndDate = new DateTime(2025, 3, 31, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1516),
+                            EndDate = new DateTime(2025, 4, 3, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(847),
                             EventCharacterId = "EC007",
                             IsActive = true,
                             Location = "Seoul",
-                            StartDate = new DateTime(2025, 3, 30, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1516),
+                            StartDate = new DateTime(2025, 4, 2, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(846),
                             Status = 2,
                             TaskName = "Cosplay Parade",
-                            UpdateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1517)
+                            UpdateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(848)
                         },
                         new
                         {
                             TaskId = "T008",
                             AccountId = "A013",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1523),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(853),
                             Description = "Perform on live TV",
-                            EndDate = new DateTime(2025, 4, 2, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1522),
+                            EndDate = new DateTime(2025, 4, 5, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(852),
                             EventCharacterId = "EC008",
                             IsActive = true,
                             Location = "London",
-                            StartDate = new DateTime(2025, 4, 1, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1521),
+                            StartDate = new DateTime(2025, 4, 4, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(850),
                             Status = 3,
                             TaskName = "TV Show Cosplay Segment",
-                            UpdateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1524)
+                            UpdateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(853)
                         },
                         new
                         {
                             TaskId = "T009",
                             AccountId = "A015",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1527),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(858),
                             Description = "Perform for charity",
-                            EndDate = new DateTime(2025, 4, 4, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1526),
+                            EndDate = new DateTime(2025, 4, 7, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(857),
                             EventCharacterId = "EC009",
                             IsActive = true,
                             Location = "Sydney",
-                            StartDate = new DateTime(2025, 4, 3, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1526),
+                            StartDate = new DateTime(2025, 4, 6, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(857),
                             Status = 4,
                             TaskName = "Cosplay Charity Event",
-                            UpdateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1528)
+                            UpdateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(859)
                         },
                         new
                         {
                             TaskId = "T010",
                             AccountId = "A005",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1531),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(862),
                             Description = "Talk about cosplay industry",
-                            EndDate = new DateTime(2025, 4, 6, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1530),
+                            EndDate = new DateTime(2025, 4, 9, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(861),
                             EventCharacterId = "EC010",
                             IsActive = true,
                             Location = "San Diego",
-                            StartDate = new DateTime(2025, 4, 5, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1530),
+                            StartDate = new DateTime(2025, 4, 8, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(861),
                             Status = 0,
                             TaskName = "Cosplay Panel Discussion",
-                            UpdateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1531)
+                            UpdateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(862)
                         },
                         new
                         {
                             TaskId = "T011",
                             AccountId = "A008",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1535),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(866),
                             Description = "New character shoot",
-                            EndDate = new DateTime(2025, 4, 8, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1534),
+                            EndDate = new DateTime(2025, 4, 11, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(865),
                             EventCharacterId = "EC011",
                             IsActive = true,
                             Location = "Bangkok",
-                            StartDate = new DateTime(2025, 4, 7, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1534),
+                            StartDate = new DateTime(2025, 4, 10, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(865),
                             Status = 1,
                             TaskName = "Cosplay Photoshoot",
-                            UpdateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1535)
+                            UpdateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(866)
                         },
                         new
                         {
                             TaskId = "T012",
                             AccountId = "A007",
-                            CreateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1538),
+                            CreateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(870),
                             Description = "Host main event",
-                            EndDate = new DateTime(2025, 4, 10, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1538),
+                            EndDate = new DateTime(2025, 4, 13, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(869),
                             EventCharacterId = "EC012",
                             IsActive = true,
                             Location = "Jakarta",
-                            StartDate = new DateTime(2025, 4, 9, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1537),
+                            StartDate = new DateTime(2025, 4, 12, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(868),
                             Status = 2,
                             TaskName = "Anime Convention Hosting",
-                            UpdateDate = new DateTime(2025, 3, 18, 22, 10, 53, 362, DateTimeKind.Local).AddTicks(1539)
+                            UpdateDate = new DateTime(2025, 3, 21, 7, 42, 29, 301, DateTimeKind.Local).AddTicks(870)
                         });
                 });
 
@@ -5434,14 +5436,14 @@ namespace CCSS_Repository.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("CCSS_Repository.Entities.Contract", "Contract")
-                        .WithMany("Feedbacks")
-                        .HasForeignKey("ContractId")
+                    b.HasOne("CCSS_Repository.Entities.ContractCharacter", "ContractCharacter")
+                        .WithOne("Feedback")
+                        .HasForeignKey("CCSS_Repository.Entities.Feedback", "ContractCharacterId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Account");
 
-                    b.Navigation("Contract");
+                    b.Navigation("ContractCharacter");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.Notification", b =>
@@ -5702,13 +5704,14 @@ namespace CCSS_Repository.Migrations
                 {
                     b.Navigation("ContractCharacters");
 
-                    b.Navigation("Feedbacks");
-
                     b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("CCSS_Repository.Entities.ContractCharacter", b =>
                 {
+                    b.Navigation("Feedback")
+                        .IsRequired();
+
                     b.Navigation("Task")
                         .IsRequired();
                 });

@@ -23,8 +23,8 @@ namespace CCSS_Repository.Entities
         public string? AccountId { get; set; }
         public Account Account { get; set; }
 
-        [ForeignKey("ContractId")]
-        public string? ContractId { get; set; }
-        public Contract Contract { get; set; }
+        [ForeignKey("ContractCharacterId")]
+        public string? ContractCharacterId { get; set; }
+        public ContractCharacter ContractCharacter { get; set; }
     }
 }

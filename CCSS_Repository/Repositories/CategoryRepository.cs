@@ -12,6 +12,7 @@ namespace CCSS_Repository.Repositories
     {
         Task<List<Category>> GetAll();
         Task<Category> GetCategory(string id);
+        Task<Category> GetCategoryIncludeCharacter(string id);
     }
     public class CategoryRepository : ICategoryRepository
     {
@@ -28,6 +29,11 @@ namespace CCSS_Repository.Repositories
         public async Task<Category> GetCategory(string id)
         {
             return await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == id);
+        }
+
+        public Task<Category> GetCategoryIncludeCharacter(string id)
+        {
+            return _context.Categories.Include(c => c.Characters).ThenInclude(c => c.CharacterImages).FirstOrDefaultAsync(c => c.CategoryId.Equals(id));
         }
     }
 }

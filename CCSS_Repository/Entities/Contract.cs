@@ -27,7 +27,7 @@ namespace CCSS_Repository.Entities
         public string? ContractName { get; set; }
         public ContractStatus ContractStatus { get; set; }
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
-        public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+        //public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
         public ICollection<ContractCharacter> ContractCharacters { get; set; } = new List<ContractCharacter>();
     }
 
