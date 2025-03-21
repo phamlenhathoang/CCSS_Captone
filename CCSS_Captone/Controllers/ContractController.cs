@@ -48,7 +48,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateContract(string contracId, string status)
+        public async Task<IActionResult> UpdateStatusContract(string contracId, string status)
         {
             if (ModelState.IsValid)
             {

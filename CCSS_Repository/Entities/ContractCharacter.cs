@@ -29,5 +29,6 @@ namespace CCSS_Repository.Entities
         public string? CosplayerId { get; set; }
 
         public Task Task { get; set; }
+        public Feedback Feedback { get; set; }
     }
 }

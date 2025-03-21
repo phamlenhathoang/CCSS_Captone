@@ -12,4 +12,12 @@ namespace CCSS_Service.Model.Requests
         public int? Star { get; set; }
         public string? Description { get; set; }
     }
+
+    public class UpdateFeedbackRequest
+    {
+        public string FeedbackId { get; set; }
+        public string? CosplayerId { get; set; }
+        public int? Star { get; set; }
+        public string? Description { get; set; }
+    }
 }

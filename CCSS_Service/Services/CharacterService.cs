@@ -22,17 +22,20 @@ namespace CCSS_Service.Services
         Task<string> AddCharacter(CharacterRequest characterResponse, List<IFormFile> imageFiles);
         Task<string> UpdateCharacter(string id, CharacterRequest newCharacter);
         Task<string> DeleteCharacter(string id);
+        Task<List<CharacterResponse>> GetCharactersByCategoryId(string categoryId);
     }
     public class CharacterService : ICharacterService
     {
         private readonly ICharacterRepository _characterRepository;
         private readonly IMapper mapper;
-        private readonly IContractServices _contractServices;      
-        public CharacterService(ICharacterRepository characterRepository, IMapper mapper, IContractServices contractServices)
+        private readonly IContractServices _contractServices; 
+        private readonly ICategoryRepository _categoryRepository;
+        public CharacterService(ICategoryRepository _categoryRepository, ICharacterRepository characterRepository, IMapper mapper, IContractServices contractServices)
         {
             _characterRepository = characterRepository;
             this.mapper = mapper;
-            _contractServices = contractServices;         
+            _contractServices = contractServices; 
+            this._categoryRepository = _categoryRepository;
         }
         public async Task<List<CharacterResponse>> GetAll()
         {
@@ -92,6 +95,28 @@ namespace CCSS_Service.Services
             }
             await _characterRepository.DeleteCharacter(character);
             return $"{character.CharacterName} deleted";
+        }
+
+        public async Task<List<CharacterResponse>> GetCharactersByCategoryId(string categoryId)
+        {
+            try
+            {
+                Category category = await _categoryRepository.GetCategoryIncludeCharacter(categoryId);
+                if(category == null)
+                {
+                    throw new Exception("Category does not exist");
+                }
+                if (!category.Characters.Any())
+                {
+                    throw new Exception($"Character belong {category.CategoryId} do not exist");
+                }
+
+                return mapper.Map<List<CharacterResponse>>(category.Characters);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

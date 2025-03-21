@@ -246,11 +246,11 @@ namespace CCSS_Repository.Entities
                .HasForeignKey<Contract>(a => a.RequestId)
                .OnDelete(DeleteBehavior.NoAction);
 
-            //Contract - Feedback
-            modelBuilder.Entity<Contract>()
-               .HasMany(a => a.Feedbacks)
-               .WithOne(r => r.Contract)
-               .HasForeignKey(a => a.ContractId)
+            //ContractCharacter - Feedback
+            modelBuilder.Entity<Feedback>()
+               .HasOne(a => a.ContractCharacter)
+               .WithOne(r => r.Feedback)
+               .HasForeignKey<Feedback>(a => a.ContractCharacterId)
                .OnDelete(DeleteBehavior.NoAction);
 
             //Contract - ContractCharacter
@@ -576,15 +576,15 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Feedback
             modelBuilder.Entity<Feedback>().HasData(
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Great experience!", CreateDate = new DateTime(2025, 2, 15), CreateBy = "A001", AccountId = "A001", ContractId = "CT002" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Loved the event!", CreateDate = new DateTime(2025, 3, 10), CreateBy = "A004", AccountId = "A004", ContractId = "CT005" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Nice cosplay session!", CreateDate = new DateTime(2025, 4, 5), CreateBy = "A005", AccountId = "A005", ContractId = "CT008" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Enjoyed the event!", CreateDate = new DateTime(2025, 6, 20), CreateBy = "A007", AccountId = "A007", ContractId = "CT010" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Would love to join again!", CreateDate = new DateTime(2025, 7, 15), CreateBy = "A008", AccountId = "A008", ContractId = "CT014" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "The atmosphere was amazing!", CreateDate = new DateTime(2025, 8, 25), CreateBy = "A010", AccountId = "A010", ContractId = "CT002" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Best cosplay event!", CreateDate = new DateTime(2025, 9, 10), CreateBy = "A012", AccountId = "A012", ContractId = "CT005" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Nice crowd and management!", CreateDate = new DateTime(2025, 10, 5), CreateBy = "A013", AccountId = "A013", ContractId = "CT008" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Amazing experience!", CreateDate = new DateTime(2025, 11, 20), CreateBy = "A015", AccountId = "A015", ContractId = "CT010" }
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Great experience!", CreateDate = new DateTime(2025, 2, 15), CreateBy = "A001", AccountId = "A001", ContractCharacterId = "CC0021" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Loved the event!", CreateDate = new DateTime(2025, 3, 10), CreateBy = "A004", AccountId = "A004", ContractCharacterId = "CC0022" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Nice cosplay session!", CreateDate = new DateTime(2025, 4, 5), CreateBy = "A005", AccountId = "A005", ContractCharacterId = "CC0023" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Enjoyed the event!", CreateDate = new DateTime(2025, 6, 20), CreateBy = "A007", AccountId = "A007", ContractCharacterId = "CC0051" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Would love to join again!", CreateDate = new DateTime(2025, 7, 15), CreateBy = "A008", AccountId = "A008", ContractCharacterId = "CC0052" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "The atmosphere was amazing!", CreateDate = new DateTime(2025, 8, 25), CreateBy = "A010", AccountId = "A010", ContractCharacterId = "CC0053" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Best cosplay event!", CreateDate = new DateTime(2025, 9, 10), CreateBy = "A012", AccountId = "A012", ContractCharacterId = "CC0081" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Nice crowd and management!", CreateDate = new DateTime(2025, 10, 5), CreateBy = "A013", AccountId = "A013", ContractCharacterId = "CC0082" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Amazing experience!", CreateDate = new DateTime(2025, 11, 20), CreateBy = "A015", AccountId = "A015", ContractCharacterId = "CC0083" }
 );
             #endregion
 

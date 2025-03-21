@@ -49,11 +49,12 @@ namespace CCSS_Service.Services
         private readonly IHubContext<NotificationHub> hubContext;
         private readonly INotificationRepository notificationRepository;
         private readonly IContractCharacterService contractCharacterService;
+        private readonly IPackageRepository packageRepository;
         private readonly string _projectId = "miracles-ef238";
         private readonly string _bucketName = "miracles-ef238.appspot.com";
 
 
-        public ContractServices(IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
+        public ContractServices(IPackageRepository packageRepository, IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
         {
             this._contractRespository = _contractRespository;
             _contractCharacterRepository = contractCharacterRepository;
@@ -67,6 +68,7 @@ namespace CCSS_Service.Services
             this.hubContext = hubContext;
             this.notificationRepository = notificationRepository;
             this.contractCharacterService = contractCharacterService;
+            this.packageRepository = packageRepository;
         }
         //private string GenerateCode(int length = 6)
         //{
@@ -322,6 +324,16 @@ namespace CCSS_Service.Services
                         throw new Exception("AccountCoupon does not exist");
                     }
                     totalPrice = (totalPrice * accountCoupon.Coupon.Amount) / 100;
+                }
+
+                if (request.PackageId != null)
+                {
+                    Package package = await packageRepository.GetPackage(request.PackageId);
+                    if (package == null)
+                    {
+                        throw new Exception("Package does not exist");
+                    }
+                    totalPrice = (totalPrice + (double)package.Price);
                 }
 
                 Contract contract = new Contract()
