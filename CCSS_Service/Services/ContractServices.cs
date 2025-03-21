@@ -319,6 +319,11 @@ namespace CCSS_Service.Services
                     throw new Exception("Account does not exist");
                 }
 
+                if(request.Contract != null)
+                {
+                    throw new Exception("This request created contract");
+                }
+
                 Contract contract = new Contract()
                 {
                     Deposit = deposit.ToString(),

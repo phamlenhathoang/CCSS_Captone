@@ -58,8 +58,11 @@ namespace CCSS_Service.BackgroundServices
                                             throw new Exception($"Can not update status of {contract.ContractId}");
                                         }
                                         Account account = await _accountRepository.GetAccount(contract.CreateBy);
-                                        await _sendMail.SendContractExpiredEmail(account.Email, contract.ContractName, account.Name);
-                                        _logger.LogInformation($"Notification {account.Email}");
+                                        if(account != null)
+                                        {
+                                            await _sendMail.SendContractExpiredEmail(account.Email, contract.ContractName, account.Name);
+                                            _logger.LogInformation($"Notification {account.Email}");
+                                        }
                                     }
                                 }
                             }
