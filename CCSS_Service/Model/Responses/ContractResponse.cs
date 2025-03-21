@@ -9,14 +9,23 @@ namespace CCSS_Service.Model.Responses
 {
     public class ContractResponse
     {   
-        public string PackageId { get; set; }
+        public string PackageName { get; set; }
         public string ContractName { get; set; }
         //public ContractDescription Description { get; set; }
         public double Price { get; set; }
         public double Amount { get; set; }
-        public bool Signature { get; set; }
         public string Deposit { get; set; }
-        public ContractStatus Status { get; set; }
-        public DateTime EndDate { get; set; }
+        public string Reason { get; set; }
+        public string Status { get; set; }
+        public string EndDate { get; set; }
+        public string StartDate { get; set; }
+        public List<ListContractCharcterResponse> ContractCharacters { get; set; }
+    }
+
+    public class ListContractCharcterResponse
+    {
+        public string? CosplayerName { get; set; }
+        public string CharacterName { get; set; }
+        public int Quantity {  get; set; }
     }
 }

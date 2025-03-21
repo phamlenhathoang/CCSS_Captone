@@ -20,7 +20,7 @@ namespace CCSS_Repository.Entities
         public Account Account { get; set; }
         
         public string Name { get; set; }
-        public RequestDescription? Description { get; set; }
+        public string? Description { get; set; }
         public double? Price { get; set; }
         public RequestStatus Status { get; set; }
         public DateTime StartDate { get; set; }
