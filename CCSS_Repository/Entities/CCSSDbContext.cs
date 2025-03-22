@@ -28,6 +28,7 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<CharacterImage> CharacterImages { get; set; }
         public virtual DbSet<Contract> Contracts { get; set; }
         public virtual DbSet<CustomerCharacter> CustomerCharacters { get; set; }
+        public virtual DbSet<CustomerCharacterImage> CustomerCharacterImages { get; set; }
         public virtual DbSet<ContractCharacter> ContractCharacters { get; set; }
         public virtual DbSet<Request> Requests { get; set; }
         public virtual DbSet<RequestCharacter> RequestsCharacters { get; set; }
@@ -359,6 +360,13 @@ namespace CCSS_Repository.Entities
                .HasForeignKey(a => a.PackageId)
                .OnDelete(DeleteBehavior.NoAction);
 
+            //CustomerCharacter - CustomerCharacterImage 
+            modelBuilder.Entity<CustomerCharacter>()
+               .HasMany(a => a.CustomerCharacterImages)
+               .WithOne(r => r.CustomerCharacter)
+               .HasForeignKey(a => a.CustomerCharacterId)
+               .OnDelete(DeleteBehavior.NoAction);
+
 
             // --- SEED DATA (Dữ liệu khởi tạo mẫu) ---
             #region Role
@@ -600,21 +608,21 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Notication
             modelBuilder.Entity<Notification>().HasData(
-    new Notification { Id = "N001", AccountId = "A001", Message = "Welcome to the system!", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N002", AccountId = "A002", Message = "Your account has been upgraded.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N003", AccountId = "A003", Message = "New promotional offer available!", IsRead = true, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N004", AccountId = "A004", Message = "Your request has been approved.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N005", AccountId = "A005", Message = "System maintenance scheduled.", IsRead = true, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N006", AccountId = "A006", Message = "Your order has been shipped!", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N007", AccountId = "A007", Message = "New event registration open.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N008", AccountId = "A008", Message = "Reminder: Payment due soon.", IsRead = true, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N009", AccountId = "A009", Message = "Your password was changed.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N010", AccountId = "A010", Message = "Admin announcement update.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N011", AccountId = "A011", Message = "New message from support.", IsRead = true, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N012", AccountId = "A012", Message = "Upcoming event invitation.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N013", AccountId = "A013", Message = "New cosplayer contest.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N014", AccountId = "A014", Message = "Loyalty points updated.", IsRead = true, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N015", AccountId = "A015", Message = "Your subscription expired.", IsRead = false, CreatedAt = DateTime.UtcNow }
+    new Notification { Id = "N001", AccountId = "A001", Message = "Welcome to the system!", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N002", AccountId = "A002", Message = "Your account has been upgraded.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N003", AccountId = "A003", Message = "New promotional offer available!", IsRead = true, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N004", AccountId = "A004", Message = "Your request has been approved.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N005", AccountId = "A005", Message = "System maintenance scheduled.", IsRead = true, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N006", AccountId = "A006", Message = "Your order has been shipped!", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N007", AccountId = "A007", Message = "New event registration open.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N008", AccountId = "A008", Message = "Reminder: Payment due soon.", IsRead = true, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N009", AccountId = "A009", Message = "Your password was changed.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N010", AccountId = "A010", Message = "Admin announcement update.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N011", AccountId = "A011", Message = "New message from support.", IsRead = true, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N012", AccountId = "A012", Message = "Upcoming event invitation.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N013", AccountId = "A013", Message = "New cosplayer contest.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N014", AccountId = "A014", Message = "Loyalty points updated.", IsRead = true, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N015", AccountId = "A015", Message = "Your subscription expired.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow }
 );
             #endregion
 

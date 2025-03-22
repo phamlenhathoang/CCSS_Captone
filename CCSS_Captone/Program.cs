@@ -52,6 +52,9 @@ builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
+builder.Services.AddScoped<ICustomerCharacterImageRepository, CustomerCharacterImageRepository>();
+builder.Services.AddScoped<ICustomerCharacterRepository, CustomerCharacterRepository>();
+
 
 
 //Service
@@ -73,6 +76,7 @@ builder.Services.AddScoped<IFeedbackService, FeebackService>();
 builder.Services.AddScoped<IContractCharacterService, ContractCharacterService>();
 builder.Services.AddScoped<IPdfService, Pdf>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
+builder.Services.AddScoped<ICustomerCharacterService, CustomerCharacterService>();
 
 
 //Libraries
@@ -140,6 +144,35 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddScoped<IVNPayService, VNPayService>();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter token in the form 'Bearer {token}'",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"   
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] { }
+                    }
+                });
+});
 var app = builder.Build();
 
 

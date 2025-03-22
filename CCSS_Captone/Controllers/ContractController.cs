@@ -2,6 +2,7 @@
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,7 @@ namespace CCSS_Captone.Controllers
             _services = services;
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId)
         {

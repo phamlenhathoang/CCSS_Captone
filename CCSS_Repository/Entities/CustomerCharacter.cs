@@ -26,6 +26,7 @@ namespace CCSS_Repository.Entities
         public CustomerCharacterStatus Status { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }   
+        public ICollection<CustomerCharacterImage> CustomerCharacterImages { get; set; } = new List<CustomerCharacterImage>();
     }
 
     public enum CustomerCharacterStatus
