@@ -71,7 +71,7 @@ namespace CCSS_Service.Services
                     Location = item.Location,
                     ServiceId = item.ServiceId,
                     PackageId = item.PackageId,
-                    ContractId = item.ContractId,
+                    //ContractId = item.ContractId,
                     CharactersListResponse = characterResponses
                 };
                 listRequest.Add(response); ;
@@ -107,7 +107,7 @@ namespace CCSS_Service.Services
                 Location = request.Location,
                 ServiceId = request.ServiceId,
                 PackageId = request.PackageId,
-                ContractId = request.ContractId,
+                //ContractId = request.ContractId,
                 CharactersListResponse = characterResponses
             };
             return response;
@@ -223,7 +223,7 @@ namespace CCSS_Service.Services
                 Location = requestDtos.Location,
                 ServiceId = requestDtos.ServiceId,
                 PackageId = requestDtos.PackageId,
-                ContractId = null,
+                //ContractId = null,
                 AccountCouponId = requestDtos.AccountCouponId,
             };
             var result = await _repository.AddRequest(newRequest);
@@ -438,13 +438,57 @@ namespace CCSS_Service.Services
 
                 int totalDay = (int)Math.Ceiling((EndDate - StartDate).TotalDays);
                 double totalPrice = 0;
+                double total = 0;
 
                 foreach (var request in requestTotalPrices)
                 {
-                    totalPrice += request.CharacterPrice * (request.SalaryIndex != 0 ? request.SalaryIndex : 1);
+                    //totalPrice += request.CharacterPrice * (request.SalaryIndex != 0 ? request.SalaryIndex : 1);
+                    Character character = await _characterRepository.GetCharacter(request.CharacterId);
+                    if (character == null)
+                    {
+                        throw new Exception("Character does not exist");
+                    }
+                    if(request.Quantity <= 0)
+                    {
+                        throw new Exception("Quantity must greater than 0");
+                    }
+
+                    if (request.Quantity > character.Quantity)
+                    {
+                        throw new Exception("Quantity character does not enough");
+                    }
+
+                    totalPrice = (int)request.Quantity * (double)character.Price;
+
+                    if (request.CosplayerId != null)
+                    {
+                        Account cosplayer = await _accountRepository.GetAccount(request.CosplayerId);
+
+                        if(cosplayer == null)
+                        {
+                            throw new Exception("Cosplayer does not exist");
+                        }
+
+                        if (cosplayer.Role.RoleName != RoleName.Cosplayer)
+                        {
+                            throw new Exception("AccountId must be cosplayer");
+                        }
+
+                        bool checkCharacter = await _characterRepository.CheckCharacterForAccount(cosplayer, character.CharacterId);
+
+                        if (!checkCharacter)
+                        {
+                            throw new Exception("Cosplayer does not suitable for character");
+                        }
+
+                        totalPrice *= (double)cosplayer.SalaryIndex; 
+                    }
+
+                    total += totalPrice;
+                    
                 }
 
-                return totalDay * totalPrice + packagePrice + accountCouponPrice;
+                return totalDay * total + packagePrice - accountCouponPrice;
             }
             catch (Exception ex)
             {

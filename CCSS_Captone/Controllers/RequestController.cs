@@ -112,7 +112,7 @@ namespace CCSS_Captone.Controllers
             }
         }
 
-        [HttpGet("totalPrice")]
+        [HttpPost("totalPrice")]
         public async Task<IActionResult> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices)
         {
             try
