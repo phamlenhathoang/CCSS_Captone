@@ -27,6 +27,7 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<Character> Characters { get; set; }
         public virtual DbSet<CharacterImage> CharacterImages { get; set; }
         public virtual DbSet<Contract> Contracts { get; set; }
+        public virtual DbSet<CustomerCharacter> CustomerCharacters { get; set; }
         public virtual DbSet<ContractCharacter> ContractCharacters { get; set; }
         public virtual DbSet<Request> Requests { get; set; }
         public virtual DbSet<RequestCharacter> RequestsCharacters { get; set; }
@@ -327,6 +328,13 @@ namespace CCSS_Repository.Entities
             modelBuilder.Entity<Character>()
                .HasOne(a => a.Category)
                .WithMany(r => r.Characters)
+               .HasForeignKey(a => a.CategoryId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            //CustomerCharacter - Category
+            modelBuilder.Entity<CustomerCharacter>()
+               .HasOne(a => a.Category)
+               .WithMany(r => r.CustomerCharacters)
                .HasForeignKey(a => a.CategoryId)
                .OnDelete(DeleteBehavior.NoAction);
 

@@ -34,7 +34,8 @@ namespace CCSS_Service.Model.Requests
 
     public class RequestTotalPrice
     {
-        public double SalaryIndex { get; set; }
-        public double CharacterPrice { get; set; }
+        public string? CosplayerId { get; set; }
+        public string CharacterId { get; set; }
+        public int Quantity { get; set; }
     }
 }
