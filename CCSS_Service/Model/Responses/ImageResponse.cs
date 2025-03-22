@@ -37,4 +37,12 @@ namespace CCSS_Service.Model.Responses
         
         
     }
+    public class AccountImageResponse
+    {
+        public string AccountImageId { get; set; }
+        public string UrlImage { get; set; }
+        public DateTime? CreateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
+
+    }
 }

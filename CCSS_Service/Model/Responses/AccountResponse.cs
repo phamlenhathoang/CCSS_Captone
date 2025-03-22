@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CCSS_Repository.Entities;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,4 +31,23 @@ namespace CCSS_Service.Model.Responses
         public string? Name { get; set; }
         public string? UrlImage { get; set; }
     }
+    public class AccountDashBoardResponse
+    {
+        public string AccountId { get; set; } 
+        public string? Name { get; set; }
+        public string Email { get; set; }
+        public string? Description { get; set; }
+        public DateTime? Birthday { get; set; }
+        public string? Phone { get; set; }
+        public bool? OnTask { get; set; }
+        public bool? Leader { get; set; }
+        public string? Code { get; set; }
+        public int? TaskQuantity { get; set; }
+        public float? Height { get; set; }
+        public float? Weight { get; set; }
+        public double? AverageStar { get; set; }
+        public double? SalaryIndex { get; set; }
+        public ICollection<AccountImageResponse> AccountImages { get; set; } = new List<AccountImageResponse>();
+    }
+
 }

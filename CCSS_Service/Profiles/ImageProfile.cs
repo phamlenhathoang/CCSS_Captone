@@ -14,6 +14,7 @@ namespace CCSS_Service.Profiles
         public ImageProfile() 
         {
             CreateMap<EventImage, EventImageResponse>().ReverseMap();
+            CreateMap<AccountImage, AccountImageResponse>().ReverseMap();
         }
     }
 }

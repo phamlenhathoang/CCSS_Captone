@@ -11,9 +11,9 @@ namespace CCSS_Service
 {
     public interface IDashBoardService
     {
-        //Task<DashBoardRevenueResponse> GetRevenueAsync(DateFilterType filterType);
-        ////Task<List<Contract>> GetContractsByStatusAsync(ContractStatus status, DateFilterType filterType);
-        //Task<List<AccountResponse>> GetTop5AccountsWithMostPaymentsAsync();
+        Task<DashBoardRevenueResponse> GetRevenueAsync(DateFilterType filterType);
+        //Task<List<Contract>> GetContractsByStatusAsync(ContractStatus status, DateFilterType filterType);
+        Task<List<AccountDashBoardResponse>> GetTop5AccountsWithMostPaymentsAsync();
         //Task<double> GetAverageStarByContractDescriptionAsync();
         //Task<List<AccountResponse>> Get5PopularCosplayers(DateFilterType filterType);
 
@@ -21,41 +21,41 @@ namespace CCSS_Service
 
     public class DashBoardService : IDashBoardService
     {
-        //private readonly IDashBoardRepository _dashBoardRepository;
-        //private readonly IMapper _mapper;
+        private readonly IDashBoardRepository _dashBoardRepository;
+        private readonly IMapper _mapper;
 
 
-        //public DashBoardService(IDashBoardRepository dashBoardRepository, IMapper mapper)
-        //{
-        //    _dashBoardRepository = dashBoardRepository;
-        //    _mapper = mapper;
-        //}
+        public DashBoardService(IDashBoardRepository dashBoardRepository, IMapper mapper)
+        {
+            _dashBoardRepository = dashBoardRepository;
+            _mapper = mapper;
+        }
 
-        //public async Task<DashBoardRevenueResponse> GetRevenueAsync(DateFilterType filterType)
-        //{
-        //    var payments = await _dashBoardRepository.GetALlRevenue(filterType);
+        public async Task<DashBoardRevenueResponse> GetRevenueAsync(DateFilterType filterType)
+        {
+            var ticketAndPayment = await _dashBoardRepository.GetTicketAndOrderRevenue(filterType);
 
-        //    var response = new DashBoardRevenueResponse
-        //    {
-        //        TotalRevenue = payments.Sum(p => p.Amount ?? 0),
-        //        PaymentResponse = payments.Select(p => new PaymentResponse
-        //        {
-        //            PaymentId = p.PaymentId,
-        //            Amount = p.Amount,
-        //            Status = p.Status,
-        //            Purpose = p.Purpose,
-        //            CreatAt = p.CreatAt
-        //        }).ToList()
-        //    };
+            var response = new DashBoardRevenueResponse
+            {
+                TotalRevenue = ticketAndPayment.Sum(p => p.Amount ?? 0),
+                PaymentResponse = ticketAndPayment.Select(p => new PaymentResponse
+                {
+                    PaymentId = p.PaymentId,
+                    Amount = p.Amount,
+                    Status = p.Status,
+                    Purpose = p.Purpose,
+                    CreatAt = p.CreatAt
+                }).ToList()
+            };
 
-        //    return response;
-        //}
+            return response;
+        }
 
-        //public async Task<List<AccountResponse>> GetTop5AccountsWithMostPaymentsAsync()
-        //{
-        //    //var accounts = await _dashBoardRepository.GetTop5AccountsWithMostPaymentsAsync();
-        //    return _mapper.Map<List<AccountResponse>>(await _dashBoardRepository.GetTop5AccountsWithMostPaymentsAsync());
-        //}
+        public async Task<List<AccountDashBoardResponse>> GetTop5AccountsWithMostPaymentsAsync()
+        {
+            //var accounts = await _dashBoardRepository.GetTop5AccountsWithMostPaymentsAsync();
+            return _mapper.Map<List<AccountDashBoardResponse>>(await _dashBoardRepository.GetTop5AccountsWithMostPaymentsAsync());
+        }
         //public async Task<List<AccountResponse>> Get5PopularCosplayers(DateFilterType filterType)
         //{
         //    //var accounts = await _dashBoardRepository.GetTop5AccountsWithMostPaymentsAsync();
