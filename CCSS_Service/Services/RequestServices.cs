@@ -188,14 +188,18 @@ namespace CCSS_Service.Services
                     {
                         return "Character does not exist";
                     }
-
+                    if(checkCharacter.Quantity == 0 || r.Quantity > checkCharacter.Quantity)
+                    {
+                      return $"Not enough stock for character {r.CharacterId}.";
+                    }
+                
                     var account = await _accountRepository.GetAccount(r.CosplayerId);
                     bool checkAccount = await _characterRepository.CheckCharacterForAccount(account, r.CharacterId);
                     if (!checkAccount)
                     {
                         return "Cosplayer does not suitable.";
                     }
-
+                    
                     bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
                     if (!checkTask)
                     {
@@ -267,7 +271,18 @@ namespace CCSS_Service.Services
                     var requestCharacterAdd = await _requestCharacterRepository.AddListRequestCharacter(characteInRequest);
                     if (!requestCharacterAdd)
                     {
+                        await _repository.DeleteRequest(newRequest);
                         return "Failed to add characters in Request";
+                    }
+                    foreach (var r in requestDtos.ListRequestCharacters)
+                    {
+                        var characterToUpdate = await _characterRepository.GetCharacter(r.CharacterId);
+
+                        if (characterToUpdate != null)
+                        {
+                            characterToUpdate.Quantity -= r.Quantity;
+                            await _characterRepository.UpdateCharacter(characterToUpdate);
+                        }
                     }
                 }
                 return "Add Request Success";
@@ -360,6 +375,20 @@ namespace CCSS_Service.Services
             if (characterInRequest.Any())
             {
                 await _requestCharacterRepository.UpdateListRequestCharacter(characterInRequest);
+            }
+            foreach (var r in UpdateRequestDtos.ListUpdateRequestCharacters)
+            {
+                var characterToUpdate = await _characterRepository.GetCharacter(r.CharacterId);
+
+                if (characterToUpdate != null)
+                {
+                    if (characterToUpdate.Quantity < r.Quantity)
+                    {
+                        return $"Not enough stock for character {r.CharacterId}.";
+                    }
+                    characterToUpdate.Quantity -= r.Quantity;
+                    await _characterRepository.UpdateCharacter(characterToUpdate);
+                }
             }
             await _repository.UpdateRequest(requestExisting);
 
