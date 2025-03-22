@@ -18,15 +18,16 @@ namespace CCSS_Captone.Controllers
             _services = services;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllContract(string? searchterm)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await _services.GetAllContract(searchterm);
-        //        return Ok(result);
-        //    }
-        //    return BadRequest(ModelState);
+        [HttpGet]
+        public async Task<IActionResult> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetContract(contractName, contractStatus, startDate, endDate, accountId, contractId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
         //}
 
         //[HttpGet("{id}")]

@@ -53,10 +53,19 @@ namespace CCSS_Service.BackgroundServices
                         {
                             foreach (var notification in notificationList)
                             {
-                                if(DateTime.Now.Date >= notification.CreatedAt.Date)
+                                if(!notification.IsSentMail)
                                 {
-                                    await _sendMail.SendAccountNewTaskEmail(notification.Account.Email);
-                                    _logger.LogInformation($"Notification {notification.Account.Email}");
+                                    if (DateTime.Now.Date >= notification.CreatedAt.Date)
+                                    {
+                                        await _sendMail.SendAccountNewTaskEmail(notification.Account.Email);
+                                        _logger.LogInformation($"Notification {notification.Account.Email}");
+                                        notification.IsSentMail = true;
+                                        bool result = await _notificationRepository.UpdateNotification(notification);
+                                        if (!result)
+                                        {
+                                            _logger.LogInformation($"Can not send {notification.Account.Email}");
+                                        }
+                                    }
                                 }
                             }
                         }
