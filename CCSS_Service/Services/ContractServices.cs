@@ -393,6 +393,18 @@ namespace CCSS_Service.Services
                 Package package = null;
                 foreach (var contract in contracts)
                 {
+                    ContractResponse crsItem = new ContractResponse()
+                    {
+                        Amount = contract.Amount ?? 0,
+                        ContractName = contract.ContractName,
+                        Deposit = contract.Deposit,
+                        EndDate = contract.Request.EndDate.ToString("HH:mm dd/MM/yyyy"),
+                        StartDate = contract.Request.StartDate.ToString("HH:mm dd/MM/yyyy"),
+                        Price = (double)contract.TotalPrice,
+                        Status = contract.ContractStatus.ToString(),
+                        Reason = contract.Reason,
+                    };
+
                     if (contract.Request.PackageId != null)
                     {
                         package = await packageRepository.GetPackage(contract.Request.PackageId);
@@ -400,60 +412,75 @@ namespace CCSS_Service.Services
                         {
                             throw new Exception("Package does not exist");
                         }
+                        crsItem.PackageName = package.PackageName;
+                    }
+                    else
+                    {
+                        crsItem.PackageName = null;
                     }
 
-                    ContractResponse crsItem = new ContractResponse()
+                    if (contract.Request.AccountCouponId != null)
                     {
-                        Amount = (double)contract.Amount,
-                        ContractName = contract.ContractName,
-                        Deposit = contract.Deposit,
-                        EndDate = contract.Request.EndDate.ToString("HH:mm dd/MM/yyyy"),
-                        StartDate = contract.Request.StartDate.ToString("HH:mm dd/MM/yyyy"),
-                        PackageName = package.PackageName,
-                        Price = (double)contract.TotalPrice,
-                        Status = contract.ContractStatus.ToString(),
-                        Reason = contract.Reason,
-                    };
-
-                    foreach (var contractCharacter in contract.ContractCharacters)
-                    {
-                        Account account = new Account();
-                        if (contractCharacter.CosplayerId != null)
+                        AccountCoupon accountCoupon = await accountCouponRepository.GetAccountCoupon(contract.Request.AccountCouponId);
+                        if(accountCoupon == null)
                         {
-                            account = await _accountRepository.GetAccount(contractCharacter.CosplayerId);
-                            if(account == null)
+                            throw new Exception("AccountCoupon does not exist");
+                        }
+                        if (accountCoupon.Coupon == null) 
+                        {
+                            throw new Exception("Coupont does not exist");
+                        }
+                        crsItem.AccountCoupon = accountCoupon.Coupon.Amount;
+                    }
+                    else
+                    {
+                        crsItem.AccountCoupon = 0;
+                    }
+
+                    if (contract.ContractCharacters != null)
+                    {
+                        foreach (var contractCharacter in contract.ContractCharacters)
+                        {
+                            Account account = new Account();
+                            if (contractCharacter.CosplayerId != null)
                             {
-                                throw new Exception("Account does not exist");
+                                account = await _accountRepository.GetAccount(contractCharacter.CosplayerId);
+                                if (account == null)
+                                {
+                                    throw new Exception("Account does not exist");
+                                }
                             }
-                        }
-                        Character character = await _characterRepository.GetCharacter(contractCharacter.CharacterId);
-                        if (character == null)
-                        {
-                            throw new Exception("Character does not exist");
+                            Character character = await _characterRepository.GetCharacter(contractCharacter.CharacterId);
+                            if (character == null)
+                            {
+                                throw new Exception("Character does not exist");
+                            }
+
+                            ListContractCharcterResponse listContractCharcterResponse = new ListContractCharcterResponse()
+                            {
+                                CharacterName = character.CharacterName,
+                                Quantity = (int)contractCharacter.Quantity,
+                            };
+
+                            if (account != null)
+                            {
+                                listContractCharcterResponse.CosplayerName = account.Name;
+                            }
+                            else
+                            {
+                                listContractCharcterResponse.CosplayerName = null;
+                            }
+
+                            listContractCharcterResponses.Add(listContractCharcterResponse);
+
                         }
 
-                        ListContractCharcterResponse listContractCharcterResponse = new ListContractCharcterResponse()
-                        {
-                            CharacterName = character.CharacterName,
-                            Quantity = (int)contractCharacter.Quantity,
-                        };
+                        crsItem.ContractCharacters = listContractCharcterResponses;
 
-                        if (account != null)
-                        {
-                            listContractCharcterResponse.CosplayerName = account.Name;
-                        }
-                        else
-                        {
-                            listContractCharcterResponse.CosplayerName = null;
-                        }
+                        crs.Add(crsItem);
 
-                        listContractCharcterResponses.Add(listContractCharcterResponse);
-
+                        listContractCharcterResponses = new List<ListContractCharcterResponse>();
                     }
-
-                    crsItem.ContractCharacters = listContractCharcterResponses;
-
-                    crs.Add(crsItem);
                 }
 
                 return crs;
