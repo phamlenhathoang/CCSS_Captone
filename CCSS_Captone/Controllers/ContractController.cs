@@ -2,6 +2,7 @@
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,22 +12,24 @@ namespace CCSS_Captone.Controllers
     [ApiController]
     public class ContractController : ControllerBase
     {
-        //private readonly IContractServices _services;
+        private readonly IContractServices _services;
 
-        //public ContractController(IContractServices services)
-        //{
-        //    _services = services;
-        //}
+        public ContractController(IContractServices services)
+        {
+            _services = services;
+        }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllContract(string? searchterm)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await _services.GetAllContract(searchterm);
-        //        return Ok(result);
-        //    }
-        //    return BadRequest(ModelState);
+        [Authorize(Roles = "Manager")]
+        [HttpGet]
+        public async Task<IActionResult> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetContract(contractName, contractStatus, startDate, endDate, accountId, contractId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
         //}
 
         //[HttpGet("{id}")]
@@ -40,31 +43,23 @@ namespace CCSS_Captone.Controllers
         //    return BadRequest(ModelState);
         //}
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddContract(ContractRequest contractRequest)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (contractRequest == null || contractRequest.contractCharacterRequests == null || !contractRequest.contractCharacterRequests.Any())
-        //        {
-        //            return BadRequest("Invalid contract data.");
-        //        }
-        //        var result = await _services.AddContract(contractRequest);
-        //        return Ok(result);
-        //    }
-        //    return BadRequest(ModelState);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> AddContract(string requestId, int deposit)
+        {
+            var result = await _services.AddContract(requestId, deposit);
+            return Ok(result);
+        }
 
-        //[HttpPut]
-        //public async Task<IActionResult> UpdateContract(string contracId, ContractResponse contractResponse)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await _services.UpdateContract(contracId, contractResponse);
-        //        return Ok(result);
-        //    }
-        //    return BadRequest(ModelState);
-        //}
+        [HttpPut]
+        public async Task<IActionResult> UpdateStatusContract(string contracId, string status)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.UpdateStatusContract(contracId, status);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
 
         //[HttpPut("Status")]
         //public async Task<IActionResult> UpdateStatusContract(string contractId, ContractStatus contractStatus)

@@ -37,9 +37,9 @@ namespace CCSS_Service.Services
         private readonly IAccountCouponRepository _accountCouponRepository;
         private readonly IEventRepository _eventrepository;
         private readonly IContractRespository _contractRespository;
+        private readonly IContractServices _contractServices;
 
-
-        public MomoService(IOptions<MomoOptionModel> options, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IAccountRepository accountRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IContractRespository contractRespository)
+        public MomoService(IContractServices _contractServices, IOptions<MomoOptionModel> options, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IAccountRepository accountRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IContractRespository contractRespository)
         {
             _options = options;
             _ticketAccountService = ticketAccountService;
@@ -48,6 +48,7 @@ namespace CCSS_Service.Services
             _eventrepository = eventrepository;
             _accountCouponRepository = accountCouponRepository;
             _contractRespository = contractRespository;
+            this._contractServices = _contractServices;
         }
         public async Task<MomoCreatePaymentResponse> CreatePaymentAsync(OrderInfoModel model)
         {
@@ -258,6 +259,12 @@ namespace CCSS_Service.Services
                     
                     existingPayment.ContractId = contractId;
                     await _paymentRepository.UpdatePayment(existingPayment);
+
+                    bool result = await _contractServices.UpdateStatusContract(contractId, "Progressing");
+                    if (!result)
+                    {
+                        throw new Exception("Can not update status contract");
+                    }
                     
                     await sendMail.SendEmailNotification(purpose, account.Email, null, contract.ContractName, null, DateTime.Now, null, amount, account.Name);
 
@@ -268,6 +275,11 @@ namespace CCSS_Service.Services
                     
                     existingPayment.ContractId = contractId;
                     await _paymentRepository.UpdatePayment(existingPayment);
+                    bool rs = await _contractServices.UpdateStatusContract(contractId, "Progressing");
+                    if (!rs)
+                    {
+                        throw new Exception("Can not update status contract");
+                    }
                     await sendMail.SendEmailNotification(purpose, account.Email, null, contract.ContractName, null, DateTime.Now, null, amount, account.Name);
                     return "Thanh toán thành công ";
 
@@ -282,9 +294,6 @@ namespace CCSS_Service.Services
             }
 
         }
-
-
-
 
         private string ComputeHmacSha256(string message, string secretKey)
         {

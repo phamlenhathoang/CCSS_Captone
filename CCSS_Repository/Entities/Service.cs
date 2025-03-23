@@ -20,6 +20,5 @@ namespace CCSS_Repository.Entities
         public DateTime? UpdateDate { get; set; }
 
         public ICollection<Request> Requests { get; set; } = new List<Request>();
-        public ICollection<Package> Packages { get; set; } = new List<Package>();
     }
 }

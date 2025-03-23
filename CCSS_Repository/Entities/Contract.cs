@@ -25,9 +25,10 @@ namespace CCSS_Repository.Entities
         public string? UrlPdf { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? ContractName { get; set; }
+        public string? Reason { get; set; }
         public ContractStatus ContractStatus { get; set; }
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
-        public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+        //public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
         public ICollection<ContractCharacter> ContractCharacters { get; set; } = new List<ContractCharacter>();
     }
 

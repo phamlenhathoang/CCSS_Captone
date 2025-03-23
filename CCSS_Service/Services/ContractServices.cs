@@ -1,4 +1,5 @@
-﻿using CCSS_Repository.Entities;
+﻿using AutoMapper;
+using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
 using CCSS_Service.Hubs;
 using CCSS_Service.Libraries;
@@ -24,7 +25,7 @@ namespace CCSS_Service.Services
 {
     public interface IContractServices
     {
-        //Task<List<Request>> GetAllContract(string searchterm);
+        ////Task<List<Request>> GetAllContract(string searchterm);
         //Task<Request> GetContract(string id);
         //Task<string> AddContract(ContractRequest contractRequest);
         //Task<string> UpdateContract(string contractId, ContractResponse contractResponse);
@@ -33,11 +34,13 @@ namespace CCSS_Service.Services
         //Task<string> UploadImageToFirebase(IFormFile file);
 
         Task<string> AddContract(string requestId, int deposit);
-
+        Task<bool> UpdateStatusContract(string contractId, string status);
+        Task<bool> DeleteContract(string contractId, string reason);   
+        Task<List<ContractResponse>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate,string? accountId, string? contractId);
     }
     public class ContractServices : IContractServices
     {
-        private readonly IContractRespository _respository;
+        private readonly IContractRespository _contractRespository;
         private readonly IContractCharacterRepository _contractCharacterRepository;
         private readonly ICharacterRepository _characterRepository;
         private readonly IRequestRepository _requestRepository;
@@ -48,13 +51,16 @@ namespace CCSS_Service.Services
         private readonly Image Image;
         private readonly IHubContext<NotificationHub> hubContext;
         private readonly INotificationRepository notificationRepository;
+        private readonly IContractCharacterService contractCharacterService;
+        private readonly IPackageRepository packageRepository;
+        private readonly IMapper mapper;
         private readonly string _projectId = "miracles-ef238";
         private readonly string _bucketName = "miracles-ef238.appspot.com";
 
 
-        public ContractServices(INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository respository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
+        public ContractServices(IMapper mapper, IPackageRepository packageRepository, IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
         {
-            _respository = respository;
+            this._contractRespository = _contractRespository;
             _contractCharacterRepository = contractCharacterRepository;
             _characterRepository = characterRepository;
             this._requestRepository = _requestRepository;
@@ -65,6 +71,9 @@ namespace CCSS_Service.Services
             this._accountRepository = _accountRepository;
             this.hubContext = hubContext;
             this.notificationRepository = notificationRepository;
+            this.contractCharacterService = contractCharacterService;
+            this.packageRepository = packageRepository;
+            this.mapper = mapper;
         }
         //private string GenerateCode(int length = 6)
         //{
@@ -300,15 +309,6 @@ namespace CCSS_Service.Services
                     throw new Exception("Request not browsed yet");
                 }
 
-                if (request.AccountCoupon == null) 
-                {
-                    throw new Exception("AcccountCoupon does not exist");
-                }
-                if(request.AccountCoupon.Coupon.Type != CouponType.ForContract)
-                {
-                    throw new Exception("Coupon not belong for contract");
-                }
-
                 if (request.Service == null) 
                 {
                     throw new Exception("Service does not exist");
@@ -319,26 +319,26 @@ namespace CCSS_Service.Services
                     throw new Exception("Account does not exist");
                 }
 
-                double totalPrice = (double)(request.Price * request.AccountCoupon.Coupon.Amount) / 100;
-
-                var urlPdf = await Image.UploadImageToFirebase(await pdfService.ConvertBytesToIFormFile(request, deposit));
+                if(request.Contract != null)
+                {
+                    throw new Exception("This request created contract");
+                }
 
                 Contract contract = new Contract()
                 {
                     Deposit = deposit.ToString(),
-                    TotalPrice = totalPrice,
-                    Amount = (double)(totalPrice * deposit) / 100,
+                    TotalPrice = request.Price,
+                    Amount = request.Price - ((request.Price * deposit) / 100),
                     RequestId = requestId,
                     CreateBy = request.AccountId,
                     ContractId = Guid.NewGuid().ToString(),
                     CreateDate = DateTime.Now,
                     ContractStatus = ContractStatus.Active,
                     ContractName = request.Service.ServiceName,
-                    UrlPdf = urlPdf
+                    UrlPdf = await Image.UploadImageToFirebase(await pdfService.ConvertBytesToIFormFile(request, deposit)),
                 };
 
-
-                bool result = await _respository.AddContract(contract);
+                bool result = await _contractRespository.AddContract(contract);
                 if (result)
                 {
                     return "Success";
@@ -346,6 +346,212 @@ namespace CCSS_Service.Services
                 return "Failed";
             }
             catch(Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> DeleteContract(string contractId, string reason)
+        {
+            try
+            {
+                Contract contract = await _contractRespository.GetContractById(contractId);
+                if (contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
+                if (contract.ContractStatus != ContractStatus.Active)
+                {
+                    throw new Exception("Contract can not delete");
+                }
+                contract.ContractStatus = ContractStatus.Cancel;
+                contract.Reason = reason;
+                bool result = await _contractRespository.UpdateContract(contract);
+                if (result)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<ContractResponse>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId)
+        {
+            try
+            {
+                List<ContractResponse> crs = new List<ContractResponse>();
+                List<ListContractCharcterResponse> listContractCharcterResponses = new List<ListContractCharcterResponse>();
+                List<Contract> contracts = await _contractRespository.GetContract(contractName, contractStatus, startDate, endDate, accountId, contractId);
+                if (contracts == null)
+                {
+                    return crs;
+                }
+                Package package = null;
+                foreach (var contract in contracts)
+                {
+                    ContractResponse crsItem = new ContractResponse()
+                    {
+                        Amount = contract.Amount ?? 0,
+                        ContractName = contract.ContractName,
+                        Deposit = contract.Deposit,
+                        EndDate = contract.Request.EndDate.ToString("HH:mm dd/MM/yyyy"),
+                        StartDate = contract.Request.StartDate.ToString("HH:mm dd/MM/yyyy"),
+                        Price = (double)contract.TotalPrice,
+                        Status = contract.ContractStatus.ToString(),
+                        Reason = contract.Reason,
+                    };
+
+                    if (contract.Request.PackageId != null)
+                    {
+                        package = await packageRepository.GetPackage(contract.Request.PackageId);
+                        if (package == null)
+                        {
+                            throw new Exception("Package does not exist");
+                        }
+                        crsItem.PackageName = package.PackageName;
+                    }
+                    else
+                    {
+                        crsItem.PackageName = null;
+                    }
+
+                    if (contract.Request.AccountCouponId != null)
+                    {
+                        AccountCoupon accountCoupon = await accountCouponRepository.GetAccountCoupon(contract.Request.AccountCouponId);
+                        if(accountCoupon == null)
+                        {
+                            throw new Exception("AccountCoupon does not exist");
+                        }
+                        if (accountCoupon.Coupon == null) 
+                        {
+                            throw new Exception("Coupont does not exist");
+                        }
+                        crsItem.AccountCoupon = accountCoupon.Coupon.Amount;
+                    }
+                    else
+                    {
+                        crsItem.AccountCoupon = 0;
+                    }
+
+                    if (contract.ContractCharacters != null)
+                    {
+                        foreach (var contractCharacter in contract.ContractCharacters)
+                        {
+                            Account account = new Account();
+                            if (contractCharacter.CosplayerId != null)
+                            {
+                                account = await _accountRepository.GetAccount(contractCharacter.CosplayerId);
+                                if (account == null)
+                                {
+                                    throw new Exception("Account does not exist");
+                                }
+                            }
+                            Character character = await _characterRepository.GetCharacter(contractCharacter.CharacterId);
+                            if (character == null)
+                            {
+                                throw new Exception("Character does not exist");
+                            }
+
+                            ListContractCharcterResponse listContractCharcterResponse = new ListContractCharcterResponse()
+                            {
+                                CharacterName = character.CharacterName,
+                                Quantity = (int)contractCharacter.Quantity,
+                            };
+
+                            if (account != null)
+                            {
+                                listContractCharcterResponse.CosplayerName = account.Name;
+                            }
+                            else
+                            {
+                                listContractCharcterResponse.CosplayerName = null;
+                            }
+
+                            listContractCharcterResponses.Add(listContractCharcterResponse);
+
+                        }
+
+                        crsItem.ContractCharacters = listContractCharcterResponses;
+
+                        crs.Add(crsItem);
+
+                        listContractCharcterResponses = new List<ListContractCharcterResponse>();
+                    }
+                }
+
+                return crs;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> UpdateStatusContract(string contractId, string status)
+        {
+            try
+            {
+                Contract contract = await _contractRespository.GetContractById(contractId);
+                if (contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
+                if (status.ToUpper() == ContractStatus.Cancel.ToString().ToUpper())
+                {
+                    if (contract.ContractStatus == ContractStatus.Active)
+                    {
+                        contract.ContractStatus = ContractStatus.Cancel;
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update contract status");
+                    }
+                }
+                if (status.ToUpper() == ContractStatus.Progressing.ToString().ToUpper())
+                {
+                    if (contract.ContractStatus == ContractStatus.Active)
+                    {
+                        contract.ContractStatus = ContractStatus.Progressing;   
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update contract status");
+                    }
+                }
+                if (status.ToUpper() == ContractStatus.Completed.ToString().ToUpper())
+                {
+                    if (contract.ContractStatus == ContractStatus.Progressing)
+                    {
+                        contract.ContractStatus = ContractStatus.Completed;
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update contract status");
+                    }
+                }
+
+                bool result = await _contractRespository.UpdateContract(contract);
+                if (!result)
+                {
+                    return false;
+                }
+
+                if (contract.ContractStatus == ContractStatus.Progressing)
+                {
+                    bool checkAddContractCharacter = await contractCharacterService.AddListContractCharacter(contract);
+                    if (!checkAddContractCharacter)
+                    {
+                        throw new Exception("Cannot add ContractCharacter");
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

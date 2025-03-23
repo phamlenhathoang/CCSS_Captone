@@ -1,5 +1,6 @@
 ﻿using CCSS_Service.Model.Requests;
 using CCSS_Service.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -15,7 +16,7 @@ namespace CCSS_Captone.Controllers
         {
             _momoService = momoService;
         }
-
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         [SwaggerOperation(Description = "purpose==0 (Mua vé)<br>" +
                                 "purpose==1 (Trả tiền cọc hợp đồng)<br>" +
@@ -31,7 +32,7 @@ namespace CCSS_Captone.Controllers
             }
             return Ok(response.PayUrl);
         }
-
+        [SwaggerOperation(Description = "role: không call cái này")]
         [HttpGet]
         [Route("PaymentCallBack")]
         public async Task<IActionResult> PaymentCallBack()

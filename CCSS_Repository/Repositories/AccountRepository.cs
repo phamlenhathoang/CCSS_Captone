@@ -24,6 +24,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> AddAccount(Account account);
         Task<bool> UpdateAccount(Account account);
         Task<List<Account>> GetAllAccountsByCharacter(Character character);
+        Task<List<Account>> GetAllAccountsByRoleId(string roleId);
     }
     public class AccountRepository : IAccountRepository
     {
@@ -41,7 +42,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Account> GetAccount(string accountId)
         {
-            return await dbContext.Accounts.FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsActive == true);   
+            return await dbContext.Accounts.Include(r => r.Role).FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsActive == true);   
         }
 
         public async Task<Account> GetAccountByAccountId(string accountId)
@@ -98,6 +99,11 @@ namespace CCSS_Repository.Repositories
             return await dbContext.Accounts.Include(r => r.Role).Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight
                                                         && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight
                                                         && a.Role.RoleName == RoleName.Cosplayer).ToListAsync();
+        }
+
+        public async Task<List<Account>> GetAllAccountsByRoleId(string roleId)
+        {
+            return await dbContext.Accounts.Include(r => r.Role).Include(ai => ai.AccountImages).Where(a => a.RoleId.Equals(roleId)).ToListAsync();
         }
 
         //public async Task<Account> GetAccountIncludeAccountCategory(string accountId)

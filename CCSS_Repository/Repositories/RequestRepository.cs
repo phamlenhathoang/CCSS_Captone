@@ -13,10 +13,10 @@ namespace CCSS_Repository.Repositories
     {
         Task<List<Request>> GetAllRequest();
         Task<Request> GetRequestById(string id);
-        Task AddRequest(Request request);
+        Task<bool> AddRequest(Request request);
         Task UpdateRequest(Request request);
         Task DeleteRequest(Request request);
-
+        Task<Request> GetRequestIncludeRequestCharacter(string requestId);
         Task<Request> GetRequestByIdInclude(string id);
     }
 
@@ -31,7 +31,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Request>> GetAllRequest()
         {
-            return await _context.Requests.ToListAsync();
+            return await _context.Requests.Include(sc => sc.RequestCharacters).ToListAsync();
         }
 
         public async Task<Request> GetRequestById(string id)
@@ -39,10 +39,10 @@ namespace CCSS_Repository.Repositories
             return await _context.Requests.FirstOrDefaultAsync(sc => sc.RequestId.Equals(id));  
         }
 
-        public async Task AddRequest( Request request)
+        public async Task<bool> AddRequest( Request request)
         {
             _context.Requests.Add(request);
-            await _context.SaveChangesAsync();
+           return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task UpdateRequest(Request request)
@@ -57,12 +57,19 @@ namespace CCSS_Repository.Repositories
             await _context.SaveChangesAsync();
         }
 
+        
+
         public async Task<Request> GetRequestByIdInclude(string id)
         {
-            return await _context.Requests.Include(a => a.Account)
+            return await _context.Requests.Include(a => a.Account).Include(c => c.Contract)
                                           .Include(s => s.Service)
                                           .Include(rc => rc.RequestCharacters)
                                           .FirstOrDefaultAsync(sc => sc.RequestId.Equals(id));
+        }
+
+        public async Task<Request> GetRequestIncludeRequestCharacter(string requestId)
+        {
+            return await _context.Requests.Include(rc => rc.RequestCharacters).FirstOrDefaultAsync(r => r.RequestId.Equals(requestId));
         }
     }
 }

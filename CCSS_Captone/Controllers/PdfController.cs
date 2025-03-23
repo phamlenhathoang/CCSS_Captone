@@ -21,11 +21,5 @@ namespace CCSS_Captone.Controllers
         {
             this.pdfService = pdf;
         }
-
-        //[HttpGet]
-        //public async Task<IFormFile> GenerateInvoicePdf(string requestId, int deposit)
-        //{
-        //    return await pdfService.ConvertBytesToIFormFile(requestId, deposit);
-        //}
     }
 }

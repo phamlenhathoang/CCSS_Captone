@@ -23,13 +23,15 @@ namespace CCSS_Service.Libraries
         private readonly IAccountRepository accountRepository;
         private readonly IRequestRepository requestRepository;
         private readonly IAccountCouponRepository accountCouponRepository;
+        private readonly IPackageRepository packageRepository;
 
-        public Pdf(ICharacterRepository characterRepository, IAccountRepository accountRepository, IRequestRepository requestRepository, IAccountCouponRepository accountCouponRepository)
+        public Pdf(IPackageRepository packageRepository, ICharacterRepository characterRepository, IAccountRepository accountRepository, IRequestRepository requestRepository, IAccountCouponRepository accountCouponRepository)
         {
             this.characterRepository = characterRepository;
             this.accountRepository = accountRepository;
             this.requestRepository = requestRepository;
             this.accountCouponRepository = accountCouponRepository;
+            this.packageRepository = packageRepository;
         }
         public async Task<byte[]> GeneratePdf(Request request, int deposit)
         {
@@ -48,6 +50,18 @@ namespace CCSS_Service.Libraries
                     if (accountCoupon == null)
                     {
                         throw new Exception("AccountCoupon does not exist");
+                    }
+                }
+
+                Package package = null;
+
+                if (request.PackageId != null)
+                {
+                    package = await packageRepository.GetPackage(request.PackageId);
+
+                    if (package == null)
+                    {
+                        throw new Exception("Package does not exist");
                     }
                 }
 
@@ -139,12 +153,19 @@ namespace CCSS_Service.Libraries
                             <td>{account.Name}</td>
                             <td>Cosplayer</td>
                             <td>-</td>
-                            <td>{character.Price * account.SalaryIndex}</td>
-                            <td>{character.Price * account.SalaryIndex}</td>
+                            <td>{character.Price * account.SalaryIndex - character.Price}</td>
+                            <td>{character.Price * account.SalaryIndex - character.Price}</td>
                         </tr>";
                             index++;
                         }
                     }
+
+                    double packagePrice = (package?.Price ?? 0);
+
+                    htmlContent += $@"<tr>
+                    <td colspan='5' class='right-align'>Package</td>
+                    <td>{packagePrice}</td>
+                </tr>";
 
                     // Xử lý coupon
                     double amount = accountCoupon?.Coupon?.Amount ?? 0.0;
@@ -156,7 +177,7 @@ namespace CCSS_Service.Libraries
                 </tr>";
 
                     // Tính tổng số tiền
-                    double totalAmount = await CalculateTotalAmount(request, formattedAmount);
+                    double totalAmount = await CalculateTotalAmount(request, formattedAmount, packagePrice);
 
                     htmlContent += $@"<tr>
                     <td colspan='5' class='right-align'>Tổng</td>
@@ -213,7 +234,7 @@ namespace CCSS_Service.Libraries
 
 
 
-        public async Task<double> CalculateTotalAmount(Request request, string amount)
+        public async Task<double> CalculateTotalAmount(Request request, string amount, double price)
         {
             double totalAmount = 0;
 
@@ -226,13 +247,13 @@ namespace CCSS_Service.Libraries
                 if (requestCharacter.CosplayerId != null)
                 {
                     Account account = await accountRepository.GetAccount(requestCharacter.CosplayerId);
-                    totalAmount += (double)character.Price * (double)account.SalaryIndex;
+                    totalAmount += (double)character.Price * (double)account.SalaryIndex - (double)character.Price;
                 }
             }
             double parsedAmount;
             if (double.TryParse(amount, out parsedAmount))
             {
-                return totalAmount - parsedAmount;
+                return totalAmount - parsedAmount + price;
             }
             return totalAmount;
         }

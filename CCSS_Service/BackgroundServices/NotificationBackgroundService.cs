@@ -1,5 +1,6 @@
 ﻿using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Libraries;
 using CCSS_Service.Services;
 using Google.Apis.Logging;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,7 +45,7 @@ namespace CCSS_Service.BackgroundServices
                         //    .ToList();
 
                         var _notificationRepository = scope.ServiceProvider.GetRequiredService<INotificationRepository>();
-                        var _emailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
+                        var _sendMail = scope.ServiceProvider.GetRequiredService<SendMail>();
 
                         List<Notification> notificationList = await _notificationRepository.GetNotifications();
 
@@ -52,10 +53,19 @@ namespace CCSS_Service.BackgroundServices
                         {
                             foreach (var notification in notificationList)
                             {
-                                if(DateTime.Now.Date >= notification.CreatedAt.Date)
+                                if(!notification.IsSentMail)
                                 {
-                                    await _emailService.SendEmailAsync(notification.Account.Email, "New task", $"You have new task. Please check in the system to check about your task", true);
-                                    _logger.LogInformation($"Notification {notification.Account.Email}");
+                                    if (DateTime.Now.Date >= notification.CreatedAt.Date)
+                                    {
+                                        await _sendMail.SendAccountNewTaskEmail(notification.Account.Email);
+                                        _logger.LogInformation($"Notification {notification.Account.Email}");
+                                        notification.IsSentMail = true;
+                                        bool result = await _notificationRepository.UpdateNotification(notification);
+                                        if (!result)
+                                        {
+                                            _logger.LogInformation($"Can not send {notification.Account.Email}");
+                                        }
+                                    }
                                 }
                             }
                         }

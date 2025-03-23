@@ -40,16 +40,14 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRequest([FromBody] RequestDtos requestDtos, [FromQuery] RequestDescription requestDescription)
-
+        public async Task<IActionResult> CreateRequest([FromBody] RequestDtos requestDtos)
         {
             try
             {
 
-
                 if (ModelState.IsValid)
                 {
-                    var result = await _services.AddRequest(requestDtos, requestDescription);
+                    var result = await _services.AddRequest(requestDtos);
                     return Ok(result);
                 }
                 return BadRequest(ModelState);
@@ -106,6 +104,24 @@ namespace CCSS_Captone.Controllers
                     return BadRequest(ModelState);
                 }
                 var result = await _services.DeleteRequest(requestId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("totalPrice")]
+        public async Task<IActionResult> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var result = await _services.TotalPriceRequest(packagePrice, accountCouponPrice, startDate, endDate, requestTotalPrices);
                 return Ok(result);
             }
             catch (Exception ex)

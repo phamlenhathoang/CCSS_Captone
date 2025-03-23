@@ -27,6 +27,8 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<Character> Characters { get; set; }
         public virtual DbSet<CharacterImage> CharacterImages { get; set; }
         public virtual DbSet<Contract> Contracts { get; set; }
+        public virtual DbSet<CustomerCharacter> CustomerCharacters { get; set; }
+        public virtual DbSet<CustomerCharacterImage> CustomerCharacterImages { get; set; }
         public virtual DbSet<ContractCharacter> ContractCharacters { get; set; }
         public virtual DbSet<Request> Requests { get; set; }
         public virtual DbSet<RequestCharacter> RequestsCharacters { get; set; }
@@ -246,11 +248,11 @@ namespace CCSS_Repository.Entities
                .HasForeignKey<Contract>(a => a.RequestId)
                .OnDelete(DeleteBehavior.NoAction);
 
-            //Contract - Feedback
-            modelBuilder.Entity<Contract>()
-               .HasMany(a => a.Feedbacks)
-               .WithOne(r => r.Contract)
-               .HasForeignKey(a => a.ContractId)
+            //ContractCharacter - Feedback
+            modelBuilder.Entity<Feedback>()
+               .HasOne(a => a.ContractCharacter)
+               .WithOne(r => r.Feedback)
+               .HasForeignKey<Feedback>(a => a.ContractCharacterId)
                .OnDelete(DeleteBehavior.NoAction);
 
             //Contract - ContractCharacter
@@ -330,6 +332,13 @@ namespace CCSS_Repository.Entities
                .HasForeignKey(a => a.CategoryId)
                .OnDelete(DeleteBehavior.NoAction);
 
+            //CustomerCharacter - Category
+            modelBuilder.Entity<CustomerCharacter>()
+               .HasOne(a => a.Category)
+               .WithMany(r => r.CustomerCharacters)
+               .HasForeignKey(a => a.CategoryId)
+               .OnDelete(DeleteBehavior.NoAction);
+
             //Task - EventCharacter
             modelBuilder.Entity<Task>()
                .HasOne(a => a.EventCharacter)
@@ -344,11 +353,18 @@ namespace CCSS_Repository.Entities
                .HasForeignKey<Task>(a => a.ContractCharacterId)
                .OnDelete(DeleteBehavior.NoAction);
 
-            //Service - Package 
-            modelBuilder.Entity<Service>()
-               .HasMany(a => a.Packages)
-               .WithOne(r => r.Service)
-               .HasForeignKey(a => a.ServiceId)
+            //Request - Package 
+            modelBuilder.Entity<Request>()
+               .HasOne(a => a.Package)
+               .WithMany(r => r.Requests)
+               .HasForeignKey(a => a.PackageId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            //CustomerCharacter - CustomerCharacterImage 
+            modelBuilder.Entity<CustomerCharacter>()
+               .HasMany(a => a.CustomerCharacterImages)
+               .WithOne(r => r.CustomerCharacter)
+               .HasForeignKey(a => a.CustomerCharacterId)
                .OnDelete(DeleteBehavior.NoAction);
 
 
@@ -576,15 +592,15 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Feedback
             modelBuilder.Entity<Feedback>().HasData(
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Great experience!", CreateDate = new DateTime(2025, 2, 15), CreateBy = "A001", AccountId = "A001", ContractId = "CT002" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Loved the event!", CreateDate = new DateTime(2025, 3, 10), CreateBy = "A004", AccountId = "A004", ContractId = "CT005" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Nice cosplay session!", CreateDate = new DateTime(2025, 4, 5), CreateBy = "A005", AccountId = "A005", ContractId = "CT008" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Enjoyed the event!", CreateDate = new DateTime(2025, 6, 20), CreateBy = "A007", AccountId = "A007", ContractId = "CT010" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Would love to join again!", CreateDate = new DateTime(2025, 7, 15), CreateBy = "A008", AccountId = "A008", ContractId = "CT014" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "The atmosphere was amazing!", CreateDate = new DateTime(2025, 8, 25), CreateBy = "A010", AccountId = "A010", ContractId = "CT002" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Best cosplay event!", CreateDate = new DateTime(2025, 9, 10), CreateBy = "A012", AccountId = "A012", ContractId = "CT005" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Nice crowd and management!", CreateDate = new DateTime(2025, 10, 5), CreateBy = "A013", AccountId = "A013", ContractId = "CT008" },
-    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Amazing experience!", CreateDate = new DateTime(2025, 11, 20), CreateBy = "A015", AccountId = "A015", ContractId = "CT010" }
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Great experience!", CreateDate = new DateTime(2025, 2, 15), CreateBy = "A001", AccountId = "A001", ContractCharacterId = "CC0021" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Loved the event!", CreateDate = new DateTime(2025, 3, 10), CreateBy = "A004", AccountId = "A004", ContractCharacterId = "CC0022" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Nice cosplay session!", CreateDate = new DateTime(2025, 4, 5), CreateBy = "A005", AccountId = "A005", ContractCharacterId = "CC0023" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Enjoyed the event!", CreateDate = new DateTime(2025, 6, 20), CreateBy = "A007", AccountId = "A007", ContractCharacterId = "CC0051" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Would love to join again!", CreateDate = new DateTime(2025, 7, 15), CreateBy = "A008", AccountId = "A008", ContractCharacterId = "CC0052" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "The atmosphere was amazing!", CreateDate = new DateTime(2025, 8, 25), CreateBy = "A010", AccountId = "A010", ContractCharacterId = "CC0053" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Best cosplay event!", CreateDate = new DateTime(2025, 9, 10), CreateBy = "A012", AccountId = "A012", ContractCharacterId = "CC0081" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Nice crowd and management!", CreateDate = new DateTime(2025, 10, 5), CreateBy = "A013", AccountId = "A013", ContractCharacterId = "CC0082" },
+    new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Amazing experience!", CreateDate = new DateTime(2025, 11, 20), CreateBy = "A015", AccountId = "A015", ContractCharacterId = "CC0083" }
 );
             #endregion
 
@@ -592,21 +608,21 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Notication
             modelBuilder.Entity<Notification>().HasData(
-    new Notification { Id = "N001", AccountId = "A001", Message = "Welcome to the system!", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N002", AccountId = "A002", Message = "Your account has been upgraded.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N003", AccountId = "A003", Message = "New promotional offer available!", IsRead = true, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N004", AccountId = "A004", Message = "Your request has been approved.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N005", AccountId = "A005", Message = "System maintenance scheduled.", IsRead = true, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N006", AccountId = "A006", Message = "Your order has been shipped!", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N007", AccountId = "A007", Message = "New event registration open.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N008", AccountId = "A008", Message = "Reminder: Payment due soon.", IsRead = true, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N009", AccountId = "A009", Message = "Your password was changed.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N010", AccountId = "A010", Message = "Admin announcement update.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N011", AccountId = "A011", Message = "New message from support.", IsRead = true, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N012", AccountId = "A012", Message = "Upcoming event invitation.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N013", AccountId = "A013", Message = "New cosplayer contest.", IsRead = false, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N014", AccountId = "A014", Message = "Loyalty points updated.", IsRead = true, CreatedAt = DateTime.UtcNow },
-    new Notification { Id = "N015", AccountId = "A015", Message = "Your subscription expired.", IsRead = false, CreatedAt = DateTime.UtcNow }
+    new Notification { Id = "N001", AccountId = "A001", Message = "Welcome to the system!", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N002", AccountId = "A002", Message = "Your account has been upgraded.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N003", AccountId = "A003", Message = "New promotional offer available!", IsRead = true, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N004", AccountId = "A004", Message = "Your request has been approved.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N005", AccountId = "A005", Message = "System maintenance scheduled.", IsRead = true, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N006", AccountId = "A006", Message = "Your order has been shipped!", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N007", AccountId = "A007", Message = "New event registration open.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N008", AccountId = "A008", Message = "Reminder: Payment due soon.", IsRead = true, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N009", AccountId = "A009", Message = "Your password was changed.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N010", AccountId = "A010", Message = "Admin announcement update.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N011", AccountId = "A011", Message = "New message from support.", IsRead = true, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N012", AccountId = "A012", Message = "Upcoming event invitation.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N013", AccountId = "A013", Message = "New cosplayer contest.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N014", AccountId = "A014", Message = "Loyalty points updated.", IsRead = true, IsSentMail = true, CreatedAt = DateTime.UtcNow },
+    new Notification { Id = "N015", AccountId = "A015", Message = "Your subscription expired.", IsRead = false, IsSentMail = true, CreatedAt = DateTime.UtcNow }
 );
             #endregion
 
@@ -621,21 +637,21 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Request
             modelBuilder.Entity<Request>().HasData(
-    new Request { RequestId = "R001", AccountId = "A001", Name = "Rent Naruto Costume", Description = RequestDescription.RentCostumes, Price = 100, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 1, 10), EndDate = new DateTime(2025, 1, 15), ServiceId = "S001", ContractId = "CT001", Location = "HCM" },
-    new Request { RequestId = "R002", AccountId = "A002", Name = "Rent Cosplayer for Event", Description = RequestDescription.RentCosplayer, Price = 500, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 2, 5), EndDate = new DateTime(2025, 2, 10), ServiceId = "S002", ContractId = "CT002", Location = "ĐN" },
-    new Request { RequestId = "R003", AccountId = "A003", Name = "Create Anime Festival", Description = RequestDescription.CreateEvent, Price = 2000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 3, 1), EndDate = new DateTime(2025, 3, 5), ServiceId = "S003", ContractId = "CT003", Location = "BD" },
-    new Request { RequestId = "R004", AccountId = "A004", Name = "Rent Samurai Armor", Description = RequestDescription.RentCostumes, Price = 150, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 4, 10), EndDate = new DateTime(2025, 4, 15), ServiceId = "S002", ContractId = "CT004", Location = "HN" },
-    new Request { RequestId = "R005", AccountId = "A005", Name = "Hire Professional Cosplayer", Description = RequestDescription.RentCosplayer, Price = 700, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 5, 3), EndDate = new DateTime(2025, 5, 7), ServiceId = "S002", ContractId = "CT005", Location = "BT" },
-    new Request { RequestId = "R006", AccountId = "A006", Name = "Organize Comic Convention", Description = RequestDescription.CreateEvent, Price = 5000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 6, 12), EndDate = new DateTime(2025, 6, 20), ServiceId = "S001", ContractId = "CT006", Location = "HCM" },
-    new Request { RequestId = "R007", AccountId = "A007", Name = "Rent Victorian Costume", Description = RequestDescription.RentCostumes, Price = 120, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 7, 1), EndDate = new DateTime(2025, 7, 5), ServiceId = "S002", ContractId = "CT007", Location = "HCM" },
-    new Request { RequestId = "R008", AccountId = "A008", Name = "Book Cosplayer for Birthday Party", Description = RequestDescription.RentCosplayer, Price = 350, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 8, 15), EndDate = new DateTime(2025, 8, 18), ServiceId = "S003", ContractId = "CT008", Location = "QN" },
-    new Request { RequestId = "R009", AccountId = "A009", Name = "Plan Fantasy Fair", Description = RequestDescription.CreateEvent, Price = 3000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 9, 10), EndDate = new DateTime(2025, 9, 15), ServiceId = "S003", ContractId = "CT009", Location = "CM" },
-    new Request { RequestId = "R010", AccountId = "A010", Name = "Rent Halloween Costumes", Description = RequestDescription.RentCostumes, Price = 200, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 10, 25), EndDate = new DateTime(2025, 10, 31), ServiceId = "S001", ContractId = "CT010", Location = "LĐ" },
-    new Request { RequestId = "R011", AccountId = "A011", Name = "Hire Cosplayer for Wedding", Description = RequestDescription.RentCosplayer, Price = 800, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 11, 20), EndDate = new DateTime(2025, 11, 25), ServiceId = "S001", ContractId = "CT011", Location = "NT" },
-    new Request { RequestId = "R012", AccountId = "A012", Name = "Create Sci-Fi Convention", Description = RequestDescription.CreateEvent, Price = 4500, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 12, 5), EndDate = new DateTime(2025, 12, 10), ServiceId = "S002", ContractId = "CT012", Location = "VT" },
-    new Request { RequestId = "R013", AccountId = "A013", Name = "Rent Santa Claus Costume", Description = RequestDescription.RentCostumes, Price = 130, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 20), EndDate = new DateTime(2025, 12, 25), ServiceId = "S003", ContractId = "CT013", Location = "HCM" },
-    new Request { RequestId = "R014", AccountId = "A014", Name = "Book Cosplayer for Product Launch", Description = RequestDescription.RentCosplayer, Price = 600, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 6, 30), EndDate = new DateTime(2025, 7, 2), ServiceId = "S001", ContractId = "CT014", Location = "HN" },
-    new Request { RequestId = "R015", AccountId = "A015", Name = "Host Christmas Event", Description = RequestDescription.CreateEvent, Price = 5500, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 15), EndDate = new DateTime(2025, 12, 31), ServiceId = "S002", ContractId = "CT015", Location = "HCM" }
+    new Request { RequestId = "R001", AccountId = "A001", Name = "Rent Naruto Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 100, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 1, 10), EndDate = new DateTime(2025, 1, 15), ServiceId = "S001", Location = "HCM" },
+    new Request { RequestId = "R002", AccountId = "A002", Name = "Rent Cosplayer for Event", Description = RequestDescription.RentCosplayer.ToString(), Price = 500, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 2, 5), EndDate = new DateTime(2025, 2, 10), ServiceId = "S002", Location = "ĐN" },
+    new Request { RequestId = "R003", AccountId = "A003", Name = "Create Anime Festival", Description = RequestDescription.CreateEvent.ToString(), Price = 2000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 3, 1), EndDate = new DateTime(2025, 3, 5), ServiceId = "S003", Location = "BD" },
+    new Request { RequestId = "R004", AccountId = "A004", Name = "Rent Samurai Armor", Description = RequestDescription.RentCostumes.ToString(), Price = 150, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 4, 10), EndDate = new DateTime(2025, 4, 15), ServiceId = "S002", Location = "HN" },
+    new Request { RequestId = "R005", AccountId = "A005", Name = "Hire Professional Cosplayer", Description = RequestDescription.RentCosplayer.ToString(), Price = 700, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 5, 3), EndDate = new DateTime(2025, 5, 7), ServiceId = "S002",Location = "BT" },
+    new Request { RequestId = "R006", AccountId = "A006", Name = "Organize Comic Convention", Description = RequestDescription.CreateEvent.ToString(), Price = 5000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 6, 12), EndDate = new DateTime(2025, 6, 20), ServiceId = "S001", Location = "HCM" },
+    new Request { RequestId = "R007", AccountId = "A007", Name = "Rent Victorian Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 120, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 7, 1), EndDate = new DateTime(2025, 7, 5), ServiceId = "S002", Location = "HCM" },
+    new Request { RequestId = "R008", AccountId = "A008", Name = "Book Cosplayer for Birthday Party", Description = RequestDescription.RentCosplayer.ToString(), Price = 350, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 8, 15), EndDate = new DateTime(2025, 8, 18), ServiceId = "S003", Location = "QN" },
+    new Request { RequestId = "R009", AccountId = "A009", Name = "Plan Fantasy Fair", Description = RequestDescription.CreateEvent.ToString(), Price = 3000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 9, 10), EndDate = new DateTime(2025, 9, 15), ServiceId = "S003", Location = "CM" },
+    new Request { RequestId = "R010", AccountId = "A010", Name = "Rent Halloween Costumes", Description = RequestDescription.RentCostumes.ToString(), Price = 200, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 10, 25), EndDate = new DateTime(2025, 10, 31), ServiceId = "S001", Location = "LĐ" },
+    new Request { RequestId = "R011", AccountId = "A011", Name = "Hire Cosplayer for Wedding", Description = RequestDescription.RentCosplayer.ToString(), Price = 800, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 11, 20), EndDate = new DateTime(2025, 11, 25), ServiceId = "S001", Location = "NT" },
+    new Request { RequestId = "R012", AccountId = "A012", Name = "Create Sci-Fi Convention", Description = RequestDescription.CreateEvent.ToString(), Price = 4500, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 12, 5), EndDate = new DateTime(2025, 12, 10), ServiceId = "S002", Location = "VT" },
+    new Request { RequestId = "R013", AccountId = "A013", Name = "Rent Santa Claus Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 130, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 20), EndDate = new DateTime(2025, 12, 25), ServiceId = "S003", Location = "HCM" },
+    new Request { RequestId = "R014", AccountId = "A014", Name = "Book Cosplayer for Product Launch", Description = RequestDescription.RentCosplayer.ToString(), Price = 600, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 6, 30), EndDate = new DateTime(2025, 7, 2), ServiceId = "S001", Location = "HN" },
+    new Request { RequestId = "R015", AccountId = "A015", Name = "Host Christmas Event", Description = RequestDescription.CreateEvent.ToString(), Price = 5500, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 15), EndDate = new DateTime(2025, 12, 31), ServiceId = "S002", Location = "HCM" }
 );
             #endregion
 
@@ -932,25 +948,25 @@ new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015",
 
             #region Package
             modelBuilder.Entity<Package>().HasData(
-    new Package { PackageId = "PKG001", PackageName = "Basic Character Rental", Description = "Rent a single character for an event", Price = 100.0, ServiceId = "S001" },
-    new Package { PackageId = "PKG002", PackageName = "Deluxe Character Rental", Description = "Rent multiple characters with costumes", Price = 250.0, ServiceId = "S001" },
-    new Package { PackageId = "PKG003", PackageName = "Ultimate Character Rental", Description = "Full-day character rental service", Price = 500.0, ServiceId = "S001" },
+    new Package { PackageId = "PKG001", PackageName = "Basic Character Rental", Description = "Rent a single character for an event", Price = 100.0},
+    new Package { PackageId = "PKG002", PackageName = "Deluxe Character Rental", Description = "Rent multiple characters with costumes", Price = 250.0},
+    new Package { PackageId = "PKG003", PackageName = "Ultimate Character Rental", Description = "Full-day character rental service", Price = 500.0},
 
-    new Package { PackageId = "PKG004", PackageName = "Standard Cosplay Performance", Description = "Basic cosplay performance at an event", Price = 150.0, ServiceId = "S002" },
-    new Package { PackageId = "PKG005", PackageName = "Premium Cosplay Performance", Description = "Advanced performance with choreography", Price = 300.0, ServiceId = "S002" },
-    new Package { PackageId = "PKG006", PackageName = "VIP Cosplay Performance", Description = "Exclusive show with audience interaction", Price = 500.0, ServiceId = "S002" },
+    new Package { PackageId = "PKG004", PackageName = "Standard Cosplay Performance", Description = "Basic cosplay performance at an event", Price = 150.0},
+    new Package { PackageId = "PKG005", PackageName = "Premium Cosplay Performance", Description = "Advanced performance with choreography", Price = 300.0},
+    new Package { PackageId = "PKG006", PackageName = "VIP Cosplay Performance", Description = "Exclusive show with audience interaction", Price = 500.0},
 
-    new Package { PackageId = "PKG007", PackageName = "Mini Photography Session", Description = "30-minute photoshoot with cosplayers", Price = 80.0, ServiceId = "S003" },
-    new Package { PackageId = "PKG008", PackageName = "Standard Photography Session", Description = "1-hour professional photoshoot", Price = 150.0, ServiceId = "S003" },
-    new Package { PackageId = "PKG009", PackageName = "Full Photography Package", Description = "Complete photoshoot with editing", Price = 300.0, ServiceId = "S003" },
+    new Package { PackageId = "PKG007", PackageName = "Mini Photography Session", Description = "30-minute photoshoot with cosplayers", Price = 80.0},
+    new Package { PackageId = "PKG008", PackageName = "Standard Photography Session", Description = "1-hour professional photoshoot", Price = 150.0},
+    new Package { PackageId = "PKG009", PackageName = "Full Photography Package", Description = "Complete photoshoot with editing", Price = 300.0},
 
-    new Package { PackageId = "PKG010", PackageName = "Basic Merchandise Pack", Description = "Includes exclusive cosplay merchandise", Price = 50.0, ServiceId = "S001" },
-    new Package { PackageId = "PKG011", PackageName = "Deluxe Merchandise Pack", Description = "Premium cosplay collectibles", Price = 150.0, ServiceId = "S002" },
-    new Package { PackageId = "PKG012", PackageName = "Ultimate Merchandise Pack", Description = "Limited edition cosplay items", Price = 300.0, ServiceId = "S003" },
+    new Package { PackageId = "PKG010", PackageName = "Basic Merchandise Pack", Description = "Includes exclusive cosplay merchandise", Price = 50.0},
+    new Package { PackageId = "PKG011", PackageName = "Deluxe Merchandise Pack", Description = "Premium cosplay collectibles", Price = 150.0},
+    new Package { PackageId = "PKG012", PackageName = "Ultimate Merchandise Pack", Description = "Limited edition cosplay items", Price = 300.0},
 
-    new Package { PackageId = "PKG013", PackageName = "Cosplay Basics Workshop", Description = "Beginner-friendly cosplay training", Price = 100.0, ServiceId = "S001" },
-    new Package { PackageId = "PKG014", PackageName = "Advanced Cosplay Training", Description = "In-depth cosplay and makeup course", Price = 250.0, ServiceId = "S002" },
-    new Package { PackageId = "PKG015", PackageName = "Master Cosplay Workshop", Description = "Professional-level training for cosplayers", Price = 500.0, ServiceId = "S003" }
+    new Package { PackageId = "PKG013", PackageName = "Cosplay Basics Workshop", Description = "Beginner-friendly cosplay training", Price = 100.0},
+    new Package { PackageId = "PKG014", PackageName = "Advanced Cosplay Training", Description = "In-depth cosplay and makeup course", Price = 250.0},
+    new Package { PackageId = "PKG015", PackageName = "Master Cosplay Workshop", Description = "Professional-level training for cosplayers", Price = 500.0}
 );
             #endregion
 

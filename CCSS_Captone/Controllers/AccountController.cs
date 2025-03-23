@@ -81,5 +81,19 @@ namespace CCSS_Captone.Controllers
             var account = await accountService.ViewAllAccountByCharacterName(characterName.ToLower(),start, end);
             return Ok(account);
         }
+
+        [HttpGet("contractId")]
+        public async Task<IActionResult> ViewAllCosplayerByContractId(string contractId)
+        {
+            var account = await accountService.ViewAllCosplayerByContractId(contractId);
+            return Ok(account);
+        }
+        
+        [HttpGet("roleId")]
+        public async Task<IActionResult> GetAllAccountByRoleId(string roleId)
+        {
+            var account = await accountService.GetAllAccountByRoleId(roleId);
+            return Ok(account);
+        }
     }
 }

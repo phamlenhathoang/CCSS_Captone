@@ -50,12 +50,12 @@ namespace CCSS_Captone.Controllers
         //    return Ok(task);
         //}
 
-        [HttpPost]
-        public async Task<ActionResult<TaskResponse>> AddTask(TaskRequest taskRequests)
-        {
-            var task = await taskService.AddTask(taskRequests.AddTaskEventRequests, taskRequests.AddTaskContractRequests);
-            return Ok(task);
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<TaskResponse>> AddTask(TaskRequest taskRequests)
+        //{
+        //    //var task = await taskService.AddTask(taskRequests.AddTaskEventRequests, taskRequests.AddTaskContractRequests);
+        //    //return Ok(task);
+        //}
 
         [HttpGet]
         public async Task<ActionResult> GetAllTask()

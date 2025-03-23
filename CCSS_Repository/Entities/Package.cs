@@ -17,8 +17,6 @@ namespace CCSS_Repository.Entities
         public string? Description { get; set; }
         public double? Price { get; set; }
 
-        [ForeignKey("ServiceId")]
-        public string ServiceId { get; set; } 
-        public Service Service { get; set; }
+        public ICollection<Request> Requests { get; set; } = new List<Request>();
     }
 }

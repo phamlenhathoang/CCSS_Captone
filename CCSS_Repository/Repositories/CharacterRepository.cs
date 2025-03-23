@@ -11,6 +11,7 @@ namespace CCSS_Repository.Repositories
     public interface ICharacterRepository
     {
         Task<Character> GetCharacter(string characterId);
+        Task<List<Character>> GetCharacterByCategoryId(string categoryId);
         Task<List<Character>> GetAll();
         Task<Character> GetCharacterByCharacterName(string characterName);
         Task<bool> CreateCharacter(Character character);
@@ -66,13 +67,18 @@ namespace CCSS_Repository.Repositories
             {
                 return false;
             }
-
-            if(character.MinHeight < a.Height && a.Height < character.MaxHeight && character.MinWeight < a.Weight && a.Weight < character.MaxHeight)
+            
+            if(character.MinHeight <= a.Height && a.Height <= character.MaxHeight && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight)
             {
                 return true;
             }
 
             return false;
+        }
+
+        public async Task<List<Character>> GetCharacterByCategoryId(string categoryId)
+        {
+            return await _context.Characters.Include(i => i.CharacterImages).Where(c => c.CategoryId.Equals(c.CategoryId)).ToListAsync();
         }
     }
 }

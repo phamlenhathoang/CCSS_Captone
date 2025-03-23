@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Libraries;
 using CCSS_Service.Model;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
+using Google.Apis.Storage.v1.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +21,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Contract = CCSS_Repository.Entities.Contract;
 using Task = CCSS_Repository.Entities.Task;
 
 namespace CCSS_Service.Services
@@ -36,12 +39,14 @@ namespace CCSS_Service.Services
         Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest);
         Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate);
         Task<List<AccountByCharacterAndDateResponse>> ViewAllAccountByCharacterName(string characterName, string? start, string? end);
+        Task<List<AccountByCharacterAndDateResponse>> ViewAllCosplayerByContractId(string contractId);
+        Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId);
     }
     public class AccountService : IAccountService
     {
         private readonly ITaskRepository taskRepository;
         private readonly IAccountRepository accountRepository;
-        //private readonly IContractRespository contractRespository;
+        private readonly IContractRespository contractRespository;
         private readonly ICharacterRepository characterRepository;
         //private readonly ICategoryRepository categoryRepository;
         private readonly IRefreshTokenRepository refreshTokenRepository;
@@ -49,13 +54,13 @@ namespace CCSS_Service.Services
         private readonly IConfiguration _configuration;
         private readonly IMapper mapper;
 
-        public AccountService(ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, /*IContractRespository contractRepository, ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
+        public AccountService(ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
         {
             this.taskRepository = taskRepository;
             this.accountRepository = accountRepository;
             this.mapper = mapper;
             this.characterRepository = characterRepository;
-            //this.contractRespository = contractRepository;
+            this.contractRespository = contractRepository;
             //this.categoryRepository = categoryRepository;
             _configuration = configuration;
             this.refreshTokenRepository = refreshTokenRepository;
@@ -386,7 +391,8 @@ namespace CCSS_Service.Services
                 {
                     return "Cannot save account";
                 }
-                await _emailService.SendEmailAsync(accountRequest.Email, "Confirm your account", $"Here is your code: {account.Code}. Please enter this code to authenticate your account.", true);
+                SendMail _sendMail = new SendMail();
+                await _sendMail.SendAccountVerificationEmail(account.Email, account.Code);
                 return "Please enter code";
             }
         }
@@ -528,5 +534,45 @@ namespace CCSS_Service.Services
             return accountByCharacterAndDateResponses;
         }
 
+        public async Task<List<AccountByCharacterAndDateResponse>> ViewAllCosplayerByContractId(string contractId)
+        {
+            try
+            {
+                List<AccountByCharacterAndDateResponse> list = new List<AccountByCharacterAndDateResponse>();
+                Contract contract = await contractRespository.GetContractById(contractId);
+
+                if (contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
+
+                if (!contract.ContractCharacters.Any())
+                {
+                    throw new Exception("ContractCharacters do not exist");
+                }
+
+                foreach (var contractCharacter in contract.ContractCharacters)
+                {
+                    Account account = await accountRepository.GetAccount(contractCharacter.CosplayerId);
+                    if(account == null)
+                    {
+                        throw new Exception("Account does not exist");
+                    }
+                    AccountByCharacterAndDateResponse accountByCharacterAndDateResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                    list.Add(accountByCharacterAndDateResponse);
+                }
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId)
+        {
+            return mapper.Map<List<AccountResponse>>(await accountRepository.GetAllAccountsByRoleId(roleId));
+        }
     }
 }
