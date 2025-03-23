@@ -26,6 +26,8 @@ namespace CCSS_Repository.Entities
         public CustomerCharacterStatus Status { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }   
+        public string? CreateBy { get; set; }
+        public string? Reason { get; set; }
         public ICollection<CustomerCharacterImage> CustomerCharacterImages { get; set; } = new List<CustomerCharacterImage>();
     }
 
@@ -34,5 +36,6 @@ namespace CCSS_Repository.Entities
         Pending,
         Accept,
         Reject,
+        Completed
     }
 }

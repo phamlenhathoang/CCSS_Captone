@@ -39,11 +39,11 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(ProductRequest productRequest, IFormFile formFile)
+        public async Task<IActionResult> CreateProduct([FromBody] ProductRequest productRequest)
         {
             if (ModelState.IsValid)
             {
-                var result = await _services.AddProduct(productRequest, formFile);
+                var result = await _services.AddProduct(productRequest);
                 return Ok(result);
             }
             return BadRequest(ModelState);

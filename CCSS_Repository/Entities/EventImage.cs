@@ -17,6 +17,7 @@ namespace CCSS_Repository.Entities
         public string? ImageUrl { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
+        public bool? IsAvatar { get; set; }
 
         [ForeignKey("EventId")]
         public string? EventId { get; set; }

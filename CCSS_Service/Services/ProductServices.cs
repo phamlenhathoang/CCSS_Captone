@@ -16,7 +16,7 @@ namespace CCSS_Service.Services
     {
         Task<List<Product>> GetAllProduct(string searchterm);
         Task<Product> GetProductById(string productId);
-        Task<string> AddProduct(ProductRequest productRequest, IFormFile formFile);
+        Task<string> AddProduct(ProductRequest productRequest);
         Task<string> UpdateProduct(Product product);
         Task<string> DeleteProduct(string ProductId);
     }
@@ -42,7 +42,7 @@ namespace CCSS_Service.Services
             return await _repository.GetProductById(productId);
         }
 
-        public async Task<string> AddProduct(ProductRequest productRequest, IFormFile formFile)
+        public async Task<string> AddProduct(ProductRequest productRequest)
         {
             if (productRequest == null)
             {
@@ -60,25 +60,8 @@ namespace CCSS_Service.Services
                 IsActive = true,
 
             };
-            var result = await _repository.AddProduct(newProduct);
-
-            if (!result)
-            {
-                return "Add Product failed";
-            }
-            List<ProductImage> productImages = new List<ProductImage>();
-            foreach (var item in productRequest.ListImageProduct)
-            {
-                var imageUrl = new Image();
-                productImages.Add(new ProductImage
-                {
-                    ProductImageId = Guid.NewGuid().ToString(),
-                    ProductId = item.ProductId,
-                    UrlImage = await imageUrl.UploadImageToFirebase(formFile),
-                });
-            }
-            await _imageRepository.AddListImageProduct(productImages);
-            return "Add Success";
+            var result = await _repository.AddProduct(newProduct);         
+            return result ? "Add Success" : "Add Failed";
         }
 
         public async Task<string> UpdateProduct(Product product)

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CCSS_Repository.Entities;
-using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using System;
 using System.Collections.Generic;
@@ -11,26 +10,23 @@ using System.Threading.Tasks;
 
 namespace CCSS_Service.Profiles
 {
-    public class CustomerCharacterProfile : Profile
+    public class CustomerCharacterImageProfile : Profile
     {
-        public CustomerCharacterProfile()
+        public CustomerCharacterImageProfile() 
         {
-            //Request 
-            CreateMap<CustomerCharacter, CustomerCharacterRequest>().ReverseMap();
-
             //Response
-            CreateMap<CustomerCharacter, CustomerCharacterReponse>()
+            CreateMap<CustomerCharacterImage, CustomerCharacterImageResponse>()
                 .ForMember(dest => dest.CreateDate,
-                    opt => opt.MapFrom(src => src.CreateDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
+                    opt => opt.MapFrom(src =>
+                        src.CreateDate.HasValue 
+                        ? src.CreateDate.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        : string.Empty))
                 .ForMember(dest => dest.UpdateDate,
                     opt => opt.MapFrom(src =>
                         src.UpdateDate.HasValue
                             ? src.UpdateDate.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
                             : string.Empty))
-                .ForMember(dest => dest.Status,
-                    opt => opt.MapFrom(src => src.Status.ToString()))
-                .ReverseMap(); 
-
+                .ReverseMap();
         }
     }
 }

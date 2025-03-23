@@ -54,6 +54,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddScoped<ICustomerCharacterImageRepository, CustomerCharacterImageRepository>();
 builder.Services.AddScoped<ICustomerCharacterRepository, CustomerCharacterRepository>();
+builder.Services.AddScoped<ICharacterImageRepository, CharacterImageRepository>();
 
 
 
@@ -76,7 +77,9 @@ builder.Services.AddScoped<IFeedbackService, FeebackService>();
 builder.Services.AddScoped<IContractCharacterService, ContractCharacterService>();
 builder.Services.AddScoped<IPdfService, Pdf>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
+builder.Services.AddScoped<IProductImageServices, ProductImageServices>();
 builder.Services.AddScoped<ICustomerCharacterService, CustomerCharacterService>();
+
 
 
 //Libraries

@@ -113,7 +113,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPost("totalPrice")]
-        public async Task<IActionResult> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices)
+        public async Task<IActionResult> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices, string serviceId)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace CCSS_Captone.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var result = await _services.TotalPriceRequest(packagePrice, accountCouponPrice, startDate, endDate, requestTotalPrices);
+                var result = await _services.TotalPriceRequest(packagePrice, accountCouponPrice, startDate, endDate, requestTotalPrices, serviceId);
                 return Ok(result);
             }
             catch (Exception ex)

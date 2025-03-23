@@ -19,7 +19,7 @@ namespace CCSS_Service.Services
         Task<string> AddRequest(RequestDtos requestDtos);
         Task<string> UpdateRequest(string requestId, UpdateRequestDtos requestDtos);
         Task<string> UpdateStatusRequest(string requestId, RequestStatus requestStatus);
-        Task<double> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices);
+        Task<double> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices, string serviceId);
     }
     public class RequestServices : IRequestServices
     {
@@ -426,7 +426,7 @@ namespace CCSS_Service.Services
         }
         #endregion
 
-        public async Task<double> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices)
+        public async Task<double> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices, string serviceId)
         {
             try
             {
@@ -487,10 +487,16 @@ namespace CCSS_Service.Services
                         throw new Exception("Quantity character does not enough");
                     }
 
-                    totalPrice = (int)request.Quantity * (double)character.Price;
+                    if (request.CosplayerId == null)
+                    {
+                        totalPrice = (int)request.Quantity * (double)character.Price * 5;
+                    }
 
                     if (request.CosplayerId != null)
                     {
+
+                        totalPrice = (int)request.Quantity * (double)character.Price;
+
                         Account cosplayer = await _accountRepository.GetAccount(request.CosplayerId);
 
                         if(cosplayer == null)
@@ -517,7 +523,23 @@ namespace CCSS_Service.Services
                     
                 }
 
-                return totalDay * total + packagePrice - accountCouponPrice;
+                Service service = await _serviceRepository.GetService(serviceId);
+                if(service == null)
+                {
+                    throw new Exception("Service does not exist");
+                }
+
+                double amount = 0;
+
+                if (service.ServiceId.Equals("S001"))
+                {
+                    amount = total - accountCouponPrice;
+                }
+                else
+                {
+                    amount = totalDay * total + packagePrice - accountCouponPrice;
+                }
+                return amount;
             }
             catch (Exception ex)
             {

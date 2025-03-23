@@ -54,9 +54,7 @@ namespace CCSS_Api.Controllers
                                 "0 (Order)<br>" +
                                 "1 (festival)<br>" +
                                 "2 (Service)<br>" +
-                                "3 (Total))<br>"  
-
-                                )]
+                                "3 (Total))<br>")]
         public async Task<ActionResult<DashBoardChartRevenueResponse>> GetRevenueChart([FromQuery] DateFilterType filterType, RevenueSource revenueSource)
         {
             var result = await _dashBoardService.GetRevenueChartAsync(filterType, revenueSource);
