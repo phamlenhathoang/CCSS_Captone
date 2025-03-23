@@ -23,6 +23,8 @@ namespace CCSS_Service.Profiles
                                 ? src.Birthday.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
                                 : string.Empty))
                     .ReverseMap();
+            CreateMap<Account, AccountDashBoardResponse>()
+                    .ReverseMap();
 
 
             CreateMap<Account, AccountByCharacterAndDateResponse>()

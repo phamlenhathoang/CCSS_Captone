@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace CCSS_Captone.Controllers
 {
@@ -22,6 +24,8 @@ namespace CCSS_Captone.Controllers
         /// <summary>
         /// Lấy danh sách tất cả sự kiện có thể tìm kiếm theo tên
         /// </summary>
+        [SwaggerOperation(Description = "role: Mamager, Customer")]
+        [Authorize(Roles = "Manager, Customer")]
         [HttpGet("GetAllEvents")]
         public async Task<IActionResult> GetAllEvents([FromQuery] string? searchTerm)
         {
@@ -67,6 +71,8 @@ namespace CCSS_Captone.Controllers
         /// <summary>
         /// Tạo một sự kiện mới
         /// </summary>
+        [SwaggerOperation(Description = "role: Mamager")]
+        [Authorize(Roles = "Ma nen dơ")]
         [HttpPost("AddEvent")]
         public async Task<IActionResult> AddEvent([FromBody] CreateEventRequest eventRequest)
         {
@@ -90,6 +96,8 @@ namespace CCSS_Captone.Controllers
         /// <summary>
         /// Cập nhật thông tin sự kiện
         /// </summary>
+         [SwaggerOperation(Description = "role: Mamager")]
+        [Authorize(Roles = "Manager")]
         [HttpPut("UpdateEvent/{eventId}")]
         public async Task<IActionResult> UpdateEvent(string eventId, [FromBody] UpdateEventRequest eventRequest)
         {
@@ -113,6 +121,8 @@ namespace CCSS_Captone.Controllers
         /// <summary>
         /// Xóa một sự kiện theo ID
         /// </summary>
+        [SwaggerOperation(Description = "role: Mamager")]
+        [Authorize(Roles = "Manager")]
         [HttpDelete("DeleteEvent/{id}")]
         public async Task<IActionResult> DeleteEvent(string id)
         {

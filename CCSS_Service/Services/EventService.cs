@@ -107,6 +107,10 @@ namespace CCSS_Service.Services
                             return "Cosplayer "+ cosplayer.Name + " không phù hợp với thời gian sự kiện";
                         }
                         Character character = await _characterRepository.GetCharacter(ec.CharacterId);
+                        if (character.Quantity <= 0)
+                        {
+                            return "Nhân vật " + character.CharacterName + " đã hết số lượng khả dụng";
+                        }
                         if (cosplayer.Height < character.MinHeight || cosplayer.Height > character.MaxHeight || cosplayer.Weight < character.MinWeight || cosplayer.Weight > character.MaxHeight)
                         {
                             return "Cosplayer " + cosplayer.Name + " không phù hợp với nhân vật " + character.CharacterName;
@@ -157,7 +161,13 @@ namespace CCSS_Service.Services
                 {
                     return "Failed to add event to database";
                 }
-               
+                foreach (var ec in eventRequest.EventCharacterRequest)
+                {
+                    Character character = await _characterRepository.GetCharacter(ec.CharacterId);
+                    character.Quantity -= 1;
+                    await _characterRepository.UpdateCharacter(character);
+                }
+
                 //ImageRequest image = new ImageRequest();
                 //image.ImageUrl = eventRequest.ImageUrl;
                 //image.EventId = newEvent.EventId.ToString();

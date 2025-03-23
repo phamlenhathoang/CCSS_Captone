@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CCSS_Repository.Model
 {
-    public class DashBoard
+    public class AccountDasboard
     {
 
     }
@@ -16,5 +16,12 @@ namespace CCSS_Repository.Model
         ThisWeek,
         ThisMonth,
         ThisYear
+    }
+    public enum RevenueSource
+    {
+        Order,
+        festival,
+        Service,
+        Total
     }
 }
