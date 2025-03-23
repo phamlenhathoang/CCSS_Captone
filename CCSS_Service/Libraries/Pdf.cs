@@ -88,105 +88,16 @@ namespace CCSS_Service.Libraries
                     htmlContent += $"<p><i>Xét yêu cầu của bên B. Hai bên thỏa thuận ký hợp đồng {request.Service.ServiceName.ToLower()}, sự kiện sẽ bắt đầu vào {formattedEndDate} và kết thúc vào {formattedEndDate}. Hợp đồng thuê sẽ bao gồm các nội dung quan trọng sau:</i></p>";
 
                     // Thêm CSS để làm đẹp bảng
-                    htmlContent += @"<style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        font-family: Arial, sans-serif;
-    }
-    th, td {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: center;
-    }
-    th {
-        background-color: #f2f2f2;
-        font-weight: bold;
-    }
-    td {
-        font-size: 14px;
-    }
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    tr:hover {
-        background-color: #e6f7ff;
-    }
-    .right-align {
-        text-align: right;
-        font-weight: bold;
-    }
-</style>";
 
-                    // Bắt đầu bảng
-                    htmlContent += @"<table>
-    <tr>
-        <th>STT</th>
-        <th>Tên trang phục, cosplayer</th>
-        <th>Đơn vị tính</th>
-        <th>Số lượng</th>
-        <th>Đơn giá</th>
-        <th>Thành tiền</th>
-    </tr>";
-
-                    int index = 1;
-
-                    foreach (RequestCharacter requestCharacter in request.RequestCharacters)
+                    if (request.Service.ServiceId.Equals("S001"))
                     {
-                        Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
-
-                        htmlContent += $@"<tr>
-                        <td>{index}</td>
-                        <td>{character.CharacterName}</td>
-                        <td>Bộ</td>
-                        <td>{requestCharacter.Quantity}</td>
-                        <td>{character.Price}</td>
-                        <td>{(double)requestCharacter.Quantity * character.Price}</td>
-                    </tr>";
-                        index++;
-
-                        if (requestCharacter.CosplayerId != null)
-                        {
-                            Account account = await accountRepository.GetAccount(requestCharacter.CosplayerId);
-                            htmlContent += $@"<tr>
-                            <td>{index}</td>
-                            <td>{account.Name}</td>
-                            <td>Cosplayer</td>
-                            <td>-</td>
-                            <td>{character.Price * account.SalaryIndex - character.Price}</td>
-                            <td>{character.Price * account.SalaryIndex - character.Price}</td>
-                        </tr>";
-                            index++;
-                        }
+                        HtmlContractCharacter(request, accountCoupon);
                     }
-
-                    double packagePrice = (package?.Price ?? 0);
-
-                    htmlContent += $@"<tr>
-                    <td colspan='5' class='right-align'>Package</td>
-                    <td>{packagePrice}</td>
-                </tr>";
-
-                    // Xử lý coupon
-                    double amount = accountCoupon?.Coupon?.Amount ?? 0.0;
-                    string formattedAmount = amount.ToString("0.##");
-
-                    htmlContent += $@"<tr>
-                    <td colspan='5' class='right-align'>Coupon</td>
-                    <td>{formattedAmount}</td>
-                </tr>";
-
-                    // Tính tổng số tiền
-                    double totalAmount = await CalculateTotalAmount(request, formattedAmount, packagePrice);
-
-                    htmlContent += $@"<tr>
-                    <td colspan='5' class='right-align'>Tổng</td>
-                    <td>{totalAmount}</td>
-                </tr>";
-
-                    htmlContent += "</table>";
-
-
+                    else
+                    {
+                        HtmlContractCosplayerAndCharacter(request, accountCoupon, package);
+                    }
+                    
                     // Thông tin hợp đồng
                     htmlContent += "<h3><strong>Điều khoản thuê Character.</strong></h3>";
                     htmlContent += "<p>Bên thuê có quyền sử dụng trang phục, đạo cụ theo danh sách thỏa thuận trong hợp đồng.</p>";
@@ -195,6 +106,10 @@ namespace CCSS_Service.Libraries
                     htmlContent += "<p>Không được cắt, xé, làm bẩn hoặc sửa đổi kết cấu trang phục nếu không có sự đồng ý của bên cho thuê.</p>";
                     htmlContent += "<p>Nếu trang phục, đạo cụ bị hư hỏng, mất mát, bên thuê phải bồi thường theo mức giá quy định trong hợp đồng.</p>";
                     htmlContent += "<p>Trong trường hợp hư hỏng nhỏ, bên thuê phải chịu chi phí sửa chữa.</p>";
+                    htmlContent += "<p>Khách hàng phải đặt cọc trước một khoản tiền tương ứng với chi phí thiết kế của trang phục trước khi nhận hàng.</p>";
+                    htmlContent += "<p>Tiền thuê trang phục được tính theo số ngày thuê và được trừ vào tiền cọc khi khách hàng hoàn trả trang phục.</p>";
+                    htmlContent += "<p>Khi khách hàng hoàn trả trang phục, bên cho thuê sẽ kiểm tra tình trạng sản phẩm. Nếu trang phục không có hư hại, tiền cọc sẽ được hoàn lại sau khi trừ đi tiền thuê. Nếu trang phục bị hư hại, chi phí sửa chữa sẽ được trừ vào tiền cọc.</p>";
+                    htmlContent += "<p>Nếu tổng số tiền thuê và chi phí sửa chữa vượt quá số tiền cọc, khách hàng có trách nhiệm thanh toán phần chênh lệch trước khi hoàn tất hợp đồng thuê.</p>";
 
                     htmlContent += "<h3><strong>Điều khoản thuê Cosplayer</strong></h3>";
                     htmlContent += "<p>Cosplayer sẽ hóa thân vào nhân vật theo yêu cầu của bên thuê.</p>";
@@ -204,7 +119,7 @@ namespace CCSS_Service.Libraries
                     htmlContent += "<p>Các chi phí phát sinh như đi lại, ăn uống, lưu trú (nếu có) sẽ do bên thuê chi trả.</p>";
                     htmlContent += "<h3><strong>Điều khoản ký hợp đồng</strong></h3>";
                     htmlContent += "<p>Thanh toán theo mức giá đã thỏa thuận trong hợp đồng.</p>";
-                    htmlContent += $"<p>Thanh toán trước {deposit}% tổng chi phí khi ký. Thanh toán phần còn lại khi sự kiện kết thúc</p>";
+                    htmlContent += $"<p>Thanh toán trước tổng chi phí khi thỏa thuận. Thanh toán phần còn lại khi sự kiện kết thúc</p>";
 
                     PdfGenerator.AddPdfPages(document, htmlContent, PageSize.A4);
 
@@ -258,6 +173,185 @@ namespace CCSS_Service.Libraries
             return totalAmount;
         }
 
+        private async void HtmlContractCosplayerAndCharacter(Request request, AccountCoupon accountCoupon, Package package)
+        {
+            int index = 1;
+            string htmlContent = null;
+                    htmlContent += @"<style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-family: Arial, sans-serif;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: center;
+            }
+            th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+            td {
+                font-size: 14px;
+            }
+            tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+            tr:hover {
+                background-color: #e6f7ff;
+            }
+            .right-align {
+                text-align: right;
+                font-weight: bold;
+            }
+        </style>";
 
+                    // Bắt đầu bảng
+                    htmlContent += @"<table>
+            <tr>
+                <th>STT</th>
+                <th>Tên trang phục, cosplayer</th>
+                <th>Đơn vị tính</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>";
+            foreach (RequestCharacter requestCharacter in request.RequestCharacters)
+            {
+                Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
+
+                htmlContent += $@"<tr>
+                        <td>{index}</td>
+                        <td>{character.CharacterName}</td>
+                        <td>Bộ</td>
+                        <td>{requestCharacter.Quantity}</td>
+                        <td>{character.Price}</td>
+                        <td>{(double)requestCharacter.Quantity * character.Price}</td>
+                    </tr>";
+                index++;
+
+                if (requestCharacter.CosplayerId != null)
+                {
+                    Account account = await accountRepository.GetAccount(requestCharacter.CosplayerId);
+                    htmlContent += $@"<tr>
+                            <td>{index}</td>
+                            <td>{account.Name}</td>
+                            <td>Cosplayer</td>
+                            <td>-</td>
+                            <td>{character.Price * account.SalaryIndex - character.Price}</td>
+                            <td>{character.Price * account.SalaryIndex - character.Price}</td>
+                        </tr>";
+                    index++;
+                }
+            }
+
+            double packagePrice = (package?.Price ?? 0);
+
+            htmlContent += $@"<tr>
+                    <td colspan='5' class='right-align'>Package</td>
+                    <td>{packagePrice}</td>
+                </tr>";
+
+            // Xử lý coupon
+            double amount = accountCoupon?.Coupon?.Amount ?? 0.0;
+            string formattedAmount = amount.ToString("0.##");
+
+            htmlContent += $@"<tr>
+                    <td colspan='5' class='right-align'>Coupon</td>
+                    <td>{formattedAmount}</td>
+                </tr>";
+
+            // Tính tổng số tiền
+            double totalAmount = await CalculateTotalAmount(request, formattedAmount, packagePrice);
+
+            htmlContent += $@"<tr>
+                    <td colspan='5' class='right-align'>Tổng</td>
+                    <td>{totalAmount}</td>
+                </tr>";
+
+            htmlContent += "</table>";
+        }
+
+
+
+        private async void HtmlContractCharacter(Request request, AccountCoupon accountCoupon)
+        {
+            int index = 1;
+            string htmlContent = null;
+            htmlContent += @"<style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-family: Arial, sans-serif;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: center;
+            }
+            th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+            td {
+                font-size: 14px;
+            }
+            tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+            tr:hover {
+                background-color: #e6f7ff;
+            }
+            .right-align {
+                text-align: right;
+                font-weight: bold;
+            }
+        </style>";
+
+            // Bắt đầu bảng
+            htmlContent += @"<table>
+            <tr>
+                <th>STT</th>
+                <th>Tên trang phục, cosplayer</th>
+                <th>Đơn vị tính</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>";
+            foreach (RequestCharacter requestCharacter in request.RequestCharacters)
+            {
+                Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
+
+                htmlContent += $@"<tr>
+                        <td>{index}</td>
+                        <td>{character.CharacterName}</td>
+                        <td>Bộ</td>
+                        <td>{requestCharacter.Quantity}</td>
+                        <td>{character.Price}</td>
+                        <td>{(double)requestCharacter.Quantity * character.Price * 5}</td>
+                    </tr>";
+                index++;
+            }
+
+            // Xử lý coupon
+            double amount = accountCoupon?.Coupon?.Amount ?? 0.0;
+            string formattedAmount = amount.ToString("0.##");
+
+            htmlContent += $@"<tr>
+                    <td colspan='5' class='right-align'>Coupon</td>
+                    <td>{formattedAmount}</td>
+                </tr>";
+
+            // Tính tổng số tiền
+            double totalAmount = await CalculateTotalAmount(request, formattedAmount, 0);
+
+            htmlContent += $@"<tr>
+                    <td colspan='5' class='right-align'>Tổng</td>
+                    <td>{totalAmount}</td>
+                </tr>";
+
+            htmlContent += "</table>";
+        }
     }
 }

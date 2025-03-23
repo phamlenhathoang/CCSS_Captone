@@ -19,7 +19,7 @@ namespace CCSS_Captone.Controllers
             _services = services;
         }
 
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId)
         {
@@ -55,7 +55,7 @@ namespace CCSS_Captone.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _services.UpdateStatusContract(contracId, status);
+                var result = await _services.UpdateStatusContract(contracId, status, null);
                 return Ok(result);
             }
             return BadRequest(ModelState);

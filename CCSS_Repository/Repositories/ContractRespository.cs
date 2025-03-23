@@ -73,14 +73,14 @@ namespace CCSS_Repository.Repositories
 
             if (!string.IsNullOrEmpty(startDate))
             {
-                DateTime date = DateTime.ParseExact(startDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                query = query.Where(c => c.Request.StartDate.Date >= date);
+                DateTime startDateTime = DateTime.ParseExact(startDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                query = query.Where(c => c.Request.StartDate >= startDateTime);
             }
 
             if (!string.IsNullOrEmpty(endDate))
             {
-                DateTime date = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.InvariantCulture); 
-                query = query.Where(c => c.Request.EndDate.Date <= date);
+                DateTime endDateTime = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.InvariantCulture).AddDays(1).AddTicks(-1);
+                query = query.Where(c => c.Request.EndDate <= endDateTime);
             }
 
             if (!string.IsNullOrEmpty(accountId))

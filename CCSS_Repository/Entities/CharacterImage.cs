@@ -16,6 +16,7 @@ namespace CCSS_Repository.Entities
         public string UrlImage { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
+        public bool? IsAvatar { get; set; }
 
         [ForeignKey("CharacterId")]
         public string? CharacterId { get; set; }

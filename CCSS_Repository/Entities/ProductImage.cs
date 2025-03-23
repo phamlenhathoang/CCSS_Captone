@@ -17,6 +17,7 @@ namespace CCSS_Repository.Entities
         [ForeignKey("ProductId")]
         public string ProductId { get; set; }
         public Product Product { get; set; }
+        public bool? IsAvatar { get; set; }
 
         public string UrlImage { get; set; }
         public DateTime? CreateDate { get; set; }

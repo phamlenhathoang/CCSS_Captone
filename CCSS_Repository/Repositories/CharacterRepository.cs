@@ -12,7 +12,7 @@ namespace CCSS_Repository.Repositories
     {
         Task<Character> GetCharacter(string characterId);
         Task<List<Character>> GetCharacterByCategoryId(string categoryId);
-        Task<List<Character>> GetAll();
+        Task<List<Character>> GetCharacters(string? characterId, string? categoryId, string? characterName, double? MaxHeight, double? MinHeight, double? Maxweight, double? MinWeight, double? MinPrice, double? MaxPrice);
         Task<Character> GetCharacterByCharacterName(string characterName);
         Task<bool> CreateCharacter(Character character);
         Task<bool> UpdateCharacter(Character character);
@@ -33,12 +33,12 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Character> GetCharacter(string characterId)
         {
-            return await _context.Characters.Include(c => c.Category).FirstOrDefaultAsync(c => c.CharacterId == characterId && c.IsActive == true);
+            return await _context.Characters.Include(c => c.Category).Include(c => c.CharacterImages).FirstOrDefaultAsync(c => c.CharacterId == characterId && c.IsActive == true);
         }
 
         public async Task<Character> GetCharacterByCharacterName(string characterName)
         {
-            return await _context.Characters.Include(c => c.Category).FirstOrDefaultAsync(c => c.CharacterName.ToLower() == characterName && c.IsActive == true);
+            return await _context.Characters.Include(c => c.Category).Include(c => c.CharacterImages).FirstOrDefaultAsync(c => c.CharacterName.ToLower() == characterName && c.IsActive == true);
         }
 
         public async Task<bool> CreateCharacter(Character character)
@@ -79,6 +79,58 @@ namespace CCSS_Repository.Repositories
         public async Task<List<Character>> GetCharacterByCategoryId(string categoryId)
         {
             return await _context.Characters.Include(i => i.CharacterImages).Where(c => c.CategoryId.Equals(c.CategoryId)).ToListAsync();
+        }
+
+        public async Task<List<Character>> GetCharacters(string? characterId, string? categoryId, string? characterName, double? MaxHeight, double? MinHeight, double? Maxweight, double? MinWeight, double? MinPrice, double? MaxPrice)
+        {
+            IQueryable<Character> query = _context.Characters.Include(c => c.Category).Include(c => c.CharacterImages).Where(c => c.IsActive == true);
+
+            if (!string.IsNullOrWhiteSpace(characterId))
+            {
+                query = query.Where(c => c.CharacterId.Equals(characterId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(categoryId))
+            {
+                query = query.Where(c => c.Category.CategoryId.Equals(categoryId));
+            }
+
+            if (!string.IsNullOrWhiteSpace(characterName))
+            {
+                query = query.Where(c => c.CharacterName.Equals(characterName));
+            }
+
+            if (MaxHeight != null)
+            {
+                query = query.Where(c => c.MaxHeight <= MaxHeight);
+            }
+
+            if (MinHeight != null)
+            {
+                query = query.Where(c => c.MinHeight >= MinHeight);
+            }
+
+            if (Maxweight != null)
+            {
+                query = query.Where(c => c.MaxWeight <= Maxweight);
+            }
+
+            if (MinWeight != null)
+            {
+                query = query.Where(c => c.MinWeight >= MinWeight);
+            }
+
+            if (MaxPrice != null)
+            {
+                query = query.Where(c => c.Price <= MaxPrice);
+            }
+
+            if (MinPrice != null)
+            {
+                query = query.Where(c => c.Price >= MinWeight);
+            }
+
+            return await query.ToListAsync();
         }
     }
 }
