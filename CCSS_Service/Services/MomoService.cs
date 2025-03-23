@@ -148,10 +148,6 @@ namespace CCSS_Service.Services
 
         }
 
-
-
-
-
         public async Task<string> MomoPaymentExecuteAsync(IQueryCollection collection)
         {
             var amountSt = collection["amount"].ToString();
@@ -260,7 +256,7 @@ namespace CCSS_Service.Services
                     existingPayment.ContractId = contractId;
                     await _paymentRepository.UpdatePayment(existingPayment);
 
-                    bool result = await _contractServices.UpdateStatusContract(contractId, "Progressing");
+                    bool result = await _contractServices.UpdateStatusContract(contractId, "Progressing", null);
                     if (!result)
                     {
                         throw new Exception("Can not update status contract");
@@ -275,7 +271,7 @@ namespace CCSS_Service.Services
                     
                     existingPayment.ContractId = contractId;
                     await _paymentRepository.UpdatePayment(existingPayment);
-                    bool rs = await _contractServices.UpdateStatusContract(contractId, "Progressing");
+                    bool rs = await _contractServices.UpdateStatusContract(contractId, "Completed", amount);
                     if (!rs)
                     {
                         throw new Exception("Can not update status contract");

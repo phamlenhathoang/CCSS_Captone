@@ -383,46 +383,46 @@ namespace CCSS_Repository.Entities
             #region Account
 
             modelBuilder.Entity<Account>().HasData(
-new Account { AccountId = "A001", Name = "John Doe", Email = "john@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 180, Weight = 75 },
+new Account { AccountId = "A001", Name = "John Doe", Email = "john@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 180, Weight = 75, AverageStar = 4.5 },
 new Account { AccountId = "A002", Name = "Jane Smith", Email = "jane@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R001", SalaryIndex = null, IsActive = true },
 new Account { AccountId = "A003", Name = "Alice Johnson", Email = "alice@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true },
-new Account { AccountId = "A004", Name = "Bob Brown", Email = "bob@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 175, Weight = 80 },
-new Account { AccountId = "A005", Name = "Charlie White", Email = "charlie@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 182, Weight = 78 },
+new Account { AccountId = "A004", Name = "Bob Brown", Email = "bob@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 175, Weight = 80, AverageStar = 4.2 },
+new Account { AccountId = "A005", Name = "Charlie White", Email = "charlie@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 182, Weight = 78, AverageStar = 3.5 },
 new Account { AccountId = "A006", Name = "David Black", Email = "david@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true },
-new Account { AccountId = "A007", Name = "Emma Green", Email = "emma@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, IsActive = true, Height = 168, Weight = 60 },
-new Account { AccountId = "A008", Name = "Frank Blue", Email = "frank@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.5, IsActive = true, Height = 185, Weight = 85 },
+new Account { AccountId = "A007", Name = "Emma Green", Email = "emma@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, IsActive = true, Height = 168, Weight = 60, AverageStar = 4.1 },
+new Account { AccountId = "A008", Name = "Frank Blue", Email = "frank@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.5, IsActive = true, Height = 185, Weight = 85, AverageStar = 4.6 },
 new Account { AccountId = "A009", Name = "Grace Pink", Email = "grace@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R001", SalaryIndex = null, IsActive = true },
-new Account { AccountId = "A010", Name = "Henry Purple", Email = "henry@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 178, Weight = 77 },
+new Account { AccountId = "A010", Name = "Henry Purple", Email = "henry@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 178, Weight = 77, AverageStar = 2.5 },
 new Account { AccountId = "A011", Name = "Isla Red", Email = "isla@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true },
-new Account { AccountId = "A012", Name = "Jack Yellow", Email = "jack@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 172, Weight = 70 },
-new Account { AccountId = "A013", Name = "Katie Orange", Email = "katie@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, IsActive = true, Height = 165, Weight = 55 },
+new Account { AccountId = "A012", Name = "Jack Yellow", Email = "jack@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 172, Weight = 70, AverageStar = 3.8 },
+new Account { AccountId = "A013", Name = "Katie Orange", Email = "katie@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, IsActive = true, Height = 165, Weight = 55, AverageStar = 2.59 },
 new Account { AccountId = "A014", Name = "Liam Gray", Email = "liam@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true },
-new Account { AccountId = "A015", Name = "Mia Cyan", Email = "mia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 170, Weight = 65 },
-new Account { AccountId = "A016", Name = "Noah Silver", Email = "noah@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 175, Weight = 70 },
-new Account { AccountId = "A017", Name = "Olivia Gold", Email = "olivia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 168, Weight = 55 },
-new Account { AccountId = "A018", Name = "William Amber", Email = "william@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 180, Weight = 75 },
-new Account { AccountId = "A019", Name = "Sophia Ivory", Email = "sophia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 165, Weight = 50 },
-new Account { AccountId = "A020", Name = "James Navy", Email = "james@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.5, IsActive = true, Height = 178, Weight = 72 },
-new Account { AccountId = "A021", Name = "Ava Teal", Email = "ava@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 162, Weight = 48 },
-new Account { AccountId = "A022", Name = "Benjamin Lime", Email = "benjamin@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 177, Weight = 70 },
-new Account { AccountId = "A023", Name = "Charlotte Beige", Email = "charlotte@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 164, Weight = 52 },
-new Account { AccountId = "A024", Name = "Lucas Maroon", Email = "lucas@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 180, Weight = 74 },
-new Account { AccountId = "A025", Name = "Mia Pearl", Email = "mia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, IsActive = true, Height = 159, Weight = 47 },
-new Account { AccountId = "A026", Name = "Ethan Olive", Email = "ethan@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 176, Weight = 71 },
-new Account { AccountId = "A027", Name = "Amelia Ruby", Email = "amelia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 167, Weight = 53 },
-new Account { AccountId = "A028", Name = "Henry Saffron", Email = "henry@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 182, Weight = 76 },
-new Account { AccountId = "A029", Name = "Ella Coral", Email = "ella@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, IsActive = true, Height = 160, Weight = 49 },
-new Account { AccountId = "A030", Name = "Daniel Cyan", Email = "daniel@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 175, Weight = 72 },
-new Account { AccountId = "A031", Name = "Logan Indigo", Email = "logan@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 180, Weight = 73 },
-new Account { AccountId = "A032", Name = "Lily Violet", Email = "lily@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 165, Weight = 52 },
-new Account { AccountId = "A033", Name = "Mason Turquoise", Email = "mason@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 178, Weight = 74 },
-new Account { AccountId = "A034", Name = "Zoe Lavender", Email = "zoe@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, IsActive = true, Height = 160, Weight = 48 },
-new Account { AccountId = "A035", Name = "Elijah Crimson", Email = "elijah@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.5, IsActive = true, Height = 182, Weight = 77 },
-new Account { AccountId = "A036", Name = "Aria Mint", Email = "aria@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 164, Weight = 50 },
-new Account { AccountId = "A037", Name = "Sebastian Bronze", Email = "sebastian@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 179, Weight = 72 },
-new Account { AccountId = "A038", Name = "Harper Rose", Email = "harper@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 168, Weight = 53 },
-new Account { AccountId = "A039", Name = "Caleb Onyx", Email = "caleb@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 181, Weight = 75 },
-new Account { AccountId = "A040", Name = "Scarlett Magenta", Email = "scarlett@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, IsActive = true, Height = 162, Weight = 51 }
+new Account { AccountId = "A015", Name = "Mia Cyan", Email = "mia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 170, Weight = 65, AverageStar = 1.5 },
+new Account { AccountId = "A016", Name = "Noah Silver", Email = "noah@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 175, Weight = 70, AverageStar = 3.7 },
+new Account { AccountId = "A017", Name = "Olivia Gold", Email = "olivia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 168, Weight = 55 , AverageStar = 4.8 },
+new Account { AccountId = "A018", Name = "William Amber", Email = "william@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 180, Weight = 75, AverageStar = 3.2 },
+new Account { AccountId = "A019", Name = "Sophia Ivory", Email = "sophia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 165, Weight = 50, AverageStar = 3.3 },
+new Account { AccountId = "A020", Name = "James Navy", Email = "james@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.5, IsActive = true, Height = 178, Weight = 72, AverageStar = 3.4 },
+new Account { AccountId = "A021", Name = "Ava Teal", Email = "ava@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 162, Weight = 48, AverageStar = 3.5 },
+new Account { AccountId = "A022", Name = "Benjamin Lime", Email = "benjamin@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 177, Weight = 70, AverageStar = 3.6 },
+new Account { AccountId = "A023", Name = "Charlotte Beige", Email = "charlotte@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 164, Weight = 52, AverageStar = 3.7 },
+new Account { AccountId = "A024", Name = "Lucas Maroon", Email = "lucas@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 180, Weight = 74, AverageStar = 3.8 },
+new Account { AccountId = "A025", Name = "Mia Pearl", Email = "mia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, IsActive = true, Height = 159, Weight = 47, AverageStar = 3.9 },
+new Account { AccountId = "A026", Name = "Ethan Olive", Email = "ethan@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 176, Weight = 71, AverageStar = 2.5 },
+new Account { AccountId = "A027", Name = "Amelia Ruby", Email = "amelia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 167, Weight = 53, AverageStar = 2.6 },
+new Account { AccountId = "A028", Name = "Henry Saffron", Email = "henry@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 182, Weight = 76, AverageStar = 2.7 },
+new Account { AccountId = "A029", Name = "Ella Coral", Email = "ella@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, IsActive = true, Height = 160, Weight = 49, AverageStar = 2.8 },
+new Account { AccountId = "A030", Name = "Daniel Cyan", Email = "daniel@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 175, Weight = 72, AverageStar = 2.9 },
+new Account { AccountId = "A031", Name = "Logan Indigo", Email = "logan@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 180, Weight = 73, AverageStar = 3.0 },
+new Account { AccountId = "A032", Name = "Lily Violet", Email = "lily@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 165, Weight = 52, AverageStar = 4.0 },
+new Account { AccountId = "A033", Name = "Mason Turquoise", Email = "mason@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 178, Weight = 74, AverageStar = 4.1 },
+new Account { AccountId = "A034", Name = "Zoe Lavender", Email = "zoe@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, IsActive = true, Height = 160, Weight = 48, AverageStar = 4.2 },
+new Account { AccountId = "A035", Name = "Elijah Crimson", Email = "elijah@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.5, IsActive = true, Height = 182, Weight = 77, AverageStar = 4.3 },
+new Account { AccountId = "A036", Name = "Aria Mint", Email = "aria@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 164, Weight = 50, AverageStar = 4.4 },
+new Account { AccountId = "A037", Name = "Sebastian Bronze", Email = "sebastian@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 179, Weight = 72, AverageStar = 4.5 },
+new Account { AccountId = "A038", Name = "Harper Rose", Email = "harper@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 168, Weight = 53, AverageStar = 4.6 },
+new Account { AccountId = "A039", Name = "Caleb Onyx", Email = "caleb@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 181, Weight = 75, AverageStar = 4.7 },
+new Account { AccountId = "A040", Name = "Scarlett Magenta", Email = "scarlett@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.1, IsActive = true, Height = 162, Weight = 51, AverageStar = 4.8 }
 );
 
             #endregion
@@ -582,11 +582,11 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Contract
             modelBuilder.Entity<Contract>().HasData(
-     new Contract { ContractId = "CT002", RequestId = "R002", Deposit = "100", TotalPrice = 500, CreateBy = "Admin", CreateDate = new DateTime(2025, 2, 1), ContractStatus = ContractStatus.Active, ContractName = "Character rental" },
-     new Contract { ContractId = "CT005", RequestId = "R005", Deposit = "150", TotalPrice = 700, CreateBy = "Admin", CreateDate = new DateTime(2025, 5, 1), ContractStatus = ContractStatus.Active, ContractName = "Character rental" },
-     new Contract { ContractId = "CT008", RequestId = "R008", Deposit = "70", TotalPrice = 350, CreateBy = "Admin", CreateDate = new DateTime(2025, 8, 10), ContractStatus = ContractStatus.Active, ContractName = "Character rental" },
-     new Contract { ContractId = "CT010", RequestId = "R010", Deposit = "50", TotalPrice = 200, CreateBy = "Admin", CreateDate = new DateTime(2025, 10, 20), ContractStatus = ContractStatus.Completed, ContractName = "Character rental" },
-     new Contract { ContractId = "CT014", RequestId = "R014", Deposit = "120", TotalPrice = 600, CreateBy = "Admin", CreateDate = new DateTime(2025, 6, 25), ContractStatus = ContractStatus.Active, ContractName = "Character rental" }
+     new Contract { ContractId = "CT002", RequestId = "R002", Deposit = "100", TotalPrice = 500, Amount = 0,CreateBy = "Admin", CreateDate = new DateTime(2025, 2, 1), ContractStatus = ContractStatus.Active, ContractName = "Character rental" },
+     new Contract { ContractId = "CT005", RequestId = "R005", Deposit = "50", TotalPrice = 700, Amount = 350, CreateBy = "Admin", CreateDate = new DateTime(2025, 5, 1), ContractStatus = ContractStatus.Active, ContractName = "Character rental" },
+     new Contract { ContractId = "CT008", RequestId = "R008", Deposit = "50", TotalPrice = 350, Amount = 175, CreateBy = "Admin", CreateDate = new DateTime(2025, 8, 10), ContractStatus = ContractStatus.Active, ContractName = "Character rental" },
+     new Contract { ContractId = "CT010", RequestId = "R010", Deposit = "50", TotalPrice = 200, Amount = 100, CreateBy = "Admin", CreateDate = new DateTime(2025, 10, 20), ContractStatus = ContractStatus.Completed, ContractName = "Character rental" },
+     new Contract { ContractId = "CT014", RequestId = "R014", Deposit = "100", TotalPrice = 600, Amount = 0, CreateBy = "Admin", CreateDate = new DateTime(2025, 6, 25), ContractStatus = ContractStatus.Active, ContractName = "Character rental" }
  );
             #endregion
 
@@ -637,21 +637,21 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Request
             modelBuilder.Entity<Request>().HasData(
-    new Request { RequestId = "R001", AccountId = "A001", Name = "Rent Naruto Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 100, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 1, 10), EndDate = new DateTime(2025, 1, 15), ServiceId = "S001", Location = "HCM" },
+    new Request { RequestId = "R001", AccountId = "A001", Name = "Rent Naruto Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 100, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 1, 10), EndDate = new DateTime(2025, 1, 15), ServiceId = "S001", Location = "HCM", PackageId= "PKG001" },
     new Request { RequestId = "R002", AccountId = "A002", Name = "Rent Cosplayer for Event", Description = RequestDescription.RentCosplayer.ToString(), Price = 500, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 2, 5), EndDate = new DateTime(2025, 2, 10), ServiceId = "S002", Location = "ĐN" },
     new Request { RequestId = "R003", AccountId = "A003", Name = "Create Anime Festival", Description = RequestDescription.CreateEvent.ToString(), Price = 2000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 3, 1), EndDate = new DateTime(2025, 3, 5), ServiceId = "S003", Location = "BD" },
     new Request { RequestId = "R004", AccountId = "A004", Name = "Rent Samurai Armor", Description = RequestDescription.RentCostumes.ToString(), Price = 150, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 4, 10), EndDate = new DateTime(2025, 4, 15), ServiceId = "S002", Location = "HN" },
-    new Request { RequestId = "R005", AccountId = "A005", Name = "Hire Professional Cosplayer", Description = RequestDescription.RentCosplayer.ToString(), Price = 700, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 5, 3), EndDate = new DateTime(2025, 5, 7), ServiceId = "S002",Location = "BT" },
+    new Request { RequestId = "R005", AccountId = "A005", Name = "Hire Professional Cosplayer", Description = RequestDescription.RentCosplayer.ToString(), Price = 700, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 5, 3), EndDate = new DateTime(2025, 5, 7), ServiceId = "S002",Location = "BT", PackageId = "PKG002" },
     new Request { RequestId = "R006", AccountId = "A006", Name = "Organize Comic Convention", Description = RequestDescription.CreateEvent.ToString(), Price = 5000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 6, 12), EndDate = new DateTime(2025, 6, 20), ServiceId = "S001", Location = "HCM" },
     new Request { RequestId = "R007", AccountId = "A007", Name = "Rent Victorian Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 120, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 7, 1), EndDate = new DateTime(2025, 7, 5), ServiceId = "S002", Location = "HCM" },
     new Request { RequestId = "R008", AccountId = "A008", Name = "Book Cosplayer for Birthday Party", Description = RequestDescription.RentCosplayer.ToString(), Price = 350, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 8, 15), EndDate = new DateTime(2025, 8, 18), ServiceId = "S003", Location = "QN" },
     new Request { RequestId = "R009", AccountId = "A009", Name = "Plan Fantasy Fair", Description = RequestDescription.CreateEvent.ToString(), Price = 3000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 9, 10), EndDate = new DateTime(2025, 9, 15), ServiceId = "S003", Location = "CM" },
     new Request { RequestId = "R010", AccountId = "A010", Name = "Rent Halloween Costumes", Description = RequestDescription.RentCostumes.ToString(), Price = 200, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 10, 25), EndDate = new DateTime(2025, 10, 31), ServiceId = "S001", Location = "LĐ" },
-    new Request { RequestId = "R011", AccountId = "A011", Name = "Hire Cosplayer for Wedding", Description = RequestDescription.RentCosplayer.ToString(), Price = 800, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 11, 20), EndDate = new DateTime(2025, 11, 25), ServiceId = "S001", Location = "NT" },
+    new Request { RequestId = "R011", AccountId = "A011", Name = "Hire Cosplayer for Wedding", Description = RequestDescription.RentCosplayer.ToString(), Price = 800, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 11, 20), EndDate = new DateTime(2025, 11, 25), ServiceId = "S001", Location = "NT", PackageId = "PKG010" },
     new Request { RequestId = "R012", AccountId = "A012", Name = "Create Sci-Fi Convention", Description = RequestDescription.CreateEvent.ToString(), Price = 4500, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 12, 5), EndDate = new DateTime(2025, 12, 10), ServiceId = "S002", Location = "VT" },
     new Request { RequestId = "R013", AccountId = "A013", Name = "Rent Santa Claus Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 130, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 20), EndDate = new DateTime(2025, 12, 25), ServiceId = "S003", Location = "HCM" },
     new Request { RequestId = "R014", AccountId = "A014", Name = "Book Cosplayer for Product Launch", Description = RequestDescription.RentCosplayer.ToString(), Price = 600, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 6, 30), EndDate = new DateTime(2025, 7, 2), ServiceId = "S001", Location = "HN" },
-    new Request { RequestId = "R015", AccountId = "A015", Name = "Host Christmas Event", Description = RequestDescription.CreateEvent.ToString(), Price = 5500, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 15), EndDate = new DateTime(2025, 12, 31), ServiceId = "S002", Location = "HCM" }
+    new Request { RequestId = "R015", AccountId = "A015", Name = "Host Christmas Event", Description = RequestDescription.CreateEvent.ToString(), Price = 5500, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 15), EndDate = new DateTime(2025, 12, 31), ServiceId = "S002", Location = "HCM", PackageId = "PKG015" }
 );
             #endregion
 
@@ -697,29 +697,29 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
             #region ContractCharacter
             modelBuilder.Entity<ContractCharacter>().HasData(
     // ContractId = CT002
-    new ContractCharacter { ContractCharacterId = "CC0021", CharacterId = "CH001", ContractId = "CT002", TotalPrice = 150, CreateDate = new DateTime(2025, 2, 2), Description = "Character 1 for CT002" },
-    new ContractCharacter { ContractCharacterId = "CC0022", CharacterId = "CH002", ContractId = "CT002", TotalPrice = 180, CreateDate = new DateTime(2025, 2, 2), Description = "Character 2 for CT002" },
-    new ContractCharacter { ContractCharacterId = "CC0023", CharacterId = "CH003", ContractId = "CT002", TotalPrice = 170, CreateDate = new DateTime(2025, 2, 2), Description = "Character 3 for CT002" },
+    new ContractCharacter { ContractCharacterId = "CC0021", CharacterId = "CH001", ContractId = "CT002", TotalPrice = 150, CreateDate = new DateTime(2025, 2, 2), Description = "Character 1 for CT002", Quantity = 1},
+    new ContractCharacter { ContractCharacterId = "CC0022", CharacterId = "CH002", ContractId = "CT002", TotalPrice = 180, CreateDate = new DateTime(2025, 2, 2), Description = "Character 2 for CT002", Quantity = 5 },
+    new ContractCharacter { ContractCharacterId = "CC0023", CharacterId = "CH003", ContractId = "CT002", TotalPrice = 170, CreateDate = new DateTime(2025, 2, 2), Description = "Character 3 for CT002", Quantity = 3 },
 
     // ContractId = CT005
-    new ContractCharacter { ContractCharacterId = "CC0051", CharacterId = "CH004", ContractId = "CT005", TotalPrice = 200, CreateDate = new DateTime(2025, 5, 2), Description = "Character 1 for CT005" },
-    new ContractCharacter { ContractCharacterId = "CC0052", CharacterId = "CH005", ContractId = "CT005", TotalPrice = 250, CreateDate = new DateTime(2025, 5, 2), Description = "Character 2 for CT005" },
-    new ContractCharacter { ContractCharacterId = "CC0053", CharacterId = "CH006", ContractId = "CT005", TotalPrice = 250, CreateDate = new DateTime(2025, 5, 2), Description = "Character 3 for CT005" },
+    new ContractCharacter { ContractCharacterId = "CC0051", CharacterId = "CH004", ContractId = "CT005", TotalPrice = 200, CreateDate = new DateTime(2025, 5, 2), Description = "Character 1 for CT005", Quantity = 2},
+    new ContractCharacter { ContractCharacterId = "CC0052", CharacterId = "CH005", ContractId = "CT005", TotalPrice = 250, CreateDate = new DateTime(2025, 5, 2), Description = "Character 2 for CT005", Quantity = 4},
+    new ContractCharacter { ContractCharacterId = "CC0053", CharacterId = "CH006", ContractId = "CT005", TotalPrice = 250, CreateDate = new DateTime(2025, 5, 2), Description = "Character 3 for CT005", Quantity = 6},
 
     // ContractId = CT008
-    new ContractCharacter { ContractCharacterId = "CC0081", CharacterId = "CH007", ContractId = "CT008", TotalPrice = 120, CreateDate = new DateTime(2025, 8, 11), Description = "Character 1 for CT008" },
-    new ContractCharacter { ContractCharacterId = "CC0082", CharacterId = "CH008", ContractId = "CT008", TotalPrice = 130, CreateDate = new DateTime(2025, 8, 11), Description = "Character 2 for CT008" },
-    new ContractCharacter { ContractCharacterId = "CC0083", CharacterId = "CH009", ContractId = "CT008", TotalPrice = 100, CreateDate = new DateTime(2025, 8, 11), Description = "Character 3 for CT008" },
+    new ContractCharacter { ContractCharacterId = "CC0081", CharacterId = "CH007", ContractId = "CT008", TotalPrice = 120, CreateDate = new DateTime(2025, 8, 11), Description = "Character 1 for CT008", Quantity = 1, CosplayerId = "A001" },
+    new ContractCharacter { ContractCharacterId = "CC0082", CharacterId = "CH008", ContractId = "CT008", TotalPrice = 130, CreateDate = new DateTime(2025, 8, 11), Description = "Character 2 for CT008", Quantity = 1, CosplayerId = "A008" },
+    new ContractCharacter { ContractCharacterId = "CC0083", CharacterId = "CH009", ContractId = "CT008", TotalPrice = 100, CreateDate = new DateTime(2025, 8, 11), Description = "Character 3 for CT008", Quantity = 1, CosplayerId = "A040" },
 
     // ContractId = CT010
-    new ContractCharacter { ContractCharacterId = "CC0101", CharacterId = "CH010", ContractId = "CT010", TotalPrice = 70, CreateDate = new DateTime(2025, 10, 21), Description = "Character 1 for CT010" },
-    new ContractCharacter { ContractCharacterId = "CC0102", CharacterId = "CH011", ContractId = "CT010", TotalPrice = 80, CreateDate = new DateTime(2025, 10, 21), Description = "Character 2 for CT010" },
-    new ContractCharacter { ContractCharacterId = "CC0103", CharacterId = "CH012", ContractId = "CT010", TotalPrice = 50, CreateDate = new DateTime(2025, 10, 21), Description = "Character 3 for CT010" },
+    new ContractCharacter { ContractCharacterId = "CC0101", CharacterId = "CH010", ContractId = "CT010", TotalPrice = 70, CreateDate = new DateTime(2025, 10, 21), Description = "Character 1 for CT010", Quantity = 1, CosplayerId = "A040" },
+    new ContractCharacter { ContractCharacterId = "CC0102", CharacterId = "CH011", ContractId = "CT010", TotalPrice = 80, CreateDate = new DateTime(2025, 10, 21), Description = "Character 2 for CT010", Quantity = 1, CosplayerId = "A039" },
+    new ContractCharacter { ContractCharacterId = "CC0103", CharacterId = "CH012", ContractId = "CT010", TotalPrice = 50, CreateDate = new DateTime(2025, 10, 21), Description = "Character 3 for CT010", Quantity = 1, CosplayerId = "A038" },
 
     // ContractId = CT014
-    new ContractCharacter { ContractCharacterId = "CC0141", CharacterId = "CH013", ContractId = "CT014", TotalPrice = 200, CreateDate = new DateTime(2025, 6, 26), Description = "Character 1 for CT014" },
-    new ContractCharacter { ContractCharacterId = "CC0142", CharacterId = "CH014", ContractId = "CT014", TotalPrice = 250, CreateDate = new DateTime(2025, 6, 26), Description = "Character 2 for CT014" },
-    new ContractCharacter { ContractCharacterId = "CC0143", CharacterId = "CH015", ContractId = "CT014", TotalPrice = 150, CreateDate = new DateTime(2025, 6, 26), Description = "Character 3 for CT014" }
+    new ContractCharacter { ContractCharacterId = "CC0141", CharacterId = "CH013", ContractId = "CT014", TotalPrice = 200, CreateDate = new DateTime(2025, 6, 26), Description = "Character 1 for CT014", Quantity = 1, CosplayerId = "A035" },
+    new ContractCharacter { ContractCharacterId = "CC0142", CharacterId = "CH014", ContractId = "CT014", TotalPrice = 250, CreateDate = new DateTime(2025, 6, 26), Description = "Character 2 for CT014", Quantity = 1, CosplayerId = "A040" },
+    new ContractCharacter { ContractCharacterId = "CC0143", CharacterId = "CH015", ContractId = "CT014", TotalPrice = 150, CreateDate = new DateTime(2025, 6, 26), Description = "Character 3 for CT014", Quantity = 1 , CosplayerId = "A005" }
 );
             #endregion
 
@@ -992,21 +992,21 @@ new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015",
 
             #region RequestCharacter
             modelBuilder.Entity<RequestCharacter>().HasData(
-    new RequestCharacter { RequestCharacterId = "RC01", RequestId = "R001", CharacterId = "CH001", TotalPrice = 50.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH001", CosplayerId = "C001" },
-    new RequestCharacter { RequestCharacterId = "RC02", RequestId = "R002", CharacterId = "CH002", TotalPrice = 60.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH002", CosplayerId = "C002" },
-    new RequestCharacter { RequestCharacterId = "RC03", RequestId = "R003", CharacterId = "CH003", TotalPrice = 70.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH003", CosplayerId = "C003" },
-    new RequestCharacter { RequestCharacterId = "RC04", RequestId = "R004", CharacterId = "CH004", TotalPrice = 80.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH004", CosplayerId = "C004" },
-    new RequestCharacter { RequestCharacterId = "RC05", RequestId = "R005", CharacterId = "CH005", TotalPrice = 90.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH005", CosplayerId = "C005" },
-    new RequestCharacter { RequestCharacterId = "RC06", RequestId = "R006", CharacterId = "CH006", TotalPrice = 100.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH006", CosplayerId = "C006" },
-    new RequestCharacter { RequestCharacterId = "RC07", RequestId = "R007", CharacterId = "CH007", TotalPrice = 110.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH007", CosplayerId = "C007" },
-    new RequestCharacter { RequestCharacterId = "RC08", RequestId = "R008", CharacterId = "CH008", TotalPrice = 120.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH008", CosplayerId = "C008" },
-    new RequestCharacter { RequestCharacterId = "RC09", RequestId = "R009", CharacterId = "CH009", TotalPrice = 130.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH009", CosplayerId = "C009" },
-    new RequestCharacter { RequestCharacterId = "RC10", RequestId = "R010", CharacterId = "CH010", TotalPrice = 140.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH010", CosplayerId = "C010" },
-    new RequestCharacter { RequestCharacterId = "RC11", RequestId = "R011", CharacterId = "CH011", TotalPrice = 150.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH011", CosplayerId = "C011" },
-    new RequestCharacter { RequestCharacterId = "RC12", RequestId = "R012", CharacterId = "CH012", TotalPrice = 160.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH012", CosplayerId = "C012" },
-    new RequestCharacter { RequestCharacterId = "RC13", RequestId = "R013", CharacterId = "CH013", TotalPrice = 170.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH013", CosplayerId = "C013" },
-    new RequestCharacter { RequestCharacterId = "RC14", RequestId = "R014", CharacterId = "CH014", TotalPrice = 180.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH014", CosplayerId = "C014" },
-    new RequestCharacter { RequestCharacterId = "RC15", RequestId = "R015", CharacterId = "CH015", TotalPrice = 190.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH015", CosplayerId = "C015" }
+    new RequestCharacter { RequestCharacterId = "RC01", RequestId = "R001", CharacterId = "CH001", TotalPrice = 50.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH001", CosplayerId = "A025", Quantity = 1},
+    new RequestCharacter { RequestCharacterId = "RC02", RequestId = "R002", CharacterId = "CH002", TotalPrice = 60.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH002", CosplayerId = "A026", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC03", RequestId = "R003", CharacterId = "CH003", TotalPrice = 70.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH003", CosplayerId = "A027", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC04", RequestId = "R004", CharacterId = "CH004", TotalPrice = 80.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH004", CosplayerId = "A028", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC05", RequestId = "R005", CharacterId = "CH005", TotalPrice = 90.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH005", CosplayerId = "A029", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC06", RequestId = "R006", CharacterId = "CH006", TotalPrice = 100.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH006", Quantity = 5 },
+    new RequestCharacter { RequestCharacterId = "RC07", RequestId = "R007", CharacterId = "CH007", TotalPrice = 110.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH007", CosplayerId = "A031", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC08", RequestId = "R008", CharacterId = "CH008", TotalPrice = 120.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH008", Quantity = 7},
+    new RequestCharacter { RequestCharacterId = "RC09", RequestId = "R009", CharacterId = "CH009", TotalPrice = 130.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH009", CosplayerId = "A033", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC10", RequestId = "R010", CharacterId = "CH010", TotalPrice = 140.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH010", Quantity = 9},
+    new RequestCharacter { RequestCharacterId = "RC11", RequestId = "R011", CharacterId = "CH011", TotalPrice = 150.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH011", CosplayerId = "A035", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC12", RequestId = "R012", CharacterId = "CH012", TotalPrice = 160.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH012", CosplayerId = "A036", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC13", RequestId = "R013", CharacterId = "CH013", TotalPrice = 170.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH013", Quantity = 10 },
+    new RequestCharacter { RequestCharacterId = "RC14", RequestId = "R014", CharacterId = "CH014", TotalPrice = 180.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH014", CosplayerId = "A038", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC15", RequestId = "R015", CharacterId = "CH015", TotalPrice = 190.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH015", CosplayerId = "A039", Quantity = 1 }
 );
             #endregion
 

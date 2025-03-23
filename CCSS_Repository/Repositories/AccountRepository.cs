@@ -25,6 +25,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> UpdateAccount(Account account);
         Task<List<Account>> GetAllAccountsByCharacter(Character character);
         Task<List<Account>> GetAllAccountsByRoleId(string roleId);
+        Task<List<Account>> GetAllAccountRoleManager();
     }
     public class AccountRepository : IAccountRepository
     {
@@ -92,6 +93,11 @@ namespace CCSS_Repository.Repositories
         public async Task<Account> GetAccountByEmailAndPassword(string email, string password)
         {
             return await dbContext.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email && a.Password == password);   
+        }
+
+        public async Task<List<Account>> GetAllAccountRoleManager()
+        {
+            return await dbContext.Accounts.Include(r => r.Role).Where(a => a.Role.RoleName == RoleName.Manager).ToListAsync();
         }
 
         public async Task<List<Account>> GetAllAccountsByCharacter(Character character)

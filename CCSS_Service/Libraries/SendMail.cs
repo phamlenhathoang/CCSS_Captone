@@ -262,5 +262,85 @@ namespace CCSS_Service.Libraries
             }
         }
 
+        public async Task<bool> SendManagerCustomerCharacterEmail(string toEmail)
+        {
+            try
+            {
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .Build();
+
+                string fromEmail = configuration["FromEmail:Email"];
+                string emailPassword = configuration["FromEmail:Password"];
+
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("CCSS", fromEmail));
+                message.To.Add(new MailboxAddress("", toEmail));
+                message.Subject = "📢 Có yêu cầu tạo mới trang phục";
+
+                string emailBody = $@"
+        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+            <h2 style='color: #007bff;'>Bạn có yêu cầu mới về tạo mới trang phục! 🎉</h2>
+            <p>Vui lòng kiểm tra trên hệ thống để xem thông tin trang phục.</p>
+        </div>";
+
+                message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
+
+                using var smtp = new SmtpClient();
+                await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(fromEmail, emailPassword);
+                await smtp.SendAsync(message);
+                await smtp.DisconnectAsync(true);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi gửi email: {ex.Message}");
+                return false;
+            }
+        }
+
+
+        public async Task<bool> SendCustomerStatusCustomerCharacterEmail(string toEmail, string status)
+        {
+            try
+            {
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .Build();
+
+                string fromEmail = configuration["FromEmail:Email"];
+                string emailPassword = configuration["FromEmail:Password"];
+
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("CCSS", fromEmail));
+                message.To.Add(new MailboxAddress("", toEmail));
+                message.Subject = "📢 Phản hồi về trang phục";
+
+                string emailBody = $@"
+        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+            <h2 style='color: #007bff;'>Yêu cầu về tạo trang phục của bạn đã được {status}! 🎉</h2>
+            <p>Vui lòng kiểm tra trên hệ thống để xem thông tin trang phục.</p>
+        </div>";
+
+                message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
+
+                using var smtp = new SmtpClient();
+                await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(fromEmail, emailPassword);
+                await smtp.SendAsync(message);
+                await smtp.DisconnectAsync(true);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi gửi email: {ex.Message}");
+                return false;
+            }
+        }
     }
 }

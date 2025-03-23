@@ -54,6 +54,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddScoped<ICustomerCharacterImageRepository, CustomerCharacterImageRepository>();
 builder.Services.AddScoped<ICustomerCharacterRepository, CustomerCharacterRepository>();
+builder.Services.AddScoped<ICharacterImageRepository, CharacterImageRepository>();
 
 
 

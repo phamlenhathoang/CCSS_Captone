@@ -13,9 +13,10 @@ namespace CCSS_Service.Model.Requests
         public string? CharacterName { get; set; }
         public string? Description { get; set; }
         public double? Price { get; set; }
-        public bool? IsActive { get; set; }
-    
+        public int? Quantity { get; set; }
+        public float? MaxHeight { get; set; }
+        public float? MaxWeight { get; set; }
+        public float? MinHeight { get; set; }
+        public float? MinWeight { get; set; }
     }   
-
-
 }
