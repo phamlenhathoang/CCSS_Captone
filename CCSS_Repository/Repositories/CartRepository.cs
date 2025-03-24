@@ -1,5 +1,6 @@
 ﻿using CCSS_Repository.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,10 @@ namespace CCSS_Repository.Repositories
     public interface ICartRepository
     {
         Task<Cart> GetCartById(string id);
-        Task AddCart(Cart cart);
+        Task<Cart> GetcartByAccount(string accountId);
+        Task<bool> AddCart(Cart cart);
         Task DeleteCart(Cart cart);
+        Task UpdateCart(Cart cart);
     }
 
     public class CartRepository: ICartRepository
@@ -30,10 +33,20 @@ namespace CCSS_Repository.Repositories
             return await _context.Carts.FirstOrDefaultAsync(sc => sc.CartId.Equals(id));
         }
 
-        public async Task AddCart(Cart cart)
+        public async Task<Cart> GetcartByAccount(string accountId)
+        {
+            return await _context.Carts.FirstOrDefaultAsync(sc => sc.AccountId.Equals(accountId));
+        }
+        public async Task<bool> AddCart(Cart cart)
         {
             _context.Carts.Add(cart);
-            await _context.SaveChangesAsync();
+           return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task UpdateCart(Cart cart)
+        {
+            _context.Carts.Update(cart);
+             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteCart(Cart cart)
