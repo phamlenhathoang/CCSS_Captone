@@ -28,6 +28,7 @@ namespace CCSS_Repository.Entities
 
     public enum OrderStatus
     {
+        Pending,
         Completed, 
         Cancel
     }
