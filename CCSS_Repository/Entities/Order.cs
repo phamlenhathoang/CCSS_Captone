@@ -21,7 +21,7 @@ namespace CCSS_Repository.Entities
 
         public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
 
-        public string? OrderDate { get; set; }
+        public DateTime? OrderDate { get; set; }
         public double? TotalPrice { get; set; }
         public OrderStatus OrderStatus { get; set; }
     }

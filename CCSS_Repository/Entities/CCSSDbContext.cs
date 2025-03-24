@@ -521,22 +521,22 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Order
             modelBuilder.Entity<Order>().HasData(
-   new Order { OrderId = "O001", AccountId = "A003", OrderDate = "2024-03-01", TotalPrice = 250.0, OrderStatus = OrderStatus.Completed },
-   new Order { OrderId = "O002", AccountId = "A006", OrderDate = "2024-03-05", TotalPrice = 150.5, OrderStatus = OrderStatus.Completed },
-   new Order { OrderId = "O003", AccountId = "A011", OrderDate = "2024-03-10", TotalPrice = 300.0, OrderStatus = OrderStatus.Cancel },
-   new Order { OrderId = "O004", AccountId = "A014", OrderDate = "2024-03-12", TotalPrice = 400.0, OrderStatus = OrderStatus.Completed },
-   new Order { OrderId = "O005", AccountId = "A003", OrderDate = "2024-03-15", TotalPrice = 175.0, OrderStatus = OrderStatus.Cancel },
-   new Order { OrderId = "O006", AccountId = "A006", OrderDate = "2024-03-18", TotalPrice = 225.0, OrderStatus = OrderStatus.Completed },
-   new Order { OrderId = "O007", AccountId = "A011", OrderDate = "2024-03-20", TotalPrice = 350.0, OrderStatus = OrderStatus.Completed },
-   new Order { OrderId = "O008", AccountId = "A014", OrderDate = "2024-03-22", TotalPrice = 275.0, OrderStatus = OrderStatus.Cancel },
-   new Order { OrderId = "O009", AccountId = "A003", OrderDate = "2024-03-25", TotalPrice = 500.0, OrderStatus = OrderStatus.Completed },
-   new Order { OrderId = "O010", AccountId = "A006", OrderDate = "2024-03-28", TotalPrice = 125.0, OrderStatus = OrderStatus.Cancel },
-   new Order { OrderId = "O011", AccountId = "A011", OrderDate = "2024-03-30", TotalPrice = 325.0, OrderStatus = OrderStatus.Completed },
-   new Order { OrderId = "O012", AccountId = "A014", OrderDate = "2024-04-02", TotalPrice = 410.0, OrderStatus = OrderStatus.Completed },
-   new Order { OrderId = "O013", AccountId = "A003", OrderDate = "2024-04-05", TotalPrice = 280.0, OrderStatus = OrderStatus.Cancel },
-   new Order { OrderId = "O014", AccountId = "A006", OrderDate = "2024-04-07", TotalPrice = 350.0, OrderStatus = OrderStatus.Completed },
-   new Order { OrderId = "O015", AccountId = "A011", OrderDate = "2024-04-10", TotalPrice = 200.0, OrderStatus = OrderStatus.Completed }
-);
+               new Order { OrderId = "O001", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-01"), TotalPrice = 250.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O002", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-05"), TotalPrice = 150.5, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O003", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-10"), TotalPrice = 300.0, OrderStatus = OrderStatus.Cancel },
+               new Order { OrderId = "O004", AccountId = "A014", OrderDate = DateTime.Parse("2024-03-12"), TotalPrice = 400.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O005", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-15"), TotalPrice = 175.0, OrderStatus = OrderStatus.Cancel },
+               new Order { OrderId = "O006", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-18"), TotalPrice = 225.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O007", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-20"), TotalPrice = 350.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O008", AccountId = "A014", OrderDate = DateTime.Parse("2024-03-22"), TotalPrice = 275.0, OrderStatus = OrderStatus.Cancel },
+               new Order { OrderId = "O009", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-25"), TotalPrice = 500.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O010", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-28"), TotalPrice = 125.0, OrderStatus = OrderStatus.Cancel },
+               new Order { OrderId = "O011", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-30"), TotalPrice = 325.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O012", AccountId = "A014", OrderDate = DateTime.Parse("2024-04-02"), TotalPrice = 410.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O013", AccountId = "A003", OrderDate = DateTime.Parse("2024-04-05"), TotalPrice = 280.0, OrderStatus = OrderStatus.Cancel },
+               new Order { OrderId = "O014", AccountId = "A006", OrderDate = DateTime.Parse("2024-04-07"), TotalPrice = 350.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O015", AccountId = "A011", OrderDate = DateTime.Parse("2024-04-10"), TotalPrice = 200.0, OrderStatus = OrderStatus.Completed }
+            );
             #endregion
 
             #region Coupon
