@@ -55,11 +55,7 @@ builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddScoped<ICustomerCharacterImageRepository, CustomerCharacterImageRepository>();
 builder.Services.AddScoped<ICustomerCharacterRepository, CustomerCharacterRepository>();
 builder.Services.AddScoped<ICharacterImageRepository, CharacterImageRepository>();
-
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-
-
-
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICartProductRepository, CartProductRepository>();
 
@@ -85,9 +81,7 @@ builder.Services.AddScoped<IPdfService, Pdf>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
 builder.Services.AddScoped<IProductImageServices, ProductImageServices>();
 builder.Services.AddScoped<ICustomerCharacterService, CustomerCharacterService>();
-
 builder.Services.AddScoped<IOrderService, OrderService>();
-
 builder.Services.AddScoped<ICartServices, CartServices>();
 builder.Services.AddScoped<ICartProductServices, CartProductServices>();
 
@@ -122,6 +116,7 @@ builder.Services.AddDbContext<CCSSDbContext>(options =>
 
 builder.Services.AddHostedService<NotificationBackgroundService>();
 builder.Services.AddHostedService<ContractBackgroudService>();
+builder.Services.AddHostedService<OrderBackgroundService>();
 
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];
