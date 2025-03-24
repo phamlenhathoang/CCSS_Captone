@@ -55,8 +55,13 @@ builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddScoped<ICustomerCharacterImageRepository, CustomerCharacterImageRepository>();
 builder.Services.AddScoped<ICustomerCharacterRepository, CustomerCharacterRepository>();
 builder.Services.AddScoped<ICharacterImageRepository, CharacterImageRepository>();
+
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
+
+
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICartProductRepository, CartProductRepository>();
 
 
 //Service
@@ -80,7 +85,11 @@ builder.Services.AddScoped<IPdfService, Pdf>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
 builder.Services.AddScoped<IProductImageServices, ProductImageServices>();
 builder.Services.AddScoped<ICustomerCharacterService, CustomerCharacterService>();
+
 builder.Services.AddScoped<IOrderService, OrderService>();
+
+builder.Services.AddScoped<ICartServices, CartServices>();
+builder.Services.AddScoped<ICartProductServices, CartProductServices>();
 
 
 

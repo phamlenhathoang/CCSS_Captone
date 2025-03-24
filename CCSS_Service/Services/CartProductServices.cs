@@ -1,0 +1,217 @@
+﻿using CCSS_Repository.Entities;
+using CCSS_Repository.Repositories;
+using CCSS_Service.Model.Requests;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
+
+namespace CCSS_Service.Services
+{
+    public interface ICartProductServices
+    {
+        Task<List<CartProduct>> GetAllCartProduct();
+        Task<CartProduct> GetCartProductById(string id);
+        Task<CartProduct> GetCartProduct(string productId, string cartId);
+        Task<List<CartProduct>> GetListProductInCart(string cartId);
+        Task<string> AddCartProduct(string cartId, List<CartProductRequest> cartProductRequests);
+        Task<string> UpdateCartProduct(string cartId, List<UpdateCartProductRequest> updateCartProductRequests);
+        Task<string> DeleteCartProduct(string cartId, List<CartPorductRequestDtos> cartProductRequests);
+
+    }
+
+    public class CartProductServices : ICartProductServices
+    {
+        private readonly ICartProductRepository _repository;
+        private readonly ICartRepository _cartRepository;
+        private readonly IProductRepository _productRepository;
+
+        public CartProductServices(ICartProductRepository repository, ICartRepository cartRepository, IProductRepository productRepository)
+        {
+            _repository = repository;
+            _cartRepository = cartRepository;
+            _productRepository = productRepository;
+
+        }
+
+        public async Task<string> AddCartProduct(string cartId, List<CartProductRequest> cartProductRequests)
+        {
+            if (cartProductRequests == null || !cartProductRequests.Any())
+            {
+                return "No cart products to add.";
+            }
+            if (cartId == null)
+            {
+                return "Required this filed";
+            }
+            var cart = await _cartRepository.GetCartById(cartId);
+            if (cart == null)
+            {
+                return "Cart not found";
+            }
+            foreach (var cp in cartProductRequests)
+            {
+                var product = await _productRepository.GetProductById(cp.ProductId);
+                if (product == null)
+                {
+                    return "Product not found";
+                }
+                if (product.Quantity == 0 || product.Quantity < cp.Quantity)
+                {
+                    return "This product is out of stock";
+                }
+
+                var cartProduct = new CartProduct()
+                {
+                    CartProductId = Guid.NewGuid().ToString(),
+                    ProductId = cp.ProductId,
+                    CartId = cartId,
+                    Quantity = cp.Quantity ?? 1,
+                    Price = product.Price * cp.Quantity,
+                    CreatedDate = DateTime.Now,
+                };
+
+                await _repository.AddCartProduct(cartProduct);
+
+                cart.TotalPrice += (double)cartProduct.Price;
+                cart.UpdateDate = DateTime.Now;
+                await _cartRepository.UpdateCart(cart);
+
+                product.Quantity -= cp.Quantity;
+                product.UpdateDate = DateTime.Now;
+                await _productRepository.UpdateProduct(product);
+
+            }
+            return "Add Success";
+        }
+
+
+        public async Task<string> DeleteCartProduct(string cartId, List<CartPorductRequestDtos> cartProductRequests)
+        {
+            if (cartId == null)
+            {
+                return "required this field";
+            }
+            var cart = await _cartRepository.GetCartById(cartId);
+            if (cart == null)
+            {
+                return "Cart not found";
+            }
+            foreach (var cp in cartProductRequests)
+            {
+                var cartProduct = await _repository.GetCartProductById(cp.CartProductId);
+                if (cartProduct == null)
+                {
+                    return "this Product is not in Cart";
+                }
+                var product = await _productRepository.GetProductById(cartProduct.ProductId);
+                if (product == null)
+                {
+                    return "Prouduct ot found";
+                }
+                var result = await _repository.DeleteCartProduct(cartProduct);
+                if (!result)
+                {
+                    return "Delete Failed";
+                }
+                product.Quantity += cartProduct.Quantity;
+                product.UpdateDate = DateTime.Now;
+                await _productRepository.UpdateProduct(product);
+
+                cart.TotalPrice -= (double)cartProduct.Price;
+                cart.UpdateDate = DateTime.Now;
+                await _cartRepository.UpdateCart(cart);
+
+            }
+            return "Delete Success";
+        }
+        public async Task<string> UpdateCartProduct(string cartId, List<UpdateCartProductRequest> updateCartProductRequests)
+        {
+            if (cartId == null)
+            {
+                return "Required this field";
+            }
+            var cart = await _cartRepository.GetCartById(cartId);
+            if (cart == null)
+            {
+                return "Cart is not found";
+            }
+            foreach (var cp in updateCartProductRequests)
+            {
+                var cartproduct = await _repository.GetCartProductById(cp.CartProductId);
+                if (cartproduct == null)
+                {
+                    return "This product is not in Cart";
+                }
+                if(cp.Quantity == 0)
+                {
+                    return "Quanitty of Product mmust higher than 0";
+                }
+                var product = await _productRepository.GetProductById(cartproduct.ProductId);
+                if (product == null)
+                {
+                    return "This product is not found";
+                }              
+
+                product.Quantity += (cartproduct.Quantity - cp.Quantity);
+                product.UpdateDate = DateTime.Now;
+                await _productRepository.UpdateProduct(product);
+
+                double oldPrice = (double)cartproduct.Price;
+
+                //if (cp.Quantity == 0)
+                //{
+                //    var deleteResult = await _repository.DeleteCartProduct(cartproduct);
+                //    if (!deleteResult)
+                //    {
+                //        return "Failed to delete product from cart";
+                //    }
+
+                //    // Adjust the Cart's total price by subtracting the removed product's price
+                //    cart.TotalPrice -= oldPrice;
+                //    cart.UpdateDate = DateTime.Now;
+                //    await _cartRepository.UpdateCart(cart);
+                
+                //}
+
+                cartproduct.Quantity = cp.Quantity;
+                cartproduct.Price = cp.Quantity * product.Price;
+                await _repository.UpdateCartProduct(cartproduct);
+
+
+                double priceDifference = (double)cartproduct.Price - oldPrice;
+
+                cart.TotalPrice += priceDifference;
+                cart.UpdateDate = DateTime.Now;
+                await _cartRepository.UpdateCart(cart);
+
+            }
+            return "Update Success";
+        }
+
+
+
+        public async Task<List<CartProduct>> GetAllCartProduct()
+        {
+            return await _repository.GetAllCartProduct();
+        }
+
+        public async Task<CartProduct> GetCartProduct(string productId, string cartId)
+        {
+            return await _repository.GetCartProduct(productId, cartId);
+        }
+
+        public async Task<CartProduct> GetCartProductById(string id)
+        {
+            return await _repository.GetCartProductById(id);
+        }
+
+        public async Task<List<CartProduct>> GetListProductInCart(string cartId)
+        {
+            return await _repository.GetListProductInCart(cartId);
+        }
+
+    }
+}
