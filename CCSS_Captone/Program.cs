@@ -81,6 +81,7 @@ builder.Services.AddScoped<IPdfService, Pdf>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
 builder.Services.AddScoped<IProductImageServices, ProductImageServices>();
 builder.Services.AddScoped<ICustomerCharacterService, CustomerCharacterService>();
+builder.Services.AddScoped<ICharacterImageServices, CharacterImageServices>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICartServices, CartServices>();
 builder.Services.AddScoped<ICartProductServices, CartProductServices>();
