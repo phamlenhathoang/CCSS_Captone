@@ -28,11 +28,11 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddListImageCharacter([Required]string chracterId, [FromForm] IFormFileCollection formFiles)
+        public async Task<IActionResult> AddListImageCharacter([Required]string characterId, [FromForm] IFormFileCollection formFiles)
         {
             if (ModelState.IsValid)
             {
-                var result = await _services.AddCharacterImage(chracterId, formFiles);
+                var result = await _services.AddCharacterImage(characterId, formFiles);
                 return Ok(result);
             }
             return BadRequest(ModelState);
