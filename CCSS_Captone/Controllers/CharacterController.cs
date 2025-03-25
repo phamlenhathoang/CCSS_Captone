@@ -64,7 +64,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCharacter(string id, CharacterRequest characterRequest, [FromForm] List<string>? characterImageIds, List<IFormFile>? images)
+        public async Task<IActionResult> UpdateCharacter(string id, [FromForm]  CharacterRequest characterRequest, [FromForm] List<string>?characterImageIds, List<IFormFile>? images)
         {
             if (ModelState.IsValid)
             {
