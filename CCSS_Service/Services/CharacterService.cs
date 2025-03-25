@@ -94,7 +94,45 @@ namespace CCSS_Service.Services
 
         public async Task<CharacterResponse> GetCharacter(string characterId)
         {
-            return mapper.Map<CharacterResponse>(await _characterRepository.GetCharacter(characterId));
+            List<CharacterImageResponse> characterImageResponses = new List<CharacterImageResponse>();
+            var character = await _characterRepository.GetCharacter(characterId);
+            if (character == null)
+            {
+                return null;
+            }
+
+            foreach (var image in character.CharacterImages)
+            {
+                CharacterImageResponse characterImageResponse = new CharacterImageResponse()
+                {
+                    CharacterImageId = image.CharacterImageId,
+                    CreateDate = image.CreateDate,
+                    IsAvatar = image.IsAvatar,
+                    UpdateDate = image.UpdateDate,
+                    UrlImage = image.UrlImage,
+                };
+                characterImageResponses.Add(characterImageResponse);
+            }
+
+            CharacterResponse characterResponse = new CharacterResponse()
+            {
+                CharacterId = character.CharacterId,
+                CategoryId = character.CategoryId,
+                CharacterName = character.CharacterName,
+                CreateDate = character.CreateDate.ToString("HH:mm dd/MM/yyyy") ?? null,
+                Description = character.Description,
+                IsActive = character.IsActive,
+                UpdateDate = character.UpdateDate?.ToString("HH:mm dd/MM/yyyy") ?? null,
+                Price = character.Price,
+                Images = characterImageResponses,
+                MaxHeight = character.MaxHeight,
+                MinHeight = character.MinHeight,
+                MinWeight = character.MinWeight,
+                MaxWeight = character.MaxWeight,
+                Quantity = character.Quantity,
+            };
+
+            return characterResponse;   
         }
 
         public async Task<Character> GetCharacterById(string characterId)
