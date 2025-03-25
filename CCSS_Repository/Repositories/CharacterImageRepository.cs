@@ -13,6 +13,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> AddCharacterImages(List<CharacterImage> characterImages);
         Task<bool> UpdateCharacterImage(CharacterImage characterImage);
         Task<CharacterImage> GetCharacterImageById(string id);
+        Task<List<CharacterImage>> GetListImageCharacter(string characterid);
 
     }
     public class CharacterImageRepository : ICharacterImageRepository
@@ -32,6 +33,11 @@ namespace CCSS_Repository.Repositories
         public async Task<CharacterImage> GetCharacterImageById(string id)
         {
             return await _dbContext.CharacterImages.FirstOrDefaultAsync(c => c.CharacterImageId.Equals(id));
+        }
+
+        public async Task<List<CharacterImage>> GetListImageCharacter(string characterid)
+        {
+            return await _dbContext.CharacterImages.Where(sc => sc.CharacterId.Equals(characterid)).ToListAsync();
         }
 
         public async Task<bool> UpdateCharacterImage(CharacterImage characterImage)
