@@ -16,6 +16,11 @@ namespace CCSS_Service.Model.Responses
         public string? Description { get; set; }
         public double? Price { get; set; }
         public bool? IsActive { get; set; }
+        public float? MaxHeight { get; set; }
+        public float? MaxWeight { get; set; }
+        public float? MinHeight { get; set; }
+        public float? MinWeight { get; set; }
+        public int? Quantity { get; set; }
         public string? CreateDate { get; set; }
         public string? UpdateDate { get; set; }
         public List<CharacterImageResponse> Images { get; set; }

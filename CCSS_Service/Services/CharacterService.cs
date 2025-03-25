@@ -78,6 +78,11 @@ namespace CCSS_Service.Services
                     UpdateDate = character.UpdateDate?.ToString("HH:mm dd/MM/yyyy") ?? null,
                     Price = character.Price,
                     Images = characterImageResponses,
+                    MaxHeight = character.MaxHeight,
+                    MinHeight = character.MinHeight,
+                    MinWeight = character.MinWeight,
+                    MaxWeight = character.MaxWeight,
+                    Quantity = character.Quantity,  
                 };
 
                 characterResponses.Add(characterResponse);
