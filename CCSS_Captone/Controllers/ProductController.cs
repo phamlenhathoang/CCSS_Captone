@@ -49,8 +49,16 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        //[HttpPut]
-        //public async Task<IActionResult> UpdateProduct(P)
+        [HttpPut]
+        public async Task<IActionResult> UpdateProduct(string productId, ProductRequest productRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _services.UpdateProduct(productId, productRequest);
+            return Ok(result);
+        }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteProduct(string productId)
