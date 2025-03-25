@@ -19,16 +19,16 @@ namespace CCSS_Captone.Controllers
             _characterService = characterService;
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<CharacterResponse>> GetCharater(string id)
-        //{
-        //    var character = await _characterService.GetCharacter(id);
-        //    if (character == null)
-        //    {
-        //        return NotFound(new { message = "Character not found." });
-        //    }
-        //    return Ok(character);
-        //}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CharacterResponse>> GetCharater(string id)
+        {
+            var character = await _characterService.GetCharacter(id);
+            if (character == null)
+            {
+                return NotFound(new { message = "Character not found." });
+            }
+            return Ok(character);
+        }
 
         //[HttpGet("categoryId/{categoryId}")]
         //public async Task<ActionResult<CategoryResponse>> GetCharactersByCategoryId(string categoryId)
