@@ -24,15 +24,17 @@ namespace CCSS_Service.Services
 
     public class ProductServices : IProductServices
     {
-        private IProductRepository _repository;
-        private IProductImageRepository _imageRepository;
+        private readonly IProductRepository _repository;
+        private readonly IProductImageRepository _imageRepository;
         private readonly Image _image;
+        private readonly IBeginTransactionRepository _transactionRepository;
 
-        public ProductServices(IProductRepository repository, Image image, IProductImageRepository productImageRepository)
+        public ProductServices(IProductRepository repository, Image image, IProductImageRepository productImageRepository, IBeginTransactionRepository transactionRepository)
         {
             _repository = repository;
             _image = image;
             _imageRepository = productImageRepository;
+            _transactionRepository = transactionRepository;
         }
 
         public async Task<List<ProductResponse>> GetAllProduct(string? searchterm)
@@ -106,44 +108,65 @@ namespace CCSS_Service.Services
             {
                 return "The price need higher than 0";
             }
-            List<ProductImage> productImages = new List<ProductImage>();
-            Product newProduct = new Product()
+            using (var transaction = await _transactionRepository.BeginTransaction())
             {
-                ProductId = Guid.NewGuid().ToString(),
-                ProductName = productRequest.ProductName,
-                Description = productRequest.Description,
-                Quantity = productRequest.Quantity,
-                Price = productRequest.Price,
-                CreateDate = DateTime.Now,
-                UpdateDate = null,
-            };
-            var result = await _repository.AddProduct(newProduct);
-            if (!result)
-            {
-                return "Add Failed";
-            }
-            foreach (var file in formFiles)
-            {
-                int count = 0;
-                ProductImage productImage = new ProductImage()
+                try
                 {
-                    ProductImageId = Guid.NewGuid().ToString(),
-                    ProductId = newProduct.ProductId,
-                    UrlImage = await _image.UploadImageToFirebase(file),
-                    CreateDate = DateTime.Now,
-                    UpdateDate = null,
-                };
-                if (count == 0)
-                {
-                    productImage.IsAvatar = true;
-                }
-                productImage.IsAvatar = false;
+                    List<ProductImage> productImages = new List<ProductImage>();
+                    Product newProduct = new Product()
+                    {
+                        ProductId = Guid.NewGuid().ToString(),
+                        ProductName = productRequest.ProductName,
+                        Description = productRequest.Description,
+                        Quantity = productRequest.Quantity,
+                        Price = productRequest.Price,
+                        CreateDate = DateTime.Now,
+                        UpdateDate = null,
+                    };
+                    var result = await _repository.AddProduct(newProduct);
+                    if (!result)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Add Failed";
+                    }
+                    foreach (var file in formFiles)
+                    {
+                        int count = 0;
+                        ProductImage productImage = new ProductImage()
+                        {
+                            ProductImageId = Guid.NewGuid().ToString(),
+                            ProductId = newProduct.ProductId,
+                            UrlImage = await _image.UploadImageToFirebase(file),
+                            CreateDate = DateTime.Now,
+                            UpdateDate = null,
+                        };
+                        if (count == 0)
+                        {
+                            productImage.IsAvatar = true;
+                        }
+                        else
+                        {
+                            productImage.IsAvatar = false;
+                        }
+                        productImages.Add(productImage);
+                        count++;
+                    }
+                    var result2 = await _imageRepository.AddListImageProduct(productImages);
+                    if (!result2)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Add Image failed";
+                    }
 
-                productImages.Add(productImage);
-                count++;
+                    await transaction.CommitAsync();
+                    return "Add Success";
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw new Exception("An error occurred", ex);
+                }
             }
-            await _imageRepository.AddListImageProduct(productImages);
-            return "Add Success";
         }
 
         public async Task<string> UpdateProduct(string productId, ProductRequest productRequest)
@@ -161,14 +184,24 @@ namespace CCSS_Service.Services
             {
                 return "number cannot be negative";
             }
-            productExisting.ProductName = productRequest.ProductName;
-            productExisting.Description = productRequest.Description;
-            productExisting.Quantity = productRequest.Quantity;
-            productExisting.Price = productRequest.Price;
-            productExisting.UpdateDate = DateTime.Now;
+            using (var transaction = await _transactionRepository.BeginTransaction())
+            {
+                productExisting.ProductName = productRequest.ProductName;
+                productExisting.Description = productRequest.Description;
+                productExisting.Quantity = productRequest.Quantity;
+                productExisting.Price = productRequest.Price;
+                productExisting.UpdateDate = DateTime.Now;
 
-            var result = await _repository.UpdateProduct(productExisting);
-            return result ? "Update Success" : "Update Failed";
+                var result = await _repository.UpdateProduct(productExisting);
+                if (!result)
+                {
+                    await transaction.RollbackAsync();
+                    return " Update Product failed";
+                }
+
+                await transaction.CommitAsync();
+                return "Update Product Success";
+            }
         }
 
         public async Task<string> DeleteProduct(string ProductId)
