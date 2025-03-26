@@ -18,6 +18,7 @@ namespace CCSS_Repository.Repositories
         Task Add(ProductImage productImage);
         Task UpdateProduct(ProductImage productImage);
         Task DeleteProduct(ProductImage productImage);
+        Task DeleteListProduct(List<ProductImage> productImages);
     }
 
     public class ProductImageRepository: IProductImageRepository
@@ -65,6 +66,12 @@ namespace CCSS_Repository.Repositories
         public async Task DeleteProduct(ProductImage productImage)
         {
             _context.ProductImages.Remove(productImage);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteListProduct(List<ProductImage> productImages)
+        {
+            _context.ProductImages.RemoveRange(productImages);
             await _context.SaveChangesAsync();
         }
     }

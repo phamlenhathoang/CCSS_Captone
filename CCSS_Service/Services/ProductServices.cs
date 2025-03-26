@@ -122,6 +122,7 @@ namespace CCSS_Service.Services
                         Price = productRequest.Price,
                         CreateDate = DateTime.Now,
                         UpdateDate = null,
+                        IsActive = true,
                     };
                     var result = await _repository.AddProduct(newProduct);
                     if (!result)
@@ -212,7 +213,9 @@ namespace CCSS_Service.Services
             {
                 return "Product not found";
             }
-            await _repository.DeleteProduct(product);
+            product.IsActive = false;   
+
+            await _repository.UpdateProduct(product);
             return "Delete Success";
         }
     }

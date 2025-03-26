@@ -50,8 +50,8 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateProduct(string productId, ProductRequest productRequest)
-        {
+        public async Task<IActionResult> UpdateProduct(string productId, UpdateProductRequest productRequest)
+        { 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
