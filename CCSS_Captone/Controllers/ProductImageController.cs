@@ -16,7 +16,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProdutcImage()
+        public async Task<IActionResult> GetAllProductImage()
         {
             if (ModelState.IsValid)
             {
