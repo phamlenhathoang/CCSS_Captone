@@ -169,7 +169,7 @@ namespace CCSS_Service.Services
             }
         }
 
-        public async Task<string> UpdateProduct(string productId, ProductRequest productRequest)
+        public async Task<string> UpdateProduct(string productId, UpdateProductRequest productRequest)
         {
             var productExisting = await _repository.GetProductById(productId);
             if (productExisting == null)
@@ -191,6 +191,7 @@ namespace CCSS_Service.Services
                 productExisting.Quantity = productRequest.Quantity;
                 productExisting.Price = productRequest.Price;
                 productExisting.UpdateDate = DateTime.Now;
+                productExisting.IsActive = productRequest.IsActive;
 
                 var result = await _repository.UpdateProduct(productExisting);
                 if (!result)

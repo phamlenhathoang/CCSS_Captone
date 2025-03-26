@@ -16,7 +16,7 @@ namespace CCSS_Repository.Repositories
         Task<Cart> GetcartByAccount(string accountId);
         Task<bool> AddCart(Cart cart);
         Task DeleteCart(Cart cart);
-        Task UpdateCart(Cart cart);
+        Task<bool> UpdateCart(Cart cart);
     }
 
     public class CartRepository: ICartRepository
@@ -43,10 +43,10 @@ namespace CCSS_Repository.Repositories
            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task UpdateCart(Cart cart)
+        public async Task<bool> UpdateCart(Cart cart)
         {
             _context.Carts.Update(cart);
-             await _context.SaveChangesAsync();
+             return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task DeleteCart(Cart cart)

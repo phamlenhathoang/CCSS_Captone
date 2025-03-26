@@ -15,7 +15,7 @@ namespace CCSS_Repository.Repositories
         Task<CartProduct> GetCartProductById(string id);
         Task<CartProduct> GetCartProduct(string productId, string cartId);
         Task<List<CartProduct>> GetListProductInCart(string cartId);
-        Task AddCartProduct(CartProduct cartProduct);
+        Task<bool> AddCartProduct(CartProduct cartProduct);
         Task UpdateCartProduct(CartProduct cartProduct);       
         Task<bool> DeleteCartProduct(CartProduct cartProduct);
     }
@@ -49,10 +49,10 @@ namespace CCSS_Repository.Repositories
             return await _context.CartProducts.Where(sc => sc.CartId.Equals(cartId)).ToListAsync();
         }
 
-        public async Task AddCartProduct(CartProduct cartProduct)
+        public async Task<bool> AddCartProduct(CartProduct cartProduct)
         {
             _context.CartProducts.AddRange(cartProduct);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task UpdateCartProduct(CartProduct cartProduct)
