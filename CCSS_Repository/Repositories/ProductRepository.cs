@@ -32,11 +32,11 @@ namespace CCSS_Repository.Repositories
         {
             if (string.IsNullOrWhiteSpace(searchterm))
             {
-                return await _context.Products.ToListAsync();
+                return await _context.Products.Where(sc => sc.IsActive == true).ToListAsync();
             }
             else
             {
-                return await _context.Products.Where(sc => sc.ProductName.Contains(searchterm)).OrderByDescending(p => p.CreateDate).ToListAsync();
+                return await _context.Products.Where(sc =>sc.IsActive == true && sc.ProductName.Contains(searchterm) ).OrderByDescending(p => p.CreateDate).ToListAsync();
             }
         }
 

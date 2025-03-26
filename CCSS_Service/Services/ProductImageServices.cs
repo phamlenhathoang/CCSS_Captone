@@ -1,5 +1,6 @@
 ﻿using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Libraries;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -21,13 +22,15 @@ namespace CCSS_Service.Services
     {
         private readonly IProductImageRepository _productImageRepository;
         private readonly IProductRepository _productRepository;
+        private readonly Image _image;
         private readonly string _projectId = "miracles-ef238";
         private readonly string _bucketName = "miracles-ef238.appspot.com";
 
-        public ProductImageServices(IProductImageRepository productImageRepository, IProductRepository productRepository)
+        public ProductImageServices(Image image,IProductImageRepository productImageRepository, IProductRepository productRepository)
         {
             _productImageRepository = productImageRepository;
             _productRepository = productRepository;
+            _image = image;
         }
 
         public async Task<List<ProductImage>> GetAllProductImages()
@@ -96,5 +99,15 @@ namespace CCSS_Service.Services
                 throw new Exception($"Error uploading images for product {productId}: {ex.Message}", ex);
             }
         }
+
+        //public async Task<string> UpdateProductImage(string productImageId, IFormFile formFile)
+        //{
+        //    var productImage = await _productImageRepository.GetImageProductById(productImageId);
+        //    if (productImage == null)
+        //    {
+        //        return "Image not found";
+        //    }
+        //    productImage.UrlImage = 
+        //}
     }
 }

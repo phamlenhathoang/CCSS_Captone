@@ -34,18 +34,20 @@ namespace CCSS_Service.Services
         private readonly IMapper mapper;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICharacterImageRepository _imageRepository;
-        public CharacterService(Image image, ICategoryRepository _categoryRepository, ICharacterRepository characterRepository, IMapper mapper, ICharacterImageRepository _imageRepository)
+        private readonly IBeginTransactionRepository _beginTransactionRepository;
+        public CharacterService(Image image, IBeginTransactionRepository beginTransactionRepository, ICategoryRepository _categoryRepository, ICharacterRepository characterRepository, IMapper mapper, ICharacterImageRepository _imageRepository)
         {
             _characterRepository = characterRepository;
             this.mapper = mapper;
             this._categoryRepository = _categoryRepository;
             this._imageRepository = _imageRepository;
             this.image = image;
+            _beginTransactionRepository = beginTransactionRepository;
         }
         public async Task<List<CharacterResponse>> GetCharacters(string? characterId, string? categoryId, string? characterName, double? MaxHeight, double? MinHeight, double? Maxweight, double? MinWeight, double? MinPrice, double? MaxPrice)
         {
-            List<CharacterResponse> characterResponses = new List<CharacterResponse> ();
-            List<CharacterImageResponse> characterImageResponses = new List<CharacterImageResponse> ();
+            List<CharacterResponse> characterResponses = new List<CharacterResponse>();
+            List<CharacterImageResponse> characterImageResponses = new List<CharacterImageResponse>();
             List<Character> characters = await _characterRepository.GetCharacters(characterId, categoryId, characterName, MaxHeight, MinHeight, Maxweight, MinWeight, MinPrice, MaxPrice);
 
             if (characters == null)
@@ -82,14 +84,14 @@ namespace CCSS_Service.Services
                     MinHeight = character.MinHeight,
                     MinWeight = character.MinWeight,
                     MaxWeight = character.MaxWeight,
-                    Quantity = character.Quantity,  
+                    Quantity = character.Quantity,
                 };
 
                 characterResponses.Add(characterResponse);
                 characterImageResponses = new List<CharacterImageResponse>();
             }
 
-            return characterResponses;  
+            return characterResponses;
         }
 
         public async Task<CharacterResponse> GetCharacter(string characterId)
@@ -132,7 +134,7 @@ namespace CCSS_Service.Services
                 Quantity = character.Quantity,
             };
 
-            return characterResponse;   
+            return characterResponse;
         }
 
         public async Task<Character> GetCharacterById(string characterId)
@@ -165,62 +167,65 @@ namespace CCSS_Service.Services
             {
                 throw new Exception("MaxHeight must be greater than MinHeight is 10");
             }
-
-            List<CharacterImage> characterImages = new List<CharacterImage>();
-            var newCharacter = new Character()
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                CharacterId = Guid.NewGuid().ToString(),
-                CategoryId = characterResponse.CategoryId,
-                CharacterName = characterResponse.CharacterName,
-                Price = characterResponse.Price,
-                Description = characterResponse.Description,
-                IsActive = true,
-                CreateDate = DateTime.Now,
-                UpdateDate = null,
-                Quantity = characterResponse.Quantity,
-                MaxHeight = characterResponse.MaxHeight,
-                MaxWeight = characterResponse.MaxWeight,
-                MinHeight = characterResponse.MinHeight,
-                MinWeight = characterResponse.MinWeight,
-            };
-
-            bool checkAddCharacter = await _characterRepository.CreateCharacter(newCharacter);
-            if (!checkAddCharacter)
-            {
-                return "Can not add Character";
-            }
-
-            int count = 0;
-
-            foreach (var file in imageFiles)
-            {
-                CharacterImage characterImage = new CharacterImage()
+                List<CharacterImage> characterImages = new List<CharacterImage>();
+                var newCharacter = new Character()
                 {
-                    CharacterId = newCharacter.CharacterId,
+                    CharacterId = Guid.NewGuid().ToString(),
+                    CategoryId = characterResponse.CategoryId,
+                    CharacterName = characterResponse.CharacterName,
+                    Price = characterResponse.Price,
+                    Description = characterResponse.Description,
+                    IsActive = true,
                     CreateDate = DateTime.Now,
-                    UrlImage = await image.UploadImageToFirebase(file),
+                    UpdateDate = null,
+                    Quantity = characterResponse.Quantity,
+                    MaxHeight = characterResponse.MaxHeight,
+                    MaxWeight = characterResponse.MaxWeight,
+                    MinHeight = characterResponse.MinHeight,
+                    MinWeight = characterResponse.MinWeight,
                 };
 
-                if (count == 0)
+                bool checkAddCharacter = await _characterRepository.CreateCharacter(newCharacter);
+                if (!checkAddCharacter)
                 {
-                    characterImage.IsAvatar = true;
-                }
-                else
-                {
-                    characterImage.IsAvatar = false;
+                    return "Can not add Character";
                 }
 
-                characterImages.Add(characterImage);
-                count++;
-            }
+                int count = 0;
 
-            bool result = await _imageRepository.AddCharacterImages(characterImages);
-            if (!result)
-            {
-                return "Failed";
-            }
+                foreach (var file in imageFiles)
+                {
+                    CharacterImage characterImage = new CharacterImage()
+                    {
+                        CharacterId = newCharacter.CharacterId,
+                        CreateDate = DateTime.Now,
+                        UrlImage = await image.UploadImageToFirebase(file),
+                    };
 
-            return "Add Success";
+                    if (count == 0)
+                    {
+                        characterImage.IsAvatar = true;
+                    }
+                    else
+                    {
+                        characterImage.IsAvatar = false;
+                    }
+
+                    characterImages.Add(characterImage);
+                    count++;
+                }
+
+                bool result = await _imageRepository.AddCharacterImages(characterImages);
+                if (!result)
+                {
+                    return "Failed";
+                }
+
+                await transaction.CommitAsync();
+                return "Add Success";
+            }
         }
 
         public async Task<string> UpdateCharacter(string id, CharacterRequest newCharacter, List<CharacterImageRequest>? characterImageRequests)
@@ -276,16 +281,16 @@ namespace CCSS_Service.Services
 
             if (characterImageRequests != null)
             {
-                foreach(var characterImageRequest in characterImageRequests)
+                foreach (var characterImageRequest in characterImageRequests)
                 {
                     CharacterImage characterImage = await _imageRepository.GetCharacterImageById(characterImageRequest.CharactetImageId);
-                    if(characterImage == null)
+                    if (characterImage == null)
                     {
                         return "CharacterImage does not exist";
                     }
                     characterImage.UpdateDate = DateTime.Now;
                     characterImage.UrlImage = await image.UploadImageToFirebase(characterImageRequest.Image);
-                    
+
                     bool checkUpdateImage = await _imageRepository.UpdateCharacterImage(characterImage);
                     if (!checkUpdateImage)
                     {
@@ -318,7 +323,7 @@ namespace CCSS_Service.Services
             try
             {
                 Category category = await _categoryRepository.GetCategoryIncludeCharacter(categoryId);
-                if(category == null)
+                if (category == null)
                 {
                     throw new Exception("Category does not exist");
                 }
