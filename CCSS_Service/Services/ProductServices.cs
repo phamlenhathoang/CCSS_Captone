@@ -18,7 +18,7 @@ namespace CCSS_Service.Services
         Task<List<ProductResponse>> GetAllProduct(string? searchterm);
         Task<ProductResponse> GetProductById(string productId);
         Task<string> AddProduct(ProductRequest productRequest, List<IFormFile> formFiles);
-        Task<string> UpdateProduct(string productId, ProductRequest productRequest);
+        Task<string> UpdateProduct(string productId, UpdateProductRequest productRequest);
         Task<string> DeleteProduct(string ProductId);
     }
 
