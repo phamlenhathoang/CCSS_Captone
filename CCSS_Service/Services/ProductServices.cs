@@ -17,19 +17,21 @@ namespace CCSS_Service.Services
     {
         Task<List<ProductResponse>> GetAllProduct(string? searchterm);
         Task<ProductResponse> GetProductById(string productId);
-        Task<string> AddProduct(ProductRequest productRequest);
+        Task<string> AddProduct(ProductRequest productRequest, List<IFormFile> formFiles);
         Task<string> UpdateProduct(string productId, ProductRequest productRequest);
         Task<string> DeleteProduct(string ProductId);
     }
 
-    public class ProductServices: IProductServices
+    public class ProductServices : IProductServices
     {
         private IProductRepository _repository;
         private IProductImageRepository _imageRepository;
+        private readonly Image _image;
 
-        public ProductServices(IProductRepository repository, IProductImageRepository productImageRepository)
+        public ProductServices(IProductRepository repository, Image image, IProductImageRepository productImageRepository)
         {
             _repository = repository;
+            _image = image;
             _imageRepository = productImageRepository;
         }
 
@@ -37,7 +39,7 @@ namespace CCSS_Service.Services
         {
             List<ProductResponse> productRequests = new List<ProductResponse>();
             var listProducts = await _repository.GetAllProduct(searchterm);
-            foreach(var r in listProducts)
+            foreach (var r in listProducts)
             {
                 var listImage = await _imageRepository.GetListImageByProductId(r.ProductId);
                 ProductResponse productResponse = new ProductResponse()
@@ -66,7 +68,7 @@ namespace CCSS_Service.Services
 
         public async Task<ProductResponse> GetProductById(string productId)
         {
-          var product = await _repository.GetProductById(productId);
+            var product = await _repository.GetProductById(productId);
             var image = await _imageRepository.GetListImageByProductId(productId);
             ProductResponse productResponse = new ProductResponse()
             {
@@ -90,20 +92,21 @@ namespace CCSS_Service.Services
             return productResponse;
         }
 
-        public async Task<string> AddProduct(ProductRequest productRequest)
+        public async Task<string> AddProduct(ProductRequest productRequest, List<IFormFile> formFiles)
         {
             if (productRequest == null)
             {
                 return "Need to entry field";
             }
-            if(productRequest.Quantity <= 0)
+            if (productRequest.Quantity <= 0)
             {
                 return "The quantity need > 0";
             }
-            if(productRequest.Price <= 0)
+            if (productRequest.Price <= 0)
             {
                 return "The price need higher than 0";
-            }      
+            }
+            List<ProductImage> productImages = new List<ProductImage>();
             Product newProduct = new Product()
             {
                 ProductId = Guid.NewGuid().ToString(),
@@ -113,11 +116,34 @@ namespace CCSS_Service.Services
                 Price = productRequest.Price,
                 CreateDate = DateTime.Now,
                 UpdateDate = null,
-                IsActive = true,
-
             };
-            var result = await _repository.AddProduct(newProduct);         
-            return result ? "Add Success" : "Add Failed";
+            var result = await _repository.AddProduct(newProduct);
+            if (!result)
+            {
+                return "Add Failed";
+            }
+            foreach (var file in formFiles)
+            {
+                int count = 0;
+                ProductImage productImage = new ProductImage()
+                {
+                    ProductImageId = Guid.NewGuid().ToString(),
+                    ProductId = newProduct.ProductId,
+                    UrlImage = await _image.UploadImageToFirebase(file),
+                    CreateDate = DateTime.Now,
+                    UpdateDate = null,
+                };
+                if (count == 0)
+                {
+                    productImage.IsAvatar = true;
+                }
+                productImage.IsAvatar = false;
+
+                productImages.Add(productImage);
+                count++;
+            }
+            await _imageRepository.AddListImageProduct(productImages);
+            return "Add Success";
         }
 
         public async Task<string> UpdateProduct(string productId, ProductRequest productRequest)
@@ -127,11 +153,11 @@ namespace CCSS_Service.Services
             {
                 return "Product is not found";
             }
-            if(productRequest.Quantity == 0)
+            if (productRequest.Quantity == 0)
             {
                 productExisting.IsActive = false;
             }
-            if(productRequest.Quantity <  0 || productRequest.Price < 0)
+            if (productRequest.Quantity < 0 || productRequest.Price < 0)
             {
                 return "number cannot be negative";
             }
@@ -140,7 +166,7 @@ namespace CCSS_Service.Services
             productExisting.Quantity = productRequest.Quantity;
             productExisting.Price = productRequest.Price;
             productExisting.UpdateDate = DateTime.Now;
-            
+
             var result = await _repository.UpdateProduct(productExisting);
             return result ? "Update Success" : "Update Failed";
         }
