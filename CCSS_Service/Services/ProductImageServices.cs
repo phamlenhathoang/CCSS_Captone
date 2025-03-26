@@ -16,6 +16,7 @@ namespace CCSS_Service.Services
     {
         Task<List<ProductImage>> GetAllProductImages();
         Task<string> AddListImageProduct(string productId, IFormFileCollection formFiles);
+        Task<string> UpdateProductImage(string productImageId, IFormFile formFile);
     }
 
     public class ProductImageServices: IProductImageServices
@@ -100,14 +101,19 @@ namespace CCSS_Service.Services
             }
         }
 
-        //public async Task<string> UpdateProductImage(string productImageId, IFormFile formFile)
-        //{
-        //    var productImage = await _productImageRepository.GetImageProductById(productImageId);
-        //    if (productImage == null)
-        //    {
-        //        return "Image not found";
-        //    }
-        //    productImage.UrlImage = 
-        //}
+        public async Task<string> UpdateProductImage(string productImageId, IFormFile formFile)
+        {
+            var productImage = await _productImageRepository.GetImageProductById(productImageId);
+            if (productImage == null)
+            {
+                return "Image not found";
+            }
+            productImage.UrlImage = await _image.UploadImageToFirebase(formFile);
+            productImage.UpdateDate = DateTime.Now;
+
+            await _productImageRepository.UpdateProduct(productImage);
+
+            return "Update Success";
+        }
     }
 }

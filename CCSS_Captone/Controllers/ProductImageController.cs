@@ -36,5 +36,16 @@ namespace CCSS_Captone.Controllers
             }
             return BadRequest(ModelState);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateImageProduct(string id, IFormFile formFile)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.UpdateProductImage(id, formFile);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
     }
 }
