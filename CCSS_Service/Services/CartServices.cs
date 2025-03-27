@@ -25,13 +25,15 @@ namespace CCSS_Service.Services
         private readonly IAccountRepository _accountRepository;
         private readonly ICartProductRepository _cartProductRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IBeginTransactionRepository _beginTransactionRepository;
 
-        public CartServices(ICartRepository cartRepository, ICartProductRepository cartProductRepository, IAccountRepository accountRepository, IProductRepository productRepository)
+        public CartServices(ICartRepository cartRepository,IBeginTransactionRepository beginTransactionRepository ,ICartProductRepository cartProductRepository, IAccountRepository accountRepository, IProductRepository productRepository)
         {
             _accountRepository = accountRepository;
             _cartRepository = cartRepository;
             _productRepository = productRepository;
             _cartProductRepository = cartProductRepository;
+            _beginTransactionRepository = beginTransactionRepository;
         }
 
         public async Task<CartResponse> GetCartById(string id)
@@ -94,7 +96,13 @@ namespace CCSS_Service.Services
 
         public async Task<string> AddCart(CartRequest cartRequest)
         {
+            
             var account = await _accountRepository.GetAccount(cartRequest.AccountId);
+            var cartExist = await _cartRepository.GetcartByAccount(cartRequest.AccountId);
+            if (cartExist != null)
+            {
+                return "This Account has cart";
+            }
             if (account == null)
             {
                 return "Account not found";
@@ -107,17 +115,31 @@ namespace CCSS_Service.Services
             {
                 return "Please entry field";
             }
-            var cart = new Cart()
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                CartId = Guid.NewGuid().ToString(),
-                AccountId = cartRequest.AccountId,
-                TotalPrice = 0,
-                CreateDate = DateTime.Now,
-                UpdateDate = null,
-            };
+                var cart = new Cart()
+                {
+                    CartId = Guid.NewGuid().ToString(),
+                    AccountId = cartRequest.AccountId,
+                    TotalPrice = 0,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = null,
+                };
 
-            var result = await _cartRepository.AddCart(cart);
-            return result ? "Add Success" : "Add Failed";
+
+                var result = await _cartRepository.AddCart(cart);
+                if (!result)
+                {
+                    await transaction.RollbackAsync();
+                    return "Add Failed";
+                }
+                else
+                {
+                    await transaction.CommitAsync();
+                    return "Add Success";
+                }
+               
+            }
         }
     }
 }
