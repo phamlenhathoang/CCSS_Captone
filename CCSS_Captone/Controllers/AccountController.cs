@@ -54,7 +54,7 @@ namespace CCSS_Captone.Controllers
         //}
 
 
-        [HttpGet]
+        [HttpGet("{accountId}")]
         public async Task<IActionResult> GetAccountByAccountId(string accountId)
         {
             var account = await accountService.GetAccountByAccountId(accountId);   
@@ -62,7 +62,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest)
+        public async Task<IActionResult> UpdateAccountByAccountId([FromForm] string accountId, [FromForm]UpdateAccountRequest updateAccountRequest)
         {
             var account = await accountService.UpdateAccountByAccountId(accountId, updateAccountRequest);
             return Ok(account);
@@ -75,24 +75,31 @@ namespace CCSS_Captone.Controllers
             return Ok(account);
         }
 
-        [HttpGet("characterName")]
+        [HttpGet("characterName/{characterName}")]
         public async Task<IActionResult> ViewAllAccountByCharacterName(string characterName, string? start, string? end)
         {
             var account = await accountService.ViewAllAccountByCharacterName(characterName.ToLower(),start, end);
             return Ok(account);
         }
 
-        [HttpGet("contractId")]
+        [HttpGet("contractId/{contractId}")]
         public async Task<IActionResult> ViewAllCosplayerByContractId(string contractId)
         {
             var account = await accountService.ViewAllCosplayerByContractId(contractId);
             return Ok(account);
         }
         
-        [HttpGet("roleId")]
+        [HttpGet("roleId/{roleId}")]
         public async Task<IActionResult> GetAllAccountByRoleId(string roleId)
         {
             var account = await accountService.GetAllAccountByRoleId(roleId);
+            return Ok(account);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCosplayer(string username, string password)
+        {
+            var account = await accountService.AddCosplayer(username, password);
             return Ok(account);
         }
     }

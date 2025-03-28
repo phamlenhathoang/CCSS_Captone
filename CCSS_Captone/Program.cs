@@ -59,6 +59,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICartProductRepository, CartProductRepository>();
 builder.Services.AddScoped<IBeginTransactionRepository, BeginTransactionRepository>();
+builder.Services.AddScoped<IAccountImageRepository, AccountImageRepository>();
 
 
 //Service

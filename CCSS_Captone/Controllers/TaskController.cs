@@ -18,12 +18,12 @@ namespace CCSS_Captone.Controllers
             this.taskService = taskService;
         }
 
-        //[HttpPut]
-        //public async Task<ActionResult<TaskResponse>> UpdateStatusTask(string taskId, int taskStatus, string accountId)
-        //{
-        //    var task = await taskService.UpdateStatusTask(taskId, taskStatus, accountId);
-        //    return Ok(task);
-        //}
+        [HttpPut]
+        public async Task<ActionResult<TaskResponse>> UpdateStatusTask(string taskId, string taskStatus, string accountId)
+        {
+            var task = await taskService.UpdateStatusTask(taskId, taskStatus, accountId);
+            return Ok(task);
+        }
 
         //[HttpDelete("id")]
         //public async Task<ActionResult<TaskResponse>> DeleteTask(string taskId)
@@ -32,23 +32,23 @@ namespace CCSS_Captone.Controllers
         //    return Ok(task);
         //}
 
-        //[HttpGet("taskId")]
-        //public async Task<ActionResult<TaskResponse>> GetTask(string taskId)
-        //{
-        //    var task = await taskService.GetTask(taskId);
-        //    if (task == null)
-        //    {
-        //        return NotFound(new { message = "Update task does not success." });
-        //    }
-        //    return Ok(task);
-        //}
+        [HttpGet("taskId/{taskId}")]
+        public async Task<ActionResult<TaskResponse>> GetTaskByTaskId(string taskId)
+        {
+            var task = await taskService.GetTaskByTaskId(taskId);
+            if (task == null)
+            {
+                return NotFound(new { message = "Update task does not success." });
+            }
+            return Ok(task);
+        }
 
-        //[HttpGet("accountId")]
-        //public async Task<ActionResult> ViewAllTaskByAccountId(string accountId, string? taskId)
-        //{
-        //    var task = await taskService.ViewAllTaskByAccountId(accountId, taskId);
-        //    return Ok(task);
-        //}
+        [HttpGet("accountId/{accountId}")]
+        public async Task<ActionResult> GetTaskByAccountId(string accountId)
+        {
+            var task = await taskService.GetTaskByAccountId(accountId);
+            return Ok(task);
+        }
 
         //[HttpPost]
         //public async Task<ActionResult<TaskResponse>> AddTask(TaskRequest taskRequests)

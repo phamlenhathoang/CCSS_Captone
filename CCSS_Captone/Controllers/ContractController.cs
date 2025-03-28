@@ -32,16 +32,27 @@ namespace CCSS_Captone.Controllers
         }
         //}
 
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetContractById(string id)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await _services.GetContract(id);
-        //        return Ok(result);
-        //    }
-        //    return BadRequest(ModelState);
-        //}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetContractById(string id)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetContractById(id);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpGet("acountId/{accountId}")]
+        public async Task<IActionResult> GetContractByAccountId(string accountId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetContractByAccountId(accountId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddContract(string requestId, int deposit)
