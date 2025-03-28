@@ -39,6 +39,7 @@ namespace CCSS_Service.Services
         Task<List<ContractResponse>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate,string? accountId, string? contractId);
         Task<ContractResponse> GetContractById(string contractId); 
         Task<List<ContractResponse>> GetContractByAccountId(string accountId);
+
     }
     public class ContractServices : IContractServices
     {
@@ -380,6 +381,7 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+   
 
         public async Task<List<ContractResponse>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId)
         {
