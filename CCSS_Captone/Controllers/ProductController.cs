@@ -27,7 +27,7 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{productId}")]
         public async Task<IActionResult> GetProductbyId(string productId)
         {
             if (ModelState.IsValid)
