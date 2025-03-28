@@ -43,6 +43,17 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
+        [HttpGet("acountId/{accountId}")]
+        public async Task<IActionResult> GetContractByAccountId(string accountId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetContractByAccountId(accountId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddContract(string requestId, int deposit)
         {

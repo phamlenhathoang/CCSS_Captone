@@ -42,6 +42,7 @@ namespace CCSS_Service.Services
         Task<List<AccountByCharacterAndDateResponse>> ViewAllAccountByCharacterName(string characterName, string? start, string? end);
         Task<List<AccountByCharacterAndDateResponse>> ViewAllCosplayerByContractId(string contractId);
         Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId);
+        Task<bool> AddCosplayer(string userName, string password);
     }
     public class AccountService : IAccountService
     {
@@ -56,8 +57,10 @@ namespace CCSS_Service.Services
         private readonly IMapper mapper;
         private readonly ICartRepository _cartRepository;
         private readonly IBeginTransactionRepository _beginTransactionRepository;
+        private readonly Image image;
+        private readonly IAccountImageRepository accountImageRepository;
 
-        public AccountService(ICartRepository cartRepository, IBeginTransactionRepository beginTransactionRepository ,ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
+        public AccountService(ICartRepository cartRepository, IBeginTransactionRepository beginTransactionRepository ,ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService, Image image, IAccountImageRepository accountImageRepository)
         {
             this.taskRepository = taskRepository;
             _beginTransactionRepository = beginTransactionRepository;
@@ -70,6 +73,8 @@ namespace CCSS_Service.Services
             _configuration = configuration;
             this.refreshTokenRepository = refreshTokenRepository;
             _emailService = emailService;
+            this.image = image;
+            this.accountImageRepository = accountImageRepository;
         }
 
         //public async Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId)
@@ -456,17 +461,84 @@ namespace CCSS_Service.Services
 
         public async Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest)
         {
-            Account checkAccount = await accountRepository.GetAccountByAccountId(accountId);
-            if (checkAccount == null)
+            try
             {
-                return false;
+                Account checkAccount = await accountRepository.GetAccountByAccountId(accountId);
+                if (checkAccount == null)
+                {
+                    return false;
+                }
+                //mapper.Map(updateAccountRequest, checkAccount);
+
+                DateTime date;
+
+                string[] formats = { "dd/MM/yyyy", "d/MM/yyyy", "dd/M/yyyy", "d/M/yyyy" };
+
+                if (DateTime.TryParseExact(updateAccountRequest.Birthday, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+                {
+                    Console.WriteLine("Ngày hợp lệ: " + date.ToString("yyyy-MM-dd"));
+                }
+                else
+                {
+                    Console.WriteLine("Không thể chuyển đổi chuỗi thành DateTime.");
+                }
+
+                checkAccount.Password = PasswordHash.ConvertToEncrypt(checkAccount.Password);
+                checkAccount.Height = updateAccountRequest.Height;
+                checkAccount.Birthday = date;
+                checkAccount.Description = updateAccountRequest.Description;
+                checkAccount.Name = updateAccountRequest.Name;
+                checkAccount.UserName = updateAccountRequest.UserName;
+                checkAccount.Email = updateAccountRequest.Email;
+                checkAccount.Phone = updateAccountRequest.Phone;
+                checkAccount.Weight = updateAccountRequest.Weight;
+
+                bool checkUpdate = await accountRepository.UpdateAccount(checkAccount);
+                if (!checkUpdate)
+                {
+                    throw new Exception("Can not update account");
+                }
+
+                List<AccountImage> accountImages = new List<AccountImage>();
+
+                AccountImage avatar = new AccountImage()
+                {
+                    AccountId = checkAccount.AccountId,
+                    CreateDate = DateTime.Now,
+                    IsAvatar = true,
+                    UrlImage = await image.UploadImageToFirebase(updateAccountRequest.Avatar),
+                };
+
+                accountImages.Add(avatar);
+
+                if(updateAccountRequest.Images != null)
+                {
+                    foreach (var im in updateAccountRequest.Images)
+                    {
+                        AccountImage accountImage = new AccountImage()
+                        {
+                            AccountId = checkAccount.AccountId,
+                            CreateDate = DateTime.Now,
+                            IsAvatar = false,
+                            UrlImage = await image.UploadImageToFirebase(im),
+                        };
+
+                        accountImages.Add(accountImage);
+                    }
+                }
+                
+                bool result = await accountImageRepository.AddListAccountImage(accountImages);
+                if (!result)
+                {
+                    throw new Exception("Can not add AccountImages");
+                }
+
+                return true;
             }
-            mapper.Map(updateAccountRequest, checkAccount);
-
-            checkAccount.Password = PasswordHash.ConvertToDecrypt(checkAccount.Password);
-
-            bool result = await accountRepository.UpdateAccount(checkAccount);
-            return result;  
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }   
         }
 
         public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate)
@@ -601,6 +673,38 @@ namespace CCSS_Service.Services
         public async Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId)
         {
             return mapper.Map<List<AccountResponse>>(await accountRepository.GetAllAccountsByRoleId(roleId));
+        }
+
+        public async Task<bool> AddCosplayer(string userName, string password)
+        {
+            try
+            {
+                Account checkUsername = await accountRepository.GetAccountByUsername(userName);
+                if (checkUsername != null)
+                {
+                    throw new Exception("Username do exist");
+                }
+
+                Account account = new Account()
+                {
+                    UserName = userName,
+                    Password = PasswordHash.ConvertToEncrypt(password),
+                    IsActive = true,
+                    RoleId = "R004"
+                };
+
+                bool result = await accountRepository.AddAccount(account);
+                if (!result)
+                {
+                    throw new Exception("Can not add cosplayer");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

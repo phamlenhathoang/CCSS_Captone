@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,15 +24,12 @@ namespace CCSS_Service.Model.Requests
         public string Email { get; set; }
         public string Password { get; set; }
         public string? Description { get; set; }
-        public DateTime? Birthday { get; set; }
+        public string? Birthday { get; set; }
         public string? Phone { get; set; }
-        public bool? IsActive { get; set; }
-        public bool? OnTask { get; set; }
-        public bool? Leader { get; set; }
-        public string? Code { get; set; }
-        public string? ImageUrl { get; set; }
-        public int? TaskQuantity { get; set; }
+        public IFormFile? Avatar { get; set; }
         public float? Height { get; set; }
         public float? Weight { get; set; }
+        public string? UserName { get; set; }
+        public List<IFormFile>? Images { get; set; }
     }
 }

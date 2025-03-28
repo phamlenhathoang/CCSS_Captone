@@ -26,6 +26,7 @@ namespace CCSS_Repository.Repositories
         Task<List<Account>> GetAllAccountsByCharacter(Character character);
         Task<List<Account>> GetAllAccountsByRoleId(string roleId);
         Task<List<Account>> GetAllAccountRoleManager();
+        Task<Account> GetAccountByUsername(string username);
     }
     public class AccountRepository : IAccountRepository
     {
@@ -37,8 +38,15 @@ namespace CCSS_Repository.Repositories
 
         public async Task<bool> AddAccount(Account account)
         {
-            await dbContext.AddAsync(account);
-            return await dbContext.SaveChangesAsync() > 0 ? true : false;
+            try
+            {
+                await dbContext.AddAsync(account);
+                return await dbContext.SaveChangesAsync() > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<Account> GetAccount(string accountId)
@@ -93,6 +101,11 @@ namespace CCSS_Repository.Repositories
         public async Task<Account> GetAccountByEmailAndPassword(string email, string password)
         {
             return await dbContext.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email && a.Password == password);   
+        }
+
+        public async Task<Account> GetAccountByUsername(string username)
+        {
+            return await dbContext.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.UserName.Equals(username) && a.IsActive == true && a.Role.RoleName == RoleName.Cosplayer);
         }
 
         public async Task<List<Account>> GetAllAccountRoleManager()

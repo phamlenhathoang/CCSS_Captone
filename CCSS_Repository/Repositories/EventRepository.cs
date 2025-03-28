@@ -10,6 +10,7 @@ namespace CCSS_Repository.Repositories
     {
         Task<List<Event>> GetAllEvents(string searchTerm);
         Task<Event> GetEventById(string id);
+        Task<Event> GetEventByEventId(string id);
         Task<Event> GetEventByTicketId(string ticketId);
         Task<bool> AddEvent(Event eventObj);
         Task<bool> UpdateEvent(Event eventObj);
@@ -152,5 +153,9 @@ namespace CCSS_Repository.Repositories
             return false; // Không tìm thấy Ticket để xóa
         }
 
+        public Task<Event> GetEventByEventId(string id)
+        {
+            return _dbContext.Events.FirstOrDefaultAsync(e => e.EventId.Equals(id)); 
+        }
     }
 }

@@ -17,7 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static iText.Svg.SvgConstants;
-using Contract = CCSS_Repository.Entities.Request;
+using Contract = CCSS_Repository.Entities.Contract;
 using Task = CCSS_Repository.Entities.Task;
 using TaskStatus = CCSS_Repository.Entities.TaskStatus;
 
@@ -37,6 +37,8 @@ namespace CCSS_Service.Services
         Task<List<TaskResponse>> GetAllTasks();
         Task<string> AddTask(List<AddTaskEventRequest>? taskEventRequests, List<ContractCharacter>? contractCharacters);
         Task<bool> UpdateStatusTask(string taskId, string status, string accountId);
+        Task<List<TaskResponse>> GetTaskByAccountId(string accountId);
+        Task<TaskResponse> GetTaskByTaskId(string taskId);
     }
     public class TaskService : ITaskService
     {
@@ -50,8 +52,9 @@ namespace CCSS_Service.Services
         private readonly IEventChacracterRepository eventChacracterRepository;
         private readonly IContractCharacterRepository contractCharacterRepository;
         private readonly IRequestRepository requestRepository;
+        private readonly IEventRepository eventRepository;
 
-        public TaskService(IRequestRepository requestRepository, IContractCharacterRepository contractCharacterRepository, IEventChacracterRepository eventChacracterRepository, ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<NotificationHub> hubContext, INotificationRepository notificationRepository)
+        public TaskService(IRequestRepository requestRepository, IContractCharacterRepository contractCharacterRepository, IEventChacracterRepository eventChacracterRepository, ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<NotificationHub> hubContext, INotificationRepository notificationRepository, IEventRepository eventRepository)
         {
             this.taskRepository = taskRepository;
             this.contractRespository = contractRespository;
@@ -63,6 +66,7 @@ namespace CCSS_Service.Services
             this.eventChacracterRepository = eventChacracterRepository;
             this.contractCharacterRepository = contractCharacterRepository;
             this.requestRepository = requestRepository;
+            this.eventRepository = eventRepository;
         }
 
         private async Task<bool> AddTaskEvent(List<AddTaskEventRequest> taskEventRequests)
@@ -289,6 +293,15 @@ namespace CCSS_Service.Services
         {
             try
             {
+                Account account = await accountRepository.GetAccount(accountId);
+                if (account == null)
+                {
+                    throw new Exception("Account does not exist");
+                }
+                if(account.Role.RoleName != RoleName.Cosplayer)
+                {
+                    throw new Exception("Account must be cosplayer");
+                }
                 Task task = await taskRepository.GetTaskById(taskId, accountId);
                 if (task == null)
                 {
@@ -333,6 +346,130 @@ namespace CCSS_Service.Services
                 return result;
             }
             catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<TaskResponse>> GetTaskByAccountId(string accountId)
+        {
+            try
+            {
+                Account account = await accountRepository.GetAccount(accountId);
+                if(account == null)
+                {
+                    throw new Exception("Account does not exist");
+                }
+
+                List<TaskResponse> taskResponses = new List<TaskResponse>();
+                var tasks = await taskRepository.GetTasksByAccountId(accountId);
+                if (tasks == null)
+                {
+                    throw new Exception("Task does not exist");
+                }
+
+                foreach (var task in tasks)
+                {
+                    Contract contract = new Contract();
+
+                    if (task.ContractCharacter != null)
+                    {
+                        contract = await contractRespository.GetContractById(task.ContractCharacter.ContractId);
+                        if (contract == null)
+                        {
+                            throw new Exception("Contract does not exist");
+                        }
+                    }
+
+                    Event e = new Event();
+                    if (task.EventCharacter != null)
+                    {
+                        e = await eventRepository.GetEventByEventId(task.EventCharacter.EventId);
+                        if (e == null)
+                        {
+                            throw new Exception("Event does not exist");
+                        }
+                    }
+
+                    var tasResponse = new TaskResponse()
+                    {
+                        AccountId = task.AccountId,
+                        ContractId = contract.ContractId,
+                        CreateDate = task.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                        Description = task.Description,
+                        EndDate = task.EndDate?.ToString("HH:mm dd/MM/yyyy"),
+                        EventId = e.EventId,
+                        IsActive = task.IsActive,
+                        Location = task.Location,
+                        StartDate = task.StartDate?.ToString("HH:mm dd/MM/yyyy"),
+                        Status = task.Status.ToString(),
+                        TaskId = task.TaskId,
+                        TaskName = task.TaskName,
+                        UpdateDate = task.UpdateDate?.ToString("HH:mm dd/MM/yyyy") ?? null,
+                    };
+
+                    taskResponses.Add(tasResponse);
+                }
+
+                return taskResponses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<TaskResponse> GetTaskByTaskId(string taskId)
+        {
+            try
+            {
+                var task = await taskRepository.GetTaskByTaskId(taskId);
+                if (task == null)
+                {
+                    throw new Exception("Task does not exist");
+                }
+
+                Contract contract = new Contract();
+
+                if(task.ContractCharacter != null)
+                {
+                    contract = await contractRespository.GetContractById(task.ContractCharacter.ContractId);
+                    if(contract == null)
+                    {
+                        throw new Exception("Contract does not exist");
+                    }
+                }
+
+                Event e = new Event();
+                if (task.EventCharacter != null)
+                {
+                    e = await eventRepository.GetEventByEventId(task.EventCharacter.EventId);   
+                    if(e == null)
+                    {
+                        throw new Exception("Event does not exist");
+                    }
+                }
+
+                var taskResponse = new TaskResponse()
+                {
+                    AccountId = task.AccountId,
+                    ContractId = contract.ContractId,
+                    CreateDate = task.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                    Description = task.Description,
+                    EndDate = task.EndDate?.ToString("HH:mm dd/MM/yyyy"),
+                    EventId = e.EventId,
+                    IsActive = task.IsActive,
+                    Location = task.Location,
+                    StartDate = task.StartDate?.ToString("HH:mm dd/MM/yyyy"),
+                    Status = task.Status.ToString(),
+                    TaskId = task.TaskId,
+                    TaskName = task.TaskName,
+                    UpdateDate = task.UpdateDate?.ToString("HH:mm dd/MM/yyyy") ?? null,
+                };
+
+                return taskResponse;
+            }
+            catch(Exception ex) 
             {
                 throw new Exception(ex.Message);
             }
