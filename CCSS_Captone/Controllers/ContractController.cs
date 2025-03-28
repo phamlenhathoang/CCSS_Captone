@@ -20,12 +20,23 @@ namespace CCSS_Captone.Controllers
         }
 
         //[Authorize(Roles = "Manager")]
-        [HttpGet]
+        [HttpGet("{searchTerm}")]
         public async Task<IActionResult> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId)
         {
             if (ModelState.IsValid)
             {
                 var result = await _services.GetContract(contractName, contractStatus, startDate, endDate, accountId, contractId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllContract()
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetContract(null, null, null, null, null, null);
                 return Ok(result);
             }
             return BadRequest(ModelState);
