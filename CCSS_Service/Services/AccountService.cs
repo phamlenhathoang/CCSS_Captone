@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Asn1.Crmf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -53,10 +54,14 @@ namespace CCSS_Service.Services
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IMapper mapper;
+        private readonly ICartRepository _cartRepository;
+        private readonly IBeginTransactionRepository _beginTransactionRepository;
 
-        public AccountService(ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
+        public AccountService(ICartRepository cartRepository, IBeginTransactionRepository beginTransactionRepository ,ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
         {
             this.taskRepository = taskRepository;
+            _beginTransactionRepository = beginTransactionRepository;
+            _cartRepository = cartRepository;
             this.accountRepository = accountRepository;
             this.mapper = mapper;
             this.characterRepository = characterRepository;
@@ -372,28 +377,51 @@ namespace CCSS_Service.Services
                     Console.WriteLine("Không thể chuyển đổi chuỗi thành DateTime.");
                 }
 
-                Account account = new Account();
-
-                account.AccountId = Guid.NewGuid().ToString();
-                account.Name = accountRequest.Name;
-                account.Email = accountRequest.Email;
-                account.Description = accountRequest.Description;
-                account.IsActive = false;
-                account.Code = GenerateCode();
-                account.Password = PasswordHash.ConvertToEncrypt(accountRequest.Password);
-                account.Birthday = date;
-                account.Phone = accountRequest.Phone;
-                account.RoleId = "R005";
-
-
-                bool result = await accountRepository.AddAccount(account);
-                if (!result)
+                using (var transaction = await _beginTransactionRepository.BeginTransaction())
                 {
-                    return "Cannot save account";
+                    Account account = new Account();
+
+                    account.AccountId = Guid.NewGuid().ToString();
+                    account.Name = accountRequest.Name;
+                    account.Email = accountRequest.Email;
+                    account.Description = accountRequest.Description;
+                    account.IsActive = false;
+                    account.Code = GenerateCode();
+                    account.Password = PasswordHash.ConvertToEncrypt(accountRequest.Password);
+                    account.Birthday = date;
+                    account.Phone = accountRequest.Phone;
+                    account.RoleId = "R005";
+
+
+                    bool result = await accountRepository.AddAccount(account);
+                    if (!result)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Cannot save account";
+                    }
+
+                    Cart cart = new Cart()
+                    {
+                        CartId = Guid.NewGuid().ToString(),
+                        AccountId = account.AccountId,
+                        TotalPrice = 0,
+                        CreateDate = DateTime.Now,
+                        UpdateDate = null,
+                    };
+                    var result1 = await _cartRepository.AddCart(cart);  
+                    if (!result1)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Add Cart failed";
+                    }
+
+
+                    SendMail _sendMail = new SendMail();
+                    await _sendMail.SendAccountVerificationEmail(account.Email, account.Code);
+
+                    await transaction.CommitAsync();
+                    return "Please enter code";
                 }
-                SendMail _sendMail = new SendMail();
-                await _sendMail.SendAccountVerificationEmail(account.Email, account.Code);
-                return "Please enter code";
             }
         }
 
