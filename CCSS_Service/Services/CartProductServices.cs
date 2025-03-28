@@ -19,6 +19,7 @@ namespace CCSS_Service.Services
         Task<string> AddCartProduct(string cartId, List<CartProductRequest> cartProductRequests);
         Task<string> UpdateCartProduct(string cartId, List<UpdateCartProductRequest> updateCartProductRequests);
         Task<string> DeleteCartProduct(string cartId, List<CartPorductRequestDtos> cartProductRequests);
+        Task<string> DeleteCartProductByProductId(string cartId, List<CartProductRequestDTO> cartProductRequests);
 
     }
 
@@ -260,10 +261,60 @@ namespace CCSS_Service.Services
         }
 
 
-        //public async Task<string> DeleteCartProduct(string productId, string cartId)
-        //{
+        public async Task<string> DeleteCartProductByProductId(string cartId, List<CartProductRequestDTO> cartProductRequests)
+        {
+            if (cartId == null)
+            {
+                return "required this field";
+            }
+            var cart = await _cartRepository.GetCartById(cartId);
+            if (cart == null)
+            {
+                return "Cart not found";
+            }
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
+            {
+                foreach (var cp in cartProductRequests)
+                {
+                    var cartProduct = await _repository.GetCartProduct(cartId, cp.ProductId);
+                    if (cartProduct == null)
+                    {
+                        return "this Product is not in Cart";
+                    }
+                    var product = await _productRepository.GetProductById(cartProduct.ProductId);
+                    if (product == null)
+                    {
+                        return "Prouduct ot found";
+                    }
+                    var result = await _repository.DeleteCartProduct(cartProduct);
+                    if (!result)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Delete Failed";
+                    }
+                    product.Quantity += cartProduct.Quantity;
+                    product.UpdateDate = DateTime.Now;
+                    var result1 = await _productRepository.UpdateProduct(product);
+                    if (!result1)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Delete Failed";
+                    }
 
-        //}
+                    cart.TotalPrice -= (double)cartProduct.Price;
+                    cart.UpdateDate = DateTime.Now;
+                    var result2 = await _cartRepository.UpdateCart(cart);
+                    if (!result2)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Delete Failed";
+                    }
+
+                }
+                await transaction.CommitAsync();
+                return "Delete Success";
+            }
+        }
 
         public async Task<List<CartProduct>> GetAllCartProduct()
         {
