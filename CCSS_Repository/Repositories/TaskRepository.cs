@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Task = CCSS_Repository.Entities.Task;
+using TaskStatus = CCSS_Repository.Entities.TaskStatus;
 
 namespace CCSS_Repository.Repositories
 {
@@ -24,6 +25,8 @@ namespace CCSS_Repository.Repositories
         Task<List<Task>> GetAllTask();
 
         Task<bool> CheckTaskIsValid(Account account, DateTime startDate, DateTime endDate);
+        Task<Task> GetTaskById(string id, string accountId);
+        Task<bool> UpdateTask(Task task);
     }
     public class TaskRepository : ITaskRepository
     {
@@ -216,6 +219,17 @@ namespace CCSS_Repository.Repositories
 
             return true;
 
+        }
+
+        public async Task<Task> GetTaskById(string id, string accountId)
+        {
+            return await _dbContext.Tasks.Include(t => t.Account).FirstOrDefaultAsync(t => t.TaskId.Equals(id) && t.Account.AccountId.Equals(accountId));
+        }
+
+        public async Task<bool> UpdateTask(Task task)
+        {
+            _dbContext.Update(task);
+            return await _dbContext.SaveChangesAsync() > 0 ? true : false;
         }
 
         //public async Task<bool> DeleteTask(CCSS_Repository.Entities.Task task)

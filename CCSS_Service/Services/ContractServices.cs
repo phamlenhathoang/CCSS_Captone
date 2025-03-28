@@ -37,6 +37,7 @@ namespace CCSS_Service.Services
         Task<bool> UpdateStatusContract(string contractId, string status, double? price);
         Task<bool> DeleteContract(string contractId, string reason);   
         Task<List<ContractResponse>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate,string? accountId, string? contractId);
+        Task<ContractResponse> GetContractById(string contractId);  
     }
     public class ContractServices : IContractServices
     {
@@ -490,6 +491,108 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<ContractResponse> GetContractById(string contractId)
+        {
+            List<ListContractCharcterResponse> listContractCharcterResponses = new List<ListContractCharcterResponse>();
+
+            Contract contract = await _contractRespository.GetContractById(contractId);
+
+            if (contract == null)
+            {
+                return null;
+            }
+
+            ContractResponse crsItem = new ContractResponse()
+            {
+                Amount = contract.Amount ?? 0,
+                ContractName = contract.ContractName,
+                Deposit = contract.Deposit,
+                EndDate = contract.Request.EndDate.ToString("HH:mm dd/MM/yyyy"),
+                StartDate = contract.Request.StartDate.ToString("HH:mm dd/MM/yyyy"),
+                Price = (double)contract.TotalPrice,
+                Status = contract.ContractStatus.ToString(),
+                Reason = contract.Reason,
+            };
+
+            Package package = new Package();
+
+            if (contract.Request.PackageId != null)
+            {
+                package = await packageRepository.GetPackage(contract.Request.PackageId);
+                if (package == null)
+                {
+                    throw new Exception("Package does not exist");
+                }
+                crsItem.PackageName = package.PackageName;
+            }
+            else
+            {
+                crsItem.PackageName = null;
+            }
+
+            if (contract.Request.AccountCouponId != null)
+            {
+                AccountCoupon accountCoupon = await accountCouponRepository.GetAccountCoupon(contract.Request.AccountCouponId);
+                if (accountCoupon == null)
+                {
+                    throw new Exception("AccountCoupon does not exist");
+                }
+                if (accountCoupon.Coupon == null)
+                {
+                    throw new Exception("Coupont does not exist");
+                }
+                crsItem.AccountCoupon = accountCoupon.Coupon.Amount;
+            }
+            else
+            {
+                crsItem.AccountCoupon = 0;
+            }
+
+            if (contract.ContractCharacters != null)
+            {
+                foreach (var contractCharacter in contract.ContractCharacters)
+                {
+                    Account account = new Account();
+                    if (contractCharacter.CosplayerId != null)
+                    {
+                        account = await _accountRepository.GetAccount(contractCharacter.CosplayerId);
+                        if (account == null)
+                        {
+                            throw new Exception("Account does not exist");
+                        }
+                    }
+                    Character character = await _characterRepository.GetCharacter(contractCharacter.CharacterId);
+                    if (character == null)
+                    {
+                        throw new Exception("Character does not exist");
+                    }
+
+                    ListContractCharcterResponse listContractCharcterResponse = new ListContractCharcterResponse()
+                    {
+                        CharacterName = character.CharacterName,
+                        Quantity = (int)contractCharacter.Quantity,
+                    };
+
+                    if (account != null)
+                    {
+                        listContractCharcterResponse.CosplayerName = account.Name;
+                    }
+                    else
+                    {
+                        listContractCharcterResponse.CosplayerName = null;
+                    }
+
+                    listContractCharcterResponses.Add(listContractCharcterResponse);
+
+                }
+
+                crsItem.ContractCharacters = listContractCharcterResponses;
+            }
+
+            return crsItem;
+        }
+    
 
         public async Task<bool> UpdateStatusContract(string contractId, string status, double? price)
         {

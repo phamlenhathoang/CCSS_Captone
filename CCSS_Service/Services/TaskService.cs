@@ -36,6 +36,7 @@ namespace CCSS_Service.Services
 
         Task<List<TaskResponse>> GetAllTasks();
         Task<string> AddTask(List<AddTaskEventRequest>? taskEventRequests, List<ContractCharacter>? contractCharacters);
+        Task<bool> UpdateStatusTask(string taskId, string status, string accountId);
     }
     public class TaskService : ITaskService
     {
@@ -282,6 +283,59 @@ namespace CCSS_Service.Services
         public async Task<List<TaskResponse>> GetAllTasks()
         {
             return mapper.Map<List<TaskResponse>>(await taskRepository.GetAllTask());
+        }
+
+        public async Task<bool> UpdateStatusTask(string taskId, string status, string accountId)
+        {
+            try
+            {
+                Task task = await taskRepository.GetTaskById(taskId, accountId);
+                if (task == null)
+                {
+                    throw new Exception($"{taskId} was not found");
+                }
+
+                if(task.Account == null)
+                {
+                    throw new Exception("Cosplayer does not exist");
+                }
+
+                if (status.ToLower().Equals("progressing"))
+                {
+                    if (task.Status.ToString().ToLower().Equals(TaskStatus.Assignment.ToString().ToLower()))
+                    {
+                        task.Status = TaskStatus.Progressing;
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update status task");
+                    }
+                }
+
+                if (status.ToLower().Equals("completed"))
+                {
+                    if (task.Status.ToString().ToLower().Equals(TaskStatus.Progressing.ToString().ToLower()))
+                    {
+                        task.Status = TaskStatus.Completed;
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update status task");
+                    }
+                }
+
+                bool result = await taskRepository.UpdateTask(task);
+                if (!result)
+                {
+                    throw new Exception("Can not update status task");
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         //public async Task<string> AddTask(List<TaskRequest> taskRequests, int quantityAccount, string contractId)
