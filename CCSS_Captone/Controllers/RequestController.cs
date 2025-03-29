@@ -28,6 +28,17 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
+        [HttpGet("GetAllRequestByAccount")]
+        public async Task<IActionResult> GetAllRequestByAccount(string accountId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetAllRequestByAccountId(accountId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRequestById(string id)
         {

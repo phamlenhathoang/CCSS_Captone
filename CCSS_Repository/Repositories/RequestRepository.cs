@@ -18,6 +18,7 @@ namespace CCSS_Repository.Repositories
         Task DeleteRequest(Request request);
         Task<Request> GetRequestIncludeRequestCharacter(string requestId);
         Task<Request> GetRequestByIdInclude(string id);
+        Task<List<Request>> GetAllRequestByAccountId(string accountId);
     }
 
     public class RequestRepository: IRequestRepository
@@ -34,6 +35,10 @@ namespace CCSS_Repository.Repositories
             return await _context.Requests.Include(sc => sc.RequestCharacters).ToListAsync();
         }
 
+        public async Task<List<Request>> GetAllRequestByAccountId(string accountId)
+        {
+            return await _context.Requests.Include(c => c.RequestCharacters).Where(sc => sc.AccountId.Equals(accountId)).ToListAsync();
+        }
         public async Task<Request> GetRequestById(string id)
         {
             return await _context.Requests.FirstOrDefaultAsync(sc => sc.RequestId.Equals(id));  

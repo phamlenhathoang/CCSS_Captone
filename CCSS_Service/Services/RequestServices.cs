@@ -14,6 +14,7 @@ namespace CCSS_Service.Services
     public interface IRequestServices
     {
         Task<List<RequestResponse>> GetAllRequest();
+        Task<List<RequestResponse>> GetAllRequestByAccountId(string accountId);
         Task<RequestResponse> GetRequestById(string id);
         Task<string> DeleteRequest(string id);
         Task<string> AddRequest(RequestDtos requestDtos);
@@ -113,6 +114,48 @@ namespace CCSS_Service.Services
             return response;
         }
         #endregion
+
+        public async Task<List<RequestResponse>> GetAllRequestByAccountId(string accountId)
+        {
+            var account = await _accountRepository.GetAccountByAccountId(accountId);
+            if (account == null)
+            {
+                throw new Exception("Account not found");
+            }
+            List<RequestResponse> listRequest = new List<RequestResponse>();
+            var request = await _repository.GetAllRequestByAccountId(account.AccountId);
+            foreach (var item in request)
+            {
+                var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
+
+                List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(item.RequestId)).Select(c => new CharacterRequestResponse()
+                {
+                    CharacterId = c.CharacterId,
+                    CosplayerId = c.CosplayerId,
+                    Description = c.Description,
+                    Quantity = c.Quantity
+                }).ToList();
+
+                RequestResponse response = new RequestResponse()
+                {
+                    RequestId = item.RequestId,
+                    AccountId = item.AccountId,
+                    Name = item.Name,
+                    Description = item.Description,
+                    Price = item.Price,
+                    Status = item.Status,
+                    StartDate = item.StartDate,
+                    EndDate = item.EndDate,
+                    Location = item.Location,
+                    ServiceId = item.ServiceId,
+                    PackageId = item.PackageId,
+                    //ContractId = item.ContractId,
+                    CharactersListResponse = characterResponses
+                };
+                listRequest.Add(response); ;
+            }
+            return listRequest;
+        }
 
         #region Add Request
         public async Task<string> AddRequest(RequestDtos requestDtos)
