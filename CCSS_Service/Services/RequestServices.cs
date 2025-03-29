@@ -226,16 +226,16 @@ namespace CCSS_Service.Services
                 {
                     return "This AccountCoupon is not found";
                 }
+                if (accountCoupon.Coupon.Type != CouponType.ForContract)
+                {
+                    return "This coupon not use for contract";
+                }
+                if (accountCoupon.IsActive == true)
+                {
+                    return "This coupon be used";
+                }
             }
-            if (accountCoupon.Coupon.Type != CouponType.ForContract)
-            {
-                return "This coupon not use for contract";
-            }
-            if (accountCoupon.IsActive == true)
-            {
-                return "This coupon be used";
-            }
-
+            
             foreach (var r in requestDtos.ListRequestCharacters)
             {
                 if (r.CosplayerId != null)
