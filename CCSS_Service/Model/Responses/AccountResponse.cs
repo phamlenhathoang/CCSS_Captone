@@ -45,6 +45,9 @@ namespace CCSS_Service.Model.Responses
         public string? Code { get; set; }
         public List<AccountImageResponse>? Images { get; set; }
         public int? TaskQuantity { get; set; }
+        public float? Height { get; set; }
+        public float? Weight { get; set; }
+        public double? SalaryIndex { get; set; }
     }
     public class AccountDashBoardResponse
     {
