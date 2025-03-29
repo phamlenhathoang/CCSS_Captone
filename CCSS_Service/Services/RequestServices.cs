@@ -199,6 +199,17 @@ namespace CCSS_Service.Services
             {
                 return "Need fill request";
             }
+
+            Account customer = await _accountRepository.GetAccount(requestDtos.AccountId);
+            if (customer == null)
+            {
+                return "Customer does not exist";
+            }
+            if (customer.Role.RoleName != RoleName.Customer)
+            {
+                return "Account must be customer";
+            }
+
             var service = await _serviceRepository.GetService(requestDtos.ServiceId);
             if (service == null)
             {
@@ -208,10 +219,13 @@ namespace CCSS_Service.Services
             {
                 requestDtos.PackageId = null;
             }
-            var accountCoupon = await _accountCouponRepository.GetAccountCouponById(requestDtos.AccountCouponId);
-            if (accountCoupon == null)
+            if(requestDtos.AccountCouponId != null)
             {
-                return "This Account is not found";
+                var accountCoupon = await _accountCouponRepository.GetAccountCouponById(requestDtos.AccountCouponId);
+                if (accountCoupon == null)
+                {
+                    return "This AccountCoupon is not found";
+                }
             }
             if (accountCoupon.Coupon.Type != CouponType.ForContract)
             {
