@@ -53,8 +53,9 @@ namespace CCSS_Service.Services
         private readonly IContractCharacterRepository contractCharacterRepository;
         private readonly IRequestRepository requestRepository;
         private readonly IEventRepository eventRepository;
+        private readonly IBeginTransactionRepository _beginTransactionRepository;
 
-        public TaskService(IRequestRepository requestRepository, IContractCharacterRepository contractCharacterRepository, IEventChacracterRepository eventChacracterRepository, ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<NotificationHub> hubContext, INotificationRepository notificationRepository, IEventRepository eventRepository)
+        public TaskService(IRequestRepository requestRepository, IContractCharacterRepository contractCharacterRepository, IEventChacracterRepository eventChacracterRepository, ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<NotificationHub> hubContext, INotificationRepository notificationRepository, IEventRepository eventRepository, IBeginTransactionRepository _beginTransactionRepository)
         {
             this.taskRepository = taskRepository;
             this.contractRespository = contractRespository;
@@ -67,85 +68,101 @@ namespace CCSS_Service.Services
             this.contractCharacterRepository = contractCharacterRepository;
             this.requestRepository = requestRepository;
             this.eventRepository = eventRepository;
+            this._beginTransactionRepository = _beginTransactionRepository;
         }
 
         private async Task<bool> AddTaskEvent(List<AddTaskEventRequest> taskEventRequests)
         {
-            List<Task> tasks = new List<Task>();
-
-            var uniqueElements = new HashSet<string>();
-
-            foreach (var taskEventRequest in taskEventRequests)
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                bool checkAccount = uniqueElements.Add(taskEventRequest.AccountId);
-
-                if (!checkAccount)
+                try
                 {
-                    throw new Exception("Account is duplicate");
+                    List<Task> tasks = new List<Task>();
+
+                    var uniqueElements = new HashSet<string>();
+
+                    foreach (var taskEventRequest in taskEventRequests)
+                    {
+                        bool checkAccount = uniqueElements.Add(taskEventRequest.AccountId);
+
+                        if (!checkAccount)
+                        {
+                            throw new Exception("Account is duplicate");
+                        }
+                    }
+
+                    foreach (var taskRequest in taskEventRequests)
+                    {
+                        Account account = await accountRepository.GetAccount(taskRequest.AccountId);
+                        if (account == null)
+                        {
+                            await transaction.RollbackAsync();
+                            throw new Exception("Account does not exist");
+                        }
+                        if (account.Role.RoleName != RoleName.Cosplayer)
+                        {
+                            throw new Exception("Account must be cosplayer");
+                        }
+                        EventCharacter eventCharacter = await eventChacracterRepository.GetEventCharacterById(taskRequest.EventCharacterId);
+                        if (eventCharacter == null)
+                        {
+                            await transaction.RollbackAsync();
+                            throw new Exception("EventCharacter does not exist");
+                        }
+                        if (eventCharacter.IsAssign == true)
+                        {
+                            throw new Exception("EventCharacter assigned");
+                        }
+
+                        //if (!CheckCharacterForAccount(account, eventCharacter.Character))
+                        //{
+                        //    throw new Exception("Cosplayer does not suitable character");
+                        //}
+
+                        Task task = new Task()
+                        {
+                            EventCharacterId = taskRequest.EventCharacterId,
+                            AccountId = taskRequest.AccountId,
+                            CreateDate = DateTime.Now,
+                            Description = eventCharacter.Description,
+                            EndDate = eventCharacter.Event.EndDate,
+                            StartDate = eventCharacter.Event.StartDate,
+                            TaskName = eventCharacter.Character.CharacterName,
+                            Location = eventCharacter.Event.Location,
+                            IsActive = true,
+                            Status = TaskStatus.Assignment,
+                            Type = "Event",
+                            TaskId = Guid.NewGuid().ToString(),
+                            UpdateDate = null,
+                        };
+
+                        //bool checkTask = await taskRepository.CheckTaskIsValid(account, task.StartDate.Value, task.EndDate.Value);
+                        //if (!checkTask)
+                        //{
+                        //    throw new Exception("Task is invalid");
+                        //}
+
+                        bool check = await taskRepository.AddTask(task);
+
+                        if (!check)
+                        {
+                            await transaction.RollbackAsync();
+                            throw new Exception($"Task {task.TaskId} đã xảy ra lỗi vào lúc {DateTime.Now}");
+                        }
+                        tasks.Add(task);
+                    }
+
+                    bool result = await NortificationUser(tasks) ? true : false;
+
+                    await transaction.CommitAsync();
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw new Exception(ex.Message);
                 }
             }
-
-            foreach (var taskRequest in taskEventRequests)
-            {
-                Account account = await accountRepository.GetAccount(taskRequest.AccountId);
-                if (account == null)
-                {
-                    throw new Exception("Account does not exist");
-                }
-                if (account.Role.RoleName != RoleName.Cosplayer)
-                {
-                    throw new Exception("Account must be cosplayer");
-                }
-                EventCharacter eventCharacter = await eventChacracterRepository.GetEventCharacterById(taskRequest.EventCharacterId);
-                if (eventCharacter == null)
-                {
-                    throw new Exception("EventCharacter does not exist");
-                }
-                if (eventCharacter.IsAssign == true)
-                {
-                    throw new Exception("EventCharacter assigned");
-                }
-
-                //if (!CheckCharacterForAccount(account, eventCharacter.Character))
-                //{
-                //    throw new Exception("Cosplayer does not suitable character");
-                //}
-
-                Task task = new Task()
-                {
-                    EventCharacterId = taskRequest.EventCharacterId,
-                    AccountId = taskRequest.AccountId,
-                    CreateDate = DateTime.Now,
-                    Description = eventCharacter.Description,
-                    EndDate = eventCharacter.Event.EndDate,
-                    StartDate = eventCharacter.Event.StartDate,
-                    TaskName = eventCharacter.Character.CharacterName,
-                    Location = eventCharacter.Event.Location,
-                    IsActive = true,
-                    Status = TaskStatus.Assignment,
-                    Type = "Event",
-                    TaskId = Guid.NewGuid().ToString(),
-                    UpdateDate = null,
-                };
-
-                //bool checkTask = await taskRepository.CheckTaskIsValid(account, task.StartDate.Value, task.EndDate.Value);
-                //if (!checkTask)
-                //{
-                //    throw new Exception("Task is invalid");
-                //}
-
-                bool check = await taskRepository.AddTask(task);
-
-                if (!check)
-                {
-                    throw new Exception($"Task {task.TaskId} đã xảy ra lỗi vào lúc {DateTime.Now}");
-                }
-                tasks.Add(task);
-            }
-
-            bool result = await NortificationUser(tasks) ? true : false;
-
-            return result;
         }
 
         private bool CheckCharacterForAccount(Account account, Character character)
@@ -159,71 +176,85 @@ namespace CCSS_Service.Services
 
         private async Task<bool> AddTaskContract(List<ContractCharacter> contractCharacters)
         {
-            List<Task> tasks = new List<Task>();
-
-            var uniqueElements = new HashSet<string>();
-
-            foreach (var taskEventRequest in contractCharacters)
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                if(taskEventRequest.CosplayerId != null)
+                try
                 {
-                    bool checkAccount = uniqueElements.Add(taskEventRequest.CosplayerId);
+                    List<Task> tasks = new List<Task>();
 
-                    if (!checkAccount)
+                    var uniqueElements = new HashSet<string>();
+
+                    foreach (var taskEventRequest in contractCharacters)
                     {
-                        throw new Exception("Account is duplicate");
+                        if (taskEventRequest.CosplayerId != null)
+                        {
+                            bool checkAccount = uniqueElements.Add(taskEventRequest.CosplayerId);
+
+                            if (!checkAccount)
+                            {
+                                throw new Exception("Account is duplicate");
+                            }
+                        }
                     }
+
+                    foreach (var taskRequest in contractCharacters)
+                    {
+                        if (taskRequest.CosplayerId != null)
+                        {
+                            Account account = await accountRepository.GetAccount(taskRequest.CosplayerId);
+                            if (account == null)
+                            {
+                                throw new Exception("Account does not exist");
+                            }
+                            if (account.Role.RoleName != RoleName.Cosplayer)
+                            {
+                                throw new Exception("Account must be cosplayer");
+                            }
+                            ContractCharacter contractCharacter = await contractCharacterRepository.GetContractCharacterById(taskRequest.ContractCharacterId);
+                            if (contractCharacter == null)
+                            {
+                                await transaction.RollbackAsync();
+                                throw new Exception("ContractCharacter does not exist");
+                            }
+
+                            Task task = new Task();
+
+                            task.ContractCharacterId = taskRequest.ContractCharacterId;
+                            task.AccountId = taskRequest.CosplayerId;
+                            task.CreateDate = DateTime.Now;
+                            task.Description = contractCharacter.Description;
+                            task.EndDate = contractCharacter.Contract.Request.EndDate;
+                            task.StartDate = contractCharacter.Contract.Request.StartDate;
+                            task.TaskName = contractCharacter.CharacterId;
+                            task.Location = contractCharacter.Contract.Request.Location;
+                            task.IsActive = true;
+                            task.Status = TaskStatus.Assignment;
+                            task.Type = "Contract";
+                            task.TaskId = Guid.NewGuid().ToString();
+                            task.UpdateDate = null;
+
+                            bool check = await taskRepository.AddTask(task);
+                            if (!check)
+                            {
+                                await transaction.RollbackAsync();
+                                throw new Exception($"Task {task.TaskId} đã xảy ra lỗi vào lúc {DateTime.Now}");
+                            }
+
+                            tasks.Add(task);
+                        }
+                    }
+
+                    bool result = await NortificationUser(tasks) ? true : false;
+
+                    await transaction.CommitAsync();
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw new Exception(ex.Message);
                 }
             }
-
-            foreach (var taskRequest in contractCharacters)
-            {
-                if (taskRequest.CosplayerId != null)
-                {
-                    Account account = await accountRepository.GetAccount(taskRequest.CosplayerId);
-                    if (account == null)
-                    {
-                        throw new Exception("Account does not exist");
-                    }
-                    if (account.Role.RoleName != RoleName.Cosplayer)
-                    {
-                        throw new Exception("Account must be cosplayer");
-                    }
-                    ContractCharacter contractCharacter = await contractCharacterRepository.GetContractCharacterById(taskRequest.ContractCharacterId);
-                    if (contractCharacter == null)
-                    {
-                        throw new Exception("ContractCharacter does not exist");
-                    }
-
-                    Task task = new Task();
-
-                    task.ContractCharacterId = taskRequest.ContractCharacterId;
-                    task.AccountId = taskRequest.CosplayerId;
-                    task.CreateDate = DateTime.Now;
-                    task.Description = contractCharacter.Description;
-                    task.EndDate = contractCharacter.Contract.Request.EndDate;
-                    task.StartDate = contractCharacter.Contract.Request.StartDate;
-                    task.TaskName = contractCharacter.CharacterId;
-                    task.Location = contractCharacter.Contract.Request.Location;
-                    task.IsActive = true;
-                    task.Status = TaskStatus.Assignment;
-                    task.Type = "Contract";
-                    task.TaskId = Guid.NewGuid().ToString();
-                    task.UpdateDate = null;
-
-                    bool check = await taskRepository.AddTask(task);
-                    if (!check)
-                    {
-                        throw new Exception($"Task {task.TaskId} đã xảy ra lỗi vào lúc {DateTime.Now}");
-                    }
-
-                    tasks.Add(task);
-                }
-            }
-
-            bool result = await NortificationUser(tasks) ? true : false; 
-
-            return result;
         }
 
         private async Task<bool> NortificationUser(List<Task> tasks)
@@ -257,30 +288,37 @@ namespace CCSS_Service.Services
 
         public async Task<string> AddTask(List<AddTaskEventRequest>? taskEventRequests, List<ContractCharacter>? contractCharacters)
         {
-            try
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                if (taskEventRequests != null)
+                try
                 {
-                    bool result = await AddTaskEvent(taskEventRequests) ? true : false;
-                    if (result)
+                    if (taskEventRequests != null)
                     {
-                        return "Successfully";
+                        bool result = await AddTaskEvent(taskEventRequests) ? true : false;
+                        if (result)
+                        {
+                            await transaction.CommitAsync();
+                            return "Successfully";
+                        }
                     }
-                }
 
-                if (contractCharacters != null)
-                {
-                    bool result = await AddTaskContract(contractCharacters) ? true : false;
-                    if (result)
+                    if (contractCharacters != null)
                     {
-                        return "Successfully";
+                        bool result = await AddTaskContract(contractCharacters) ? true : false;
+                        if (result)
+                        {
+                            await transaction.CommitAsync();
+                            return "Successfully";
+                        }
                     }
+                    await transaction.RollbackAsync();
+                    return "Failed";
                 }
-                return "Failed";
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw new Exception(ex.Message);
+                }
             }
         }
 
