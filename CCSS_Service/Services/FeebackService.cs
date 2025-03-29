@@ -87,6 +87,10 @@ namespace CCSS_Service.Services
                     {
                         throw new Exception("Account must be create contract");
                     }
+                    if (!contractCharacter.CosplayerId.ToLower().Equals(cosplayer.AccountId.ToLower()))
+                    {
+                        throw new Exception("This cosplayer has not in this contract");
+                    }
                     if (contractCharacter.Contract.ContractStatus != ContractStatus.Completed)
                     {
                         throw new Exception("Contract does not completed");
@@ -132,9 +136,9 @@ namespace CCSS_Service.Services
                         totalStar += (int)fb.Star;
                     }
 
-                    account.AverageStar = totalStar + 2.5 / count + 1;
+                    cosplayer.AverageStar = (double)totalStar / count;
 
-                    bool result = await _accountRepository.UpdateAccount(account);
+                    bool result = await _accountRepository.UpdateAccount(cosplayer);
 
                     if (!result)
                     {
@@ -216,6 +220,10 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("Feedback does not exist");
                 }
+                if (feedback.Account == null) 
+                {
+                    throw new Exception("Cosplayer does not exist");
+                }
 
                 feedback.Star = feedbackRequest.Star;
                 feedback.Description = feedbackRequest.Description;
@@ -243,9 +251,9 @@ namespace CCSS_Service.Services
                     totalStar += (int)fb.Star;
                 }
 
-                account.AverageStar = totalStar / count;
+                feedback.Account.AverageStar = (double) totalStar / count;
 
-                bool result = await _accountRepository.UpdateAccount(account);
+                bool result = await _accountRepository.UpdateAccount(feedback.Account);
 
                 if (!result)
                 {

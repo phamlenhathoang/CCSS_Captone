@@ -137,8 +137,15 @@ namespace CCSS_Repository.Repositories
 
         public async Task<bool> UpdateAccount(Account account)
         {
-            dbContext.Update(account);
-            return await dbContext.SaveChangesAsync() > 0 ? true : false;
+            try
+            {
+                dbContext.Accounts.Update(account);
+                return await dbContext.SaveChangesAsync() > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }
