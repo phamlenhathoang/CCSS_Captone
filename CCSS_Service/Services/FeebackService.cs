@@ -28,130 +28,143 @@ namespace CCSS_Service.Services
         private readonly IAccountRepository _accountRepository;
         private readonly IContractCharacterRepository _contractCharacterRepository;
         private readonly IMapper mapper;
+        private readonly IBeginTransactionRepository _beginTransactionRepository;
 
-        public FeebackService(IMapper mapper, IContractCharacterRepository _contractCharacterRepository, IFeedbackRepository feedbackRepository, IContractRespository contractRespository, IAccountRepository accountRepository)
+        public FeebackService(IMapper mapper, IContractCharacterRepository _contractCharacterRepository, IFeedbackRepository feedbackRepository, IContractRespository contractRespository, IAccountRepository accountRepository, IBeginTransactionRepository beginTransactionRepository)
         {
             _feedbackRepository = feedbackRepository;
             this.contractRespository = contractRespository;
             _accountRepository = accountRepository;
             this._contractCharacterRepository = _contractCharacterRepository;
             this.mapper = mapper;
+            _beginTransactionRepository = beginTransactionRepository;
         }
 
         public async Task<bool> AddFeedback(List<FeedbackRequest> feedbackRequests, string accountId)
         {
-            try
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                var uniqueElements = new HashSet<string>();
-
-                foreach (var feedbackRequest in feedbackRequests)
+                try
                 {
-                    bool checkAccount = uniqueElements.Add(feedbackRequest.CosplayerId);
+                    var uniqueElements = new HashSet<string>();
 
-                    if (!checkAccount)
+                    foreach (var feedbackRequest in feedbackRequests)
                     {
-                        throw new Exception("Cosplayer is duplicate");
+                        bool checkAccount = uniqueElements.Add(feedbackRequest.CosplayerId);
+
+                        if (!checkAccount)
+                        {
+                            throw new Exception("Cosplayer is duplicate");
+                        }
                     }
+
+                    Account account = await _accountRepository.GetAccount(accountId);
+
+                    if (account == null)
+                    {
+                        throw new Exception("Account does not exist");
+                    }
+
+                    if (account.Role.RoleName != RoleName.Customer)
+                    {
+                        throw new Exception("Account must be customer");
+                    }
+
+                    if (!feedbackRequests.Any())
+                    {
+                        throw new Exception("FeedbackRequests are null");
+                    }
+
+                    foreach (var feedbackRequest in feedbackRequests)
+                    {
+                        Account cosplayer = await _accountRepository.GetAccountByAccountId(feedbackRequest.CosplayerId);
+                        if (cosplayer == null)
+                        {
+                            throw new Exception("Cosplayer does not exist");
+                        }
+                        ContractCharacter contractCharacter = await _contractCharacterRepository.GetContractCharacterById(feedbackRequest.ContractCharacterId);
+                        if (contractCharacter == null)
+                        {
+                            throw new Exception("ContractCharacter does not exist");
+                        }
+                        if (!contractCharacter.Contract.Request.AccountId.ToLower().Equals(accountId.ToLower()))
+                        {
+                            throw new Exception("Account must be create contract");
+                        }
+                        if (!contractCharacter.CosplayerId.ToLower().Equals(cosplayer.AccountId.ToLower()))
+                        {
+                            throw new Exception("This cosplayer has not in this contract");
+                        }
+                        if (contractCharacter.Contract.ContractStatus != ContractStatus.Completed)
+                        {
+                            throw new Exception("Contract does not completed");
+                        }
+                        Feedback checkExist = await _feedbackRepository.GetFeedbackByContractCharacterId(feedbackRequest.ContractCharacterId);
+                        if (checkExist != null)
+                        {
+                            await transaction.RollbackAsync();
+                            throw new Exception("ContractCharacter does exist");
+                        }
+
+                        Feedback feedback = new Feedback()
+                        {
+                            AccountId = feedbackRequest.CosplayerId,
+                            ContractCharacterId = feedbackRequest.ContractCharacterId,
+                            CreateDate = DateTime.UtcNow,
+                            CreateBy = account.AccountId,
+                            Description = feedbackRequest.Description,
+                            FeedbackId = Guid.NewGuid().ToString(),
+                            Star = feedbackRequest.Star,
+                            UpdateDate = null,
+                        };
+
+                        bool checkAdd = await _feedbackRepository.AddFeedback(feedback);
+
+                        if (!checkAdd)
+                        {
+                            await transaction.RollbackAsync();
+                            throw new Exception("Can not add feedback");
+                        }
+
+                        List<Feedback> feedbacks = await _feedbackRepository.GetAllFeedbacksByCosplayerId(feedbackRequest.CosplayerId);
+
+                        if (!feedbacks.Any())
+                        {
+                            await transaction.RollbackAsync();
+                            throw new Exception("CosplayerId does not exist");
+                        }
+
+                        int count = 0;
+                        int totalStar = 0;
+
+                        foreach (var fb in feedbacks)
+                        {
+                            count++;
+                            totalStar += (int)fb.Star;
+                        }
+
+                        cosplayer.AverageStar = (double)totalStar / count;
+
+                        bool result = await _accountRepository.UpdateAccount(cosplayer);
+
+                        if (!result)
+                        {
+                            await transaction.RollbackAsync();
+                            throw new Exception("Can not update average star of cosplayer");
+                        }
+                    }
+
+                    await transaction.CommitAsync();
+
+                    return true;
                 }
-
-                Account account = await _accountRepository.GetAccount(accountId);
-
-                if (account == null)
+                catch (Exception ex)
                 {
-                    throw new Exception("Account does not exist");
+                    await transaction.RollbackAsync();
+                    throw new Exception(ex.Message);
                 }
-
-                if (account.Role.RoleName != RoleName.Customer)
-                {
-                    throw new Exception("Account must be customer");
-                }
-
-                if (!feedbackRequests.Any())
-                {
-                    throw new Exception("FeedbackRequests are null");
-                }
-
-                foreach (var feedbackRequest in feedbackRequests)
-                {
-                    Account cosplayer = await _accountRepository.GetAccountByAccountId(feedbackRequest.CosplayerId);
-                    if (cosplayer == null)
-                    {
-                        throw new Exception("Cosplayer does not exist");
-                    }
-                    ContractCharacter contractCharacter = await _contractCharacterRepository.GetContractCharacterById(feedbackRequest.ContractCharacterId);
-                    if (contractCharacter == null)
-                    {
-                        throw new Exception("ContractCharacter does not exist");
-                    }
-                    if (!contractCharacter.Contract.Request.AccountId.ToLower().Equals(accountId.ToLower()))
-                    {
-                        throw new Exception("Account must be create contract");
-                    }
-                    if (!contractCharacter.CosplayerId.ToLower().Equals(cosplayer.AccountId.ToLower()))
-                    {
-                        throw new Exception("This cosplayer has not in this contract");
-                    }
-                    if (contractCharacter.Contract.ContractStatus != ContractStatus.Completed)
-                    {
-                        throw new Exception("Contract does not completed");
-                    }
-                    Feedback checkExist = await _feedbackRepository.GetFeedbackByContractCharacterId(feedbackRequest.ContractCharacterId);
-                    if (checkExist != null)
-                    {
-                        throw new Exception("ContractCharacter does exist");
-                    }
-
-                    Feedback feedback = new Feedback()
-                    {
-                        AccountId = feedbackRequest.CosplayerId,
-                        ContractCharacterId = feedbackRequest.ContractCharacterId,
-                        CreateDate = DateTime.UtcNow,
-                        CreateBy = account.AccountId,
-                        Description = feedbackRequest.Description,
-                        FeedbackId = Guid.NewGuid().ToString(),
-                        Star = feedbackRequest.Star,
-                        UpdateDate = null,
-                    };
-
-                    bool checkAdd = await _feedbackRepository.AddFeedback(feedback);
-
-                    if (!checkAdd)
-                    {
-                        throw new Exception("Can not add feedback");
-                    }
-
-                    List<Feedback> feedbacks = await _feedbackRepository.GetAllFeedbacksByCosplayerId(feedbackRequest.CosplayerId);
-
-                    if (!feedbacks.Any())
-                    {
-                        throw new Exception("CosplayerId does not exist");
-                    }
-
-                    int count = 0;
-                    int totalStar = 0;
-
-                    foreach (var fb in feedbacks)
-                    {
-                        count++;
-                        totalStar += (int)fb.Star;
-                    }
-
-                    cosplayer.AverageStar = (double)totalStar / count;
-
-                    bool result = await _accountRepository.UpdateAccount(cosplayer);
-
-                    if (!result)
-                    {
-                        throw new Exception("Can not update average star of cosplayer");
-                    }
-                }
-
-                return true;
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
         }
 
         public async Task<List<FeedbackResponse>> GetAllFeedback()
@@ -207,64 +220,73 @@ namespace CCSS_Service.Services
 
         public async Task<bool> UpdateFeedback(UpdateFeedbackRequest feedbackRequest, string accountId)
         {
-            try
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                Account account = await _accountRepository.GetAccount(accountId);
-                if (account == null)
+                try
                 {
-                    throw new Exception("Account does not exist");
-                }
+                    Account account = await _accountRepository.GetAccount(accountId);
+                    if (account == null)
+                    {
+                        throw new Exception("Account does not exist");
+                    }
 
-                Feedback feedback = await _feedbackRepository.GetFeedbackByFeedbackId(feedbackRequest.FeedbackId);
-                if (feedback == null)
+                    Feedback feedback = await _feedbackRepository.GetFeedbackByFeedbackId(feedbackRequest.FeedbackId);
+                    if (feedback == null)
+                    {
+                        throw new Exception("Feedback does not exist");
+                    }
+                    if (feedback.Account == null)
+                    {
+                        throw new Exception("Cosplayer does not exist");
+                    }
+
+                    feedback.Star = feedbackRequest.Star;
+                    feedback.Description = feedbackRequest.Description;
+
+                    bool checkUpdate = await _feedbackRepository.UpdateFeedback(feedback);
+
+                    if (!checkUpdate)
+                    {
+                        await transaction.RollbackAsync();
+                        throw new Exception("Can not update feedback");
+                    }
+
+                    List<Feedback> feedbacks = await _feedbackRepository.GetAllFeedbacksByCosplayerId(feedback.AccountId);
+
+                    if (!feedbacks.Any())
+                    {
+                        await transaction.RollbackAsync();
+                        throw new Exception("CosplayerId does not exist");
+                    }
+
+                    int count = 0;
+                    int totalStar = 0;
+
+                    foreach (var fb in feedbacks)
+                    {
+                        count++;
+                        totalStar += (int)fb.Star;
+                    }
+
+                    feedback.Account.AverageStar = (double)totalStar / count;
+
+                    bool result = await _accountRepository.UpdateAccount(feedback.Account);
+
+                    if (!result)
+                    {
+                        await transaction.RollbackAsync();
+                        throw new Exception("Can not update average star of cosplayer");
+                    }
+
+                    await transaction.CommitAsync();
+
+                    return true;
+                }
+                catch (Exception ex)
                 {
-                    throw new Exception("Feedback does not exist");
+                    await transaction.RollbackAsync();
+                    throw new Exception(ex.Message);
                 }
-                if (feedback.Account == null) 
-                {
-                    throw new Exception("Cosplayer does not exist");
-                }
-
-                feedback.Star = feedbackRequest.Star;
-                feedback.Description = feedbackRequest.Description;
-
-                bool checkUpdate = await _feedbackRepository.UpdateFeedback(feedback);
-
-                if (!checkUpdate)
-                {
-                    throw new Exception("Can not update feedback");
-                }
-
-                List<Feedback> feedbacks = await _feedbackRepository.GetAllFeedbacksByCosplayerId(feedback.AccountId);
-
-                if (!feedbacks.Any())
-                {
-                    throw new Exception("CosplayerId does not exist");
-                }
-
-                int count = 0;
-                int totalStar = 0;
-
-                foreach (var fb in feedbacks)
-                {
-                    count++;
-                    totalStar += (int)fb.Star;
-                }
-
-                feedback.Account.AverageStar = (double) totalStar / count;
-
-                bool result = await _accountRepository.UpdateAccount(feedback.Account);
-
-                if (!result)
-                {
-                    throw new Exception("Can not update average star of cosplayer");
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
             }
         }
 
