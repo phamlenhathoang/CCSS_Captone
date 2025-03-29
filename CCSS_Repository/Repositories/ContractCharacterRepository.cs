@@ -20,6 +20,7 @@ namespace CCSS_Repository.Repositories
 
         Task<ContractCharacter> GetContractCharacterById(string id);
         Task<bool> AddListContractCharacter(List<ContractCharacter> listContractCharacter);
+
     }
     public class ContractCharacterRepository : IContractCharacterRepository
     {

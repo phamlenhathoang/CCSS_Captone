@@ -61,6 +61,11 @@ namespace CCSS_Service.Services
                     throw new Exception("Account does not exist");
                 }
 
+                if (account.Role.RoleName != RoleName.Customer)
+                {
+                    throw new Exception("Account must be customer");
+                }
+
                 if (!feedbackRequests.Any())
                 {
                     throw new Exception("FeedbackRequests are null");
@@ -78,10 +83,20 @@ namespace CCSS_Service.Services
                     {
                         throw new Exception("ContractCharacter does not exist");
                     }
-                    if(contractCharacter.Contract.ContractStatus != ContractStatus.Completed)
+                    if (!contractCharacter.Contract.Request.AccountId.ToLower().Equals(accountId.ToLower()))
+                    {
+                        throw new Exception("Account must be create contract");
+                    }
+                    if (contractCharacter.Contract.ContractStatus != ContractStatus.Completed)
                     {
                         throw new Exception("Contract does not completed");
                     }
+                    Feedback checkExist = await _feedbackRepository.GetFeedbackByContractCharacterId(feedbackRequest.ContractCharacterId);
+                    if (checkExist != null)
+                    {
+                        throw new Exception("ContractCharacter does exist");
+                    }
+
                     Feedback feedback = new Feedback()
                     {
                         AccountId = feedbackRequest.CosplayerId,
@@ -117,7 +132,7 @@ namespace CCSS_Service.Services
                         totalStar += (int)fb.Star;
                     }
 
-                    account.AverageStar = totalStar / count;
+                    account.AverageStar = totalStar + 2.5 / count + 1;
 
                     bool result = await _accountRepository.UpdateAccount(account);
 
