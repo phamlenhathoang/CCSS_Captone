@@ -29,8 +29,15 @@ namespace CCSS_Repository.Repositories
 
         public async Task<bool> AddFeedback(Feedback feedback)
         {
-            await _dbContext.AddAsync(feedback);
-            return await _dbContext.SaveChangesAsync() > 0 ? true : false;
+            try
+            {
+                await _dbContext.AddAsync(feedback);
+                return await _dbContext.SaveChangesAsync() > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<bool> AddListFeedback(List<Feedback> feedbacks)
