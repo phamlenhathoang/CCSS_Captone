@@ -34,7 +34,7 @@ namespace CCSS_Service.Services
         //Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId);
         //Task<bool> ChangeAccountForTask(string taskId, string accountId);
         Task<AccountLoginResponse> Login(string email, string password);
-        Task<string> Register(AccountRequest accountRequest); 
+        Task<string> Register(AccountRequest accountRequest);
         Task<string> CodeValidation(string email, string code);
         Task<AccountResponse> GetAccountByAccountId(string accountId);
         Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest);
@@ -60,7 +60,7 @@ namespace CCSS_Service.Services
         private readonly Image image;
         private readonly IAccountImageRepository accountImageRepository;
 
-        public AccountService(ICartRepository cartRepository, IBeginTransactionRepository beginTransactionRepository ,ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService, Image image, IAccountImageRepository accountImageRepository)
+        public AccountService(ICartRepository cartRepository, IBeginTransactionRepository beginTransactionRepository, ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService, Image image, IAccountImageRepository accountImageRepository)
         {
             this.taskRepository = taskRepository;
             _beginTransactionRepository = beginTransactionRepository;
@@ -413,7 +413,7 @@ namespace CCSS_Service.Services
                         CreateDate = DateTime.Now,
                         UpdateDate = null,
                     };
-                    var result1 = await _cartRepository.AddCart(cart);  
+                    var result1 = await _cartRepository.AddCart(cart);
                     if (!result1)
                     {
                         await transaction.RollbackAsync();
@@ -456,8 +456,29 @@ namespace CCSS_Service.Services
             {
                 return null;
             }
-            return mapper.Map<AccountResponse>(account);
+
+            var accountResponse = mapper.Map<AccountResponse>(account);
+
+            accountResponse.Images ??= new List<AccountImageResponse>();
+
+            if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+            {
+                foreach (var image in account.AccountImages)
+                {
+                    accountResponse.Images.Add(new AccountImageResponse
+                    {
+                        AccountImageId = image.AccountImageId,
+                        UrlImage = image.UrlImage,
+                        CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                        UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                        IsAvatar = image.IsAvatar
+                    });
+                }
+            }
+
+            return accountResponse;
         }
+
 
         public async Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest)
         {
@@ -511,7 +532,7 @@ namespace CCSS_Service.Services
 
                 accountImages.Add(avatar);
 
-                if(updateAccountRequest.Images != null)
+                if (updateAccountRequest.Images != null)
                 {
                     foreach (var im in updateAccountRequest.Images)
                     {
@@ -526,7 +547,7 @@ namespace CCSS_Service.Services
                         accountImages.Add(accountImage);
                     }
                 }
-                
+
                 bool result = await accountImageRepository.AddListAccountImage(accountImages);
                 if (!result)
                 {
@@ -538,7 +559,7 @@ namespace CCSS_Service.Services
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
-            }   
+            }
         }
 
         public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate)
@@ -555,13 +576,13 @@ namespace CCSS_Service.Services
 
                 List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character);
 
-                string format = "HH:mm dd/MM/yyyy"; 
+                string format = "HH:mm dd/MM/yyyy";
                 CultureInfo culture = CultureInfo.InvariantCulture;
 
                 DateTime start = DateTime.ParseExact(startDate, format, culture);
                 DateTime end = DateTime.ParseExact(endDate, format, culture);
 
-                if(start > end)
+                if (start > end)
                 {
                     throw new Exception("Start can not greater than EndDate");
                 }
@@ -572,11 +593,27 @@ namespace CCSS_Service.Services
                     if (result)
                     {
                         AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
-                        accountByCharacterAndDateResponses.Add(accountRespose); 
+                        accountRespose.Images ??= new List<AccountImageResponse>();
+
+                        if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                        {
+                            foreach (var image in account.AccountImages)
+                            {
+                                accountRespose.Images.Add(new AccountImageResponse
+                                {
+                                    AccountImageId = image.AccountImageId,
+                                    UrlImage = image.UrlImage,
+                                    CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    IsAvatar = image.IsAvatar
+                                });
+                            }
+                        }
+                        accountByCharacterAndDateResponses.Add(accountRespose);
                     }
                 }
 
-                return accountByCharacterAndDateResponses;  
+                return accountByCharacterAndDateResponses;
             }
             catch (Exception ex)
             {
@@ -617,6 +654,22 @@ namespace CCSS_Service.Services
                         {
                             // Map và thêm vào danh sách kết quả
                             AccountByCharacterAndDateResponse accountResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                            accountResponse.Images ??= new List<AccountImageResponse>();
+
+                            if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                            {
+                                foreach (var image in account.AccountImages)
+                                {
+                                    accountResponse.Images.Add(new AccountImageResponse
+                                    {
+                                        AccountImageId = image.AccountImageId,
+                                        UrlImage = image.UrlImage,
+                                        CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                        UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                        IsAvatar = image.IsAvatar
+                                    });
+                                }
+                            }
                             accountByCharacterAndDateResponses.Add(accountResponse);
                         }
                     }
@@ -628,7 +681,28 @@ namespace CCSS_Service.Services
             }
             else
             {
-                accountByCharacterAndDateResponses = mapper.Map<List<AccountByCharacterAndDateResponse>>(accounts);
+                foreach (Account account in accounts)
+                {
+                    AccountByCharacterAndDateResponse accountResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                    accountResponse.Images ??= new List<AccountImageResponse>();
+
+                    if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                    {
+                        foreach (var image in account.AccountImages)
+                        {
+                            accountResponse.Images.Add(new AccountImageResponse
+                            {
+                                AccountImageId = image.AccountImageId,
+                                UrlImage = image.UrlImage,
+                                CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                IsAvatar = image.IsAvatar
+                            });
+                        }
+                    }
+                    accountByCharacterAndDateResponses.Add(accountResponse);
+
+                }
             }
 
             return accountByCharacterAndDateResponses;
@@ -653,13 +727,36 @@ namespace CCSS_Service.Services
 
                 foreach (var contractCharacter in contract.ContractCharacters)
                 {
-                    Account account = await accountRepository.GetAccount(contractCharacter.CosplayerId);
-                    if(account == null)
+                    if (contractCharacter.CosplayerId != null)
                     {
-                        throw new Exception("Account does not exist");
+                        Account account = await accountRepository.GetAccount(contractCharacter.CosplayerId);
+                        if (account == null)
+                        {
+                            throw new Exception("Account does not exist");
+                        }
+
+                        AccountByCharacterAndDateResponse accountByCharacterAndDateResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
+
+                        accountByCharacterAndDateResponse.Images ??= new List<AccountImageResponse>();
+
+                        if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                        {
+                            foreach (var image in account.AccountImages)
+                            {
+                                accountByCharacterAndDateResponse.Images.Add(new AccountImageResponse
+                                {
+                                    AccountImageId = image.AccountImageId,
+                                    UrlImage = image.UrlImage,
+                                    CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    IsAvatar = image.IsAvatar
+                                });
+                            }
+                        }
+
+                        list.Add(accountByCharacterAndDateResponse);
                     }
-                    AccountByCharacterAndDateResponse accountByCharacterAndDateResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
-                    list.Add(accountByCharacterAndDateResponse);
+
                 }
 
                 return list;
@@ -672,7 +769,30 @@ namespace CCSS_Service.Services
 
         public async Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId)
         {
-            return mapper.Map<List<AccountResponse>>(await accountRepository.GetAllAccountsByRoleId(roleId));
+            List<AccountResponse> accountResponses = new List<AccountResponse>();
+            var accounts = await accountRepository.GetAllAccountsByRoleId(roleId);
+            foreach (Account account in accounts)
+            {
+                AccountResponse accountResponse = mapper.Map<AccountResponse>(account);
+                accountResponse.Images ??= new List<AccountImageResponse>();
+
+                if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                {
+                    foreach (var image in account.AccountImages)
+                    {
+                        accountResponse.Images.Add(new AccountImageResponse
+                        {
+                            AccountImageId = image.AccountImageId,
+                            UrlImage = image.UrlImage,
+                            CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                            UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                            IsAvatar = image.IsAvatar
+                        });
+                    }
+                }
+                accountResponses.Add(accountResponse);
+            }
+            return accountResponses;
         }
 
         public async Task<bool> AddCosplayer(string userName, string password)
