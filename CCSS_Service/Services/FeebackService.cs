@@ -17,7 +17,8 @@ namespace CCSS_Service.Services
         Task<bool> UpdateFeedback(UpdateFeedbackRequest feedbackRequest, string accountId);
         Task<List<FeedbackResponse>> GetFeedbackByContractId(string contractId);
         Task<List<FeedbackResponse>> GetAllFeedback();
-        Task<List<FeedbackResponse>> ViewFeedbackByCosplayerId(string cosplayerId);
+        Task<List<FeedbackResponse>> GetFeedbackByCosplayerId(string cosplayerId);
+        Task<FeedbackResponse> GetFeedbackByFeedbackId(string feedbackId);
         
     }
     public class FeebackService : IFeedbackService
@@ -244,9 +245,14 @@ namespace CCSS_Service.Services
             }
         }
 
-        public async Task<List<FeedbackResponse>> ViewFeedbackByCosplayerId(string cosplayerId)
+        public async Task<List<FeedbackResponse>> GetFeedbackByCosplayerId(string cosplayerId)
         {
             return mapper.Map<List<FeedbackResponse>>(await _feedbackRepository.GetAllFeedbacksByCosplayerId(cosplayerId));
+        }
+
+        public async Task<FeedbackResponse> GetFeedbackByFeedbackId(string feedbackId)
+        {
+            return mapper.Map<FeedbackResponse>(await _feedbackRepository.GetFeedbackByFeedbackId(feedbackId));
         }
     }
 }

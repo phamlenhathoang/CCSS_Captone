@@ -41,7 +41,6 @@ namespace CCSS_Captone.Controllers
             }
             return BadRequest(ModelState);
         }
-        //}
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetContractById(string id)

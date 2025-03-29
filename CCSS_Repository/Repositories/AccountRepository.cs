@@ -51,12 +51,12 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Account> GetAccount(string accountId)
         {
-            return await dbContext.Accounts.Include(r => r.Role).FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsActive == true);   
+            return await dbContext.Accounts.Include(r => r.Role).Include(a => a.AccountImages).FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsActive == true);   
         }
 
         public async Task<Account> GetAccountByAccountId(string accountId)
         {
-            return await dbContext.Accounts.FirstOrDefaultAsync(a => a.AccountId == accountId && a.IsActive == true); 
+            return await dbContext.Accounts.Include(a => a.AccountImages).FirstOrDefaultAsync(a => a.AccountId == accountId && a.IsActive == true); 
         }
 
         //public async Task<Account> GetAccountByAccountIdIncludeTask(string acountId, string? taskId)
@@ -115,7 +115,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Account>> GetAllAccountsByCharacter(Character character)
         {
-            return await dbContext.Accounts.Include(r => r.Role).Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight
+            return await dbContext.Accounts.Include(r => r.Role).Include(a => a.AccountImages).Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight
                                                         && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight
                                                         && a.Role.RoleName == RoleName.Cosplayer).ToListAsync();
         }
