@@ -219,10 +219,10 @@ namespace CCSS_Service.Services
             {
                 requestDtos.PackageId = null;
             }
-            if(requestDtos.AccountCouponId != null)
+            if(!string.IsNullOrEmpty(requestDtos.AccountCouponId))
             {
                 var accountCoupon = await _accountCouponRepository.GetAccountCouponById(requestDtos.AccountCouponId);
-                if (accountCoupon == null)
+                if (accountCoupon == null )
                 {
                     return "This AccountCoupon is not found";
                 }
@@ -235,41 +235,7 @@ namespace CCSS_Service.Services
                     return "This coupon be used";
                 }
             }
-            
-            foreach (var r in requestDtos.ListRequestCharacters)
-            {
-                if (r.CosplayerId != null)
-                {
-                    var checkCharacter = await _characterRepository.GetCharacter(r.CharacterId);
-                    if (checkCharacter == null)
-                    {
-                        return "Character does not exist";
-                    }
-                    if(checkCharacter.Quantity == 0 || r.Quantity > checkCharacter.Quantity)
-                    {
-                      return $"Not enough stock for character {r.CharacterId}.";
-                    }
-                
-                    var account = await _accountRepository.GetAccount(r.CosplayerId);
-                    bool checkAccount = await _characterRepository.CheckCharacterForAccount(account, r.CharacterId);
-                    if (!checkAccount)
-                    {
-                        return "Cosplayer does not suitable.";
-                    }
-                    
-                    bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
-                    if (!checkTask)
-                    {
-                        return "This cosplayer is has another job. Please change datetime.";
-                    }
-                }
-                var character = await _accountRepository.GetAccount(r.CosplayerId);
-                if (character.RoleId != "R004" || character == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
-                {
-
-                    return "This cosplayer not found";
-                }
-            }
+                  
 
             var newRequest = new Request()
             {
@@ -285,7 +251,7 @@ namespace CCSS_Service.Services
                 ServiceId = requestDtos.ServiceId,
                 PackageId = requestDtos.PackageId,
                 //ContractId = null,
-                AccountCouponId = requestDtos.AccountCouponId,
+                AccountCouponId = requestDtos.AccountCouponId ?? null,
             };
             var result = await _repository.AddRequest(newRequest);
             if (!result)
@@ -312,6 +278,40 @@ namespace CCSS_Service.Services
                         if (service.ServiceId != "S001")
                         {
                             r.Quantity = 1;
+                        }
+                        else
+                        {
+                            var checkCharacter = await _characterRepository.GetCharacter(r.CharacterId);
+                            if (checkCharacter.Quantity == 0 || r.Quantity > checkCharacter.Quantity)
+                            {
+                                return $"Not enough stock for character {r.CharacterId}.";
+                            }
+                        }
+                        if (r.CosplayerId != null)
+                        {
+                            var checkCharacter = await _characterRepository.GetCharacter(r.CharacterId);
+                            if (checkCharacter == null)
+                            {
+                                return "Character does not exist";
+                            }
+                            var account = await _accountRepository.GetAccount(r.CosplayerId);
+                            bool checkAccount = await _characterRepository.CheckCharacterForAccount(account, r.CharacterId);
+                            if (!checkAccount)
+                            {
+                                return "Cosplayer does not suitable.";
+                            }
+
+                            bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
+                            if (!checkTask)
+                            {
+                                return "This cosplayer is has another job. Please change datetime.";
+                            }
+                        }
+                        var character = await _accountRepository.GetAccount(r.CosplayerId);
+                        if (character.RoleId != "R004" || character == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
+                        {
+
+                            return "This cosplayer not found";
                         }
                         // Nếu CosplayerId hợp lệ, thêm vào danh sách
                         characteInRequest.Add(new RequestCharacter
