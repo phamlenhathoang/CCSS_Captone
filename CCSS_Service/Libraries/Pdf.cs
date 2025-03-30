@@ -324,12 +324,15 @@ namespace CCSS_Service.Libraries
             {
                 Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
 
-                totalAmount = (double)requestCharacter.Quantity * (double)character.Price;
-
                 if (requestCharacter.CosplayerId != null)
                 {
+                    totalAmount = (double)requestCharacter.Quantity * (double)character.Price;
                     Account account = await accountRepository.GetAccount(requestCharacter.CosplayerId);
                     totalAmount += (double)character.Price * (double)account.SalaryIndex - (double)character.Price;
+                }
+                else
+                {
+                    totalAmount += (double)requestCharacter.Quantity * (double)character.Price * 5;
                 }
             }
             double parsedAmount;
