@@ -39,6 +39,7 @@ namespace CCSS_Service.Services
         Task<List<ContractResponse>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate,string? accountId, string? contractId);
         Task<ContractResponse> GetContractById(string contractId); 
         Task<List<ContractResponse>> GetContractByAccountId(string accountId);
+        Task<List<RequestInContractResponse>> GetRequestInContractByAccountId(string accountId);
 
     }
     public class ContractServices : IContractServices
@@ -47,6 +48,7 @@ namespace CCSS_Service.Services
         private readonly IContractCharacterRepository _contractCharacterRepository;
         private readonly ICharacterRepository _characterRepository;
         private readonly IRequestRepository _requestRepository;
+        private readonly IRequestCharacterRepository _requestCharacterRepository;
         private readonly IAccountCouponRepository accountCouponRepository;
         private readonly IServiceRepository _serviceRepository;
         private readonly IAccountRepository _accountRepository; 
@@ -61,9 +63,10 @@ namespace CCSS_Service.Services
         private readonly string _bucketName = "miracles-ef238.appspot.com";
 
 
-        public ContractServices(IMapper mapper, IPackageRepository packageRepository, IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository)
+        public ContractServices(IMapper mapper, IPackageRepository packageRepository, IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository, IRequestCharacterRepository requestCharacterRepository)
         {
             this._contractRespository = _contractRespository;
+            _requestCharacterRepository = requestCharacterRepository;
             _contractCharacterRepository = contractCharacterRepository;
             _characterRepository = characterRepository;
             this._requestRepository = _requestRepository;
@@ -298,6 +301,63 @@ namespace CCSS_Service.Services
 
         //    return $"Update status {newStatus} of contract is completed";
         //}
+
+
+        public async Task<List<RequestInContractResponse>> GetRequestInContractByAccountId(string accountId)
+        {
+            if (string.IsNullOrEmpty(accountId))
+            {
+                throw new Exception("Need entry this field");
+            }
+            List<RequestInContractResponse> list = new List<RequestInContractResponse>();
+            var listcontract = await _contractRespository.GetAllContractByAccountId(accountId);
+
+
+            foreach (var item in listcontract)
+            {
+                var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
+                //var contract = await _contractRespository.GetContractById(item.ContractId);
+                var request = await _requestRepository.GetRequestById(item.RequestId);
+                List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(item.RequestId)).Select(c => new CharacterRequestResponse()
+                {
+                    CharacterId = c.CharacterId,
+                    CosplayerId = c.CosplayerId,
+                    Description = c.Description,
+                    Quantity = c.Quantity
+                }).ToList();
+
+                RequestResponse requestResponse = new RequestResponse()
+                {
+                    RequestId = request.RequestId,
+                    AccountId = request.AccountId,
+                    Name = request.Name,
+                    Description = request.Description,
+                    Price = request.Price,
+                    Status = request.Status.ToString(),
+                    StartDate = request.StartDate,
+                    EndDate = request.EndDate,
+                    Location = request.Location,
+                    ServiceId = request.ServiceId,
+                    PackageId = request.PackageId,
+                    CharactersListResponse = characterResponses
+
+                };
+
+                RequestInContractResponse requestContract = new RequestInContractResponse()
+                {
+                    ContractId = item.ContractId,
+                    RequestResponse = requestResponse,
+                };
+                list.Add(requestContract);
+            }
+            return list;
+        }
+                
+
+         
+        
+
+
         public async Task<string> AddContract(string requestId, int deposit)
         {
             try
