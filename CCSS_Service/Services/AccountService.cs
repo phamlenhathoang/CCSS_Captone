@@ -352,7 +352,8 @@ namespace CCSS_Service.Services
                             GoogleId = googleId,
                             RoleId = "R005",                          
                             UserName = email,
-                            Name = email.Split("@")[0]
+                            Name = email.Split("@")[0],
+                            IsActive = true,
                         };
                         var resultAccount = await accountRepository.AddAccount(NewAccount);
                         if (!resultAccount)

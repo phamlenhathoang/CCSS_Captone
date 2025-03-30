@@ -15,6 +15,7 @@ using Microsoft.OpenApi.Models;
 using CCSS_Service.Libraries;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Google.Apis.Auth.OAuth2;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -139,9 +140,9 @@ builder.Services.AddAuthentication(options =>
     .AddCookie()
     .AddGoogle(options =>
 {
-    options.ClientId = "555995041548-la323dpjckod6gdsh7h9dulprchfti64.apps.googleusercontent.com";
-    options.ClientSecret = "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";
-    options.CallbackPath = "/signin-google";
+    options.ClientId = builder.Configuration["Google:ClientId"];  
+    options.ClientSecret = builder.Configuration["Google:ClientSecret"];
+    options.CallbackPath = builder.Configuration["Google:CallbackPath"];
 
 })
     .AddJwtBearer(options =>
