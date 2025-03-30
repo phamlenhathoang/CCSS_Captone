@@ -1,7 +1,11 @@
 ﻿using CCSS_Service.Model.Requests;
 using CCSS_Service.Services;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace CCSS_Captone.Controllers
 {
@@ -28,6 +32,30 @@ namespace CCSS_Captone.Controllers
         {
             var account = await accountService.Register(accountRequest);
             return Ok(account);
+        }
+
+        [HttpGet("loginGoogle")]
+        public IActionResult GoogleLogin()
+        {
+            var properties = new AuthenticationProperties { RedirectUri = "/api/Auth/googleResponse" };
+            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+        }
+
+        [HttpGet("googleResponse")]
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = User.Claims.ToDictionary(c => c.Type, c => c.Value);
+
+            var email = result.GetValueOrDefault(ClaimTypes.Email);
+            var googleId = result.GetValueOrDefault(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(googleId))
+            {
+                return Unauthorized("Missing required claims");
+            }
+            var result1 = await accountService.LoginByGoogle(email, googleId);
+            return Ok(result1);
+           
         }
 
         [HttpPatch]

@@ -43,6 +43,7 @@ namespace CCSS_Service.Services
         Task<List<AccountByCharacterAndDateResponse>> ViewAllCosplayerByContractId(string contractId);
         Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId);
         Task<bool> AddCosplayer(string userName, string password);
+        Task<AccountLoginResponse> LoginByGoogle(string email, string googleId);
     }
     public class AccountService : IAccountService
     {
@@ -331,6 +332,105 @@ namespace CCSS_Service.Services
             {
                 Console.WriteLine("Error: " + ex.Message);
                 throw new Exception(ex.Message);
+            }
+        }
+
+
+        public async Task<AccountLoginResponse> LoginByGoogle(string email, string googleId)
+        {
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
+            {
+                try
+                {
+                    var account = await accountRepository.GetAccountByGoogleId(email, googleId);
+                    if (account == null)
+                    {
+                        Account NewAccount = new Account()
+                        {
+                            AccountId = Guid.NewGuid().ToString(),
+                            Email = email,
+                            GoogleId = googleId,
+                            RoleId = "R005",                          
+                            UserName = email,
+                            Name = email.Split("@")[0]
+                        };
+                        var resultAccount = await accountRepository.AddAccount(NewAccount);
+                        if (!resultAccount)
+                        {
+                            await transaction.RollbackAsync();
+                            throw new Exception("Add Failed");
+                        }
+                       
+                    }                 
+                    else if ((bool)!account.IsActive)
+                    {
+                        await transaction.RollbackAsync();
+                        throw new Exception("Account has not been activated");
+                    }
+
+
+
+                    var jti = Guid.NewGuid().ToString();
+                    var jwtHandler = new JwtSecurityTokenHandler();
+                    var issuer = _configuration["AppSettings:Issuer"];
+                    var audience = _configuration["AppSettings:Audience"];
+
+                    var key = Encoding.UTF8.GetBytes(_configuration["AppSettings:SecretKey"]);
+                    var googleAccount = await accountRepository.GetAccountByGoogleId(email, googleId);
+                    var tokenDes = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(new[]
+                        {
+                    new Claim("Id", googleAccount.AccountId),
+                    new Claim("Email", googleAccount.Email),
+                    new Claim("AccountName", googleAccount.Name),
+                    new Claim(ClaimTypes.Role, googleAccount.Role.RoleName.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Jti, jti)
+                }),
+                        Expires = DateTime.UtcNow.AddHours(2),
+                        Issuer = issuer,
+                        Audience = audience,
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                    };
+
+                    var jwtToken = jwtHandler.CreateToken(tokenDes);
+                    Console.WriteLine(SecurityAlgorithms.HmacSha256);
+
+                    string refreshTokenValue = GenerateRefreshToken();
+                    RefreshToken refreshToken = new RefreshToken
+                    {
+                        RefreshTokenId = Guid.NewGuid().ToString(),
+                        AccountId = googleAccount.AccountId,
+                        CreateAt = DateTime.UtcNow,
+                        ExpiresAt = DateTime.UtcNow.AddDays(7),
+                        IsUsed = false,
+                        RefreshTokenValue = refreshTokenValue,
+                        JwtId = jti,
+                        IsRevoked = false
+                    };
+
+                    bool result = await refreshTokenRepository.AddRefreshToken(refreshToken);
+                    if (!result)
+                    {
+                        await transaction.RollbackAsync();
+                        throw new Exception("Cannot save refresh token !!!");
+                    }
+
+                    await transaction.CommitAsync();
+                    string accessToken = jwtHandler.WriteToken(jwtToken);
+                    return new AccountLoginResponse
+                    {
+                        AccessToken = accessToken,
+                        RefreshToken = refreshTokenValue
+                    };
+                }
+
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    Console.WriteLine("Error: " + ex.Message);
+                    throw new Exception(ex.Message);
+                }
             }
         }
 
