@@ -20,7 +20,7 @@ namespace CCSS_Captone.Controllers
         }
 
         //[Authorize(Roles = "Manager")]
-        [HttpGet("{searchTerm}")]
+        [HttpGet("searchTerm")]
         public async Task<IActionResult> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId)
         {
             if (ModelState.IsValid)
@@ -42,12 +42,12 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetContractById(string id)
+        [HttpGet("contractId/{contractId}")]
+        public async Task<IActionResult> GetContractById(string contractId)
         {
             if (ModelState.IsValid)
             {
-                var result = await _services.GetContractById(id);
+                var result = await _services.GetContractById(contractId);
                 return Ok(result);
             }
             return BadRequest(ModelState);

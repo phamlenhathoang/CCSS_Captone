@@ -10,6 +10,7 @@ namespace CCSS_Service.Model.Responses
     public class ContractResponse
     {   
         public string ContractId { get; set; }  
+        public string RequestId { get; set; }  
         public string? PackageName { get; set; }
         public double? AccountCoupon { get; set; }
         public string? ContractName { get; set; }

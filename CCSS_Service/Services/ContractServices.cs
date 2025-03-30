@@ -400,6 +400,7 @@ namespace CCSS_Service.Services
                     ContractResponse crsItem = new ContractResponse()
                     {
                         ContractId = contract.ContractId,
+                        RequestId = contract.RequestId,
                         Amount = contract.Amount ?? 0,
                         ContractName = contract.ContractName,
                         Deposit = contract.Deposit,
@@ -516,6 +517,7 @@ namespace CCSS_Service.Services
                     ContractResponse crsItem = new ContractResponse()
                     {
                         ContractId = contract.ContractId,
+                        RequestId = contract.RequestId,
                         Amount = contract.Amount ?? 0,
                         ContractName = contract.ContractName,
                         Deposit = contract.Deposit,
@@ -628,6 +630,7 @@ namespace CCSS_Service.Services
                 ContractResponse crsItem = new ContractResponse()
                 {
                     ContractId = contract.ContractId,
+                    RequestId = contract.RequestId,
                     Amount = contract.Amount ?? 0,
                     ContractName = contract.ContractName,
                     Deposit = contract.Deposit,
