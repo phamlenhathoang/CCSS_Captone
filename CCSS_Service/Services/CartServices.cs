@@ -79,7 +79,7 @@ namespace CCSS_Service.Services
                     UpdateDate = cart.UpdateDate,
                     ListCartProduct = listCartProduct.Select(cp => new CartProductResponse
                     {
-                        CartProductId = cp.ProductId,
+                        CartProductId = cp.CartProductId,
                         ProductId = cp.ProductId,
                         Price = cp.Price,
                         Quantity = cp.Quantity,
