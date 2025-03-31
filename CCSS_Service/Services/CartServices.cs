@@ -51,7 +51,8 @@ namespace CCSS_Service.Services
                 {
                     CartProductId = cp.CartProductId,
                     ProductId = cp.ProductId,
-                    Price = cp.Price,
+                    Price = cp.Product.Price,
+                    CartProductPrice = cp.Price,
                     Quantity = cp.Quantity,
                     CreatedDate = cp.CreatedDate,
                 }).ToList(),
@@ -81,8 +82,9 @@ namespace CCSS_Service.Services
                     {
                         CartProductId = cp.CartProductId,
                         ProductId = cp.ProductId,
-                        Price = cp.Price,
-                        Quantity = cp.Quantity,
+                        Price = cp.Product.Price,
+                        CartProductPrice = cp.Price,
+                        Quantity = cp.Quantity,                  
                         CreatedDate = cp.CreatedDate,
                     }).ToList(),
                 };

@@ -38,6 +38,18 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
+
+        [HttpGet("GetCartByCartProduct")]
+        public async Task<IActionResult> GetCartByProductAndCart(string  cartId, string productId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetCartProduct(cartId, productId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddCartProduct(string cartId, List<CartProductRequest> cartProductRequests)
         {
