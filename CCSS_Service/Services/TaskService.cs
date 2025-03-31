@@ -288,37 +288,34 @@ namespace CCSS_Service.Services
 
         public async Task<string> AddTask(List<AddTaskEventRequest>? taskEventRequests, List<ContractCharacter>? contractCharacters)
         {
-            using (var transaction = await _beginTransactionRepository.BeginTransaction())
+            try
             {
-                try
+                if (taskEventRequests != null)
                 {
-                    if (taskEventRequests != null)
+                    bool result = await AddTaskEvent(taskEventRequests) ? true : false;
+                    if (result)
                     {
-                        bool result = await AddTaskEvent(taskEventRequests) ? true : false;
-                        if (result)
-                        {
-                            await transaction.CommitAsync();
-                            return "Successfully";
-                        }
+                        //await transaction.CommitAsync();
+                        return "Successfully";
                     }
+                }
 
-                    if (contractCharacters != null)
-                    {
-                        bool result = await AddTaskContract(contractCharacters) ? true : false;
-                        if (result)
-                        {
-                            await transaction.CommitAsync();
-                            return "Successfully";
-                        }
-                    }
-                    await transaction.RollbackAsync();
-                    return "Failed";
-                }
-                catch (Exception ex)
+                if (contractCharacters != null)
                 {
-                    await transaction.RollbackAsync();
-                    throw new Exception(ex.Message);
+                    bool result = await AddTaskContract(contractCharacters) ? true : false;
+                    if (result)
+                    {
+                        //await transaction.CommitAsync();
+                        return "Successfully";
+                    }
                 }
+                //await transaction.RollbackAsync();
+                return "Failed";
+            }
+            catch (Exception ex)
+            {
+                //await transaction.RollbackAsync();
+                throw new Exception(ex.Message);
             }
         }
 
