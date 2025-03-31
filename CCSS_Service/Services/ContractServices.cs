@@ -16,6 +16,7 @@ using System.Linq;
 using System.Management;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using Contract = CCSS_Repository.Entities.Contract;
 using Request = CCSS_Repository.Entities.Request;
@@ -562,6 +563,7 @@ namespace CCSS_Service.Services
 
         public async Task<bool> UpdateStatusContract(string contractId, string status, double? price)
         {
+            using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             try
             {
                 Contract contract = await _contractRespository.GetContractById(contractId);
@@ -630,7 +632,7 @@ namespace CCSS_Service.Services
                         throw new Exception("Cannot add ContractCharacter");
                     }
                 }
-                //await transaction.CommitAsync();
+                scope.Complete();
                 return true;
             }
             catch (Exception ex)
