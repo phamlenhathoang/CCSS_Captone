@@ -53,7 +53,7 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpGet("acountId/{accountId}")]
+        [HttpGet("accountId/{accountId}")]
         public async Task<IActionResult> GetContractByAccountId(string accountId)
         {
             if (ModelState.IsValid)
