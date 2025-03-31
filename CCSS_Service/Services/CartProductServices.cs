@@ -161,6 +161,7 @@ namespace CCSS_Service.Services
                         return "Delete Failed";
                     }
                     product.Quantity += cartProduct.Quantity;
+                    product.IsActive = true;
                     product.UpdateDate = DateTime.Now;
                     var result1 = await _productRepository.UpdateProduct(product);
                     if (!result1)
