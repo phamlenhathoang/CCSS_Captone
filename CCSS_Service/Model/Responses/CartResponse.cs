@@ -24,6 +24,8 @@ namespace CCSS_Service.Model.Responses
         public string CartProductId { get; set; } 
         public string ProductId { get; set; }
         public double? Price { get; set; }
+        public double? CartProductPrice { get; set; }
+        public string UrlImage { get; set; }
         public int? Quantity { get; set; }
         public DateTime? CreatedDate { get; set; }
     }

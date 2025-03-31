@@ -30,12 +30,12 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Cart> GetCartById(string id)
         {
-            return await _context.Carts.FirstOrDefaultAsync(sc => sc.CartId.Equals(id));
+            return await _context.Carts.Include(p => p.CartProducts).ThenInclude(sc => sc.Product).FirstOrDefaultAsync(sc => sc.CartId.Equals(id));
         }
 
         public async Task<Cart> GetcartByAccount(string accountId)
         {
-            return await _context.Carts.FirstOrDefaultAsync(sc => sc.AccountId.Equals(accountId));
+            return await _context.Carts.Include(p => p.CartProducts).ThenInclude(sc => sc.Product).FirstOrDefaultAsync(sc => sc.AccountId.Equals(accountId));
         }
         public async Task<bool> AddCart(Cart cart)
         {

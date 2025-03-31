@@ -61,31 +61,50 @@ namespace CCSS_Service.Services
                     var product = await _productRepository.GetProductById(cp.ProductId);
                     if (product == null)
                     {
+                        await transaction.RollbackAsync();
                         return "Product not found";
                     }
                     if (product.Quantity == 0 || product.Quantity < cp.Quantity)
                     {
+                        await transaction.RollbackAsync();
                         return "This product is out of stock";
                     }
 
-                    var cartProduct = new CartProduct()
-                    {
-                        CartProductId = Guid.NewGuid().ToString(),
-                        ProductId = cp.ProductId,
-                        CartId = cartId,
-                        Quantity = cp.Quantity ?? 1,
-                        Price = product.Price * cp.Quantity,
-                        CreatedDate = DateTime.Now,
-                    };
+                    int addedQuantity = cp.Quantity ?? 1;
+                    double addedPrice = (double)product.Price * addedQuantity;
 
-                    var result = await _repository.AddCartProduct(cartProduct);
-                    if (!result)
+
+                    var cartProductExisting = await _repository.GetCartProduct(cp.ProductId, cartId);
+                    if (cartProductExisting != null)
                     {
-                        await transaction.RollbackAsync();
-                        return "Add Failed";
+                        cartProductExisting.Quantity += addedQuantity;
+                        cartProductExisting.Price = product.Price * cartProductExisting.Quantity;
+
+                        await _repository.UpdateCartProduct(cartProductExisting);
+                    }
+                    else
+                    {
+
+
+                        var cartProduct = new CartProduct()
+                        {
+                            CartProductId = Guid.NewGuid().ToString(),
+                            ProductId = cp.ProductId,
+                            CartId = cartId,
+                            Quantity = cp.Quantity ?? 1,
+                            Price = product.Price * cp.Quantity,
+                            CreatedDate = DateTime.Now,
+                        };
+
+                        var result = await _repository.AddCartProduct(cartProduct);
+                        if (!result)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Add Failed";
+                        }
                     }
 
-                    cart.TotalPrice += (double)cartProduct.Price;
+                    cart.TotalPrice += addedPrice;
                     cart.UpdateDate = DateTime.Now;
                     var result1 = await _cartRepository.UpdateCart(cart);
                     if (!result1)
@@ -95,14 +114,7 @@ namespace CCSS_Service.Services
                     }
 
                     product.Quantity -= cp.Quantity;
-                    if (product.Quantity == 0)
-                    {
-                        product.IsActive = false;
-                    }
-                    else
-                    {
-                        product.IsActive = true;
-                    }
+                    product.IsActive = product.Quantity > 0;
                     product.UpdateDate = DateTime.Now;
                     var result2 = await _productRepository.UpdateProduct(product);
                     if (!result2)

@@ -41,7 +41,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<CartProduct> GetCartProduct(string productId, string cartId)
         {
-            return await _context.CartProducts.FirstOrDefaultAsync(sc => sc.ProductId.Equals(productId) && sc.CartId.Equals(cartId));
+            return await _context.CartProducts.Include(sc => sc.Cart).Include(p => p.Product).FirstOrDefaultAsync(sc => sc.ProductId.Equals(productId) && sc.CartId.Equals(cartId));
         }
 
         public async Task<List<CartProduct>> GetListProductInCart(string cartId)
