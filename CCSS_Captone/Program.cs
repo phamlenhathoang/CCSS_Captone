@@ -1,4 +1,4 @@
-using CCSS_Repository.Entities;
+﻿using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
 using CCSS_Service.BackgroundServices;
 using CCSS_Service.Hubs;
@@ -142,7 +142,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.ClientId = builder.Configuration["Google:ClientId"];  
     options.ClientSecret = builder.Configuration["Google:ClientSecret"];
-    options.CallbackPath = builder.Configuration["Google:CallbackPath"];
+    options.CallbackPath = "/signin-google";
 
 })
     .AddJwtBearer(options =>
@@ -214,9 +214,12 @@ app.MapHub<NotificationHub>("/notificationHub");
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
+<<<<<<< HEAD
 
 app.UseAuthentication();
 
+=======
+>>>>>>> 7122181825e956e17a928ad0aa59a693fbd90dcc
 app.UseAuthorization();
 
 app.MapControllers();

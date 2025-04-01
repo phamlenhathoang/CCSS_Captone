@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace CCSS_Captone.Controllers
 {
@@ -25,6 +26,7 @@ namespace CCSS_Captone.Controllers
         /// Lấy danh sách tất cả sự kiện có thể tìm kiếm theo tên
         /// </summary>
         [SwaggerOperation(Description = "role: Mamager, Customer")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "Manager, Customer")]
         [HttpGet("GetAllEvents")]
         public async Task<IActionResult> GetAllEvents([FromQuery] string? searchTerm)
@@ -72,7 +74,12 @@ namespace CCSS_Captone.Controllers
         /// Tạo một sự kiện mới
         /// </summary>
         [SwaggerOperation(Description = "role: Mamager")]
+<<<<<<< HEAD
         [Authorize(Roles = "Mamager")]
+=======
+        [Authorize(Roles = "Manager")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+>>>>>>> 7122181825e956e17a928ad0aa59a693fbd90dcc
         [HttpPost("AddEvent")]
         public async Task<IActionResult> AddEvent([FromBody] CreateEventRequest eventRequest)
         {
@@ -98,6 +105,7 @@ namespace CCSS_Captone.Controllers
         /// </summary>
          [SwaggerOperation(Description = "role: Mamager")]
         [Authorize(Roles = "Manager")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("UpdateEvent/{eventId}")]
         public async Task<IActionResult> UpdateEvent(string eventId, [FromBody] UpdateEventRequest eventRequest)
         {
@@ -123,6 +131,7 @@ namespace CCSS_Captone.Controllers
         /// </summary>
         [SwaggerOperation(Description = "role: Mamager")]
         [Authorize(Roles = "Manager")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpDelete("DeleteEvent/{id}")]
         public async Task<IActionResult> DeleteEvent(string id)
         {
