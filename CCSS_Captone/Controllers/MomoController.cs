@@ -36,6 +36,7 @@ namespace CCSS_Captone.Controllers
         }
         [SwaggerOperation(Description = "role: không call cái này")]
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("PaymentCallBack")]
         public async Task<IActionResult> PaymentCallBack()
         {
