@@ -318,7 +318,29 @@ namespace CCSS_Service.Services
 
         public async Task<List<TaskResponse>> GetAllTasks()
         {
-            return mapper.Map<List<TaskResponse>>(await taskRepository.GetAllTask());
+            try
+            {
+                List<TaskResponse> taskResponses = mapper.Map<List<TaskResponse>>(await taskRepository.GetAllTask());
+                if (taskResponses == null)
+                {
+                    return new List<TaskResponse> { };
+                }
+
+                foreach (var taskResponse in taskResponses)
+                {
+                    Character character = await characterRepository.GetCharacter(taskResponse.TaskName);
+                    if (character == null)
+                    {
+                        throw new Exception("Character does not exist");
+                    }
+                    taskResponse.TaskName = character.CharacterName;
+                }
+                return taskResponses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<bool> UpdateStatusTask(string taskId, string status, string accountId)
@@ -423,6 +445,12 @@ namespace CCSS_Service.Services
                         }
                     }
 
+                    Character character = await characterRepository.GetCharacter(task.TaskName);
+                    if (character == null)
+                    {
+                        throw new Exception("Character does not exist");
+                    }
+
                     var tasResponse = new TaskResponse()
                     {
                         AccountId = task.AccountId,
@@ -436,7 +464,7 @@ namespace CCSS_Service.Services
                         StartDate = task.StartDate?.ToString("HH:mm dd/MM/yyyy"),
                         Status = task.Status.ToString(),
                         TaskId = task.TaskId,
-                        TaskName = task.TaskName,
+                        TaskName = character.CharacterName,
                         UpdateDate = task.UpdateDate?.ToString("HH:mm dd/MM/yyyy") ?? null,
                     };
 
@@ -472,6 +500,12 @@ namespace CCSS_Service.Services
                     }
                 }
 
+                Character character = await characterRepository.GetCharacter(task.TaskName);
+                if (character == null)
+                {
+                    throw new Exception("Character does not exist");
+                }
+
                 Event e = new Event();
                 if (task.EventCharacter != null)
                 {
@@ -495,7 +529,7 @@ namespace CCSS_Service.Services
                     StartDate = task.StartDate?.ToString("HH:mm dd/MM/yyyy"),
                     Status = task.Status.ToString(),
                     TaskId = task.TaskId,
-                    TaskName = task.TaskName,
+                    TaskName = character.CharacterName,
                     UpdateDate = task.UpdateDate?.ToString("HH:mm dd/MM/yyyy") ?? null,
                 };
 
