@@ -1,4 +1,4 @@
-using CCSS_Repository.Entities;
+﻿using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
 using CCSS_Service.BackgroundServices;
 using CCSS_Service.Hubs;
@@ -138,7 +138,10 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 })
-    .AddCookie()
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+    {    
+        options.LoginPath = "/Auth/googleResponse"; // Định nghĩa đường dẫn login cho cookie
+    })
     .AddGoogle(options =>
 {
     options.ClientId = builder.Configuration["Google:ClientId"];  
@@ -215,7 +218,6 @@ app.MapHub<NotificationHub>("/notificationHub");
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
-
 app.UseAuthorization();
 
 app.MapControllers();
