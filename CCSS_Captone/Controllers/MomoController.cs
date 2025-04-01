@@ -41,7 +41,7 @@ namespace CCSS_Captone.Controllers
         public async Task<IActionResult> PaymentCallBack()
         {
             var response = await _momoService.MomoPaymentExecuteAsync(HttpContext.Request.Query);
-            return Ok(response);
+            return Redirect("http://localhost:3000/success-payment");
         }
     }
 }

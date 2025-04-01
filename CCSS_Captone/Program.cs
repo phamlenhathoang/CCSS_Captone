@@ -214,6 +214,12 @@ app.MapHub<NotificationHub>("/notificationHub");
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
+<<<<<<< HEAD
+
+app.UseAuthentication();
+
+=======
+>>>>>>> 7122181825e956e17a928ad0aa59a693fbd90dcc
 app.UseAuthorization();
 
 app.MapControllers();

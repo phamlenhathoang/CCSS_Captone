@@ -57,6 +57,7 @@ namespace CCSS_Service.Services
             var order = _mapper.Map<Order>(orderRequest);
             order.OrderId = Guid.NewGuid().ToString();
             order.OrderStatus = OrderStatus.Pending;
+            order.OrderDate = DateTime.Now;
 
             
             order.OrderProducts = new List<OrderProduct>();

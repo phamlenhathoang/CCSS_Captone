@@ -38,8 +38,9 @@ namespace CCSS_Service.Services
         private readonly IEventRepository _eventrepository;
         private readonly IContractRespository _contractRespository;
         private readonly IContractServices _contractServices;
+        private readonly IOrderRepository _orderRepository;
 
-        public MomoService(IContractServices _contractServices, IOptions<MomoOptionModel> options, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IAccountRepository accountRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IContractRespository contractRespository)
+        public MomoService(IContractServices _contractServices, IOptions<MomoOptionModel> options, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IAccountRepository accountRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IContractRespository contractRespository, IOrderRepository orderRepository)
         {
             _options = options;
             _ticketAccountService = ticketAccountService;
@@ -48,6 +49,7 @@ namespace CCSS_Service.Services
             _eventrepository = eventrepository;
             _accountCouponRepository = accountCouponRepository;
             _contractRespository = contractRespository;
+            _orderRepository = orderRepository;
             this._contractServices = _contractServices;
         }
         public async Task<MomoCreatePaymentResponse> CreatePaymentAsync(OrderInfoModel model)
@@ -281,8 +283,12 @@ namespace CCSS_Service.Services
 
                 case PaymentPurpose.Order:      // mua hàng
                     var accountCoupon = await _accountCouponRepository.GetAccountCoupon(accountCouponId);
+                    var order = await _orderRepository.GetOrderById(OrderPaymentId);
+                    order.OrderStatus= OrderStatus.Completed;
                     accountCoupon.IsActive = false;
                     await _accountCouponRepository.UpdateAccountCoupon(accountCoupon);
+                    await _orderRepository.UpdateOrder(order);
+
                     return "mua hàng thành công";
 
                 default:
