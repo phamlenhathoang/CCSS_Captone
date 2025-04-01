@@ -77,7 +77,7 @@ namespace CCSS_Service.Services
             }
 
 
-            model.OrderId = DateTime.UtcNow.Ticks.ToString();
+            string orderId = DateTime.UtcNow.Ticks.ToString();
             model.OrderInfo = "Khách hàng: " + model.FullName + ". Nội dung: " + model.OrderInfo;
             var extraDataObj = new
             {
@@ -94,9 +94,9 @@ namespace CCSS_Service.Services
             var rawData =
                 $"partnerCode={_options.Value.PartnerCode}" +
                 $"&accessKey={_options.Value.AccessKey}" +
-                $"&requestId={model.OrderId}" +
+                $"&requestId={orderId}" +
                 $"&amount={model.Amount}" +
-                $"&orderId={model.OrderId}" +
+                $"&orderId={orderId}" +
                 $"&orderInfo={model.OrderInfo}" +
                 $"&returnUrl={_options.Value.ReturnUrl}" +
                 $"&notifyUrl={_options.Value.NotifyUrl}" +
@@ -116,10 +116,10 @@ namespace CCSS_Service.Services
                 requestType = _options.Value.RequestType,
                 notifyUrl = _options.Value.NotifyUrl,
                 returnUrl = _options.Value.ReturnUrl,
-                orderId = model.OrderId,
+                orderId = orderId,
                 amount = model.Amount.ToString(),
                 orderInfo = model.OrderInfo,
-                requestId = model.OrderId,
+                requestId = orderId,
                 extraData = extraData,
                 signature = signature
             };
@@ -137,7 +137,7 @@ namespace CCSS_Service.Services
                 Status = PaymentStatus.Pending,
                 Purpose = model.Purpose,
                 CreatAt = DateTime.UtcNow,
-                TransactionId = model.OrderId,
+                TransactionId = orderId,
                 Amount = model.Amount,
                 AccountCouponID = model.AccountCouponId
                 //TicketAccountId = addTicketResult.TicketAccountId

@@ -17,15 +17,17 @@ namespace CCSS_Captone.Controllers
         {
             _momoService = momoService;
         }
+
         [Authorize(Roles = "Customer")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
         [HttpPost]
         [SwaggerOperation(Description = "purpose==0 (Mua vé)<br>" +
                                 "purpose==1 (Trả tiền cọc hợp đồng)<br>" +
                                 "purpose==2 (Tất toán hợp đồng)<br>" +
                                 "purpose==3 (Mua hàng)")]
 
-        public async Task<IActionResult> CreatePaymentUrl(OrderInfoModel model)
+        public async Task<IActionResult> CreatePaymentUrl([FromForm] OrderInfoModel model)
         {
             var response = await _momoService.CreatePaymentAsync(model);
             if (response.IsSuccess == false)
@@ -36,7 +38,7 @@ namespace CCSS_Captone.Controllers
         }
         [SwaggerOperation(Description = "role: không call cái này")]
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("PaymentCallBack")]
         public async Task<IActionResult> PaymentCallBack()
         {
