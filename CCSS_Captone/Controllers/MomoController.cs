@@ -27,7 +27,7 @@ namespace CCSS_Captone.Controllers
                                 "purpose==2 (Tất toán hợp đồng)<br>" +
                                 "purpose==3 (Mua hàng)")]
 
-        public async Task<IActionResult> CreatePaymentUrl([FromForm] OrderInfoModel model)
+        public async Task<IActionResult> CreatePaymentUrl( OrderInfoModel model)
         {
             var response = await _momoService.CreatePaymentAsync(model);
             if (response.IsSuccess == false)
