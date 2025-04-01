@@ -137,15 +137,12 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 })
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-    {    
-        options.LoginPath = "/Auth/googleResponse"; // Định nghĩa đường dẫn login cho cookie
-    })
+    .AddCookie()
     .AddGoogle(options =>
 {
     options.ClientId = builder.Configuration["Google:ClientId"];  
     options.ClientSecret = builder.Configuration["Google:ClientSecret"];
-    options.CallbackPath = builder.Configuration["Google:CallbackPath"];
+    options.CallbackPath = "/signin-google";
 
 })
     .AddJwtBearer(options =>
