@@ -16,7 +16,7 @@ namespace CCSS_Captone.Controllers
             _services = services;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetCartById")]
         public async Task<IActionResult> GetCartById(string id)
         {
             if (ModelState.IsValid)
@@ -27,7 +27,7 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpGet("GetCartby{accountId}")]
+        [HttpGet("GetCartByAccountId")]
         public async Task<IActionResult> GetCartByAccountId(string accountId)
         {
             if (!ModelState.IsValid)

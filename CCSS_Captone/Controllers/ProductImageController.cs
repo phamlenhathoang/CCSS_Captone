@@ -16,7 +16,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProdutcImage()
+        public async Task<IActionResult> GetAllProductImage()
         {
             if (ModelState.IsValid)
             {
@@ -32,6 +32,17 @@ namespace CCSS_Captone.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _services.AddListImageProduct(productId, formFiles);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateImageProduct(string id, IFormFile formFile)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.UpdateProductImage(id, formFile);
                 return Ok(result);
             }
             return BadRequest(ModelState);

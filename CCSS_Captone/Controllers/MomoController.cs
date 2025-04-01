@@ -16,7 +16,7 @@ namespace CCSS_Captone.Controllers
         {
             _momoService = momoService;
         }
-        [Authorize(Roles = "Customer")]
+        //[Authorize(Roles = "Customer")]
         [HttpPost]
         [SwaggerOperation(Description = "purpose==0 (Mua vé)<br>" +
                                 "purpose==1 (Trả tiền cọc hợp đồng)<br>" +
@@ -38,7 +38,7 @@ namespace CCSS_Captone.Controllers
         public async Task<IActionResult> PaymentCallBack()
         {
             var response = await _momoService.MomoPaymentExecuteAsync(HttpContext.Request.Query);
-            return Ok(response);
+            return Redirect("http://localhost:3000/success-payment");
         }
     }
 }

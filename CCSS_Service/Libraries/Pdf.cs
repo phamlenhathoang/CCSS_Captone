@@ -91,13 +91,180 @@ namespace CCSS_Service.Libraries
 
                     if (request.Service.ServiceId.Equals("S001"))
                     {
-                        HtmlContractCharacter(request, accountCoupon);
+                        int index = 1;
+                        htmlContent += @"<style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-family: Arial, sans-serif;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: center;
+            }
+            th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+            td {
+                font-size: 14px;
+            }
+            tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+            tr:hover {
+                background-color: #e6f7ff;
+            }
+            .right-align {
+                text-align: right;
+                font-weight: bold;
+            }
+        </style>";
+
+                        // Bắt đầu bảng
+                        htmlContent += @"<table>
+            <tr>
+                <th>STT</th>
+                <th>Tên trang phục, cosplayer</th>
+                <th>Đơn vị tính</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>";
+                        foreach (RequestCharacter requestCharacter in request.RequestCharacters)
+                        {
+                            Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
+
+                            htmlContent += $@"<tr>
+                        <td>{index}</td>
+                        <td>{character.CharacterName}</td>
+                        <td>Bộ</td>
+                        <td>{requestCharacter.Quantity}</td>
+                        <td>{character.Price}</td>
+                        <td>{(double)requestCharacter.Quantity * character.Price * 5}</td>
+                    </tr>";
+                            index++;
+                        }
+
+                        // Xử lý coupon
+                        double amount = accountCoupon?.Coupon?.Amount ?? 0.0;
+                        string formattedAmount = amount.ToString("0.##");
+
+                        htmlContent += $@"<tr>
+                    <td colspan='5' class='right-align'>Coupon</td>
+                    <td>{formattedAmount}</td>
+                </tr>";
+
+                        // Tính tổng số tiền
+                        double totalAmount = await CalculateTotalAmount(request, formattedAmount, 0);
+
+                        htmlContent += $@"<tr>
+                    <td colspan='5' class='right-align'>Tổng</td>
+                    <td>{totalAmount}</td>
+                </tr>";
+
+                        htmlContent += "</table>";
                     }
                     else
                     {
-                        HtmlContractCosplayerAndCharacter(request, accountCoupon, package);
+                        int index = 1;
+                        htmlContent += @"<style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-family: Arial, sans-serif;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: center;
+            }
+            th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+            td {
+                font-size: 14px;
+            }
+            tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+            tr:hover {
+                background-color: #e6f7ff;
+            }
+            .right-align {
+                text-align: right;
+                font-weight: bold;
+            }
+        </style>";
+
+                        // Bắt đầu bảng
+                        htmlContent += @"<table>
+            <tr>
+                <th>STT</th>
+                <th>Tên trang phục, cosplayer</th>
+                <th>Đơn vị tính</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>";
+                        foreach (RequestCharacter requestCharacter in request.RequestCharacters)
+                        {
+                            Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
+
+                            htmlContent += $@"<tr>
+                        <td>{index}</td>
+                        <td>{character.CharacterName}</td>
+                        <td>Bộ</td>
+                        <td>{requestCharacter.Quantity}</td>
+                        <td>{character.Price}</td>
+                        <td>{(double)requestCharacter.Quantity * character.Price}</td>
+                    </tr>";
+                            index++;
+
+                            if (requestCharacter.CosplayerId != null)
+                            {
+                                Account account = await accountRepository.GetAccount(requestCharacter.CosplayerId);
+                                htmlContent += $@"<tr>
+                            <td>{index}</td>
+                            <td>{account.Name}</td>
+                            <td>Cosplayer</td>
+                            <td>-</td>
+                            <td>{character.Price * account.SalaryIndex - character.Price}</td>
+                            <td>{character.Price * account.SalaryIndex - character.Price}</td>
+                        </tr>";
+                                index++;
+                            }
+                        }
+
+                        double packagePrice = (package?.Price ?? 0);
+
+                        htmlContent += $@"<tr>
+                    <td colspan='5' class='right-align'>Package</td>
+                    <td>{packagePrice}</td>
+                </tr>";
+
+                        // Xử lý coupon
+                        double amount = accountCoupon?.Coupon?.Amount ?? 0.0;
+                        string formattedAmount = amount.ToString("0.##");
+
+                        htmlContent += $@"<tr>
+                    <td colspan='5' class='right-align'>Coupon</td>
+                    <td>{formattedAmount}</td>
+                </tr>";
+
+                        // Tính tổng số tiền
+                        double totalAmount = await CalculateTotalAmount(request, formattedAmount, packagePrice);
+
+                        htmlContent += $@"<tr>
+                    <td colspan='5' class='right-align'>Tổng</td>
+                    <td>{totalAmount}</td>
+                </tr>";
+
+                        htmlContent += "</table>";
                     }
-                    
+
                     // Thông tin hợp đồng
                     htmlContent += "<h3><strong>Điều khoản thuê Character.</strong></h3>";
                     htmlContent += "<p>Bên thuê có quyền sử dụng trang phục, đạo cụ theo danh sách thỏa thuận trong hợp đồng.</p>";
@@ -157,12 +324,15 @@ namespace CCSS_Service.Libraries
             {
                 Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
 
-                totalAmount = (double)requestCharacter.Quantity * (double)character.Price;
-
                 if (requestCharacter.CosplayerId != null)
                 {
+                    totalAmount = (double)requestCharacter.Quantity * (double)character.Price;
                     Account account = await accountRepository.GetAccount(requestCharacter.CosplayerId);
                     totalAmount += (double)character.Price * (double)account.SalaryIndex - (double)character.Price;
+                }
+                else
+                {
+                    totalAmount += (double)requestCharacter.Quantity * (double)character.Price * 5;
                 }
             }
             double parsedAmount;
@@ -177,7 +347,7 @@ namespace CCSS_Service.Libraries
         {
             int index = 1;
             string htmlContent = null;
-                    htmlContent += @"<style>
+            htmlContent += @"<style>
             table {
                 width: 100%;
                 border-collapse: collapse;
@@ -207,8 +377,8 @@ namespace CCSS_Service.Libraries
             }
         </style>";
 
-                    // Bắt đầu bảng
-                    htmlContent += @"<table>
+            // Bắt đầu bảng
+            htmlContent += @"<table>
             <tr>
                 <th>STT</th>
                 <th>Tên trang phục, cosplayer</th>

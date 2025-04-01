@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Asn1.Crmf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -33,7 +34,7 @@ namespace CCSS_Service.Services
         //Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId);
         //Task<bool> ChangeAccountForTask(string taskId, string accountId);
         Task<AccountLoginResponse> Login(string email, string password);
-        Task<string> Register(AccountRequest accountRequest); 
+        Task<string> Register(AccountRequest accountRequest);
         Task<string> CodeValidation(string email, string code);
         Task<AccountResponse> GetAccountByAccountId(string accountId);
         Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest);
@@ -41,6 +42,8 @@ namespace CCSS_Service.Services
         Task<List<AccountByCharacterAndDateResponse>> ViewAllAccountByCharacterName(string characterName, string? start, string? end);
         Task<List<AccountByCharacterAndDateResponse>> ViewAllCosplayerByContractId(string contractId);
         Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId);
+        Task<bool> AddCosplayer(string userName, string password);
+        Task<AccountLoginResponse> LoginByGoogle(string email, string googleId);
     }
     public class AccountService : IAccountService
     {
@@ -53,10 +56,16 @@ namespace CCSS_Service.Services
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly IMapper mapper;
+        private readonly ICartRepository _cartRepository;
+        private readonly IBeginTransactionRepository _beginTransactionRepository;
+        private readonly Image image;
+        private readonly IAccountImageRepository accountImageRepository;
 
-        public AccountService(ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService)
+        public AccountService(ICartRepository cartRepository, IBeginTransactionRepository beginTransactionRepository, ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService, Image image, IAccountImageRepository accountImageRepository)
         {
             this.taskRepository = taskRepository;
+            _beginTransactionRepository = beginTransactionRepository;
+            _cartRepository = cartRepository;
             this.accountRepository = accountRepository;
             this.mapper = mapper;
             this.characterRepository = characterRepository;
@@ -65,6 +74,8 @@ namespace CCSS_Service.Services
             _configuration = configuration;
             this.refreshTokenRepository = refreshTokenRepository;
             _emailService = emailService;
+            this.image = image;
+            this.accountImageRepository = accountImageRepository;
         }
 
         //public async Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId)
@@ -325,6 +336,106 @@ namespace CCSS_Service.Services
         }
 
 
+        public async Task<AccountLoginResponse> LoginByGoogle(string email, string googleId)
+        {
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
+            {
+                try
+                {
+                    var account = await accountRepository.GetAccountByGoogleId(email, googleId);
+                    if (account == null)
+                    {
+                        Account NewAccount = new Account()
+                        {
+                            AccountId = Guid.NewGuid().ToString(),
+                            Email = email,
+                            GoogleId = googleId,
+                            RoleId = "R005",                          
+                            UserName = email,
+                            Name = email.Split("@")[0],
+                            IsActive = true,
+                        };
+                        var resultAccount = await accountRepository.AddAccount(NewAccount);
+                        if (!resultAccount)
+                        {
+                            await transaction.RollbackAsync();
+                            throw new Exception("Add Failed");
+                        }
+                       
+                    }                 
+                    else if ((bool)!account.IsActive)
+                    {
+                        await transaction.RollbackAsync();
+                        throw new Exception("Account has not been activated");
+                    }
+
+
+
+                    var jti = Guid.NewGuid().ToString();
+                    var jwtHandler = new JwtSecurityTokenHandler();
+                    var issuer = _configuration["AppSettings:Issuer"];
+                    var audience = _configuration["AppSettings:Audience"];
+
+                    var key = Encoding.UTF8.GetBytes(_configuration["AppSettings:SecretKey"]);
+                    var googleAccount = await accountRepository.GetAccountByGoogleId(email, googleId);
+                    var tokenDes = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(new[]
+                        {
+                    new Claim("Id", googleAccount.AccountId),
+                    new Claim("Email", googleAccount.Email),
+                    new Claim("AccountName", googleAccount.Name),
+                    new Claim(ClaimTypes.Role, googleAccount.Role.RoleName.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Jti, jti)
+                }),
+                        Expires = DateTime.UtcNow.AddHours(2),
+                        Issuer = issuer,
+                        Audience = audience,
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                    };
+
+                    var jwtToken = jwtHandler.CreateToken(tokenDes);
+                    Console.WriteLine(SecurityAlgorithms.HmacSha256);
+
+                    string refreshTokenValue = GenerateRefreshToken();
+                    RefreshToken refreshToken = new RefreshToken
+                    {
+                        RefreshTokenId = Guid.NewGuid().ToString(),
+                        AccountId = googleAccount.AccountId,
+                        CreateAt = DateTime.UtcNow,
+                        ExpiresAt = DateTime.UtcNow.AddDays(7),
+                        IsUsed = false,
+                        RefreshTokenValue = refreshTokenValue,
+                        JwtId = jti,
+                        IsRevoked = false
+                    };
+
+                    bool result = await refreshTokenRepository.AddRefreshToken(refreshToken);
+                    if (!result)
+                    {
+                        await transaction.RollbackAsync();
+                        throw new Exception("Cannot save refresh token !!!");
+                    }
+
+                    await transaction.CommitAsync();
+                    string accessToken = jwtHandler.WriteToken(jwtToken);
+                    return new AccountLoginResponse
+                    {
+                        AccessToken = accessToken,
+                        RefreshToken = refreshTokenValue
+                    };
+                }
+
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    Console.WriteLine("Error: " + ex.Message);
+                    throw new Exception(ex.Message);
+                }
+            }
+        }
+
+
         private string GenerateRefreshToken()
         {
             var random = new byte[32];
@@ -372,28 +483,51 @@ namespace CCSS_Service.Services
                     Console.WriteLine("Không thể chuyển đổi chuỗi thành DateTime.");
                 }
 
-                Account account = new Account();
-
-                account.AccountId = Guid.NewGuid().ToString();
-                account.Name = accountRequest.Name;
-                account.Email = accountRequest.Email;
-                account.Description = accountRequest.Description;
-                account.IsActive = false;
-                account.Code = GenerateCode();
-                account.Password = PasswordHash.ConvertToEncrypt(accountRequest.Password);
-                account.Birthday = date;
-                account.Phone = accountRequest.Phone;
-                account.RoleId = "R005";
-
-
-                bool result = await accountRepository.AddAccount(account);
-                if (!result)
+                using (var transaction = await _beginTransactionRepository.BeginTransaction())
                 {
-                    return "Cannot save account";
+                    Account account = new Account();
+
+                    account.AccountId = Guid.NewGuid().ToString();
+                    account.Name = accountRequest.Name;
+                    account.Email = accountRequest.Email;
+                    account.Description = accountRequest.Description;
+                    account.IsActive = false;
+                    account.Code = GenerateCode();
+                    account.Password = PasswordHash.ConvertToEncrypt(accountRequest.Password);
+                    account.Birthday = date;
+                    account.Phone = accountRequest.Phone;
+                    account.RoleId = "R005";
+
+
+                    bool result = await accountRepository.AddAccount(account);
+                    if (!result)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Cannot save account";
+                    }
+
+                    Cart cart = new Cart()
+                    {
+                        CartId = Guid.NewGuid().ToString(),
+                        AccountId = account.AccountId,
+                        TotalPrice = 0,
+                        CreateDate = DateTime.Now,
+                        UpdateDate = null,
+                    };
+                    var result1 = await _cartRepository.AddCart(cart);
+                    if (!result1)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Add Cart failed";
+                    }
+
+
+                    SendMail _sendMail = new SendMail();
+                    await _sendMail.SendAccountVerificationEmail(account.Email, account.Code);
+
+                    await transaction.CommitAsync();
+                    return "Please enter code";
                 }
-                SendMail _sendMail = new SendMail();
-                await _sendMail.SendAccountVerificationEmail(account.Email, account.Code);
-                return "Please enter code";
             }
         }
 
@@ -423,22 +557,110 @@ namespace CCSS_Service.Services
             {
                 return null;
             }
-            return mapper.Map<AccountResponse>(account);
+
+            var accountResponse = mapper.Map<AccountResponse>(account);
+
+            accountResponse.Images ??= new List<AccountImageResponse>();
+
+            if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+            {
+                foreach (var image in account.AccountImages)
+                {
+                    accountResponse.Images.Add(new AccountImageResponse
+                    {
+                        AccountImageId = image.AccountImageId,
+                        UrlImage = image.UrlImage,
+                        CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                        UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                        IsAvatar = image.IsAvatar
+                    });
+                }
+            }
+
+            return accountResponse;
         }
+
 
         public async Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest)
         {
-            Account checkAccount = await accountRepository.GetAccountByAccountId(accountId);
-            if (checkAccount == null)
+            try
             {
-                return false;
+                Account checkAccount = await accountRepository.GetAccountByAccountId(accountId);
+                if (checkAccount == null)
+                {
+                    return false;
+                }
+                //mapper.Map(updateAccountRequest, checkAccount);
+
+                DateTime date;
+
+                string[] formats = { "dd/MM/yyyy", "d/MM/yyyy", "dd/M/yyyy", "d/M/yyyy" };
+
+                if (DateTime.TryParseExact(updateAccountRequest.Birthday, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+                {
+                    Console.WriteLine("Ngày hợp lệ: " + date.ToString("yyyy-MM-dd"));
+                }
+                else
+                {
+                    Console.WriteLine("Không thể chuyển đổi chuỗi thành DateTime.");
+                }
+
+                checkAccount.Password = PasswordHash.ConvertToEncrypt(checkAccount.Password);
+                checkAccount.Height = updateAccountRequest.Height;
+                checkAccount.Birthday = date;
+                checkAccount.Description = updateAccountRequest.Description;
+                checkAccount.Name = updateAccountRequest.Name;
+                checkAccount.UserName = updateAccountRequest.UserName;
+                checkAccount.Email = updateAccountRequest.Email;
+                checkAccount.Phone = updateAccountRequest.Phone;
+                checkAccount.Weight = updateAccountRequest.Weight;
+
+                bool checkUpdate = await accountRepository.UpdateAccount(checkAccount);
+                if (!checkUpdate)
+                {
+                    throw new Exception("Can not update account");
+                }
+
+                List<AccountImage> accountImages = new List<AccountImage>();
+
+                AccountImage avatar = new AccountImage()
+                {
+                    AccountId = checkAccount.AccountId,
+                    CreateDate = DateTime.Now,
+                    IsAvatar = true,
+                    UrlImage = await image.UploadImageToFirebase(updateAccountRequest.Avatar),
+                };
+
+                accountImages.Add(avatar);
+
+                if (updateAccountRequest.Images != null)
+                {
+                    foreach (var im in updateAccountRequest.Images)
+                    {
+                        AccountImage accountImage = new AccountImage()
+                        {
+                            AccountId = checkAccount.AccountId,
+                            CreateDate = DateTime.Now,
+                            IsAvatar = false,
+                            UrlImage = await image.UploadImageToFirebase(im),
+                        };
+
+                        accountImages.Add(accountImage);
+                    }
+                }
+
+                bool result = await accountImageRepository.AddListAccountImage(accountImages);
+                if (!result)
+                {
+                    throw new Exception("Can not add AccountImages");
+                }
+
+                return true;
             }
-            mapper.Map(updateAccountRequest, checkAccount);
-
-            checkAccount.Password = PasswordHash.ConvertToDecrypt(checkAccount.Password);
-
-            bool result = await accountRepository.UpdateAccount(checkAccount);
-            return result;  
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate)
@@ -455,13 +677,13 @@ namespace CCSS_Service.Services
 
                 List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character);
 
-                string format = "HH:mm dd/MM/yyyy"; 
+                string format = "HH:mm dd/MM/yyyy";
                 CultureInfo culture = CultureInfo.InvariantCulture;
 
                 DateTime start = DateTime.ParseExact(startDate, format, culture);
                 DateTime end = DateTime.ParseExact(endDate, format, culture);
 
-                if(start > end)
+                if (start > end)
                 {
                     throw new Exception("Start can not greater than EndDate");
                 }
@@ -472,11 +694,27 @@ namespace CCSS_Service.Services
                     if (result)
                     {
                         AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
-                        accountByCharacterAndDateResponses.Add(accountRespose); 
+                        accountRespose.Images ??= new List<AccountImageResponse>();
+
+                        if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                        {
+                            foreach (var image in account.AccountImages)
+                            {
+                                accountRespose.Images.Add(new AccountImageResponse
+                                {
+                                    AccountImageId = image.AccountImageId,
+                                    UrlImage = image.UrlImage,
+                                    CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    IsAvatar = image.IsAvatar
+                                });
+                            }
+                        }
+                        accountByCharacterAndDateResponses.Add(accountRespose);
                     }
                 }
 
-                return accountByCharacterAndDateResponses;  
+                return accountByCharacterAndDateResponses;
             }
             catch (Exception ex)
             {
@@ -517,6 +755,22 @@ namespace CCSS_Service.Services
                         {
                             // Map và thêm vào danh sách kết quả
                             AccountByCharacterAndDateResponse accountResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                            accountResponse.Images ??= new List<AccountImageResponse>();
+
+                            if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                            {
+                                foreach (var image in account.AccountImages)
+                                {
+                                    accountResponse.Images.Add(new AccountImageResponse
+                                    {
+                                        AccountImageId = image.AccountImageId,
+                                        UrlImage = image.UrlImage,
+                                        CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                        UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                        IsAvatar = image.IsAvatar
+                                    });
+                                }
+                            }
                             accountByCharacterAndDateResponses.Add(accountResponse);
                         }
                     }
@@ -528,7 +782,28 @@ namespace CCSS_Service.Services
             }
             else
             {
-                accountByCharacterAndDateResponses = mapper.Map<List<AccountByCharacterAndDateResponse>>(accounts);
+                foreach (Account account in accounts)
+                {
+                    AccountByCharacterAndDateResponse accountResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                    accountResponse.Images ??= new List<AccountImageResponse>();
+
+                    if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                    {
+                        foreach (var image in account.AccountImages)
+                        {
+                            accountResponse.Images.Add(new AccountImageResponse
+                            {
+                                AccountImageId = image.AccountImageId,
+                                UrlImage = image.UrlImage,
+                                CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                IsAvatar = image.IsAvatar
+                            });
+                        }
+                    }
+                    accountByCharacterAndDateResponses.Add(accountResponse);
+
+                }
             }
 
             return accountByCharacterAndDateResponses;
@@ -553,13 +828,36 @@ namespace CCSS_Service.Services
 
                 foreach (var contractCharacter in contract.ContractCharacters)
                 {
-                    Account account = await accountRepository.GetAccount(contractCharacter.CosplayerId);
-                    if(account == null)
+                    if (contractCharacter.CosplayerId != null)
                     {
-                        throw new Exception("Account does not exist");
+                        Account account = await accountRepository.GetAccount(contractCharacter.CosplayerId);
+                        if (account == null)
+                        {
+                            throw new Exception("Account does not exist");
+                        }
+
+                        AccountByCharacterAndDateResponse accountByCharacterAndDateResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
+
+                        accountByCharacterAndDateResponse.Images ??= new List<AccountImageResponse>();
+
+                        if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                        {
+                            foreach (var image in account.AccountImages)
+                            {
+                                accountByCharacterAndDateResponse.Images.Add(new AccountImageResponse
+                                {
+                                    AccountImageId = image.AccountImageId,
+                                    UrlImage = image.UrlImage,
+                                    CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    IsAvatar = image.IsAvatar
+                                });
+                            }
+                        }
+
+                        list.Add(accountByCharacterAndDateResponse);
                     }
-                    AccountByCharacterAndDateResponse accountByCharacterAndDateResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
-                    list.Add(accountByCharacterAndDateResponse);
+
                 }
 
                 return list;
@@ -572,7 +870,62 @@ namespace CCSS_Service.Services
 
         public async Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId)
         {
-            return mapper.Map<List<AccountResponse>>(await accountRepository.GetAllAccountsByRoleId(roleId));
+            List<AccountResponse> accountResponses = new List<AccountResponse>();
+            var accounts = await accountRepository.GetAllAccountsByRoleId(roleId);
+            foreach (Account account in accounts)
+            {
+                AccountResponse accountResponse = mapper.Map<AccountResponse>(account);
+                accountResponse.Images ??= new List<AccountImageResponse>();
+
+                if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                {
+                    foreach (var image in account.AccountImages)
+                    {
+                        accountResponse.Images.Add(new AccountImageResponse
+                        {
+                            AccountImageId = image.AccountImageId,
+                            UrlImage = image.UrlImage,
+                            CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                            UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                            IsAvatar = image.IsAvatar
+                        });
+                    }
+                }
+                accountResponses.Add(accountResponse);
+            }
+            return accountResponses;
+        }
+
+        public async Task<bool> AddCosplayer(string userName, string password)
+        {
+            try
+            {
+                Account checkUsername = await accountRepository.GetAccountByUsername(userName);
+                if (checkUsername != null)
+                {
+                    throw new Exception("Username do exist");
+                }
+
+                Account account = new Account()
+                {
+                    UserName = userName,
+                    Password = PasswordHash.ConvertToEncrypt(password),
+                    IsActive = true,
+                    RoleId = "R004"
+                };
+
+                bool result = await accountRepository.AddAccount(account);
+                if (!result)
+                {
+                    throw new Exception("Can not add cosplayer");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

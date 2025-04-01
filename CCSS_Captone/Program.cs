@@ -13,6 +13,9 @@ using System.Text;
 using CCSS_Service;
 using Microsoft.OpenApi.Models;
 using CCSS_Service.Libraries;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Google.Apis.Auth.OAuth2;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +38,7 @@ builder.Services.AddScoped<IContractRespository, ContractRespository>();
 builder.Services.AddScoped<IContractCharacterRepository, ContractCharacterRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-builder.Services.AddScoped<INotificationRepository, NotificationRepository>();  
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketAccountRepository, TicketAccountRepository>();
@@ -58,6 +61,8 @@ builder.Services.AddScoped<ICharacterImageRepository, CharacterImageRepository>(
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICartProductRepository, CartProductRepository>();
+builder.Services.AddScoped<IBeginTransactionRepository, BeginTransactionRepository>();
+builder.Services.AddScoped<IAccountImageRepository, AccountImageRepository>();
 
 
 //Service
@@ -81,9 +86,14 @@ builder.Services.AddScoped<IPdfService, Pdf>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
 builder.Services.AddScoped<IProductImageServices, ProductImageServices>();
 builder.Services.AddScoped<ICustomerCharacterService, CustomerCharacterService>();
+builder.Services.AddScoped<ICharacterImageServices, CharacterImageServices>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICartServices, CartServices>();
 builder.Services.AddScoped<ICartProductServices, CartProductServices>();
+
+builder.Services.AddScoped<IServiceServices, ServiceServices>();
+builder.Services.AddScoped<IAccountImageService, AccountImageService>();
+
 
 
 
@@ -95,7 +105,7 @@ builder.Services.AddScoped<SendMail>();
 
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(PackageProfile),
-                               typeof(CharacterProfile), 
+                               typeof(CharacterProfile),
                                typeof(CategoryProfile),
                                typeof(TaskProfile),
                                typeof(AccountProfile),
@@ -124,9 +134,16 @@ var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+    .AddCookie()
+    .AddGoogle(options =>
+{
+    options.ClientId = builder.Configuration["Google:ClientId"];  
+    options.ClientSecret = builder.Configuration["Google:ClientSecret"];
+    options.CallbackPath = builder.Configuration["Google:CallbackPath"];
+
 })
     .AddJwtBearer(options =>
     {
@@ -167,7 +184,7 @@ builder.Services.AddSwaggerGen(options =>
         Name = "Authorization",
         Type = SecuritySchemeType.Http,
         BearerFormat = "JWT",
-        Scheme = "bearer"   
+        Scheme = "bearer"
     });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -197,6 +214,8 @@ app.MapHub<NotificationHub>("/notificationHub");
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

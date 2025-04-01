@@ -20,7 +20,7 @@ namespace CCSS_Captone.Controllers
         }
 
         //[Authorize(Roles = "Manager")]
-        [HttpGet]
+        [HttpGet("searchTerm")]
         public async Task<IActionResult> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId)
         {
             if (ModelState.IsValid)
@@ -30,18 +30,50 @@ namespace CCSS_Captone.Controllers
             }
             return BadRequest(ModelState);
         }
-        //}
 
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetContractById(string id)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await _services.GetContract(id);
-        //        return Ok(result);
-        //    }
-        //    return BadRequest(ModelState);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> GetAllContract()
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetContract(null, null, null, null, null, null);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpGet("contractId/{contractId}")]
+        public async Task<IActionResult> GetContractById(string contractId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetContractById(contractId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpGet("accountId/{accountId}")]
+        public async Task<IActionResult> GetContractByAccountId(string accountId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetContractByAccountId(accountId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpGet("GetRequestInContract/{accountId}")]
+        public async Task<IActionResult> GetAllContractByAccountId(string accountId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetRequestInContractByAccountId(accountId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddContract(string requestId, int deposit)

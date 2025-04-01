@@ -22,8 +22,12 @@ namespace CCSS_Service.Model.Responses
         public bool? OnTask { get; set; }
         public bool? Leader { get; set; }
         public string? Code { get; set; }
-        public string? ImageUrl { get; set; }
+        //public string? ImageUrl { get; set; }
         public int? TaskQuantity { get; set; }
+        public float? Height { get; set; }
+        public float? Weight { get; set; }
+        public double? SalaryIndex { get; set; }
+        public List<AccountImageResponse>? Images { get; set; }
     }
 
     public class AccountByCharacterAndDateResponse
@@ -39,8 +43,11 @@ namespace CCSS_Service.Model.Responses
         public bool? OnTask { get; set; }
         public bool? Leader { get; set; }
         public string? Code { get; set; }
-        public string? ImageUrl { get; set; }
+        public List<AccountImageResponse>? Images { get; set; }
         public int? TaskQuantity { get; set; }
+        public float? Height { get; set; }
+        public float? Weight { get; set; }
+        public double? SalaryIndex { get; set; }
     }
     public class AccountDashBoardResponse
     {

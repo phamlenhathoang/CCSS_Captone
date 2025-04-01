@@ -29,8 +29,15 @@ namespace CCSS_Repository.Repositories
 
         public async Task<bool> AddFeedback(Feedback feedback)
         {
-            await _dbContext.AddAsync(feedback);
-            return await _dbContext.SaveChangesAsync() > 0 ? true : false;
+            try
+            {
+                await _dbContext.AddAsync(feedback);
+                return await _dbContext.SaveChangesAsync() > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<bool> AddListFeedback(List<Feedback> feedbacks)
@@ -46,7 +53,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Feedback>> GetAllFeedbacksByCosplayerId(string cosplayerId)
         {
-            return await _dbContext.Feedbacks.Where(f => f.AccountId.Equals(cosplayerId)).ToListAsync();
+            return await _dbContext.Feedbacks.Include(a => a.Account).Where(f => f.AccountId.Equals(cosplayerId)).ToListAsync();
         }
 
         public async Task<Feedback> GetFeedbackByContractCharacterId(string contractCharacterId)
@@ -56,7 +63,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Feedback> GetFeedbackByFeedbackId(string feedbackId)
         {
-            return await _dbContext.Feedbacks.FirstOrDefaultAsync(f => f.FeedbackId.Equals(feedbackId));
+            return await _dbContext.Feedbacks.Include(a => a.Account).FirstOrDefaultAsync(f => f.FeedbackId.Equals(feedbackId));
         }
 
         public async Task<bool> UpdateFeedback(Feedback feedback)

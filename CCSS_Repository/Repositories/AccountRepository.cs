@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Task = CCSS_Repository.Entities.Task;
+using Task = System.Threading.Tasks.Task;
 
 namespace CCSS_Repository.Repositories
 {
@@ -26,35 +26,56 @@ namespace CCSS_Repository.Repositories
         Task<List<Account>> GetAllAccountsByCharacter(Character character);
         Task<List<Account>> GetAllAccountsByRoleId(string roleId);
         Task<List<Account>> GetAllAccountRoleManager();
+        Task<Account> GetAccountByUsername(string username);
+        Task<Account> GetAccountByGoogleId(string email, string googleId);
+        Task AddAccountGoogle(Account account);
     }
     public class AccountRepository : IAccountRepository
     {
         private readonly CCSSDbContext dbContext;
-        public AccountRepository(CCSSDbContext dbContext) 
+        public AccountRepository(CCSSDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
         public async Task<bool> AddAccount(Account account)
         {
-            await dbContext.AddAsync(account);
-            return await dbContext.SaveChangesAsync() > 0 ? true : false;
+            try
+            {
+                await dbContext.AddAsync(account);
+                return await dbContext.SaveChangesAsync() > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task AddAccountGoogle(Account account)
+        {
+            dbContext.Accounts.Add(account);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<Account> GetAccountByGoogleId(string email, string googleId)
+        {
+            return await dbContext.Accounts.Include(sc => sc.Role).FirstOrDefaultAsync(sc => sc.Email.Equals(email) && sc.GoogleId.Equals(googleId));
         }
 
         public async Task<Account> GetAccount(string accountId)
         {
-            return await dbContext.Accounts.Include(r => r.Role).FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsActive == true);   
+            return await dbContext.Accounts.Include(r => r.Role).Include(a => a.AccountImages).FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsActive == true);
         }
 
         public async Task<Account> GetAccountByAccountId(string accountId)
         {
-            return await dbContext.Accounts.FirstOrDefaultAsync(a => a.AccountId == accountId && a.IsActive == true); 
+            return await dbContext.Accounts.Include(a => a.AccountImages).FirstOrDefaultAsync(a => a.AccountId == accountId && a.IsActive == true);
         }
 
         //public async Task<Account> GetAccountByAccountIdIncludeTask(string acountId, string? taskId)
         //{
         //    IQueryable<Account> account = dbContext.Accounts.Include(a => a.Tasks).Where(a => a.AccountId == acountId && a.IsActive == true);
-            
+
         //    if (!string.IsNullOrEmpty(taskId))
         //    {
         //        account = account.Where(a => a.Tasks.Any(t => t.TaskId == taskId && t.IsActive == true));
@@ -82,7 +103,7 @@ namespace CCSS_Repository.Repositories
 
         public Task<Account> GetAccountByEmail(string email)
         {
-            return dbContext.Accounts.FirstOrDefaultAsync(a => a.Email == email);   
+            return dbContext.Accounts.FirstOrDefaultAsync(a => a.Email == email);
         }
 
         public Task<Account> GetAccountByEmailAndCode(string email, string code)
@@ -92,7 +113,12 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Account> GetAccountByEmailAndPassword(string email, string password)
         {
-            return await dbContext.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email && a.Password == password);   
+            return await dbContext.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email && a.Password == password);
+        }
+
+        public async Task<Account> GetAccountByUsername(string username)
+        {
+            return await dbContext.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.UserName.Equals(username) && a.IsActive == true && a.Role.RoleName == RoleName.Cosplayer);
         }
 
         public async Task<List<Account>> GetAllAccountRoleManager()
@@ -102,7 +128,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Account>> GetAllAccountsByCharacter(Character character)
         {
-            return await dbContext.Accounts.Include(r => r.Role).Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight
+            return await dbContext.Accounts.Include(r => r.Role).Include(a => a.AccountImages).Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight
                                                         && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight
                                                         && a.Role.RoleName == RoleName.Cosplayer).ToListAsync();
         }
@@ -124,8 +150,15 @@ namespace CCSS_Repository.Repositories
 
         public async Task<bool> UpdateAccount(Account account)
         {
-            dbContext.Update(account);
-            return await dbContext.SaveChangesAsync() > 0 ? true : false;
+            try
+            {
+                dbContext.Accounts.Update(account);
+                return await dbContext.SaveChangesAsync() > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

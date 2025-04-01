@@ -14,8 +14,9 @@ namespace CCSS_Repository.Entities
         [Key]
         public string AccountId { get; set; } = Guid.NewGuid().ToString();
         public string? Name { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string? Email { get; set; }
+        public string? UserName { get; set; }
+        public string? Password { get; set; }
         public string? Description { get; set; }
         public DateTime? Birthday { get; set; }
         public string? Phone { get; set; }
@@ -28,6 +29,8 @@ namespace CCSS_Repository.Entities
         public float? Weight { get; set; }
         public double? AverageStar { get; set; }
         public double? SalaryIndex { get; set; }
+        public string? GoogleId { get; set; }
+
         [ForeignKey("RoleId")]
         public string RoleId { get; set; }
         public Role Role { get; set; } 

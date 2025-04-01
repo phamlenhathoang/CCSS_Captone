@@ -41,8 +41,9 @@ namespace CCSS_Service.Model.Responses
     {
         public string AccountImageId { get; set; }
         public string UrlImage { get; set; }
-        public DateTime? CreateDate { get; set; }
-        public DateTime? UpdateDate { get; set; }
+        public string? CreateDate { get; set; }
+        public string? UpdateDate { get; set; }
+        public bool? IsAvatar {  get; set; }   
 
     }
 }

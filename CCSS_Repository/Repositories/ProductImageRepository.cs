@@ -14,10 +14,11 @@ namespace CCSS_Repository.Repositories
         Task<List<ProductImage>> GetAllImageProduct();
         Task<List<ProductImage>> GetListImageByProductId(string productId);
         Task<ProductImage> GetImageProductById(string productImageId);
-        Task AddListImageProduct(List<ProductImage> productImages);
+        Task<bool> AddListImageProduct(List<ProductImage> productImages);
         Task Add(ProductImage productImage);
         Task UpdateProduct(ProductImage productImage);
         Task DeleteProduct(ProductImage productImage);
+        Task DeleteListProduct(List<ProductImage> productImages);
     }
 
     public class ProductImageRepository: IProductImageRepository
@@ -44,10 +45,10 @@ namespace CCSS_Repository.Repositories
             return await _context.ProductImages.Where(sc => sc.ProductId.Equals(productId)).ToListAsync();
         }
 
-        public async Task AddListImageProduct(List<ProductImage> productImages)
+        public async Task<bool> AddListImageProduct(List<ProductImage> productImages)
         {
             _context.ProductImages.AddRange(productImages);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task Add(ProductImage productImage)
@@ -65,6 +66,12 @@ namespace CCSS_Repository.Repositories
         public async Task DeleteProduct(ProductImage productImage)
         {
             _context.ProductImages.Remove(productImage);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteListProduct(List<ProductImage> productImages)
+        {
+            _context.ProductImages.RemoveRange(productImages);
             await _context.SaveChangesAsync();
         }
     }

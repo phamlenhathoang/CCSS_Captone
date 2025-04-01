@@ -19,6 +19,7 @@ namespace CCSS_Service.Services
         Task<string> AddCartProduct(string cartId, List<CartProductRequest> cartProductRequests);
         Task<string> UpdateCartProduct(string cartId, List<UpdateCartProductRequest> updateCartProductRequests);
         Task<string> DeleteCartProduct(string cartId, List<CartPorductRequestDtos> cartProductRequests);
+        Task<string> DeleteCartProductByProductId(string cartId, List<CartProductRequestDTO> cartProductRequests);
 
     }
 
@@ -27,12 +28,14 @@ namespace CCSS_Service.Services
         private readonly ICartProductRepository _repository;
         private readonly ICartRepository _cartRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IBeginTransactionRepository _beginTransactionRepository;
 
-        public CartProductServices(ICartProductRepository repository, ICartRepository cartRepository, IProductRepository productRepository)
+        public CartProductServices(ICartProductRepository repository, IBeginTransactionRepository beginTransactionRepository, ICartRepository cartRepository, IProductRepository productRepository)
         {
             _repository = repository;
             _cartRepository = cartRepository;
             _productRepository = productRepository;
+            _beginTransactionRepository = beginTransactionRepository;
 
         }
 
@@ -51,40 +54,78 @@ namespace CCSS_Service.Services
             {
                 return "Cart not found";
             }
-            foreach (var cp in cartProductRequests)
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                var product = await _productRepository.GetProductById(cp.ProductId);
-                if (product == null)
+                foreach (var cp in cartProductRequests)
                 {
-                    return "Product not found";
+                    var product = await _productRepository.GetProductById(cp.ProductId);
+                    if (product == null)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Product not found";
+                    }
+                    if (product.Quantity == 0 || product.Quantity < cp.Quantity)
+                    {
+                        await transaction.RollbackAsync();
+                        return "This product is out of stock";
+                    }
+
+                    int addedQuantity = cp.Quantity ?? 1;
+                    double addedPrice = (double)product.Price * addedQuantity;
+
+
+                    var cartProductExisting = await _repository.GetCartProduct(cp.ProductId, cartId);
+                    if (cartProductExisting != null)
+                    {
+                        cartProductExisting.Quantity += addedQuantity;
+                        cartProductExisting.Price = product.Price * cartProductExisting.Quantity;
+
+                        await _repository.UpdateCartProduct(cartProductExisting);
+                    }
+                    else
+                    {
+
+
+                        var cartProduct = new CartProduct()
+                        {
+                            CartProductId = Guid.NewGuid().ToString(),
+                            ProductId = cp.ProductId,
+                            CartId = cartId,
+                            Quantity = cp.Quantity ?? 1,
+                            Price = product.Price * cp.Quantity,
+                            CreatedDate = DateTime.Now,
+                        };
+
+                        var result = await _repository.AddCartProduct(cartProduct);
+                        if (!result)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Add Failed";
+                        }
+                    }
+
+                    cart.TotalPrice += addedPrice;
+                    cart.UpdateDate = DateTime.Now;
+                    var result1 = await _cartRepository.UpdateCart(cart);
+                    if (!result1)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Add Failed";
+                    }
+
+                    product.Quantity -= cp.Quantity;
+                    product.IsActive = product.Quantity > 0;
+                    product.UpdateDate = DateTime.Now;
+                    var result2 = await _productRepository.UpdateProduct(product);
+                    if (!result2)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Add Failed";
+                    }
                 }
-                if (product.Quantity == 0 || product.Quantity < cp.Quantity)
-                {
-                    return "This product is out of stock";
-                }
-
-                var cartProduct = new CartProduct()
-                {
-                    CartProductId = Guid.NewGuid().ToString(),
-                    ProductId = cp.ProductId,
-                    CartId = cartId,
-                    Quantity = cp.Quantity ?? 1,
-                    Price = product.Price * cp.Quantity,
-                    CreatedDate = DateTime.Now,
-                };
-
-                await _repository.AddCartProduct(cartProduct);
-
-                cart.TotalPrice += (double)cartProduct.Price;
-                cart.UpdateDate = DateTime.Now;
-                await _cartRepository.UpdateCart(cart);
-
-                product.Quantity -= cp.Quantity;
-                product.UpdateDate = DateTime.Now;
-                await _productRepository.UpdateProduct(product);
-
+                await transaction.CommitAsync();
+                return "Add Success";
             }
-            return "Add Success";
         }
 
 
@@ -99,34 +140,51 @@ namespace CCSS_Service.Services
             {
                 return "Cart not found";
             }
-            foreach (var cp in cartProductRequests)
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                var cartProduct = await _repository.GetCartProductById(cp.CartProductId);
-                if (cartProduct == null)
+                foreach (var cp in cartProductRequests)
                 {
-                    return "this Product is not in Cart";
-                }
-                var product = await _productRepository.GetProductById(cartProduct.ProductId);
-                if (product == null)
-                {
-                    return "Prouduct ot found";
-                }
-                var result = await _repository.DeleteCartProduct(cartProduct);
-                if (!result)
-                {
-                    return "Delete Failed";
-                }
-                product.Quantity += cartProduct.Quantity;
-                product.UpdateDate = DateTime.Now;
-                await _productRepository.UpdateProduct(product);
+                    var cartProduct = await _repository.GetCartProductById(cp.CartProductId);
+                    if (cartProduct == null)
+                    {
+                        return "this Product is not in Cart";
+                    }
+                    var product = await _productRepository.GetProductById(cartProduct.ProductId);
+                    if (product == null)
+                    {
+                        return "Prouduct ot found";
+                    }
+                    var result = await _repository.DeleteCartProduct(cartProduct);
+                    if (!result)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Delete Failed";
+                    }
+                    product.Quantity += cartProduct.Quantity;
+                    product.IsActive = true;
+                    product.UpdateDate = DateTime.Now;
+                    var result1 = await _productRepository.UpdateProduct(product);
+                    if (!result1)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Delete Failed";
+                    }
 
-                cart.TotalPrice -= (double)cartProduct.Price;
-                cart.UpdateDate = DateTime.Now;
-                await _cartRepository.UpdateCart(cart);
+                    cart.TotalPrice -= (double)cartProduct.Price;
+                    cart.UpdateDate = DateTime.Now;
+                    var result2 = await _cartRepository.UpdateCart(cart);
+                    if (!result2)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Delete Failed";
+                    }
 
+                }
+                await transaction.CommitAsync();
+                return "Delete Success";
             }
-            return "Delete Success";
         }
+
         public async Task<string> UpdateCartProduct(string cartId, List<UpdateCartProductRequest> updateCartProductRequests)
         {
             if (cartId == null)
@@ -138,60 +196,138 @@ namespace CCSS_Service.Services
             {
                 return "Cart is not found";
             }
-            foreach (var cp in updateCartProductRequests)
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                var cartproduct = await _repository.GetCartProductById(cp.CartProductId);
-                if (cartproduct == null)
+                foreach (var cp in updateCartProductRequests)
                 {
-                    return "This product is not in Cart";
+                    var cartproduct = await _repository.GetCartProductById(cp.CartProductId);
+                    if (cartproduct == null)
+                    {
+                        return "This product is not in Cart";
+                    }
+                    if (cp.Quantity == 0)
+                    {
+                        return "Quanitty of Product mmust higher than 0";
+                    }
+                    var product = await _productRepository.GetProductById(cartproduct.ProductId);
+                    if (product == null)
+                    {
+                        return "This product is not found";
+                    }
+
+                    product.Quantity += (cartproduct.Quantity - cp.Quantity);
+                    product.UpdateDate = DateTime.Now;
+                    if (product.Quantity == 0)
+                    {
+                        product.IsActive = false;
+                    }
+                    else
+                    {
+                        product.IsActive = true;
+                    }
+
+                    var result1 = await _productRepository.UpdateProduct(product);
+                    if (!result1)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Update Failed";
+                    }
+
+                    double oldPrice = (double)cartproduct.Price;
+
+                    //if (cp.Quantity == 0)
+                    //{
+                    //    var deleteResult = await _repository.DeleteCartProduct(cartproduct);
+                    //    if (!deleteResult)
+                    //    {
+                    //        return "Failed to delete product from cart";
+                    //    }
+
+                    //    // Adjust the Cart's total price by subtracting the removed product's price
+                    //    cart.TotalPrice -= oldPrice;
+                    //    cart.UpdateDate = DateTime.Now;
+                    //    await _cartRepository.UpdateCart(cart);
+
+                    //}
+
+                    cartproduct.Quantity = cp.Quantity;
+                    cartproduct.Price = cp.Quantity * product.Price;
+                    await _repository.UpdateCartProduct(cartproduct);
+
+
+                    double priceDifference = (double)cartproduct.Price - oldPrice;
+
+                    cart.TotalPrice += priceDifference;
+                    cart.UpdateDate = DateTime.Now;
+                    var result2 = await _cartRepository.UpdateCart(cart);
+                    if (!result2)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Update Failed";
+                    }
+
                 }
-                if(cp.Quantity == 0)
-                {
-                    return "Quanitty of Product mmust higher than 0";
-                }
-                var product = await _productRepository.GetProductById(cartproduct.ProductId);
-                if (product == null)
-                {
-                    return "This product is not found";
-                }              
 
-                product.Quantity += (cartproduct.Quantity - cp.Quantity);
-                product.UpdateDate = DateTime.Now;
-                await _productRepository.UpdateProduct(product);
-
-                double oldPrice = (double)cartproduct.Price;
-
-                //if (cp.Quantity == 0)
-                //{
-                //    var deleteResult = await _repository.DeleteCartProduct(cartproduct);
-                //    if (!deleteResult)
-                //    {
-                //        return "Failed to delete product from cart";
-                //    }
-
-                //    // Adjust the Cart's total price by subtracting the removed product's price
-                //    cart.TotalPrice -= oldPrice;
-                //    cart.UpdateDate = DateTime.Now;
-                //    await _cartRepository.UpdateCart(cart);
-                
-                //}
-
-                cartproduct.Quantity = cp.Quantity;
-                cartproduct.Price = cp.Quantity * product.Price;
-                await _repository.UpdateCartProduct(cartproduct);
-
-
-                double priceDifference = (double)cartproduct.Price - oldPrice;
-
-                cart.TotalPrice += priceDifference;
-                cart.UpdateDate = DateTime.Now;
-                await _cartRepository.UpdateCart(cart);
-
+                await transaction.CommitAsync();
+                return "Update Success";
             }
-            return "Update Success";
         }
 
 
+        public async Task<string> DeleteCartProductByProductId(string cartId, List<CartProductRequestDTO> cartProductRequests)
+        {
+            if (cartId == null)
+            {
+                return "required this field";
+            }
+            var cart = await _cartRepository.GetCartById(cartId);
+            if (cart == null)
+            {
+                return "Cart not found";
+            }
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
+            {
+                foreach (var cp in cartProductRequests)
+                {
+                    var cartProduct = await _repository.GetCartProduct(cartId, cp.ProductId);
+                    if (cartProduct == null)
+                    {
+                        return "this Product is not in Cart";
+                    }
+                    var product = await _productRepository.GetProductById(cartProduct.ProductId);
+                    if (product == null)
+                    {
+                        return "Prouduct ot found";
+                    }
+                    var result = await _repository.DeleteCartProduct(cartProduct);
+                    if (!result)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Delete Failed";
+                    }
+                    product.Quantity += cartProduct.Quantity;
+                    product.UpdateDate = DateTime.Now;
+                    var result1 = await _productRepository.UpdateProduct(product);
+                    if (!result1)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Delete Failed";
+                    }
+
+                    cart.TotalPrice -= (double)cartProduct.Price;
+                    cart.UpdateDate = DateTime.Now;
+                    var result2 = await _cartRepository.UpdateCart(cart);
+                    if (!result2)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Delete Failed";
+                    }
+
+                }
+                await transaction.CommitAsync();
+                return "Delete Success";
+            }
+        }
 
         public async Task<List<CartProduct>> GetAllCartProduct()
         {

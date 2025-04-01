@@ -28,6 +28,17 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
+        [HttpGet("GetAllRequestByAccount")]
+        public async Task<IActionResult> GetAllRequestByAccount(string accountId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetAllRequestByAccountId(accountId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRequestById(string id)
         {
@@ -42,21 +53,17 @@ namespace CCSS_Captone.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRequest([FromBody] RequestDtos requestDtos)
         {
-            try
-            {
 
-                if (ModelState.IsValid)
-                {
-                    var result = await _services.AddRequest(requestDtos);
-                    return Ok(result);
-                }
-                return BadRequest(ModelState);
-            }
-            catch (Exception ex)
+
+            if (ModelState.IsValid)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                var result = await _services.AddRequest(requestDtos);
+                return Ok(result);
             }
+            return BadRequest(ModelState);
         }
+
+
 
         [HttpPut]
         public async Task<IActionResult> UpdateRequest([FromQuery] string RequestId, [FromBody] UpdateRequestDtos updateRequestDtos)

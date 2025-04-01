@@ -27,7 +27,7 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{productId}")]
         public async Task<IActionResult> GetProductbyId(string productId)
         {
             if (ModelState.IsValid)
@@ -39,18 +39,26 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductRequest productRequest)
+        public async Task<IActionResult> CreateProduct([FromForm] ProductRequest productRequest, [FromForm] List<IFormFile> formFiles)
         {
             if (ModelState.IsValid)
             {
-                var result = await _services.AddProduct(productRequest);
+                var result = await _services.AddProduct(productRequest, formFiles);
                 return Ok(result);
             }
             return BadRequest(ModelState);
         }
 
-        //[HttpPut]
-        //public async Task<IActionResult> UpdateProduct(P)
+        [HttpPut]
+        public async Task<IActionResult> UpdateProduct(string productId, UpdateProductRequest productRequest)
+        { 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _services.UpdateProduct(productId, productRequest);
+            return Ok(result);
+        }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteProduct(string productId)

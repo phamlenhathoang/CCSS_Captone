@@ -72,7 +72,7 @@ namespace CCSS_Captone.Controllers
         /// Tạo một sự kiện mới
         /// </summary>
         [SwaggerOperation(Description = "role: Mamager")]
-        [Authorize(Roles = "Ma nen dơ")]
+        [Authorize(Roles = "Mamager")]
         [HttpPost("AddEvent")]
         public async Task<IActionResult> AddEvent([FromBody] CreateEventRequest eventRequest)
         {
