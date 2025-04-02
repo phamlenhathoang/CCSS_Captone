@@ -563,7 +563,7 @@ namespace CCSS_Service.Services
 
         public async Task<bool> UpdateStatusContract(string contractId, string status, double? price)
         {
-            using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            //using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             try
             {
                 Contract contract = await _contractRespository.GetContractById(contractId);
@@ -632,7 +632,7 @@ namespace CCSS_Service.Services
                         throw new Exception("Cannot add ContractCharacter");
                     }
                 }
-                scope.Complete();
+                //scope.Complete();
                 return true;
             }
             catch (Exception ex)
