@@ -16,7 +16,7 @@
 		<PackageReference Include="MailKit" Version="4.10.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.7" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="NReco.PdfGenerator" Version="1.2.1" />
 		<PackageReference Include="Polybioz.HtmlRenderer.PdfSharp.Core" Version="1.1.0" />
