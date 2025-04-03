@@ -87,7 +87,7 @@ namespace CCSS_Service.Services
 
             var result = await _orderRepository.AddOrder(order);
             if (!result) return "Tạo Order thất bại!!!";
-            return "Tạo Order thành công";
+            return order.OrderId;
         }
 
 

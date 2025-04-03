@@ -44,6 +44,7 @@ namespace CCSS_Service.Services
         Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId);
         Task<bool> AddCosplayer(string userName, string password);
         Task<AccountLoginResponse> LoginByGoogle(string email, string googleId);
+        Task<AccountResponse> GetAccountByEventCharacterId(string eventCharacterId);
     }
     public class AccountService : IAccountService
     {
@@ -77,7 +78,18 @@ namespace CCSS_Service.Services
             this.image = image;
             this.accountImageRepository = accountImageRepository;
         }
-
+        public async Task<AccountResponse> GetAccountByEventCharacterId(string eventCharacterId)
+        {
+            try
+            {
+                var account = await accountRepository.GetAccountByEventCharacterId(eventCharacterId);
+                return mapper.Map<AccountResponse>(account);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving account: {ex.Message}");
+            }
+        }
         //public async Task<List<AccountResponse>> GetAccountsForTask(string taskId, string accountId)
         //{
         //    try

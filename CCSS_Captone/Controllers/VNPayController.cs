@@ -14,12 +14,28 @@ namespace CCSS_Captone.Controllers
 
             _vNPayService = vNPayService;
         }
+        //[HttpPost]
+        //public IActionResult CreatePaymentUrlVnpay(VNPayInformationModel     model)
+        //{
+        //    var url = _vNPayService.CreatePaymentUrl(model, HttpContext);
+
+        //    return Ok(url);
+        //}
+        //[HttpGet]
+        //[Route("PaymentCallBack")]
+        //public IActionResult PaymentCallbackVnpay()
+        //{
+        //    var response = _vNPayService.PaymentExecute(Request.Query);
+
+        //    return Json(response);
+        //}
+
         [HttpPost]
         public IActionResult CreatePaymentUrlVnpay(VNPayInformationModel model)
         {
             var url = _vNPayService.CreatePaymentUrl(model, HttpContext);
 
-            return Ok(new { PaymentUrl = url });
+            return Ok(url);
         }
         [HttpGet]
         [Route("PaymentCallBack")]

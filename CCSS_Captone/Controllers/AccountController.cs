@@ -1,4 +1,5 @@
-﻿using CCSS_Service.Model.Requests;
+﻿using CCSS_Repository.Entities;
+using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
@@ -53,7 +54,25 @@ namespace CCSS_Captone.Controllers
         //    return Ok(result);
         //}
 
+        [HttpGet("GetAccountByEventCharacterId/{eventCharacterId}")]
+        public async Task<ActionResult<AccountResponse>> GetAccountByEventCharacterId(string eventCharacterId)
+        {
+            try
+            {
+                var account = await accountService.GetAccountByEventCharacterId(eventCharacterId);
 
+                if (account == null)
+                {
+                    return NotFound(new { message = "Account not found for the given EventCharacterId." });
+                }
+
+                return Ok(account);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving the account.", error = ex.Message });
+            }
+        }
         [HttpGet("{accountId}")]
         public async Task<IActionResult> GetAccountByAccountId(string accountId)
         {

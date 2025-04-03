@@ -90,7 +90,7 @@ builder.Services.AddScoped<ICharacterImageServices, CharacterImageServices>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICartServices, CartServices>();
 builder.Services.AddScoped<ICartProductServices, CartProductServices>();
-
+builder.Services.AddScoped<IVNPayService, VNPayService>();
 builder.Services.AddScoped<IServiceServices, ServiceServices>();
 builder.Services.AddScoped<IAccountImageService, AccountImageService>();
 
@@ -171,7 +171,7 @@ builder.Services.AddSwaggerGen(options =>
     options.EnableAnnotations();
 });
 
-builder.Services.AddScoped<IVNPayService, VNPayService>();
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
