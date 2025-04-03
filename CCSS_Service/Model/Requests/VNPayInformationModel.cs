@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 
 namespace CCSS_Service.Model.Requests
 {
-    public class VNPayInformationModel
-    {
+        public class VNPayInformationModel
+        {
+        //public string OrderType { get; set; }
+        //public double Amount { get; set; }
+        //public string OrderDescription { get; set; }
+        //public string Name { get; set; }
+
         public string OrderType { get; set; }
         public PaymentPurpose Purpose { get; set; }
 
@@ -16,10 +21,14 @@ namespace CCSS_Service.Model.Requests
         public string OrderDescription { get; set; }
         public string Name { get; set; }
         public string AccountId { get; set; }
+        public string? AccountCouponId { get; set; }
+
         public string? TicketId { get; set; }
         public string? TicketQuantity { get; set; }
         public string? ContractId { get; set; }
         public string? CartId { get; set; }
+        public string? OrderPaymentId { get; set; }
+
 
     }
 }

@@ -229,17 +229,7 @@ namespace CCSS_Service.Services
 
                     var addTicketResult = await _ticketAccountService.AddTicketAccount(ticketAccountRequest);
 
-                    //Payment payment = new Payment
-                    //{
-                    //    PaymentId = Guid.NewGuid().ToString(),
-                    //    Type = "Momo",
-                    //    Status = PaymentStatus.Complete,
-                    //    Purpose = PaymentPurpose.BuyTicket,
-                    //    CreatAt = DateTime.UtcNow,
-                    //    TransactionId = orderId,
-                    //    Amount = amount.GetValueOrDefault(),
-                    //    TicketAccountId = addTicketResult.TicketAccountId
-                    //};
+                   
                    
                     existingPayment.TicketAccountId = addTicketResult.TicketAccountId;
 
@@ -282,11 +272,18 @@ namespace CCSS_Service.Services
                     return "Thanh toán thành công ";
 
                 case PaymentPurpose.Order:      // mua hàng
-                    var accountCoupon = await _accountCouponRepository.GetAccountCoupon(accountCouponId);
+                    existingPayment.OrderId = OrderPaymentId;
+                    await _paymentRepository.UpdatePayment(existingPayment);
+                    if (accountCouponId != null)
+                    {
+                        var accountCoupon = await _accountCouponRepository.GetAccountCoupon(accountCouponId);
+                        accountCoupon.IsActive = false;
+
+                    }
                     var order = await _orderRepository.GetOrderById(OrderPaymentId);
                     order.OrderStatus= OrderStatus.Completed;
-                    accountCoupon.IsActive = false;
-                    await _accountCouponRepository.UpdateAccountCoupon(accountCoupon);
+                    
+                    
                     await _orderRepository.UpdateOrder(order);
 
                     return "mua hàng thành công";
