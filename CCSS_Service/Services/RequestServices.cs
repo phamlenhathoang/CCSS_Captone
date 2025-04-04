@@ -533,7 +533,7 @@ namespace CCSS_Service.Services
                     }
                 }
 
-                int totalDay = (int)Math.Ceiling((EndDate - StartDate).TotalDays);
+                double totalDay = (EndDate - StartDate).TotalDays;
                 double totalPrice = 0;
                 double total = 0;
 
@@ -584,7 +584,7 @@ namespace CCSS_Service.Services
                             throw new Exception("Cosplayer does not suitable for character");
                         }
 
-                        totalPrice *= (double)cosplayer.SalaryIndex;
+                        totalPrice += (double)cosplayer.SalaryIndex * totalDay;
                     }
 
                     total += totalPrice;
@@ -605,7 +605,7 @@ namespace CCSS_Service.Services
                 }
                 else
                 {
-                    amount = totalDay * total + packagePrice - accountCouponPrice;
+                    amount = total + packagePrice - accountCouponPrice;
                 }
                 return amount;
             }

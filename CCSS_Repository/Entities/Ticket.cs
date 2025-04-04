@@ -15,7 +15,6 @@ namespace CCSS_Repository.Entities
         [Key]
         public string TicketId { get; set; } = Guid.NewGuid().ToString();
 
-       
         public int? Quantity { get; set; }
         public double? Price { get; set; }
 

@@ -41,6 +41,7 @@ namespace CCSS_Service.Services
         Task<List<TaskResponse>> GetTaskByAccountId(string accountId);
         Task<TaskResponse> GetTaskByTaskId(string taskId);
         Task<bool> AddTaskContractByManager(List<AddTaskContractRequest> contractCharacters, string requestId);
+        Task<bool> UpdateStatusTaskByContractId(string contractId);
     }
     public class TaskService : ITaskService
     {
@@ -627,6 +628,41 @@ namespace CCSS_Service.Services
                 return taskResponse;
             }
             catch(Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> UpdateStatusTaskByContractId(string contractId)
+        {
+            try
+            {
+                Contract contract = await contractRespository.GetContractById(contractId);
+                if (contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
+
+                if (contract.ContractCharacters.Any())
+                {
+                    foreach (var contractCharacter in contract.ContractCharacters)
+                    {
+                        Task task = await taskRepository.GetTaskByContractCharacterId(contractCharacter.ContractCharacterId);
+                        if (task != null)
+                        {
+                            task.Status = TaskStatus.Completed;
+                            bool result = await taskRepository.UpdateTask(task);
+                            if (!result)
+                            {
+                                throw new Exception("Can not update status task");
+                            }
+                        }
+                    }
+                }
+
+                return true;    
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

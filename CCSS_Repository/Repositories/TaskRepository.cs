@@ -27,6 +27,7 @@ namespace CCSS_Repository.Repositories
 
         Task<bool> CheckTaskIsValid(Account account, DateTime startDate, DateTime endDate);
         Task<Task> GetTaskById(string id, string accountId);
+        Task<Task> GetTaskByContractCharacterId(string contractCharacterId);
         Task<Task> GetTaskByTaskId(string id);
         Task<bool> UpdateTask(Task task);
         Task<List<Task>> GetTasksByAccountId(string accountId);
@@ -72,8 +73,8 @@ namespace CCSS_Repository.Repositories
             double totalHourTask = (endDate - startDate).TotalHours;
             double totalHourInDay = 0;
             var tasks = await _dbContext.Tasks
-                .Where(t => t.AccountId == account.AccountId
-                       && t.StartDate >= rangeStart && t.IsActive == true)
+                .Where(t => t.AccountId.Equals(account.AccountId)
+                        && t.IsActive == true)
                 .OrderBy(t => t.StartDate)
                 .ToListAsync();
 
@@ -243,6 +244,11 @@ namespace CCSS_Repository.Repositories
         public async Task<List<Task>> GetTasksByAccountId(string accountId)
         {
             return await _dbContext.Tasks.Where(t => t.AccountId.Equals(accountId)).ToListAsync();
+        }
+
+        public async Task<Task> GetTaskByContractCharacterId(string contractCharacterId)
+        {
+            return await _dbContext.Tasks.FirstOrDefaultAsync(c => c.ContractCharacterId.Equals(contractCharacterId));
         }
 
         //public async Task<bool> DeleteTask(CCSS_Repository.Entities.Task task)

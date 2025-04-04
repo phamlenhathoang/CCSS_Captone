@@ -62,8 +62,9 @@ namespace CCSS_Service.Services
         private readonly IMapper mapper;
         private readonly string _projectId = "miracles-ef238";
         private readonly string _bucketName = "miracles-ef238.appspot.com";
+        private readonly ITaskService taskService;
 
-        public ContractServices(IMapper mapper, IPackageRepository packageRepository, IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository, IRequestCharacterRepository requestCharacterRepository)
+        public ContractServices(IMapper mapper, IPackageRepository packageRepository, IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository, IRequestCharacterRepository requestCharacterRepository, ITaskService taskService)
         {
             this._contractRespository = _contractRespository;
             _requestCharacterRepository = requestCharacterRepository;
@@ -80,6 +81,7 @@ namespace CCSS_Service.Services
             this.contractCharacterService = contractCharacterService;
             this.packageRepository = packageRepository;
             this.mapper = mapper;
+            this.taskService = taskService;
             //this.transactionRepository = transactionRepository; 
         }
 
@@ -630,6 +632,15 @@ namespace CCSS_Service.Services
                     {
                         //await transaction.RollbackAsync();
                         throw new Exception("Cannot add ContractCharacter");
+                    }
+                }
+                if (contract.ContractStatus == ContractStatus.Completed)
+                {
+                    bool checkTask = await taskService.UpdateStatusTaskByContractId(contract.ContractId);
+                    if (!checkTask)
+                    {
+                        //await transaction.RollbackAsync();
+                        throw new Exception("Cannot update status task");
                     }
                 }
                 //scope.Complete();
