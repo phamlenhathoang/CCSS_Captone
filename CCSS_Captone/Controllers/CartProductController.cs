@@ -82,5 +82,16 @@ namespace CCSS_Captone.Controllers
             var result = await _services.UpdateCartProduct(cartId, updateCartProductRequests);
             return Ok(result);
         }
+
+        [HttpDelete("DeleteCartProductByProductId")]
+        public async Task<IActionResult> DeleteCartPorductAfterPayment(string cartId, List<CartProductRequestDTO> cartProductRequestDTOs)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.DeleteCartProductAfterPayment(cartId, cartProductRequestDTOs);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
     }
 }
