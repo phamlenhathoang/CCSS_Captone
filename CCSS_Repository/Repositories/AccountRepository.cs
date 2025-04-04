@@ -24,6 +24,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> AddAccount(Account account);
         Task<bool> UpdateAccount(Account account);
         Task<List<Account>> GetAllAccountsByCharacter(Character character);
+        Task<List<Account>> GetAccountsByCharacter(Character character, List<Account> accounts);
         Task<List<Account>> GetAllAccountsByRoleId(string roleId);
         Task<List<Account>> GetAllAccountRoleManager();
         Task<Account> GetAccountByUsername(string username);
@@ -159,6 +160,21 @@ namespace CCSS_Repository.Repositories
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+
+        public async Task<List<Account>> GetAccountsByCharacter(Character character, List<Account> accounts)
+        {
+            IQueryable<Account> query = dbContext.Accounts;
+            if (accounts.Any())
+            {
+                foreach (Account account in accounts)
+                {
+                    query = query.Where(a => !a.AccountId.Equals(account.AccountId));
+                }
+            }
+
+            return await query.ToListAsync();
         }
     }
 }

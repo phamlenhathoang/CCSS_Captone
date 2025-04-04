@@ -70,14 +70,27 @@ namespace CCSS_Service.Services
                     throw new Exception("Can not add ContractCharacter");
                 }
 
-                string result = await _taskService.AddTask(null, contractCharacters);
+                List<ContractCharacter> contractCharacters2 = new List<ContractCharacter>();
 
-                if(result == "Successfully")
+                foreach (var character in contractCharacters)
                 {
-                    return true;
+                    if(character.CosplayerId != null)
+                    {
+                        contractCharacters2.Add(character);
+                    }
                 }
 
-                return false;
+                if (contractCharacters2.Count > 0)
+                {
+                    string result = await _taskService.AddTask(null, contractCharacters);
+
+                    if (result != "Successfully")
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
             }
             catch (Exception ex)
             {

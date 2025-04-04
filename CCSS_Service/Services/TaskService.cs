@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static iText.Svg.SvgConstants;
 using Contract = CCSS_Repository.Entities.Contract;
+using Request = CCSS_Repository.Entities.Request;
 using Task = CCSS_Repository.Entities.Task;
 using TaskStatus = CCSS_Repository.Entities.TaskStatus;
 
@@ -39,6 +40,7 @@ namespace CCSS_Service.Services
         Task<bool> UpdateStatusTask(string taskId, string status, string accountId);
         Task<List<TaskResponse>> GetTaskByAccountId(string accountId);
         Task<TaskResponse> GetTaskByTaskId(string taskId);
+        Task<bool> AddTaskContractByManager(List<AddTaskContractRequest> contractCharacters, string requestId);
     }
     public class TaskService : ITaskService
     {
@@ -54,8 +56,9 @@ namespace CCSS_Service.Services
         private readonly IRequestRepository requestRepository;
         private readonly IEventRepository eventRepository;
         private readonly IBeginTransactionRepository _beginTransactionRepository;
+        private readonly IRequestCharacterRepository requestCharacterRepository;
 
-        public TaskService(IRequestRepository requestRepository, IContractCharacterRepository contractCharacterRepository, IEventChacracterRepository eventChacracterRepository, ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<NotificationHub> hubContext, INotificationRepository notificationRepository, IEventRepository eventRepository, IBeginTransactionRepository _beginTransactionRepository)
+        public TaskService(IRequestRepository requestRepository, IContractCharacterRepository contractCharacterRepository, IEventChacracterRepository eventChacracterRepository, ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<NotificationHub> hubContext, INotificationRepository notificationRepository, IEventRepository eventRepository, IBeginTransactionRepository _beginTransactionRepository, IRequestCharacterRepository requestCharacterRepository)
         {
             this.taskRepository = taskRepository;
             this.contractRespository = contractRespository;
@@ -69,6 +72,7 @@ namespace CCSS_Service.Services
             this.requestRepository = requestRepository;
             this.eventRepository = eventRepository;
             this._beginTransactionRepository = _beginTransactionRepository;
+            this.requestCharacterRepository = requestCharacterRepository;
         }
 
         private async Task<bool> AddTaskEvent(List<AddTaskEventRequest> taskEventRequests)
@@ -174,6 +178,8 @@ namespace CCSS_Service.Services
             return false;
         }
 
+
+
         private async Task<bool> AddTaskContract(List<ContractCharacter> contractCharacters)
         {
             try
@@ -250,6 +256,91 @@ namespace CCSS_Service.Services
             catch (Exception ex)
             {
                 //await transaction.RollbackAsync();
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> AddTaskContractByManager(List<AddTaskContractRequest> contractCharacters, string requestId)
+        {
+            try
+            {
+                List<Task> tasks = new List<Task>();
+
+                var uniqueElements = new HashSet<string>();
+
+                foreach (var contractCharacter in contractCharacters)
+                {
+                    if (contractCharacter.CosplayerId != null)
+                    {
+                        bool checkAccount = uniqueElements.Add(contractCharacter.CosplayerId);
+
+                        if (!checkAccount)
+                        {
+                            throw new Exception("Account is duplicate");
+                        }
+                    }
+                }
+
+                Request request = await requestRepository.GetRequestById(requestId);
+                if (request == null)
+                {
+                    throw new Exception("Request does not exist");
+                }
+
+                foreach (var taskRequest in contractCharacters)
+                {
+                    if (taskRequest.CosplayerId != null)
+                    {
+                        Account account = await accountRepository.GetAccount(taskRequest.CosplayerId);
+                        if (account == null)
+                        {
+                            throw new Exception("Account does not exist");
+                        }
+                        if (account.Role.RoleName != RoleName.Cosplayer)
+                        {
+                            throw new Exception("Account must be cosplayer");
+                        }
+
+                        Character character = await characterRepository.GetCharacter(taskRequest.CharacterId);
+                        if (character == null)
+                        {
+                            throw new Exception("Character does not exist");
+                        }
+
+                        RequestCharacter requestCharacter = await requestCharacterRepository.GetRequestCharacterByRequestIdAndCharacterId(requestId, taskRequest.CharacterId);
+                        if (requestCharacter != null)
+                        {
+                            bool checkDelete = await requestCharacterRepository.DeleteRequestCharacter(requestCharacter);
+                            if (!checkDelete)
+                            {
+                                throw new Exception("Can not delete RequestCharacter");
+                            }
+                        }
+
+                        RequestCharacter newRequestCharacter = new RequestCharacter()
+                        {
+                            CosplayerId = taskRequest.CosplayerId,
+                            CharacterId = taskRequest.CharacterId,
+                            Description = null,
+                            CreateDate = DateTime.Now,
+                            Quantity = 1,
+                            RequestId = requestId,
+                            TotalPrice = character.Price * account.SalaryIndex,
+                            UpdateDate = null,
+                        };
+
+                        bool result = await requestCharacterRepository.AddRequestCharacter(newRequestCharacter);
+                        if (!result)
+                        {
+                            throw new Exception("Can not add RequestCharacter");
+                        }
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
                 throw new Exception(ex.Message);
             }
         }
