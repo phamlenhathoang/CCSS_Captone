@@ -319,7 +319,21 @@ namespace CCSS_Service.Libraries
         public async Task<double> CalculateTotalAmount(Request request, string amount, double price)
         {
             double totalAmount = 0;
-            int totalDay = (int)Math.Ceiling((request.EndDate - request.StartDate).TotalDays);
+            double totalHours = 0;
+            DateTime start = request.StartDate;
+            DateTime end = request.EndDate;
+
+            while (start.Date <= end.Date)
+            {
+                DateTime nextDay = start.Date.AddDays(1); // 00:00 ngày hôm sau
+                DateTime effectiveEnd = (nextDay < end) ? nextDay : end; // Xác định điểm dừng trong ngày
+
+                double hoursInDay = (effectiveEnd - start).TotalHours;
+                hoursInDay = Math.Min(hoursInDay, 8); // Giới hạn tối đa 8 tiếng
+
+                totalHours += hoursInDay;
+                start = nextDay; // Chuyển sang ngày tiếp theo
+            }
 
             foreach (RequestCharacter requestCharacter in request.RequestCharacters)
             {
@@ -329,7 +343,7 @@ namespace CCSS_Service.Libraries
                 {
                     totalAmount = (double)requestCharacter.Quantity * (double)character.Price;
                     Account account = await accountRepository.GetAccount(requestCharacter.CosplayerId);
-                    totalAmount += (double)character.Price * (double)account.SalaryIndex - (double)character.Price;
+                    totalAmount += (double)account.SalaryIndex * totalHours;
                 }
                 else
                 {
@@ -343,7 +357,8 @@ namespace CCSS_Service.Libraries
             }
             if(request.ServiceId != "S001")
             {
-                return totalDay * totalAmount;
+                double total = (int)Math.Ceiling((request.EndDate - request.StartDate).TotalHours);
+                return total  * totalAmount;
             }
             return totalAmount;
         }
