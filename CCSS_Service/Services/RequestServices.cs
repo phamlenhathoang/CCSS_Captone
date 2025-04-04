@@ -242,7 +242,6 @@ namespace CCSS_Service.Services
                     }
                 }
 
-
                 var newRequest = new Request()
                 {
                     RequestId = Guid.NewGuid().ToString(),
@@ -317,12 +316,12 @@ namespace CCSS_Service.Services
                                     await transaction.RollbackAsync();
                                     return "This cosplayer is has another job. Please change datetime.";
                                 }
-                            }
-                            var character = await _accountRepository.GetAccount(r.CosplayerId);
-                            if (character.RoleId != "R004" || character == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
-                            {
-                                await transaction.RollbackAsync();
-                                return "This cosplayer not found";
+                                var character = await _accountRepository.GetAccount(r.CosplayerId);
+                                if (character.RoleId != "R004" || character == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "This cosplayer not found";
+                                }
                             }
                             // Nếu CosplayerId hợp lệ, thêm vào danh sách
                             characteInRequest.Add(new RequestCharacter
@@ -409,12 +408,35 @@ namespace CCSS_Service.Services
                 List<RequestCharacter> characterInRequest = new List<RequestCharacter>();
                 foreach (var r in UpdateRequestDtos.ListUpdateRequestCharacters)
                 {
-                    var cosplayer = await _accountRepository.GetAccount(r.CosplayerId);
-                    if (cosplayer.RoleId != "R004" || cosplayer == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
+                    if (r.CosplayerId != null)
                     {
-                        await transaction.RollbackAsync();
-                        return "This cosplayer not found";
+                        var checkCharacter = await _characterRepository.GetCharacter(r.CharacterId);
+                        if (checkCharacter == null)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Character does not exist";
+                        }
+                        var account = await _accountRepository.GetAccount(r.CosplayerId);
+                        bool checkAccount = await _characterRepository.CheckCharacterForAccount(account, r.CharacterId);
+                        if (!checkAccount)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Cosplayer does not suitable.";
+                        }
+                        bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
+                        if (!checkTask)
+                        {
+                            await transaction.RollbackAsync();
+                            return "This cosplayer is has another job. Please change datetime.";
+                        }
+                        var cosplayer = await _accountRepository.GetAccount(r.CosplayerId);
+                        if (cosplayer.RoleId != "R004" || cosplayer == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
+                        {
+                            await transaction.RollbackAsync();
+                            return "This cosplayer not found";
+                        }
                     }
+
                     var requestCharacter = await _requestCharacterRepository.GetRequestCharacter(requestExisting.RequestId, r.CharacterId);
                     var character = await _characterRepository.GetCharacter(r.CharacterId);
                     if (requestCharacter == null)
@@ -448,6 +470,11 @@ namespace CCSS_Service.Services
                 if (characterInRequest.Any())
                 {
                     await _requestCharacterRepository.UpdateListRequestCharacter(characterInRequest);
+                }
+                else
+                {
+                    await transaction.RollbackAsync();
+                    return "Cant Update Character Request";
                 }
 
                 requestExisting.Name = UpdateRequestDtos.Name;
