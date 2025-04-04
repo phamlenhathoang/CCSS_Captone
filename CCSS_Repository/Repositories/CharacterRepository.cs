@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace CCSS_Repository.Repositories
 {
@@ -18,6 +19,8 @@ namespace CCSS_Repository.Repositories
         Task<bool> UpdateCharacter(Character character);
         Task<bool> DeleteCharacter(Character character);
         Task<bool> CheckCharacterForAccount(Account account, string characterId);
+        Task<List<Character>> GetAll();
+        Task UpdateListCharacter(List<Character> list);
     }
     public class CharacterRepository : ICharacterRepository
     {
@@ -51,6 +54,12 @@ namespace CCSS_Repository.Repositories
         {
             _context.Characters.Update(character);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task UpdateListCharacter(List<Character> list)
+        {
+            _context.Characters.UpdateRange(list);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteCharacter(Character character)

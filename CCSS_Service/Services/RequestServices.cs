@@ -341,16 +341,16 @@ namespace CCSS_Service.Services
                             await transaction.RollbackAsync();
                             return "Failed to add characters in Request";
                         }
-                        foreach (var r in requestDtos.ListRequestCharacters)
-                        {
-                            var characterToUpdate = await _characterRepository.GetCharacter(r.CharacterId);
+                        //foreach (var r in requestDtos.ListRequestCharacters)
+                        //{
+                        //    var characterToUpdate = await _characterRepository.GetCharacter(r.CharacterId);
 
-                            if (characterToUpdate != null)
-                            {
-                                characterToUpdate.Quantity -= r.Quantity;
-                                await _characterRepository.UpdateCharacter(characterToUpdate);
-                            }
-                        }
+                        //    if (characterToUpdate != null)
+                        //    {
+                        //        characterToUpdate.Quantity -= r.Quantity;
+                        //        await _characterRepository.UpdateCharacter(characterToUpdate);
+                        //    }
+                        //}
                     }
                     await transaction.CommitAsync();
                     return "Add Request Success";
@@ -495,16 +495,45 @@ namespace CCSS_Service.Services
         #region Update Request Status
         public async Task<string> UpdateStatusRequest(string requestId, RequestStatus requestStatus)
         {
-            var request = await _repository.GetRequestById(requestId);
-            if (request == null)
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                return "Request not found";
+
+                var request = await _repository.GetRequestById(requestId);
+                var listRequestCharacters = await _requestCharacterRepository.GetListCharacterByRequest(requestId);
+              
+                if (request == null)
+                {
+                    await transaction.RollbackAsync();
+                    return "Request not found";
+                }
+
+                if (requestStatus == RequestStatus.Browsed)
+                {
+                    foreach (var c in listRequestCharacters)
+                    {
+                        var character = await _characterRepository.GetCharacter(c.CharacterId);
+                        if(character == null)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Character is not found";
+                        }
+                        character.Quantity -= c.Quantity;
+                        character.UpdateDate = DateTime.Now;
+                        var result = await _characterRepository.UpdateCharacter(character);
+                        if (!result)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Update Character failed";
+                        }
+                    }
+                }
+
+                request.Status = requestStatus;
+                await _repository.UpdateRequest(request);
+
+                await transaction.CommitAsync();
+                return "Status is update success";
             }
-            request.Status = requestStatus;
-
-            await _repository.UpdateRequest(request);
-
-            return "Status is update success";
         }
         #endregion
 
@@ -661,7 +690,7 @@ namespace CCSS_Service.Services
                 {
                     count += (int)requestCharacter.Quantity;
                     Character character = await _characterRepository.GetCharacter(requestCharacter.CharacterId);
-                    if(character == null)
+                    if (character == null)
                     {
                         throw new Exception("Character does not exist");
                     }
@@ -673,9 +702,9 @@ namespace CCSS_Service.Services
                         {
                             checkAccountForCharacter.Add(account);
                             checkAccountForCharacter1.Add(account);
-                            if(checkAccountForCharacter.Count == requestCharacter.Quantity)
+                            if (checkAccountForCharacter.Count == requestCharacter.Quantity)
                             {
-                                foreach(var account1 in checkAccountForCharacter)
+                                foreach (var account1 in checkAccountForCharacter)
                                 {
                                     checkAccount.Add(account1);
                                 }
