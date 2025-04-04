@@ -4,6 +4,8 @@ using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Globalization;
 
 namespace CCSS_Captone.Controllers
 {
@@ -62,6 +64,31 @@ namespace CCSS_Captone.Controllers
         {
             var task = await taskService.GetAllTasks();
             return Ok(task);
+        }
+
+        [HttpGet("totalHour")]
+        public async Task<ActionResult> TotalHour(string startDate, string endDate)
+        {
+            double totalHours = 0;
+            string format = "HH:mm dd/MM/yyyy";
+            CultureInfo culture = CultureInfo.InvariantCulture;
+
+            DateTime start = DateTime.ParseExact(startDate, format, culture);
+            DateTime end = DateTime.ParseExact(endDate, format, culture);
+
+            while (start.Date <= end.Date)
+            {
+                DateTime nextDay = start.Date.AddDays(1); // 00:00 ngày hôm sau
+                DateTime effectiveEnd = (nextDay < end) ? nextDay : end; // Xác định điểm dừng trong ngày
+
+                double hoursInDay = (effectiveEnd - start).TotalHours;
+                hoursInDay = Math.Min(hoursInDay, 8); // Giới hạn tối đa 8 tiếng
+
+                totalHours += hoursInDay;
+                start = nextDay; // Chuyển sang ngày tiếp theo
+            }
+
+            return Ok(totalHours);
         }
     }
 }
