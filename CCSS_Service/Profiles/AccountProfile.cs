@@ -26,7 +26,8 @@ namespace CCSS_Service.Profiles
             CreateMap<Account, AccountDashBoardResponse>()
                     .ReverseMap();
 
-
+           CreateMap<Account, AccountResponse>()
+          .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.AccountImages));
             CreateMap<Account, AccountByCharacterAndDateResponse>()
                     .ReverseMap();
             //Request 

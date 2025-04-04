@@ -20,6 +20,7 @@ namespace CCSS_Repository.Repositories
         //Task<Account> GetAccountByAccountIdIncludeTask(string acountId, string? taskId);
         Task<Account> GetAccountByEmailAndPassword(string email, string password);
         Task<Account> GetAccountByEmail(string email);
+        Task<Account> GetAccountByEventCharacterId(string id);
         Task<Account> GetAccountByEmailAndCode(string email, string code);
         Task<bool> AddAccount(Account account);
         Task<bool> UpdateAccount(Account account);
@@ -61,6 +62,14 @@ namespace CCSS_Repository.Repositories
         public async Task<Account> GetAccountByGoogleId(string email, string googleId)
         {
             return await dbContext.Accounts.Include(sc => sc.Role).FirstOrDefaultAsync(sc => sc.Email.Equals(email) && sc.GoogleId.Equals(googleId));
+        }
+        public async Task<Account> GetAccountByEventCharacterId(string eventCharacterId)
+        {
+            return await dbContext.Accounts
+                .Include(a => a.AccountImages) 
+                .Include(a => a.Tasks) 
+                    .ThenInclude(t => t.EventCharacter) 
+                .FirstOrDefaultAsync(a => a.Tasks.Any(t => t.EventCharacter.EventCharacterId == eventCharacterId) && a.IsActive == true);
         }
 
         public async Task<Account> GetAccount(string accountId)
@@ -161,7 +170,6 @@ namespace CCSS_Repository.Repositories
                 throw new Exception(ex.Message);
             }
         }
-
 
         public async Task<List<Account>> GetAccountsByCharacter(Character character, List<Account> accounts)
         {

@@ -19,7 +19,7 @@ namespace CCSS_Service.Services
         Task<string> AddCartProduct(string cartId, List<CartProductRequest> cartProductRequests);
         Task<string> UpdateCartProduct(string cartId, List<UpdateCartProductRequest> updateCartProductRequests);
         Task<string> DeleteCartProduct(string cartId, List<CartPorductRequestDtos> cartProductRequests);
-        Task<string> DeleteCartProductByProductId(string cartId, List<CartProductRequestDTO> cartProductRequests);
+        Task<string> DeleteCartProductAfterPayment(string cartId, List<CartProductRequestDTO> cartProductRequests);
 
     }
 
@@ -274,7 +274,7 @@ namespace CCSS_Service.Services
         }
 
 
-        public async Task<string> DeleteCartProductByProductId(string cartId, List<CartProductRequestDTO> cartProductRequests)
+        public async Task<string> DeleteCartProductAfterPayment(string cartId, List<CartProductRequestDTO> cartProductRequests)
         {
             if (cartId == null)
             {
@@ -289,7 +289,7 @@ namespace CCSS_Service.Services
             {
                 foreach (var cp in cartProductRequests)
                 {
-                    var cartProduct = await _repository.GetCartProduct(cartId, cp.ProductId);
+                    var cartProduct = await _repository.GetCartProduct(cp.ProductId, cartId);
                     if (cartProduct == null)
                     {
                         return "this Product is not in Cart";
@@ -305,15 +305,7 @@ namespace CCSS_Service.Services
                         await transaction.RollbackAsync();
                         return "Delete Failed";
                     }
-                    product.Quantity += cartProduct.Quantity;
-                    product.UpdateDate = DateTime.Now;
-                    var result1 = await _productRepository.UpdateProduct(product);
-                    if (!result1)
-                    {
-                        await transaction.RollbackAsync();
-                        return "Delete Failed";
-                    }
-
+                 
                     cart.TotalPrice -= (double)cartProduct.Price;
                     cart.UpdateDate = DateTime.Now;
                     var result2 = await _cartRepository.UpdateCart(cart);

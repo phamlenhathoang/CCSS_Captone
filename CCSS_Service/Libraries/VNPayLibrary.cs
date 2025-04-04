@@ -16,6 +16,7 @@ namespace CCSS_Service.Libraries
     {
         private readonly SortedList<string, string> _requestData = new SortedList<string, string>(new VnPayCompare());
         private readonly SortedList<string, string> _responseData = new SortedList<string, string>(new VnPayCompare());
+
         public VNPayResponseModel GetFullResponseData(IQueryCollection collection, string hashSecret)
         {
             var vnPay = new VNPayLibrary();
@@ -78,7 +79,6 @@ namespace CCSS_Service.Libraries
 
             return "127.0.0.1";
         }
-
         public void AddRequestData(string key, string value)
         {
             if (!string.IsNullOrEmpty(value))
@@ -116,7 +116,12 @@ namespace CCSS_Service.Libraries
                 signData = signData.Remove(data.Length - 1, 1);
             }
 
+            Console.WriteLine("Raw data for hash: " + signData);
+            Console.WriteLine("Secret key: " + vnpHashSecret);
             var vnpSecureHash = HmacSha512(vnpHashSecret, signData);
+            Console.WriteLine("Generated hash: " + vnpSecureHash);
+
+            //var vnpSecureHash = HmacSha512(vnpHashSecret, signData);
             baseUrl += "vnp_SecureHash=" + vnpSecureHash;
 
             return baseUrl;
@@ -144,7 +149,6 @@ namespace CCSS_Service.Libraries
 
             return hash.ToString();
         }
-
         private string GetResponseData()
         {
             var data = new StringBuilder();
@@ -171,19 +175,23 @@ namespace CCSS_Service.Libraries
 
             return data.ToString();
         }
-
     }
-    public class VnPayCompare : IComparer<string>
-    {
-        public int Compare(string x, string y)
-        {
-            if (x == y) return 0;
-            if (x == null) return -1;
-            if (y == null) return 1;
-            var vnpCompare = CompareInfo.GetCompareInfo("en-US");
-            return vnpCompare.Compare(x, y, CompareOptions.Ordinal);
-        }
-    }
+    
 
 
 }
+public class VnPayCompare : IComparer<string>
+{
+    public int Compare(string x, string y)
+    {
+        if (x == y) return 0;
+        if (x == null) return -1;
+        if (y == null) return 1;
+        var vnpCompare = CompareInfo.GetCompareInfo("en-US");
+        return vnpCompare.Compare(x, y, CompareOptions.Ordinal);
+    }
+}
+
+
+
+
