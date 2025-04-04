@@ -452,23 +452,23 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Character
             modelBuilder.Entity<Character>().HasData(
-     new Character { CharacterId = "CH001", CharacterName = "Naruto", CategoryId = "C3", Description = "Ninja from Konoha", Price = 100, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 50, Quantity = 5, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH002", CharacterName = "Sasuke", CategoryId = "C3", Description = "Naruto’s rival", Price = 120, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 3, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH003", CharacterName = "Goku", CategoryId = "C3", Description = "Saiyan warrior", Price = 150, IsActive = true, MaxHeight = 190, MinHeight = 170, MaxWeight = 90, MinWeight = 60, Quantity = 4, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH004", CharacterName = "Luffy", CategoryId = "C4", Description = "Pirate King", Price = 110, IsActive = true, MaxHeight = 175, MinHeight = 155, MaxWeight = 70, MinWeight = 45, Quantity = 6, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH005", CharacterName = "Ichigo", CategoryId = "C4", Description = "Soul Reaper", Price = 130, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 3, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH001", CharacterName = "Naruto", CategoryId = "C3", Description = "Ninja from Konoha", Price = 100000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 50, Quantity = 5, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH002", CharacterName = "Sasuke", CategoryId = "C3", Description = "Naruto’s rival", Price = 120000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 3, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH003", CharacterName = "Goku", CategoryId = "C3", Description = "Saiyan warrior", Price = 150000, IsActive = true, MaxHeight = 190, MinHeight = 170, MaxWeight = 90, MinWeight = 60, Quantity = 4, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH004", CharacterName = "Luffy", CategoryId = "C4", Description = "Pirate King", Price = 110000, IsActive = true, MaxHeight = 175, MinHeight = 155, MaxWeight = 70, MinWeight = 45, Quantity = 6, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH005", CharacterName = "Ichigo", CategoryId = "C4", Description = "Soul Reaper", Price = 130000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 3, CreateDate = DateTime.UtcNow },
 
-     new Character { CharacterId = "CH006", CharacterName = "Mario", CategoryId = "C14", Description = "Plumber hero", Price = 80, IsActive = true, MaxHeight = 160, MinHeight = 140, MaxWeight = 70, MinWeight = 50, Quantity = 5, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH007", CharacterName = "Luigi", CategoryId = "C14", Description = "Mario’s brother", Price = 85, IsActive = true, MaxHeight = 170, MinHeight = 150, MaxWeight = 75, MinWeight = 55, Quantity = 4, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH008", CharacterName = "Link", CategoryId = "C14", Description = "Hero of Hyrule", Price = 140, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 50, Quantity = 2, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH009", CharacterName = "Zelda", CategoryId = "C16", Description = "Hyrule princess", Price = 135, IsActive = true, MaxHeight = 175, MinHeight = 155, MaxWeight = 70, MinWeight = 50, Quantity = 3, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH010", CharacterName = "Samus", CategoryId = "C16", Description = "Bounty hunter", Price = 145, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 3, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH006", CharacterName = "Mario", CategoryId = "C14", Description = "Plumber hero", Price = 80000, IsActive = true, MaxHeight = 160, MinHeight = 140, MaxWeight = 70, MinWeight = 50, Quantity = 5, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH007", CharacterName = "Luigi", CategoryId = "C14", Description = "Mario’s brother", Price = 85000, IsActive = true, MaxHeight = 170, MinHeight = 150, MaxWeight = 75, MinWeight = 55, Quantity = 4, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH008", CharacterName = "Link", CategoryId = "C14", Description = "Hero of Hyrule", Price = 140000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 50, Quantity = 2, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH009", CharacterName = "Zelda", CategoryId = "C16", Description = "Hyrule princess", Price = 135000, IsActive = true, MaxHeight = 175, MinHeight = 155, MaxWeight = 70, MinWeight = 50, Quantity = 3, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH010", CharacterName = "Samus", CategoryId = "C16", Description = "Bounty hunter", Price = 145000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 3, CreateDate = DateTime.UtcNow },
 
-     new Character { CharacterId = "CH011", CharacterName = "Cloud", CategoryId = "C13", Description = "Ex-SOLDIER", Price = 125, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 3, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH012", CharacterName = "Sephiroth", CategoryId = "C13", Description = "One-Winged Angel", Price = 155, IsActive = true, MaxHeight = 190, MinHeight = 170, MaxWeight = 90, MinWeight = 60, Quantity = 2, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH013", CharacterName = "Kratos", CategoryId = "C8", Description = "God of War", Price = 160, IsActive = true, MaxHeight = 195, MinHeight = 175, MaxWeight = 100, MinWeight = 70, Quantity = 2, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH014", CharacterName = "Pikachu", CategoryId = "C8", Description = "Electric Pokemon", Price = 90, IsActive = true, MaxHeight = 50, MinHeight = 30, MaxWeight = 20, MinWeight = 10, Quantity = 10, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH015", CharacterName = "Kirby", CategoryId = "C8", Description = "Pink puffball", Price = 95, IsActive = true, MaxHeight = 60, MinHeight = 40, MaxWeight = 25, MinWeight = 15, Quantity = 8, CreateDate = DateTime.UtcNow }
+     new Character { CharacterId = "CH011", CharacterName = "Cloud", CategoryId = "C13", Description = "Ex-SOLDIER", Price = 125000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 3, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH012", CharacterName = "Sephiroth", CategoryId = "C13", Description = "One-Winged Angel", Price = 155000, IsActive = true, MaxHeight = 190, MinHeight = 170, MaxWeight = 90, MinWeight = 60, Quantity = 2, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH013", CharacterName = "Kratos", CategoryId = "C8", Description = "God of War", Price = 160000, IsActive = true, MaxHeight = 195, MinHeight = 175, MaxWeight = 100, MinWeight = 70, Quantity = 2, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH014", CharacterName = "Pikachu", CategoryId = "C8", Description = "Electric Pokemon", Price = 90000, IsActive = true, MaxHeight = 50, MinHeight = 30, MaxWeight = 20, MinWeight = 10, Quantity = 10, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH015", CharacterName = "Kirby", CategoryId = "C8", Description = "Pink puffball", Price = 95000, IsActive = true, MaxHeight = 60, MinHeight = 40, MaxWeight = 25, MinWeight = 15, Quantity = 8, CreateDate = DateTime.UtcNow }
  );
             #endregion
 
@@ -483,21 +483,21 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Product
             modelBuilder.Entity<Product>().HasData(
-    new Product { ProductId = "P001", ProductName = "Naruto Wig", Description = "A wig for Naruto cosplay", Price = 30, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P002", ProductName = "Mario Hat", Description = "A hat for Mario cosplay", Price = 20, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P003", ProductName = "Sasuke Costume", Description = "Complete costume for Sasuke cosplay", Price = 80, Quantity = 5, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P004", ProductName = "Zelda Sword", Description = "Replica sword from The Legend of Zelda", Price = 100, Quantity = 7, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P005", ProductName = "One Piece Straw Hat", Description = "Iconic straw hat from One Piece", Price = 25, Quantity = 20, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P006", ProductName = "Miku Wig", Description = "Hatsune Miku blue twin-tail wig", Price = 40, Quantity = 12, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P007", ProductName = "Demon Slayer Earrings", Description = "Tanjiro's iconic hanafuda earrings", Price = 15, Quantity = 30, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P008", ProductName = "Attack on Titan Jacket", Description = "Survey Corps uniform jacket", Price = 50, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P009", ProductName = "Pikachu Onesie", Description = "Cozy Pikachu-themed onesie", Price = 60, Quantity = 8, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P010", ProductName = "Cloud's Buster Sword", Description = "Final Fantasy VII replica sword", Price = 120, Quantity = 4, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P011", ProductName = "Genshin Impact Vision", Description = "LED Vision accessory from Genshin Impact", Price = 35, Quantity = 25, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P012", ProductName = "Jinx Wig", Description = "Jinx cosplay wig from Arcane", Price = 45, Quantity = 6, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P013", ProductName = "Sailor Moon Tiara", Description = "Golden tiara from Sailor Moon", Price = 18, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P014", ProductName = "Spider-Man Suit", Description = "High-quality Spider-Man suit", Price = 90, Quantity = 3, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P015", ProductName = "Harry Potter Wand", Description = "Replica wand from Harry Potter series", Price = 22, Quantity = 50, CreateDate = DateTime.UtcNow, IsActive = true }
+    new Product { ProductId = "P001", ProductName = "Naruto Wig", Description = "A wig for Naruto cosplay", Price = 30000, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P002", ProductName = "Mario Hat", Description = "A hat for Mario cosplay", Price = 20000, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P003", ProductName = "Sasuke Costume", Description = "Complete costume for Sasuke cosplay", Price = 80000, Quantity = 5, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P004", ProductName = "Zelda Sword", Description = "Replica sword from The Legend of Zelda", Price = 100000, Quantity = 7, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P005", ProductName = "One Piece Straw Hat", Description = "Iconic straw hat from One Piece", Price = 25000, Quantity = 20, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P006", ProductName = "Miku Wig", Description = "Hatsune Miku blue twin-tail wig", Price = 40000, Quantity = 12, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P007", ProductName = "Demon Slayer Earrings", Description = "Tanjiro's iconic hanafuda earrings", Price = 15000, Quantity = 30, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P008", ProductName = "Attack on Titan Jacket", Description = "Survey Corps uniform jacket", Price = 50000, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P009", ProductName = "Pikachu Onesie", Description = "Cozy Pikachu-themed onesie", Price = 60000, Quantity = 8, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P010", ProductName = "Cloud's Buster Sword", Description = "Final Fantasy VII replica sword", Price = 120000, Quantity = 4, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P011", ProductName = "Genshin Impact Vision", Description = "LED Vision accessory from Genshin Impact", Price = 35000, Quantity = 25, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P012", ProductName = "Jinx Wig", Description = "Jinx cosplay wig from Arcane", Price = 45000, Quantity = 6, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P013", ProductName = "Sailor Moon Tiara", Description = "Golden tiara from Sailor Moon", Price = 18000, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P014", ProductName = "Spider-Man Suit", Description = "High-quality Spider-Man suit", Price = 90000, Quantity = 3, CreateDate = DateTime.UtcNow, IsActive = true },
+    new Product { ProductId = "P015", ProductName = "Harry Potter Wand", Description = "Replica wand from Harry Potter series", Price = 22000, Quantity = 50, CreateDate = DateTime.UtcNow, IsActive = true }
 );
             #endregion
 
@@ -521,72 +521,72 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Order
             modelBuilder.Entity<Order>().HasData(
-               new Order { OrderId = "O001", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-01"), TotalPrice = 250.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O002", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-05"), TotalPrice = 150.5, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O003", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-10"), TotalPrice = 300.0, OrderStatus = OrderStatus.Cancel },
-               new Order { OrderId = "O004", AccountId = "A014", OrderDate = DateTime.Parse("2024-03-12"), TotalPrice = 400.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O005", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-15"), TotalPrice = 175.0, OrderStatus = OrderStatus.Cancel },
-               new Order { OrderId = "O006", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-18"), TotalPrice = 225.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O007", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-20"), TotalPrice = 350.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O008", AccountId = "A014", OrderDate = DateTime.Parse("2024-03-22"), TotalPrice = 275.0, OrderStatus = OrderStatus.Cancel },
-               new Order { OrderId = "O009", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-25"), TotalPrice = 500.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O010", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-28"), TotalPrice = 125.0, OrderStatus = OrderStatus.Cancel },
-               new Order { OrderId = "O011", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-30"), TotalPrice = 325.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O012", AccountId = "A014", OrderDate = DateTime.Parse("2024-04-02"), TotalPrice = 410.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O013", AccountId = "A003", OrderDate = DateTime.Parse("2024-04-05"), TotalPrice = 280.0, OrderStatus = OrderStatus.Cancel },
-               new Order { OrderId = "O014", AccountId = "A006", OrderDate = DateTime.Parse("2024-04-07"), TotalPrice = 350.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O015", AccountId = "A011", OrderDate = DateTime.Parse("2024-04-10"), TotalPrice = 200.0, OrderStatus = OrderStatus.Completed }
+               new Order { OrderId = "O001", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-01"), TotalPrice = 250000.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O002", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-05"), TotalPrice = 150000.5, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O003", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-10"), TotalPrice = 300000.0, OrderStatus = OrderStatus.Cancel },
+               new Order { OrderId = "O004", AccountId = "A014", OrderDate = DateTime.Parse("2024-03-12"), TotalPrice = 400000.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O005", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-15"), TotalPrice = 175000.0, OrderStatus = OrderStatus.Cancel },
+               new Order { OrderId = "O006", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-18"), TotalPrice = 225000.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O007", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-20"), TotalPrice = 350000.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O008", AccountId = "A014", OrderDate = DateTime.Parse("2024-03-22"), TotalPrice = 275000.0, OrderStatus = OrderStatus.Cancel },
+               new Order { OrderId = "O009", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-25"), TotalPrice = 500000.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O010", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-28"), TotalPrice = 125000.0, OrderStatus = OrderStatus.Cancel },
+               new Order { OrderId = "O011", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-30"), TotalPrice = 325000.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O012", AccountId = "A014", OrderDate = DateTime.Parse("2024-04-02"), TotalPrice = 410000.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O013", AccountId = "A003", OrderDate = DateTime.Parse("2024-04-05"), TotalPrice = 280000.0, OrderStatus = OrderStatus.Cancel },
+               new Order { OrderId = "O014", AccountId = "A006", OrderDate = DateTime.Parse("2024-04-07"), TotalPrice = 350000.0, OrderStatus = OrderStatus.Completed },
+               new Order { OrderId = "O015", AccountId = "A011", OrderDate = DateTime.Parse("2024-04-10"), TotalPrice = 200000.0, OrderStatus = OrderStatus.Completed }
             );
             #endregion
 
             #region Coupon
             modelBuilder.Entity<Coupon>().HasData(
-    new Coupon { CouponId = "CP001", Condition = "Min order 500", Percent = 10, Amount = 50, StartDate = new DateTime(2024, 3, 1), EndDate = new DateTime(2024, 3, 31), Type = CouponType.ForOrder },
-    new Coupon { CouponId = "CP002", Condition = "Min order 1000", Percent = 15, Amount = 150, StartDate = new DateTime(2024, 4, 1), EndDate = new DateTime(2024, 4, 30), Type = CouponType.ForOrder },
-    new Coupon { CouponId = "CP003", Condition = "Min contract 2000", Percent = 20, Amount = 400, StartDate = new DateTime(2024, 5, 1), EndDate = new DateTime(2024, 5, 31), Type = CouponType.ForContract },
-    new Coupon { CouponId = "CP004", Condition = "Min order 1500", Percent = 12, Amount = 180, StartDate = new DateTime(2024, 6, 1), EndDate = new DateTime(2024, 6, 30), Type = CouponType.ForOrder },
-    new Coupon { CouponId = "CP005", Condition = "Min contract 3000", Percent = 25, Amount = 750, StartDate = new DateTime(2024, 7, 1), EndDate = new DateTime(2024, 7, 31), Type = CouponType.ForContract },
+    new Coupon { CouponId = "CP001", Condition = "Min order 500", Percent = 10, Amount = 50000, StartDate = new DateTime(2024, 3, 1), EndDate = new DateTime(2024, 3, 31), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP002", Condition = "Min order 1000", Percent = 15, Amount = 150000, StartDate = new DateTime(2024, 4, 1), EndDate = new DateTime(2024, 4, 30), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP003", Condition = "Min contract 2000", Percent = 20, Amount = 400000, StartDate = new DateTime(2024, 5, 1), EndDate = new DateTime(2024, 5, 31), Type = CouponType.ForContract },
+    new Coupon { CouponId = "CP004", Condition = "Min order 1500", Percent = 12, Amount = 180000, StartDate = new DateTime(2024, 6, 1), EndDate = new DateTime(2024, 6, 30), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP005", Condition = "Min contract 3000", Percent = 25, Amount = 750000, StartDate = new DateTime(2024, 7, 1), EndDate = new DateTime(2024, 7, 31), Type = CouponType.ForContract },
 
-    new Coupon { CouponId = "CP006", Condition = "New customers only", Percent = 10, Amount = 100, StartDate = new DateTime(2024, 8, 1), EndDate = new DateTime(2024, 8, 31), Type = CouponType.ForOrder },
-    new Coupon { CouponId = "CP007", Condition = "Holiday Special", Percent = 20, Amount = 200, StartDate = new DateTime(2024, 12, 1), EndDate = new DateTime(2024, 12, 25), Type = CouponType.ForOrder },
-    new Coupon { CouponId = "CP008", Condition = "VIP customers", Percent = 30, Amount = 600, StartDate = new DateTime(2024, 9, 1), EndDate = new DateTime(2024, 9, 30), Type = CouponType.ForContract },
-    new Coupon { CouponId = "CP009", Condition = "Summer Sale", Percent = 15, Amount = 120, StartDate = new DateTime(2024, 6, 15), EndDate = new DateTime(2024, 7, 15), Type = CouponType.ForOrder },
-    new Coupon { CouponId = "CP010", Condition = "Black Friday", Percent = 50, Amount = 1000, StartDate = new DateTime(2024, 11, 25), EndDate = new DateTime(2024, 11, 30), Type = CouponType.ForContract },
+    new Coupon { CouponId = "CP006", Condition = "New customers only", Percent = 10, Amount = 100000, StartDate = new DateTime(2024, 8, 1), EndDate = new DateTime(2024, 8, 31), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP007", Condition = "Holiday Special", Percent = 20, Amount = 200000, StartDate = new DateTime(2024, 12, 1), EndDate = new DateTime(2024, 12, 25), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP008", Condition = "VIP customers", Percent = 30, Amount = 600000, StartDate = new DateTime(2024, 9, 1), EndDate = new DateTime(2024, 9, 30), Type = CouponType.ForContract },
+    new Coupon { CouponId = "CP009", Condition = "Summer Sale", Percent = 15, Amount = 120000, StartDate = new DateTime(2024, 6, 15), EndDate = new DateTime(2024, 7, 15), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP010", Condition = "Black Friday", Percent = 50, Amount = 1000000, StartDate = new DateTime(2024, 11, 25), EndDate = new DateTime(2024, 11, 30), Type = CouponType.ForContract },
 
-    new Coupon { CouponId = "CP011", Condition = "Back to School", Percent = 10, Amount = 75, StartDate = new DateTime(2024, 8, 10), EndDate = new DateTime(2024, 9, 10), Type = CouponType.ForOrder },
-    new Coupon { CouponId = "CP012", Condition = "Min contract 5000", Percent = 35, Amount = 1750, StartDate = new DateTime(2024, 10, 1), EndDate = new DateTime(2024, 10, 31), Type = CouponType.ForContract },
-    new Coupon { CouponId = "CP013", Condition = "Loyal Customers", Percent = 20, Amount = 250, StartDate = new DateTime(2024, 5, 1), EndDate = new DateTime(2024, 5, 31), Type = CouponType.ForOrder },
-    new Coupon { CouponId = "CP014", Condition = "Cyber Monday", Percent = 40, Amount = 800, StartDate = new DateTime(2024, 11, 26), EndDate = new DateTime(2024, 11, 27), Type = CouponType.ForOrder },
-    new Coupon { CouponId = "CP015", Condition = "Referral Bonus", Percent = 10, Amount = 50, StartDate = new DateTime(2024, 3, 1), EndDate = new DateTime(2024, 12, 31), Type = CouponType.ForOrder }
+    new Coupon { CouponId = "CP011", Condition = "Back to School", Percent = 10, Amount = 75000, StartDate = new DateTime(2024, 8, 10), EndDate = new DateTime(2024, 9, 10), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP012", Condition = "Min contract 5000", Percent = 35, Amount = 1750000, StartDate = new DateTime(2024, 10, 1), EndDate = new DateTime(2024, 10, 31), Type = CouponType.ForContract },
+    new Coupon { CouponId = "CP013", Condition = "Loyal Customers", Percent = 20, Amount = 250000, StartDate = new DateTime(2024, 5, 1), EndDate = new DateTime(2024, 5, 31), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP014", Condition = "Cyber Monday", Percent = 40, Amount = 800000, StartDate = new DateTime(2024, 11, 26), EndDate = new DateTime(2024, 11, 27), Type = CouponType.ForOrder },
+    new Coupon { CouponId = "CP015", Condition = "Referral Bonus", Percent = 10, Amount = 50000, StartDate = new DateTime(2024, 3, 1), EndDate = new DateTime(2024, 12, 31), Type = CouponType.ForOrder }
 );
             #endregion
 
 
             #region Ticket
             modelBuilder.Entity<Ticket>().HasData(
-    new Ticket { TicketId = "T001", Quantity = 500, Price = 50.0, EventId = "E001" },
-    new Ticket { TicketId = "T002", Quantity = 300, Price = 40.0, EventId = "E002" },
-    new Ticket { TicketId = "T003", Quantity = 200, Price = 30.0, EventId = "E003" },
-    new Ticket { TicketId = "T004", Quantity = 600, Price = 60.0, EventId = "E004" },
-    new Ticket { TicketId = "T005", Quantity = 400, Price = 45.0, EventId = "E005" },
-    new Ticket { TicketId = "T006", Quantity = 350, Price = 55.0, EventId = "E006" },
-    new Ticket { TicketId = "T007", Quantity = 250, Price = 35.0, EventId = "E007" },
-    new Ticket { TicketId = "T008", Quantity = 450, Price = 50.0, EventId = "E008" },
-    new Ticket { TicketId = "T009", Quantity = 550, Price = 65.0, EventId = "E009" },
-    new Ticket { TicketId = "T010", Quantity = 700, Price = 70.0, EventId = "E010" },
-    new Ticket { TicketId = "T011", Quantity = 150, Price = 25.0, EventId = "E011" },
-    new Ticket { TicketId = "T012", Quantity = 800, Price = 75.0, EventId = "E012" }
+    new Ticket { TicketId = "T001", Quantity = 500, Price = 50000.0, EventId = "E001" },
+    new Ticket { TicketId = "T002", Quantity = 300, Price = 40000.0, EventId = "E002" },
+    new Ticket { TicketId = "T003", Quantity = 200, Price = 30000.0, EventId = "E003" },
+    new Ticket { TicketId = "T004", Quantity = 600, Price = 60000.0, EventId = "E004" },
+    new Ticket { TicketId = "T005", Quantity = 400, Price = 45000.0, EventId = "E005" },
+    new Ticket { TicketId = "T006", Quantity = 350, Price = 55000.0, EventId = "E006" },
+    new Ticket { TicketId = "T007", Quantity = 250, Price = 35000.0, EventId = "E007" },
+    new Ticket { TicketId = "T008", Quantity = 450, Price = 50000.0, EventId = "E008" },
+    new Ticket { TicketId = "T009", Quantity = 550, Price = 65000.0, EventId = "E009" },
+    new Ticket { TicketId = "T010", Quantity = 700, Price = 70000.0, EventId = "E010" },
+    new Ticket { TicketId = "T011", Quantity = 150, Price = 25000.0, EventId = "E011" },
+    new Ticket { TicketId = "T012", Quantity = 800, Price = 75000.0, EventId = "E012" }
 );
             #endregion
 
 
             #region Contract
             modelBuilder.Entity<Contract>().HasData(
-     new Contract { ContractId = "CT002", RequestId = "R002", Deposit = "100", TotalPrice = 500, Amount = 0,CreateBy = "Admin", CreateDate = new DateTime(2025, 2, 1), ContractStatus = ContractStatus.Active, ContractName = "Character rental" },
-     new Contract { ContractId = "CT005", RequestId = "R005", Deposit = "50", TotalPrice = 700, Amount = 350, CreateBy = "Admin", CreateDate = new DateTime(2025, 5, 1), ContractStatus = ContractStatus.Active, ContractName = "Character rental" },
-     new Contract { ContractId = "CT008", RequestId = "R008", Deposit = "50", TotalPrice = 350, Amount = 175, CreateBy = "Admin", CreateDate = new DateTime(2025, 8, 10), ContractStatus = ContractStatus.Active, ContractName = "Character rental" },
-     new Contract { ContractId = "CT010", RequestId = "R010", Deposit = "50", TotalPrice = 200, Amount = 100, CreateBy = "Admin", CreateDate = new DateTime(2025, 10, 20), ContractStatus = ContractStatus.Completed, ContractName = "Character rental" },
-     new Contract { ContractId = "CT014", RequestId = "R014", Deposit = "100", TotalPrice = 600, Amount = 0, CreateBy = "Admin", CreateDate = new DateTime(2025, 6, 25), ContractStatus = ContractStatus.Active, ContractName = "Character rental" }
+     new Contract { ContractId = "CT002", RequestId = "R002", Deposit = "100", TotalPrice = 500000, Amount = 0,CreateBy = "Admin", CreateDate = new DateTime(2025, 2, 1), ContractStatus = ContractStatus.Active, ContractName = "Character rental" },
+     new Contract { ContractId = "CT005", RequestId = "R005", Deposit = "50", TotalPrice = 700000, Amount = 350000, CreateBy = "Admin", CreateDate = new DateTime(2025, 5, 1), ContractStatus = ContractStatus.Active, ContractName = "Character rental" },
+     new Contract { ContractId = "CT008", RequestId = "R008", Deposit = "50", TotalPrice = 350000, Amount = 175000, CreateBy = "Admin", CreateDate = new DateTime(2025, 8, 10), ContractStatus = ContractStatus.Active, ContractName = "Character rental" },
+     new Contract { ContractId = "CT010", RequestId = "R010", Deposit = "50", TotalPrice = 200000, Amount = 100000, CreateBy = "Admin", CreateDate = new DateTime(2025, 10, 20), ContractStatus = ContractStatus.Completed, ContractName = "Character rental" },
+     new Contract { ContractId = "CT014", RequestId = "R014", Deposit = "100", TotalPrice = 600000, Amount = 0, CreateBy = "Admin", CreateDate = new DateTime(2025, 6, 25), ContractStatus = ContractStatus.Active, ContractName = "Character rental" }
  );
             #endregion
 
@@ -637,21 +637,21 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Request
             modelBuilder.Entity<Request>().HasData(
-    new Request { RequestId = "R001", AccountId = "A001", Name = "Rent Naruto Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 100, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 1, 10), EndDate = new DateTime(2025, 1, 15), ServiceId = "S001", Location = "HCM", PackageId= "PKG001" },
-    new Request { RequestId = "R002", AccountId = "A002", Name = "Rent Cosplayer for Event", Description = RequestDescription.RentCosplayer.ToString(), Price = 500, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 2, 5), EndDate = new DateTime(2025, 2, 10), ServiceId = "S002", Location = "ĐN" },
-    new Request { RequestId = "R003", AccountId = "A003", Name = "Create Anime Festival", Description = RequestDescription.CreateEvent.ToString(), Price = 2000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 3, 1), EndDate = new DateTime(2025, 3, 5), ServiceId = "S003", Location = "BD" },
-    new Request { RequestId = "R004", AccountId = "A004", Name = "Rent Samurai Armor", Description = RequestDescription.RentCostumes.ToString(), Price = 150, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 4, 10), EndDate = new DateTime(2025, 4, 15), ServiceId = "S002", Location = "HN" },
-    new Request { RequestId = "R005", AccountId = "A005", Name = "Hire Professional Cosplayer", Description = RequestDescription.RentCosplayer.ToString(), Price = 700, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 5, 3), EndDate = new DateTime(2025, 5, 7), ServiceId = "S002",Location = "BT", PackageId = "PKG002" },
-    new Request { RequestId = "R006", AccountId = "A006", Name = "Organize Comic Convention", Description = RequestDescription.CreateEvent.ToString(), Price = 5000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 6, 12), EndDate = new DateTime(2025, 6, 20), ServiceId = "S001", Location = "HCM" },
-    new Request { RequestId = "R007", AccountId = "A007", Name = "Rent Victorian Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 120, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 7, 1), EndDate = new DateTime(2025, 7, 5), ServiceId = "S002", Location = "HCM" },
-    new Request { RequestId = "R008", AccountId = "A008", Name = "Book Cosplayer for Birthday Party", Description = RequestDescription.RentCosplayer.ToString(), Price = 350, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 8, 15), EndDate = new DateTime(2025, 8, 18), ServiceId = "S003", Location = "QN" },
-    new Request { RequestId = "R009", AccountId = "A009", Name = "Plan Fantasy Fair", Description = RequestDescription.CreateEvent.ToString(), Price = 3000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 9, 10), EndDate = new DateTime(2025, 9, 15), ServiceId = "S003", Location = "CM" },
-    new Request { RequestId = "R010", AccountId = "A010", Name = "Rent Halloween Costumes", Description = RequestDescription.RentCostumes.ToString(), Price = 200, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 10, 25), EndDate = new DateTime(2025, 10, 31), ServiceId = "S001", Location = "LĐ" },
-    new Request { RequestId = "R011", AccountId = "A011", Name = "Hire Cosplayer for Wedding", Description = RequestDescription.RentCosplayer.ToString(), Price = 800, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 11, 20), EndDate = new DateTime(2025, 11, 25), ServiceId = "S001", Location = "NT", PackageId = "PKG010" },
-    new Request { RequestId = "R012", AccountId = "A012", Name = "Create Sci-Fi Convention", Description = RequestDescription.CreateEvent.ToString(), Price = 4500, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 12, 5), EndDate = new DateTime(2025, 12, 10), ServiceId = "S002", Location = "VT" },
-    new Request { RequestId = "R013", AccountId = "A013", Name = "Rent Santa Claus Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 130, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 20), EndDate = new DateTime(2025, 12, 25), ServiceId = "S003", Location = "HCM" },
-    new Request { RequestId = "R014", AccountId = "A014", Name = "Book Cosplayer for Product Launch", Description = RequestDescription.RentCosplayer.ToString(), Price = 600, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 6, 30), EndDate = new DateTime(2025, 7, 2), ServiceId = "S001", Location = "HN" },
-    new Request { RequestId = "R015", AccountId = "A015", Name = "Host Christmas Event", Description = RequestDescription.CreateEvent.ToString(), Price = 5500, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 15), EndDate = new DateTime(2025, 12, 31), ServiceId = "S002", Location = "HCM", PackageId = "PKG015" }
+    new Request { RequestId = "R001", AccountId = "A001", Name = "Rent Naruto Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 100000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 1, 10), EndDate = new DateTime(2025, 1, 15), ServiceId = "S001", Location = "HCM", PackageId= "PKG001" },
+    new Request { RequestId = "R002", AccountId = "A002", Name = "Rent Cosplayer for Event", Description = RequestDescription.RentCosplayer.ToString(), Price = 500000, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 2, 5), EndDate = new DateTime(2025, 2, 10), ServiceId = "S002", Location = "ĐN" },
+    new Request { RequestId = "R003", AccountId = "A003", Name = "Create Anime Festival", Description = RequestDescription.CreateEvent.ToString(), Price = 2000000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 3, 1), EndDate = new DateTime(2025, 3, 5), ServiceId = "S003", Location = "BD" },
+    new Request { RequestId = "R004", AccountId = "A004", Name = "Rent Samurai Armor", Description = RequestDescription.RentCostumes.ToString(), Price = 150000, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 4, 10), EndDate = new DateTime(2025, 4, 15), ServiceId = "S002", Location = "HN" },
+    new Request { RequestId = "R005", AccountId = "A005", Name = "Hire Professional Cosplayer", Description = RequestDescription.RentCosplayer.ToString(), Price = 700000, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 5, 3), EndDate = new DateTime(2025, 5, 7), ServiceId = "S002",Location = "BT", PackageId = "PKG002" },
+    new Request { RequestId = "R006", AccountId = "A006", Name = "Organize Comic Convention", Description = RequestDescription.CreateEvent.ToString(), Price = 5000000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 6, 12), EndDate = new DateTime(2025, 6, 20), ServiceId = "S001", Location = "HCM" },
+    new Request { RequestId = "R007", AccountId = "A007", Name = "Rent Victorian Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 120000, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 7, 1), EndDate = new DateTime(2025, 7, 5), ServiceId = "S002", Location = "HCM" },
+    new Request { RequestId = "R008", AccountId = "A008", Name = "Book Cosplayer for Birthday Party", Description = RequestDescription.RentCosplayer.ToString(), Price = 350000, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 8, 15), EndDate = new DateTime(2025, 8, 18), ServiceId = "S003", Location = "QN" },
+    new Request { RequestId = "R009", AccountId = "A009", Name = "Plan Fantasy Fair", Description = RequestDescription.CreateEvent.ToString(), Price = 3000000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 9, 10), EndDate = new DateTime(2025, 9, 15), ServiceId = "S003", Location = "CM" },
+    new Request { RequestId = "R010", AccountId = "A010", Name = "Rent Halloween Costumes", Description = RequestDescription.RentCostumes.ToString(), Price = 200000, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 10, 25), EndDate = new DateTime(2025, 10, 31), ServiceId = "S001", Location = "LĐ" },
+    new Request { RequestId = "R011", AccountId = "A011", Name = "Hire Cosplayer for Wedding", Description = RequestDescription.RentCosplayer.ToString(), Price = 800000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 11, 20), EndDate = new DateTime(2025, 11, 25), ServiceId = "S001", Location = "NT", PackageId = "PKG010" },
+    new Request { RequestId = "R012", AccountId = "A012", Name = "Create Sci-Fi Convention", Description = RequestDescription.CreateEvent.ToString(), Price = 4500000, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 12, 5), EndDate = new DateTime(2025, 12, 10), ServiceId = "S002", Location = "VT" },
+    new Request { RequestId = "R013", AccountId = "A013", Name = "Rent Santa Claus Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 130000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 20), EndDate = new DateTime(2025, 12, 25), ServiceId = "S003", Location = "HCM" },
+    new Request { RequestId = "R014", AccountId = "A014", Name = "Book Cosplayer for Product Launch", Description = RequestDescription.RentCosplayer.ToString(), Price = 600000, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 6, 30), EndDate = new DateTime(2025, 7, 2), ServiceId = "S001", Location = "HN" },
+    new Request { RequestId = "R015", AccountId = "A015", Name = "Host Christmas Event", Description = RequestDescription.CreateEvent.ToString(), Price = 5500000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 15), EndDate = new DateTime(2025, 12, 31), ServiceId = "S002", Location = "HCM", PackageId = "PKG015" }
 );
             #endregion
 
@@ -676,50 +676,50 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region TicketAccount
             modelBuilder.Entity<TicketAccount>().HasData(
-   new TicketAccount { TicketAccountId = "TA001", AccountId = "A003", TicketCode = "TC001", TicketId = "T001", Quantity = 2, TotalPrice = 100.0 },
-   new TicketAccount { TicketAccountId = "TA002", AccountId = "A006", TicketCode = "TC002", TicketId = "T002", Quantity = 1, TotalPrice = 40.0 },
-   new TicketAccount { TicketAccountId = "TA003", AccountId = "A011", TicketCode = "TC003", TicketId = "T003", Quantity = 3, TotalPrice = 90.0 },
-   new TicketAccount { TicketAccountId = "TA004", AccountId = "A014", TicketCode = "TC004", TicketId = "T004", Quantity = 2, TotalPrice = 120.0 },
-   new TicketAccount { TicketAccountId = "TA005", AccountId = "A003", TicketCode = "TC005", TicketId = "T005", Quantity = 4, TotalPrice = 180.0 },
-   new TicketAccount { TicketAccountId = "TA006", AccountId = "A006", TicketCode = "TC006", TicketId = "T006", Quantity = 2, TotalPrice = 110.0 },
-   new TicketAccount { TicketAccountId = "TA007", AccountId = "A011", TicketCode = "TC007", TicketId = "T007", Quantity = 1, TotalPrice = 35.0 },
-   new TicketAccount { TicketAccountId = "TA008", AccountId = "A014", TicketCode = "TC008", TicketId = "T008", Quantity = 3, TotalPrice = 150.0 },
-   new TicketAccount { TicketAccountId = "TA009", AccountId = "A003", TicketCode = "TC009", TicketId = "T009", Quantity = 2, TotalPrice = 130.0 },
-   new TicketAccount { TicketAccountId = "TA010", AccountId = "A006", TicketCode = "TC010", TicketId = "T010", Quantity = 1, TotalPrice = 70.0 },
-   new TicketAccount { TicketAccountId = "TA011", AccountId = "A011", TicketCode = "TC011", TicketId = "T011", Quantity = 5, TotalPrice = 125.0 },
-   new TicketAccount { TicketAccountId = "TA012", AccountId = "A014", TicketCode = "TC012", TicketId = "T012", Quantity = 2, TotalPrice = 150.0 },
-   new TicketAccount { TicketAccountId = "TA013", AccountId = "A003", TicketCode = "TC013", TicketId = "T003", Quantity = 3, TotalPrice = 90.0 },
-   new TicketAccount { TicketAccountId = "TA014", AccountId = "A006", TicketCode = "TC014", TicketId = "T005", Quantity = 2, TotalPrice = 90.0 },
-   new TicketAccount { TicketAccountId = "TA015", AccountId = "A011", TicketCode = "TC015", TicketId = "T007", Quantity = 1, TotalPrice = 35.0 }
+   new TicketAccount { TicketAccountId = "TA001", AccountId = "A003", TicketCode = "TC001", TicketId = "T001", Quantity = 2, TotalPrice = 100000.0 },
+   new TicketAccount { TicketAccountId = "TA002", AccountId = "A006", TicketCode = "TC002", TicketId = "T002", Quantity = 1, TotalPrice = 40000.0 },
+   new TicketAccount { TicketAccountId = "TA003", AccountId = "A011", TicketCode = "TC003", TicketId = "T003", Quantity = 3, TotalPrice = 90000.0 },
+   new TicketAccount { TicketAccountId = "TA004", AccountId = "A014", TicketCode = "TC004", TicketId = "T004", Quantity = 2, TotalPrice = 120000.0 },
+   new TicketAccount { TicketAccountId = "TA005", AccountId = "A003", TicketCode = "TC005", TicketId = "T005", Quantity = 4, TotalPrice = 180000.0 },
+   new TicketAccount { TicketAccountId = "TA006", AccountId = "A006", TicketCode = "TC006", TicketId = "T006", Quantity = 2, TotalPrice = 110000.0 },
+   new TicketAccount { TicketAccountId = "TA007", AccountId = "A011", TicketCode = "TC007", TicketId = "T007", Quantity = 1, TotalPrice = 35000.0 },
+   new TicketAccount { TicketAccountId = "TA008", AccountId = "A014", TicketCode = "TC008", TicketId = "T008", Quantity = 3, TotalPrice = 150000.0 },
+   new TicketAccount { TicketAccountId = "TA009", AccountId = "A003", TicketCode = "TC009", TicketId = "T009", Quantity = 2, TotalPrice = 130000.0 },
+   new TicketAccount { TicketAccountId = "TA010", AccountId = "A006", TicketCode = "TC010", TicketId = "T010", Quantity = 1, TotalPrice = 70000.0 },
+   new TicketAccount { TicketAccountId = "TA011", AccountId = "A011", TicketCode = "TC011", TicketId = "T011", Quantity = 5, TotalPrice = 125000.0 },
+   new TicketAccount { TicketAccountId = "TA012", AccountId = "A014", TicketCode = "TC012", TicketId = "T012", Quantity = 2, TotalPrice = 150000.0 },
+   new TicketAccount { TicketAccountId = "TA013", AccountId = "A003", TicketCode = "TC013", TicketId = "T003", Quantity = 3, TotalPrice = 90000.0 },
+   new TicketAccount { TicketAccountId = "TA014", AccountId = "A006", TicketCode = "TC014", TicketId = "T005", Quantity = 2, TotalPrice = 90000.0 },
+   new TicketAccount { TicketAccountId = "TA015", AccountId = "A011", TicketCode = "TC015", TicketId = "T007", Quantity = 1, TotalPrice = 35000.0 }
 );
             #endregion
 
             #region ContractCharacter
             modelBuilder.Entity<ContractCharacter>().HasData(
     // ContractId = CT002
-    new ContractCharacter { ContractCharacterId = "CC0021", CharacterId = "CH001", ContractId = "CT002", TotalPrice = 150, CreateDate = new DateTime(2025, 2, 2), Description = "Character 1 for CT002", Quantity = 1},
-    new ContractCharacter { ContractCharacterId = "CC0022", CharacterId = "CH002", ContractId = "CT002", TotalPrice = 180, CreateDate = new DateTime(2025, 2, 2), Description = "Character 2 for CT002", Quantity = 5 },
-    new ContractCharacter { ContractCharacterId = "CC0023", CharacterId = "CH003", ContractId = "CT002", TotalPrice = 170, CreateDate = new DateTime(2025, 2, 2), Description = "Character 3 for CT002", Quantity = 3 },
+    new ContractCharacter { ContractCharacterId = "CC0021", CharacterId = "CH001", ContractId = "CT002", TotalPrice = 150000, CreateDate = new DateTime(2025, 2, 2), Description = "Character 1 for CT002", Quantity = 1},
+    new ContractCharacter { ContractCharacterId = "CC0022", CharacterId = "CH002", ContractId = "CT002", TotalPrice = 180000, CreateDate = new DateTime(2025, 2, 2), Description = "Character 2 for CT002", Quantity = 5 },
+    new ContractCharacter { ContractCharacterId = "CC0023", CharacterId = "CH003", ContractId = "CT002", TotalPrice = 170000, CreateDate = new DateTime(2025, 2, 2), Description = "Character 3 for CT002", Quantity = 3 },
 
     // ContractId = CT005
-    new ContractCharacter { ContractCharacterId = "CC0051", CharacterId = "CH004", ContractId = "CT005", TotalPrice = 200, CreateDate = new DateTime(2025, 5, 2), Description = "Character 1 for CT005", Quantity = 2},
-    new ContractCharacter { ContractCharacterId = "CC0052", CharacterId = "CH005", ContractId = "CT005", TotalPrice = 250, CreateDate = new DateTime(2025, 5, 2), Description = "Character 2 for CT005", Quantity = 4},
-    new ContractCharacter { ContractCharacterId = "CC0053", CharacterId = "CH006", ContractId = "CT005", TotalPrice = 250, CreateDate = new DateTime(2025, 5, 2), Description = "Character 3 for CT005", Quantity = 6},
+    new ContractCharacter { ContractCharacterId = "CC0051", CharacterId = "CH004", ContractId = "CT005", TotalPrice = 200000, CreateDate = new DateTime(2025, 5, 2), Description = "Character 1 for CT005", Quantity = 2},
+    new ContractCharacter { ContractCharacterId = "CC0052", CharacterId = "CH005", ContractId = "CT005", TotalPrice = 250000, CreateDate = new DateTime(2025, 5, 2), Description = "Character 2 for CT005", Quantity = 4},
+    new ContractCharacter { ContractCharacterId = "CC0053", CharacterId = "CH006", ContractId = "CT005", TotalPrice = 250000, CreateDate = new DateTime(2025, 5, 2), Description = "Character 3 for CT005", Quantity = 6},
 
     // ContractId = CT008
-    new ContractCharacter { ContractCharacterId = "CC0081", CharacterId = "CH007", ContractId = "CT008", TotalPrice = 120, CreateDate = new DateTime(2025, 8, 11), Description = "Character 1 for CT008", Quantity = 1, CosplayerId = "A001" },
-    new ContractCharacter { ContractCharacterId = "CC0082", CharacterId = "CH008", ContractId = "CT008", TotalPrice = 130, CreateDate = new DateTime(2025, 8, 11), Description = "Character 2 for CT008", Quantity = 1, CosplayerId = "A008" },
-    new ContractCharacter { ContractCharacterId = "CC0083", CharacterId = "CH009", ContractId = "CT008", TotalPrice = 100, CreateDate = new DateTime(2025, 8, 11), Description = "Character 3 for CT008", Quantity = 1, CosplayerId = "A040" },
+    new ContractCharacter { ContractCharacterId = "CC0081", CharacterId = "CH007", ContractId = "CT008", TotalPrice = 120000, CreateDate = new DateTime(2025, 8, 11), Description = "Character 1 for CT008", Quantity = 1, CosplayerId = "A001" },
+    new ContractCharacter { ContractCharacterId = "CC0082", CharacterId = "CH008", ContractId = "CT008", TotalPrice = 130000, CreateDate = new DateTime(2025, 8, 11), Description = "Character 2 for CT008", Quantity = 1, CosplayerId = "A008" },
+    new ContractCharacter { ContractCharacterId = "CC0083", CharacterId = "CH009", ContractId = "CT008", TotalPrice = 100000, CreateDate = new DateTime(2025, 8, 11), Description = "Character 3 for CT008", Quantity = 1, CosplayerId = "A040" },
 
     // ContractId = CT010
-    new ContractCharacter { ContractCharacterId = "CC0101", CharacterId = "CH010", ContractId = "CT010", TotalPrice = 70, CreateDate = new DateTime(2025, 10, 21), Description = "Character 1 for CT010", Quantity = 1, CosplayerId = "A040" },
-    new ContractCharacter { ContractCharacterId = "CC0102", CharacterId = "CH011", ContractId = "CT010", TotalPrice = 80, CreateDate = new DateTime(2025, 10, 21), Description = "Character 2 for CT010", Quantity = 1, CosplayerId = "A039" },
-    new ContractCharacter { ContractCharacterId = "CC0103", CharacterId = "CH012", ContractId = "CT010", TotalPrice = 50, CreateDate = new DateTime(2025, 10, 21), Description = "Character 3 for CT010", Quantity = 1, CosplayerId = "A038" },
+    new ContractCharacter { ContractCharacterId = "CC0101", CharacterId = "CH010", ContractId = "CT010", TotalPrice = 70000, CreateDate = new DateTime(2025, 10, 21), Description = "Character 1 for CT010", Quantity = 1, CosplayerId = "A040" },
+    new ContractCharacter { ContractCharacterId = "CC0102", CharacterId = "CH011", ContractId = "CT010", TotalPrice = 80000, CreateDate = new DateTime(2025, 10, 21), Description = "Character 2 for CT010", Quantity = 1, CosplayerId = "A039" },
+    new ContractCharacter { ContractCharacterId = "CC0103", CharacterId = "CH012", ContractId = "CT010", TotalPrice = 50000, CreateDate = new DateTime(2025, 10, 21), Description = "Character 3 for CT010", Quantity = 1, CosplayerId = "A038" },
 
     // ContractId = CT014
-    new ContractCharacter { ContractCharacterId = "CC0141", CharacterId = "CH013", ContractId = "CT014", TotalPrice = 200, CreateDate = new DateTime(2025, 6, 26), Description = "Character 1 for CT014", Quantity = 1, CosplayerId = "A035" },
-    new ContractCharacter { ContractCharacterId = "CC0142", CharacterId = "CH014", ContractId = "CT014", TotalPrice = 250, CreateDate = new DateTime(2025, 6, 26), Description = "Character 2 for CT014", Quantity = 1, CosplayerId = "A040" },
-    new ContractCharacter { ContractCharacterId = "CC0143", CharacterId = "CH015", ContractId = "CT014", TotalPrice = 150, CreateDate = new DateTime(2025, 6, 26), Description = "Character 3 for CT014", Quantity = 1 , CosplayerId = "A005" }
+    new ContractCharacter { ContractCharacterId = "CC0141", CharacterId = "CH013", ContractId = "CT014", TotalPrice = 200000, CreateDate = new DateTime(2025, 6, 26), Description = "Character 1 for CT014", Quantity = 1, CosplayerId = "A035" },
+    new ContractCharacter { ContractCharacterId = "CC0142", CharacterId = "CH014", ContractId = "CT014", TotalPrice = 250000, CreateDate = new DateTime(2025, 6, 26), Description = "Character 2 for CT014", Quantity = 1, CosplayerId = "A040" },
+    new ContractCharacter { ContractCharacterId = "CC0143", CharacterId = "CH015", ContractId = "CT014", TotalPrice = 150000, CreateDate = new DateTime(2025, 6, 26), Description = "Character 3 for CT014", Quantity = 1 , CosplayerId = "A005" }
 );
             #endregion
 
@@ -837,24 +837,24 @@ new EventCharacter { EventCharacterId = "EC012", EventId = "E012", CharacterId =
             #region CartProduct
             modelBuilder.Entity<CartProduct>().HasData(
     // Cart C001
-    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C001", ProductId = "P001", Price = 30, Quantity = 2, CreatedDate = DateTime.UtcNow },
-    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C001", ProductId = "P002", Price = 20, Quantity = 1, CreatedDate = DateTime.UtcNow },
-    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C001", ProductId = "P003", Price = 80, Quantity = 1, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C001", ProductId = "P001", Price = 30000, Quantity = 2, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C001", ProductId = "P002", Price = 20000, Quantity = 1, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C001", ProductId = "P003", Price = 80000, Quantity = 1, CreatedDate = DateTime.UtcNow },
 
     // Cart C002
-    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C002", ProductId = "P004", Price = 100, Quantity = 1, CreatedDate = DateTime.UtcNow },
-    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C002", ProductId = "P005", Price = 25, Quantity = 3, CreatedDate = DateTime.UtcNow },
-    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C002", ProductId = "P006", Price = 40, Quantity = 2, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C002", ProductId = "P004", Price = 100000, Quantity = 1, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C002", ProductId = "P005", Price = 25000, Quantity = 3, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C002", ProductId = "P006", Price = 40000, Quantity = 2, CreatedDate = DateTime.UtcNow },
 
     // Cart C003
-    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C003", ProductId = "P007", Price = 15, Quantity = 5, CreatedDate = DateTime.UtcNow },
-    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C003", ProductId = "P008", Price = 50, Quantity = 2, CreatedDate = DateTime.UtcNow },
-    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C003", ProductId = "P009", Price = 60, Quantity = 1, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C003", ProductId = "P007", Price = 15000, Quantity = 5, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C003", ProductId = "P008", Price = 50000, Quantity = 2, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C003", ProductId = "P009", Price = 60000, Quantity = 1, CreatedDate = DateTime.UtcNow },
 
     // Cart C004
-    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C004", ProductId = "P010", Price = 120, Quantity = 1, CreatedDate = DateTime.UtcNow },
-    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C004", ProductId = "P011", Price = 35, Quantity = 2, CreatedDate = DateTime.UtcNow },
-    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C004", ProductId = "P012", Price = 45, Quantity = 1, CreatedDate = DateTime.UtcNow }
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C004", ProductId = "P010", Price = 120000, Quantity = 1, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C004", ProductId = "P011", Price = 35000, Quantity = 2, CreatedDate = DateTime.UtcNow },
+    new CartProduct { CartProductId = Guid.NewGuid().ToString(), CartId = "C004", ProductId = "P012", Price = 45000, Quantity = 1, CreatedDate = DateTime.UtcNow }
 );
             #endregion
 
@@ -899,74 +899,74 @@ new EventCharacter { EventCharacterId = "EC012", EventId = "E012", CharacterId =
 
             #region OrderProduct
             modelBuilder.Entity<OrderProduct>().HasData(
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O001", ProductId = "P001", Price = 30, Quantity = 3, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O001", ProductId = "P002", Price = 20, Quantity = 5, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O001", ProductId = "P001", Price = 30000, Quantity = 3, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O001", ProductId = "P002", Price = 20000, Quantity = 5, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O002", ProductId = "P003", Price = 80, Quantity = 1, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O002", ProductId = "P004", Price = 100, Quantity = 1, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O002", ProductId = "P003", Price = 80000, Quantity = 1, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O002", ProductId = "P004", Price = 100000, Quantity = 1, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O003", ProductId = "P005", Price = 25, Quantity = 2, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O003", ProductId = "P006", Price = 40, Quantity = 3, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O003", ProductId = "P005", Price = 25000, Quantity = 2, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O003", ProductId = "P006", Price = 40000, Quantity = 3, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O004", ProductId = "P007", Price = 15, Quantity = 4, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O004", ProductId = "P008", Price = 50, Quantity = 2, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O004", ProductId = "P007", Price = 15000, Quantity = 4, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O004", ProductId = "P008", Price = 50000, Quantity = 2, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O005", ProductId = "P009", Price = 60, Quantity = 1, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O005", ProductId = "P010", Price = 120, Quantity = 1, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O005", ProductId = "P009", Price = 60000, Quantity = 1, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O005", ProductId = "P010", Price = 120000, Quantity = 1, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O006", ProductId = "P011", Price = 35, Quantity = 2, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O006", ProductId = "P012", Price = 45, Quantity = 3, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O006", ProductId = "P011", Price = 35000, Quantity = 2, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O006", ProductId = "P012", Price = 45000, Quantity = 3, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O007", ProductId = "P013", Price = 18, Quantity = 5, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O007", ProductId = "P014", Price = 90, Quantity = 2, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O007", ProductId = "P013", Price = 18000, Quantity = 5, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O007", ProductId = "P014", Price = 90000, Quantity = 2, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O008", ProductId = "P015", Price = 22, Quantity = 4, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O008", ProductId = "P001", Price = 30, Quantity = 1, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O008", ProductId = "P015", Price = 22000, Quantity = 4, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O008", ProductId = "P001", Price = 30000, Quantity = 1, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O009", ProductId = "P002", Price = 20, Quantity = 6, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O009", ProductId = "P003", Price = 80, Quantity = 2, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O009", ProductId = "P002", Price = 20000, Quantity = 6, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O009", ProductId = "P003", Price = 80000, Quantity = 2, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O010", ProductId = "P004", Price = 100, Quantity = 1, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O010", ProductId = "P005", Price = 25, Quantity = 3, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O010", ProductId = "P004", Price = 100000, Quantity = 1, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O010", ProductId = "P005", Price = 25000, Quantity = 3, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O011", ProductId = "P006", Price = 40, Quantity = 2, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O011", ProductId = "P007", Price = 15, Quantity = 4, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O011", ProductId = "P006", Price = 40000, Quantity = 2, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O011", ProductId = "P007", Price = 15000, Quantity = 4, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O012", ProductId = "P008", Price = 50, Quantity = 2, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O012", ProductId = "P009", Price = 60, Quantity = 1, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O012", ProductId = "P008", Price = 50000, Quantity = 2, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O012", ProductId = "P009", Price = 60000, Quantity = 1, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O013", ProductId = "P010", Price = 120, Quantity = 1, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O013", ProductId = "P011", Price = 35, Quantity = 2, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O013", ProductId = "P010", Price = 120000, Quantity = 1, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O013", ProductId = "P011", Price = 35000, Quantity = 2, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O014", ProductId = "P012", Price = 45, Quantity = 3, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O014", ProductId = "P013", Price = 18, Quantity = 5, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O014", ProductId = "P012", Price = 45000, Quantity = 3, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O014", ProductId = "P013", Price = 18000, Quantity = 5, CreateDate = DateTime.UtcNow },
 
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015", ProductId = "P014", Price = 90, Quantity = 2, CreateDate = DateTime.UtcNow },
-new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015", ProductId = "P015", Price = 22, Quantity = 4, CreateDate = DateTime.UtcNow }
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015", ProductId = "P014", Price = 90000, Quantity = 2, CreateDate = DateTime.UtcNow },
+new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015", ProductId = "P015", Price = 22000, Quantity = 4, CreateDate = DateTime.UtcNow }
 );
             #endregion
 
             #region Package
             modelBuilder.Entity<Package>().HasData(
-    new Package { PackageId = "PKG001", PackageName = "Basic Character Rental", Description = "Rent a single character for an event", Price = 100.0},
-    new Package { PackageId = "PKG002", PackageName = "Deluxe Character Rental", Description = "Rent multiple characters with costumes", Price = 250.0},
-    new Package { PackageId = "PKG003", PackageName = "Ultimate Character Rental", Description = "Full-day character rental service", Price = 500.0},
+    new Package { PackageId = "PKG001", PackageName = "Basic Character Rental", Description = "Rent a single character for an event", Price = 100000.0 },
+    new Package { PackageId = "PKG002", PackageName = "Deluxe Character Rental", Description = "Rent multiple characters with costumes", Price = 250000.0 },
+    new Package { PackageId = "PKG003", PackageName = "Ultimate Character Rental", Description = "Full-day character rental service", Price = 500000.0 },
 
-    new Package { PackageId = "PKG004", PackageName = "Standard Cosplay Performance", Description = "Basic cosplay performance at an event", Price = 150.0},
-    new Package { PackageId = "PKG005", PackageName = "Premium Cosplay Performance", Description = "Advanced performance with choreography", Price = 300.0},
-    new Package { PackageId = "PKG006", PackageName = "VIP Cosplay Performance", Description = "Exclusive show with audience interaction", Price = 500.0},
+    new Package { PackageId = "PKG004", PackageName = "Standard Cosplay Performance", Description = "Basic cosplay performance at an event", Price = 150000.0 },
+    new Package { PackageId = "PKG005", PackageName = "Premium Cosplay Performance", Description = "Advanced performance with choreography", Price = 300000.0 },
+    new Package { PackageId = "PKG006", PackageName = "VIP Cosplay Performance", Description = "Exclusive show with audience interaction", Price = 500000.0 },
 
-    new Package { PackageId = "PKG007", PackageName = "Mini Photography Session", Description = "30-minute photoshoot with cosplayers", Price = 80.0},
-    new Package { PackageId = "PKG008", PackageName = "Standard Photography Session", Description = "1-hour professional photoshoot", Price = 150.0},
-    new Package { PackageId = "PKG009", PackageName = "Full Photography Package", Description = "Complete photoshoot with editing", Price = 300.0},
+    new Package { PackageId = "PKG007", PackageName = "Mini Photography Session", Description = "30-minute photoshoot with cosplayers", Price = 80000.0 },
+    new Package { PackageId = "PKG008", PackageName = "Standard Photography Session", Description = "1-hour professional photoshoot", Price = 150000.0 },
+    new Package { PackageId = "PKG009", PackageName = "Full Photography Package", Description = "Complete photoshoot with editing", Price = 300000.0 },
 
-    new Package { PackageId = "PKG010", PackageName = "Basic Merchandise Pack", Description = "Includes exclusive cosplay merchandise", Price = 50.0},
-    new Package { PackageId = "PKG011", PackageName = "Deluxe Merchandise Pack", Description = "Premium cosplay collectibles", Price = 150.0},
-    new Package { PackageId = "PKG012", PackageName = "Ultimate Merchandise Pack", Description = "Limited edition cosplay items", Price = 300.0},
+    new Package { PackageId = "PKG010", PackageName = "Basic Merchandise Pack", Description = "Includes exclusive cosplay merchandise", Price = 50000.0 },
+    new Package { PackageId = "PKG011", PackageName = "Deluxe Merchandise Pack", Description = "Premium cosplay collectibles", Price = 150000.0 },
+    new Package { PackageId = "PKG012", PackageName = "Ultimate Merchandise Pack", Description = "Limited edition cosplay items", Price = 300000.0 },
 
-    new Package { PackageId = "PKG013", PackageName = "Cosplay Basics Workshop", Description = "Beginner-friendly cosplay training", Price = 100.0},
-    new Package { PackageId = "PKG014", PackageName = "Advanced Cosplay Training", Description = "In-depth cosplay and makeup course", Price = 250.0},
-    new Package { PackageId = "PKG015", PackageName = "Master Cosplay Workshop", Description = "Professional-level training for cosplayers", Price = 500.0}
+    new Package { PackageId = "PKG013", PackageName = "Cosplay Basics Workshop", Description = "Beginner-friendly cosplay training", Price = 100000.0 },
+    new Package { PackageId = "PKG014", PackageName = "Advanced Cosplay Training", Description = "In-depth cosplay and makeup course", Price = 2500000 },
+    new Package { PackageId = "PKG015", PackageName = "Master Cosplay Workshop", Description = "Professional-level training for cosplayers", Price = 500000.0 }
 );
             #endregion
 
@@ -992,43 +992,43 @@ new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015",
 
             #region RequestCharacter
             modelBuilder.Entity<RequestCharacter>().HasData(
-    new RequestCharacter { RequestCharacterId = "RC01", RequestId = "R001", CharacterId = "CH001", TotalPrice = 50.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH001", CosplayerId = "A025", Quantity = 1},
-    new RequestCharacter { RequestCharacterId = "RC02", RequestId = "R002", CharacterId = "CH002", TotalPrice = 60.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH002", CosplayerId = "A026", Quantity = 1 },
-    new RequestCharacter { RequestCharacterId = "RC03", RequestId = "R003", CharacterId = "CH003", TotalPrice = 70.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH003", CosplayerId = "A027", Quantity = 1 },
-    new RequestCharacter { RequestCharacterId = "RC04", RequestId = "R004", CharacterId = "CH004", TotalPrice = 80.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH004", CosplayerId = "A028", Quantity = 1 },
-    new RequestCharacter { RequestCharacterId = "RC05", RequestId = "R005", CharacterId = "CH005", TotalPrice = 90.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH005", CosplayerId = "A029", Quantity = 1 },
-    new RequestCharacter { RequestCharacterId = "RC06", RequestId = "R006", CharacterId = "CH006", TotalPrice = 100.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH006", Quantity = 5 },
-    new RequestCharacter { RequestCharacterId = "RC07", RequestId = "R007", CharacterId = "CH007", TotalPrice = 110.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH007", CosplayerId = "A031", Quantity = 1 },
-    new RequestCharacter { RequestCharacterId = "RC08", RequestId = "R008", CharacterId = "CH008", TotalPrice = 120.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH008", Quantity = 7},
-    new RequestCharacter { RequestCharacterId = "RC09", RequestId = "R009", CharacterId = "CH009", TotalPrice = 130.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH009", CosplayerId = "A033", Quantity = 1 },
-    new RequestCharacter { RequestCharacterId = "RC10", RequestId = "R010", CharacterId = "CH010", TotalPrice = 140.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH010", Quantity = 9},
-    new RequestCharacter { RequestCharacterId = "RC11", RequestId = "R011", CharacterId = "CH011", TotalPrice = 150.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH011", CosplayerId = "A035", Quantity = 1 },
-    new RequestCharacter { RequestCharacterId = "RC12", RequestId = "R012", CharacterId = "CH012", TotalPrice = 160.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH012", CosplayerId = "A036", Quantity = 1 },
-    new RequestCharacter { RequestCharacterId = "RC13", RequestId = "R013", CharacterId = "CH013", TotalPrice = 170.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH013", Quantity = 10 },
-    new RequestCharacter { RequestCharacterId = "RC14", RequestId = "R014", CharacterId = "CH014", TotalPrice = 180.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH014", CosplayerId = "A038", Quantity = 1 },
-    new RequestCharacter { RequestCharacterId = "RC15", RequestId = "R015", CharacterId = "CH015", TotalPrice = 190.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH015", CosplayerId = "A039", Quantity = 1 }
+    new RequestCharacter { RequestCharacterId = "RC01", RequestId = "R001", CharacterId = "CH001", TotalPrice = 50000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH001", CosplayerId = "A025", Quantity = 1},
+    new RequestCharacter { RequestCharacterId = "RC02", RequestId = "R002", CharacterId = "CH002", TotalPrice = 60000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH002", CosplayerId = "A026", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC03", RequestId = "R003", CharacterId = "CH003", TotalPrice = 70000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH003", CosplayerId = "A027", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC04", RequestId = "R004", CharacterId = "CH004", TotalPrice = 80000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH004", CosplayerId = "A028", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC05", RequestId = "R005", CharacterId = "CH005", TotalPrice = 90000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH005", CosplayerId = "A029", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC06", RequestId = "R006", CharacterId = "CH006", TotalPrice = 100000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH006", Quantity = 5 },
+    new RequestCharacter { RequestCharacterId = "RC07", RequestId = "R007", CharacterId = "CH007", TotalPrice = 110000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH007", CosplayerId = "A031", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC08", RequestId = "R008", CharacterId = "CH008", TotalPrice = 120000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH008", Quantity = 7},
+    new RequestCharacter { RequestCharacterId = "RC09", RequestId = "R009", CharacterId = "CH009", TotalPrice = 130000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH009", CosplayerId = "A033", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC10", RequestId = "R010", CharacterId = "CH010", TotalPrice = 140000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH010", Quantity = 9},
+    new RequestCharacter { RequestCharacterId = "RC11", RequestId = "R011", CharacterId = "CH011", TotalPrice = 150000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH011", CosplayerId = "A035", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC12", RequestId = "R012", CharacterId = "CH012", TotalPrice = 160000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH012", CosplayerId = "A036", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC13", RequestId = "R013", CharacterId = "CH013", TotalPrice = 170000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH013", Quantity = 10 },
+    new RequestCharacter { RequestCharacterId = "RC14", RequestId = "R014", CharacterId = "CH014", TotalPrice = 180000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH014", CosplayerId = "A038", Quantity = 1 },
+    new RequestCharacter { RequestCharacterId = "RC15", RequestId = "R015", CharacterId = "CH015", TotalPrice = 190000.0, CreateDate = DateTime.UtcNow, UpdateDate = DateTime.UtcNow, Description = "Yêu cầu cosplay nhân vật CH015", CosplayerId = "A039", Quantity = 1 }
 );
             #endregion
 
             #region Payment
             modelBuilder.Entity<Payment>().HasData(
-    new Payment { PaymentId = "P001", Type = "Online", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.BuyTicket, Amount = 250.0, TransactionId = "TXN001", CreatAt = new DateTime(2024, 3, 2), TicketAccountId = "TA001", AccountCouponID = "AC001" },
-    new Payment { PaymentId = "P002", Type = "Online", Status = PaymentStatus.Pending, Purpose = PaymentPurpose.BuyTicket, Amount = 150.5, TransactionId = "TXN002", CreatAt = new DateTime(2024, 3, 6), TicketAccountId = "TA002" },
-    new Payment { PaymentId = "P003", Type = "Cash", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.BuyTicket, Amount = 90.0, TransactionId = "TXN003", CreatAt = new DateTime(2024, 3, 11), TicketAccountId = "TA003" },
-    new Payment { PaymentId = "P004", Type = "Card", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.BuyTicket, Amount = 400.0, TransactionId = "TXN004", CreatAt = new DateTime(2024, 3, 13), TicketAccountId = "TA004", AccountCouponID = "AC012" },
-    new Payment { PaymentId = "P005", Type = "Online", Status = PaymentStatus.Cancel, Purpose = PaymentPurpose.BuyTicket, Amount = 175.0, TransactionId = "TXN005", CreatAt = new DateTime(2024, 3, 16), TicketAccountId = "TA005" },
+    new Payment { PaymentId = "P001", Type = "Online", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.BuyTicket, Amount = 250000.0, TransactionId = "TXN001", CreatAt = new DateTime(2024, 3, 2), TicketAccountId = "TA001", AccountCouponID = "AC001" },
+    new Payment { PaymentId = "P002", Type = "Online", Status = PaymentStatus.Pending, Purpose = PaymentPurpose.BuyTicket, Amount = 150000.5, TransactionId = "TXN002", CreatAt = new DateTime(2024, 3, 6), TicketAccountId = "TA002" },
+    new Payment { PaymentId = "P003", Type = "Cash", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.BuyTicket, Amount = 90000.0, TransactionId = "TXN003", CreatAt = new DateTime(2024, 3, 11), TicketAccountId = "TA003" },
+    new Payment { PaymentId = "P004", Type = "Card", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.BuyTicket, Amount = 400000.0, TransactionId = "TXN004", CreatAt = new DateTime(2024, 3, 13), TicketAccountId = "TA004", AccountCouponID = "AC012" },
+    new Payment { PaymentId = "P005", Type = "Online", Status = PaymentStatus.Cancel, Purpose = PaymentPurpose.BuyTicket, Amount = 175000.0, TransactionId = "TXN005", CreatAt = new DateTime(2024, 3, 16), TicketAccountId = "TA005" },
 
-    new Payment { PaymentId = "P006", Type = "Cash", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.Order, Amount = 225.0, TransactionId = "TXN006", CreatAt = new DateTime(2024, 3, 19), OrderId = "O006", AccountCouponID = "AC003" },
-    new Payment { PaymentId = "P007", Type = "Online", Status = PaymentStatus.Pending, Purpose = PaymentPurpose.Order, Amount = 350.0, TransactionId = "TXN007", CreatAt = new DateTime(2024, 3, 21), OrderId = "O007" },
-    new Payment { PaymentId = "P008", Type = "Card", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.Order, Amount = 150.0, TransactionId = "TXN008", CreatAt = new DateTime(2024, 3, 23), OrderId = "O008" },
-    new Payment { PaymentId = "P009", Type = "Cash", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.Order, Amount = 500.0, TransactionId = "TXN009", CreatAt = new DateTime(2024, 3, 26), OrderId = "O009" },
-    new Payment { PaymentId = "P010", Type = "Online", Status = PaymentStatus.Cancel, Purpose = PaymentPurpose.Order, Amount = 125.0, TransactionId = "TXN010", CreatAt = new DateTime(2024, 3, 29), OrderId = "O010", AccountCouponID = "AC004" },
+    new Payment { PaymentId = "P006", Type = "Cash", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.Order, Amount = 225000.0, TransactionId = "TXN006", CreatAt = new DateTime(2024, 3, 19), OrderId = "O006", AccountCouponID = "AC003" },
+    new Payment { PaymentId = "P007", Type = "Online", Status = PaymentStatus.Pending, Purpose = PaymentPurpose.Order, Amount = 350000.0, TransactionId = "TXN007", CreatAt = new DateTime(2024, 3, 21), OrderId = "O007" },
+    new Payment { PaymentId = "P008", Type = "Card", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.Order, Amount = 150000.0, TransactionId = "TXN008", CreatAt = new DateTime(2024, 3, 23), OrderId = "O008" },
+    new Payment { PaymentId = "P009", Type = "Cash", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.Order, Amount = 500000.0, TransactionId = "TXN009", CreatAt = new DateTime(2024, 3, 26), OrderId = "O009" },
+    new Payment { PaymentId = "P010", Type = "Online", Status = PaymentStatus.Cancel, Purpose = PaymentPurpose.Order, Amount = 125000.0, TransactionId = "TXN010", CreatAt = new DateTime(2024, 3, 29), OrderId = "O010", AccountCouponID = "AC004" },
 
-    new Payment { PaymentId = "P011", Type = "Online", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.ContractDeposit, Amount = 325.0, TransactionId = "TXN011", CreatAt = new DateTime(2024, 3, 31), ContractId = "CT002" },
-    new Payment { PaymentId = "P012", Type = "Card", Status = PaymentStatus.Pending, Purpose = PaymentPurpose.ContractDeposit, Amount = 410.0, TransactionId = "TXN012", CreatAt = new DateTime(2024, 4, 3), ContractId = "CT005" },
-    new Payment { PaymentId = "P013", Type = "Cash", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.contractSettlement, Amount = 90.0, TransactionId = "TXN013", CreatAt = new DateTime(2024, 4, 6), ContractId = "CT008" },
-    new Payment { PaymentId = "P014", Type = "Online", Status = PaymentStatus.Cancel, Purpose = PaymentPurpose.contractSettlement, Amount = 350.0, TransactionId = "TXN014", CreatAt = new DateTime(2024, 4, 8), ContractId = "CT010" },
-    new Payment { PaymentId = "P015", Type = "Card", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.contractSettlement, Amount = 200.0, TransactionId = "TXN015", CreatAt = new DateTime(2024, 4, 11), ContractId = "CT002" }
+    new Payment { PaymentId = "P011", Type = "Online", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.ContractDeposit, Amount = 325000.0, TransactionId = "TXN011", CreatAt = new DateTime(2024, 3, 31), ContractId = "CT002" },
+    new Payment { PaymentId = "P012", Type = "Card", Status = PaymentStatus.Pending, Purpose = PaymentPurpose.ContractDeposit, Amount = 410000.0, TransactionId = "TXN012", CreatAt = new DateTime(2024, 4, 3), ContractId = "CT005" },
+    new Payment { PaymentId = "P013", Type = "Cash", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.contractSettlement, Amount = 90000.0, TransactionId = "TXN013", CreatAt = new DateTime(2024, 4, 6), ContractId = "CT008" },
+    new Payment { PaymentId = "P014", Type = "Online", Status = PaymentStatus.Cancel, Purpose = PaymentPurpose.contractSettlement, Amount = 350000.0, TransactionId = "TXN014", CreatAt = new DateTime(2024, 4, 8), ContractId = "CT010" },
+    new Payment { PaymentId = "P015", Type = "Card", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.contractSettlement, Amount = 200000.0, TransactionId = "TXN015", CreatAt = new DateTime(2024, 4, 11), ContractId = "CT002" }
 );
             #endregion
 

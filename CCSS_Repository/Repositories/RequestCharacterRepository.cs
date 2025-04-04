@@ -20,6 +20,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> UpdateRequestCharacter(RequestCharacter requestCharacters);
         Task<bool> UpdateListRequestCharacter(List<RequestCharacter> requestCharacters);
         Task<bool> DeleteRequestCharacter(RequestCharacter requestCharacters);
+        Task<RequestCharacter> GetRequestCharacterByRequestIdAndCharacterId(string requestId, string characterId);
     }
 
 
@@ -80,6 +81,11 @@ namespace CCSS_Repository.Repositories
         {
             _context.RequestsCharacters.Remove(requestCharacters);
            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<RequestCharacter> GetRequestCharacterByRequestIdAndCharacterId(string requestId, string characterId)
+        {
+            return await _context.RequestsCharacters.FirstOrDefaultAsync(r => r.CharacterId.Equals(characterId) && r.RequestId.Equals(requestId));
         }
     }
 }

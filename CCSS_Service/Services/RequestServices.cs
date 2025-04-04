@@ -21,6 +21,7 @@ namespace CCSS_Service.Services
         Task<string> UpdateRequest(string requestId, UpdateRequestDtos requestDtos);
         Task<string> UpdateStatusRequest(string requestId, RequestStatus requestStatus);
         Task<double> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices, string serviceId);
+        Task<bool> CheckRequest(string requestId);
     }
     public class RequestServices : IRequestServices
     {
@@ -607,6 +608,63 @@ namespace CCSS_Service.Services
                     amount = totalDay * total + packagePrice - accountCouponPrice;
                 }
                 return amount;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> CheckRequest(string requestId)
+        {
+            try
+            {
+                Request request = await _repository.GetRequestById(requestId);
+                if (request == null)
+                {
+                    throw new Exception("Request does not exist");
+                }
+
+                List<Account> checkAccount = new List<Account>();
+                List<Account> checkAccountForCharacter = new List<Account>();
+                List<Account> checkAccountForCharacter1 = new List<Account>();
+                int count = 0;
+
+                foreach (var requestCharacter in request.RequestCharacters)
+                {
+                    count += (int)requestCharacter.Quantity;
+                    Character character = await _characterRepository.GetCharacter(requestCharacter.CharacterId);
+                    if(character == null)
+                    {
+                        throw new Exception("Character does not exist");
+                    }
+                    List<Account> accounts = await _accountRepository.GetAccountsByCharacter(character, checkAccountForCharacter1);
+                    foreach (var account in accounts)
+                    {
+                        bool checkTask = await taskRepository.CheckTaskIsValid(account, request.StartDate, request.EndDate);
+                        if (checkTask)
+                        {
+                            checkAccountForCharacter.Add(account);
+                            checkAccountForCharacter1.Add(account);
+                            if(checkAccountForCharacter.Count == requestCharacter.Quantity)
+                            {
+                                foreach(var account1 in checkAccountForCharacter)
+                                {
+                                    checkAccount.Add(account1);
+                                }
+                                checkAccountForCharacter = new List<Account>();
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (checkAccount.Count == count)
+                {
+                    return true;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {

@@ -53,8 +53,8 @@ namespace CCSS_Captone.Controllers
         //[HttpPost]
         //public async Task<ActionResult<TaskResponse>> AddTask(TaskRequest taskRequests)
         //{
-        //    //var task = await taskService.AddTask(taskRequests.AddTaskEventRequests, taskRequests.AddTaskContractRequests);
-        //    //return Ok(task);
+        //    var task = await taskService.AddTask(taskRequests.AddTaskEventRequests, taskRequests.AddTaskContractRequests);
+        //    return Ok(task);
         //}
 
         [HttpGet]

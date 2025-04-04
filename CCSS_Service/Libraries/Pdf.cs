@@ -319,6 +319,7 @@ namespace CCSS_Service.Libraries
         public async Task<double> CalculateTotalAmount(Request request, string amount, double price)
         {
             double totalAmount = 0;
+            int totalDay = (int)Math.Ceiling((request.EndDate - request.StartDate).TotalDays);
 
             foreach (RequestCharacter requestCharacter in request.RequestCharacters)
             {
@@ -339,6 +340,10 @@ namespace CCSS_Service.Libraries
             if (double.TryParse(amount, out parsedAmount))
             {
                 return totalAmount - parsedAmount + price;
+            }
+            if(request.ServiceId != "S001")
+            {
+                return totalDay * totalAmount;
             }
             return totalAmount;
         }
