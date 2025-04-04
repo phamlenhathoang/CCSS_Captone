@@ -407,11 +407,14 @@ namespace CCSS_Service.Services
                 List<RequestCharacter> characterInRequest = new List<RequestCharacter>();
                 foreach (var r in UpdateRequestDtos.ListUpdateRequestCharacters)
                 {
-                    var cosplayer = await _accountRepository.GetAccount(r.CosplayerId);
-                    if (cosplayer.RoleId != "R004" || cosplayer == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
+                    if (r.CosplayerId != null)
                     {
-                        await transaction.RollbackAsync();
-                        return "This cosplayer not found";
+                        var cosplayer = await _accountRepository.GetAccount(r.CosplayerId);
+                        if (cosplayer.RoleId != "R004" || cosplayer == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
+                        {
+                            await transaction.RollbackAsync();
+                            return "This cosplayer not found";
+                        }
                     }
                     var requestCharacter = await _requestCharacterRepository.GetRequestCharacter(requestExisting.RequestId, r.CharacterId);
                     var character = await _characterRepository.GetCharacter(r.CharacterId);
