@@ -410,6 +410,25 @@ namespace CCSS_Service.Services
                 {
                     if (r.CosplayerId != null)
                     {
+                        var checkCharacter = await _characterRepository.GetCharacter(r.CharacterId);
+                        if (checkCharacter == null)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Character does not exist";
+                        }
+                        var account = await _accountRepository.GetAccount(r.CosplayerId);
+                        bool checkAccount = await _characterRepository.CheckCharacterForAccount(account, r.CharacterId);
+                        if (!checkAccount)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Cosplayer does not suitable.";
+                        }
+                        bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
+                        if (!checkTask)
+                        {
+                            await transaction.RollbackAsync();
+                            return "This cosplayer is has another job. Please change datetime.";
+                        }
                         var cosplayer = await _accountRepository.GetAccount(r.CosplayerId);
                         if (cosplayer.RoleId != "R004" || cosplayer == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
                         {
@@ -417,6 +436,7 @@ namespace CCSS_Service.Services
                             return "This cosplayer not found";
                         }
                     }
+
                     var requestCharacter = await _requestCharacterRepository.GetRequestCharacter(requestExisting.RequestId, r.CharacterId);
                     var character = await _characterRepository.GetCharacter(r.CharacterId);
                     if (requestCharacter == null)
@@ -450,6 +470,11 @@ namespace CCSS_Service.Services
                 if (characterInRequest.Any())
                 {
                     await _requestCharacterRepository.UpdateListRequestCharacter(characterInRequest);
+                }
+                else
+                {
+                    await transaction.RollbackAsync();
+                    return "Cant Update Character Request";
                 }
 
                 requestExisting.Name = UpdateRequestDtos.Name;
