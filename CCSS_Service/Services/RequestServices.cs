@@ -241,7 +241,6 @@ namespace CCSS_Service.Services
                     }
                 }
 
-
                 var newRequest = new Request()
                 {
                     RequestId = Guid.NewGuid().ToString(),
@@ -316,12 +315,12 @@ namespace CCSS_Service.Services
                                     await transaction.RollbackAsync();
                                     return "This cosplayer is has another job. Please change datetime.";
                                 }
-                            }
-                            var character = await _accountRepository.GetAccount(r.CosplayerId);
-                            if (character.RoleId != "R004" || character == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
-                            {
-                                await transaction.RollbackAsync();
-                                return "This cosplayer not found";
+                                var character = await _accountRepository.GetAccount(r.CosplayerId);
+                                if (character.RoleId != "R004" || character == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "This cosplayer not found";
+                                }
                             }
                             // Nếu CosplayerId hợp lệ, thêm vào danh sách
                             characteInRequest.Add(new RequestCharacter
