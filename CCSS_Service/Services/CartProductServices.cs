@@ -84,8 +84,6 @@ namespace CCSS_Service.Services
                     }
                     else
                     {
-
-
                         var cartProduct = new CartProduct()
                         {
                             CartProductId = Guid.NewGuid().ToString(),
@@ -108,16 +106,6 @@ namespace CCSS_Service.Services
                     cart.UpdateDate = DateTime.Now;
                     var result1 = await _cartRepository.UpdateCart(cart);
                     if (!result1)
-                    {
-                        await transaction.RollbackAsync();
-                        return "Add Failed";
-                    }
-
-                    product.Quantity -= cp.Quantity;
-                    product.IsActive = product.Quantity > 0;
-                    product.UpdateDate = DateTime.Now;
-                    var result2 = await _productRepository.UpdateProduct(product);
-                    if (!result2)
                     {
                         await transaction.RollbackAsync();
                         return "Add Failed";
@@ -156,15 +144,6 @@ namespace CCSS_Service.Services
                     }
                     var result = await _repository.DeleteCartProduct(cartProduct);
                     if (!result)
-                    {
-                        await transaction.RollbackAsync();
-                        return "Delete Failed";
-                    }
-                    product.Quantity += cartProduct.Quantity;
-                    product.IsActive = true;
-                    product.UpdateDate = DateTime.Now;
-                    var result1 = await _productRepository.UpdateProduct(product);
-                    if (!result1)
                     {
                         await transaction.RollbackAsync();
                         return "Delete Failed";
@@ -213,24 +192,6 @@ namespace CCSS_Service.Services
                     if (product == null)
                     {
                         return "This product is not found";
-                    }
-
-                    product.Quantity += (cartproduct.Quantity - cp.Quantity);
-                    product.UpdateDate = DateTime.Now;
-                    if (product.Quantity == 0)
-                    {
-                        product.IsActive = false;
-                    }
-                    else
-                    {
-                        product.IsActive = true;
-                    }
-
-                    var result1 = await _productRepository.UpdateProduct(product);
-                    if (!result1)
-                    {
-                        await transaction.RollbackAsync();
-                        return "Update Failed";
                     }
 
                     double oldPrice = (double)cartproduct.Price;
@@ -297,7 +258,7 @@ namespace CCSS_Service.Services
                     var product = await _productRepository.GetProductById(cartProduct.ProductId);
                     if (product == null)
                     {
-                        return "Prouduct ot found";
+                        return "Prouduct not found";
                     }
                     var result = await _repository.DeleteCartProduct(cartProduct);
                     if (!result)
@@ -305,7 +266,16 @@ namespace CCSS_Service.Services
                         await transaction.RollbackAsync();
                         return "Delete Failed";
                     }
-                 
+
+                    product.Quantity -= cartProduct.Quantity;                
+                    product.UpdateDate = DateTime.Now;
+                    var result1 = await _productRepository.UpdateProduct(product);
+                    if (!result1)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Add Failed";
+                    }
+
                     cart.TotalPrice -= (double)cartProduct.Price;
                     cart.UpdateDate = DateTime.Now;
                     var result2 = await _cartRepository.UpdateCart(cart);

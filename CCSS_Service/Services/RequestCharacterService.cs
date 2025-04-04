@@ -16,6 +16,7 @@ namespace CCSS_Service.Services
         Task<string> AddCharacterInRequest(CharacterInRequest characterInRequest);
         Task<string> UpdateCharactetInRRequest(string requestCharacterId, CharacterInRequest characterInRequest);
         Task<string> DeleteCharacterInRequest(string requestCharacterId);
+        Task<RequestCharacter> GetRequestCharacter(string requestId, string characterId);
     }
 
     public class RequestCharacterService: IRequestCharacterService
@@ -100,5 +101,9 @@ namespace CCSS_Service.Services
             return result ? "Delete Success" : "Delete Failed";
         }
 
+        public async Task<RequestCharacter> GetRequestCharacter(string requestId, string characterId)
+        {
+           return await _requestCharacterRepository.GetRequestCharacter(requestId, characterId);
+        }
     }
 }
