@@ -500,7 +500,7 @@ namespace CCSS_Service.Services
 
                 var request = await _repository.GetRequestById(requestId);
                 var listRequestCharacters = await _requestCharacterRepository.GetListCharacterByRequest(requestId);
-              
+
                 if (request == null)
                 {
                     await transaction.RollbackAsync();
@@ -512,7 +512,7 @@ namespace CCSS_Service.Services
                     foreach (var c in listRequestCharacters)
                     {
                         var character = await _characterRepository.GetCharacter(c.CharacterId);
-                        if(character == null)
+                        if (character == null)
                         {
                             await transaction.RollbackAsync();
                             return "Character is not found";
@@ -540,13 +540,21 @@ namespace CCSS_Service.Services
         #region Delete Request
         public async Task<string> DeleteRequest(string id)
         {
-            var request = await _repository.GetRequestById(id);
-            if (request == null)
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                return "Request not found";
+                var request = await _repository.GetRequestById(id);
+                var listCharacterRequest = await _requestCharacterRepository.GetListCharacterByRequest(request.RequestId);
+                if (request == null)
+                {
+                    await transaction.RollbackAsync();
+                    return "Request not found";
+                }
+
+                await _requestCharacterRepository.DeleteListCharacterInRequest(listCharacterRequest);
+                await _repository.DeleteRequest(request);
+                await transaction.CommitAsync();
+                return "Delete Request Success";
             }
-            await _repository.DeleteRequest(request);
-            return "Delete Request Success";
         }
         #endregion
 
