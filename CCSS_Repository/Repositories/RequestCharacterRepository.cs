@@ -36,7 +36,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<RequestCharacter>> GetAllRequestCharacter()
         {
-            return await _context.RequestsCharacters.ToListAsync();
+            return await _context.RequestsCharacters.Include(sc => sc.Character).ThenInclude(i => i.CharacterImages).ToListAsync();
         }
 
         public async Task<RequestCharacter> GetRequestCharacterById(string id)

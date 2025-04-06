@@ -96,7 +96,17 @@ namespace CCSS_Service.Services
                 CharacterId = c.CharacterId,
                 CosplayerId = c.CosplayerId,
                 Description = c.Description,
-                Quantity = c.Quantity
+                Quantity = c.Quantity,
+                MinHeight = c.Character.MinHeight,
+                MaxHeight = c.Character.MaxHeight,
+                MinWeight = c.Character.MinWeight,
+                MaxWeight = c.Character.MaxWeight,
+                CharacterImages = c.Character.CharacterImages
+                                      .Select(img => new CharacterImageDto
+                                      {
+                                          CharacterImageId = img.CharacterImageId,
+                                          UrlImage = img.UrlImage
+                                      }).ToList()
             }).ToList();
 
             var response = new RequestResponse()
