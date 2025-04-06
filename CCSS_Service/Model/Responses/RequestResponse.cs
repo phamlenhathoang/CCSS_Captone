@@ -31,5 +31,16 @@ namespace CCSS_Service.Model.Responses
         public string? CosplayerId { get; set; }
         public string? Description { get; set; }
         public int? Quantity { get; set; }
+        public float? MaxHeight { get; set; }
+        public float? MaxWeight { get; set; }
+        public float? MinHeight { get; set; }
+        public float? MinWeight { get; set; }
+        public ICollection<CharacterImageDto> CharacterImages { get; set; }
+    }
+
+    public class CharacterImageDto
+    {
+        public string CharacterImageId { get; set; }
+        public string UrlImage { get; set; }
     }
 }
