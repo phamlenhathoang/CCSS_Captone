@@ -101,7 +101,7 @@ namespace CCSS_Captone.Controllers
             }
         }
 
-        [HttpDelete("{requestId}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteRequest(string requestId)
         {
             try

@@ -21,6 +21,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> UpdateListRequestCharacter(List<RequestCharacter> requestCharacters);
         Task<bool> DeleteRequestCharacter(RequestCharacter requestCharacters);
         Task<RequestCharacter> GetRequestCharacterByRequestIdAndCharacterId(string requestId, string characterId);
+        Task DeleteListCharacterInRequest(List<RequestCharacter> requestCharacterInRequest);
     }
 
 
@@ -81,6 +82,12 @@ namespace CCSS_Repository.Repositories
         {
             _context.RequestsCharacters.Remove(requestCharacters);
            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task DeleteListCharacterInRequest(List<RequestCharacter> requestCharacterInRequest)
+        {
+            _context.RequestsCharacters.RemoveRange(requestCharacterInRequest);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<RequestCharacter> GetRequestCharacterByRequestIdAndCharacterId(string requestId, string characterId)
