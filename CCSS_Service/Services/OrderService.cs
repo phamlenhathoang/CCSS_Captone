@@ -17,7 +17,8 @@ namespace CCSS_Service.Services
         Task<OrderResponse> GetOrderById(string id); 
         Task<string> CreateOrder(OrderRequest orderRequest);
         Task<bool> UpdateOrder(string id, OrderRequest orderRequest); 
-        Task<bool> DeleteOrder(string id); 
+        Task<bool> DeleteOrder(string id);
+        Task<List<OrderResponse>> GetAllOrdersByAccountId(string accountId);
     }
 
     public class OrderService : IOrderService
@@ -36,6 +37,11 @@ namespace CCSS_Service.Services
         public async Task<List<OrderResponse>> GetAllOrders()
         {
             var orders = await _orderRepository.GetAllOrders();
+            return _mapper.Map<List<OrderResponse>>(orders); 
+        }
+        public async Task<List<OrderResponse>> GetAllOrdersByAccountId(string accountId)
+        {
+            var orders = await _orderRepository.GetAllOrdersByAccountId(accountId);
             return _mapper.Map<List<OrderResponse>>(orders); 
         }
 

@@ -12,8 +12,8 @@ namespace CCSS_Repository.Entities
 
     public partial class Ticket
     {
-        [Key]
-        public string TicketId { get; set; } = Guid.NewGuid().ToString();
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int TicketId { get; set; }
 
         public int? Quantity { get; set; }
         public double? Price { get; set; }
@@ -23,6 +23,12 @@ namespace CCSS_Repository.Entities
         public Event Event { get; set; }
 
         public ICollection<TicketAccount> TicketAccounts { get; set; } = new List<TicketAccount>();
+        public ticketType ticketType { get; set; }
 
+    }
+    public enum ticketType
+    {
+        Nomal,
+        Premium
     }
 }

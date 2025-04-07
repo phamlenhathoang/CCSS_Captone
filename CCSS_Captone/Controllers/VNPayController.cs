@@ -31,9 +31,9 @@ namespace CCSS_Captone.Controllers
         //}
 
         [HttpPost]
-        public IActionResult CreatePaymentUrlVnpay(VNPayInformationModel model)
+        public async Task<IActionResult> CreatePaymentUrlVnpay(VNPayInformationModel model)
         {
-            var url = _vNPayService.CreatePaymentUrl(model, HttpContext);
+            var url = await _vNPayService.CreatePaymentUrl(model, HttpContext);
 
             return Ok(url);
         }
@@ -43,7 +43,7 @@ namespace CCSS_Captone.Controllers
         {
             var response = await _vNPayService.VNPayPaymentExecuteAsync(Request.Query);
 
-            return Ok(response);
+            return Redirect("http://localhost:3000/success-payment");
         }
 
     }

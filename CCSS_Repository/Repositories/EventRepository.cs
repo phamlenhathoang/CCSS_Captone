@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CCSS_Repository.Repositories
 {
@@ -11,13 +12,15 @@ namespace CCSS_Repository.Repositories
         Task<List<Event>> GetAllEvents(string searchTerm);
         Task<Event> GetEventById(string id);
         Task<Event> GetEventByEventId(string id);
-        Task<Event> GetEventByTicketId(string ticketId);
+        Task<Event> GetEventByTicketId(int? ticketId);
         Task<bool> AddEvent(Event eventObj);
         Task<bool> UpdateEvent(Event eventObj);
         Task<bool> DeleteEvent(string id);
         Task<bool> DeleteEventCharactersByEventId(string id);
         Task<bool> DeleteEventActivityByEventId(string id);
         Task<bool> DeleteTicketByEventId(string id);
+        Task<bool> DeleteEventImageById(string id);
+        Task<bool> DeleteTicketsByEventId(string eventId);
     }
 
     public class EventRepository : IEventRepository
@@ -62,13 +65,14 @@ namespace CCSS_Repository.Repositories
 
             return await query.ToListAsync();
         }
-        public async Task<Event> GetEventByTicketId(string ticketId)
+        public async Task<Event> GetEventByTicketId(int? ticketId)
         {
             return await _dbContext.Events
-        .Where(e => e.IsActive == true && e.Ticket.TicketId == ticketId)
-        .Include(e => e.Ticket)
-        .FirstOrDefaultAsync();
+                .Where(e => e.IsActive == true && e.Ticket.Any(t => t.TicketId == ticketId))
+                .Include(e => e.Ticket)
+                .FirstOrDefaultAsync();
         }
+
 
 
 
@@ -157,5 +161,34 @@ namespace CCSS_Repository.Repositories
         {
             return _dbContext.Events.FirstOrDefaultAsync(e => e.EventId.Equals(id)); 
         }
+        public async Task<bool> DeleteTicketsByEventId(string eventId)
+        {
+            var tickets = await _dbContext.Tickets.Where(t => t.EventId == eventId).ToListAsync();
+
+            if (tickets.Any())
+            {
+                _dbContext.Tickets.RemoveRange(tickets);
+                await _dbContext.SaveChangesAsync();
+                return true; // Thành công
+            }
+
+            return false; // Không tìm thấy ticket nào
+        }
+
+        public async Task<bool> DeleteEventImageById(string id)
+        {
+            var image = await _dbContext.EventImages.FirstOrDefaultAsync(i => i.ImageId == id);
+
+            if (image == null)
+            {
+                return false;
+            }
+
+            _dbContext.EventImages.Remove(image);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
     }
 }

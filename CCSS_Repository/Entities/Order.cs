@@ -13,7 +13,7 @@ namespace CCSS_Repository.Entities
     {
         [Key]
         public string OrderId { get; set; }
-        public Payment Payment { get; set; }
+        public ICollection<Payment> Payment { get; set; }
 
         [ForeignKey("AccountId")]
         public string AccountId { get; set; }

@@ -1,4 +1,5 @@
-﻿using CCSS_Repository.Entities;
+﻿using AutoMapper;
+using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
 using CCSS_Service.Libraries;
 using CCSS_Service.Model.Requests;
@@ -39,8 +40,11 @@ namespace CCSS_Service.Services
         private readonly IContractRespository _contractRespository;
         private readonly IContractServices _contractServices;
         private readonly IOrderRepository _orderRepository;
+        private readonly ICartRepository _cartRepository;
+        private readonly ICartProductServices _cartProductServices;
+        private readonly IMapper _mapper;
 
-        public MomoService(IContractServices _contractServices, IOptions<MomoOptionModel> options, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IAccountRepository accountRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IContractRespository contractRespository, IOrderRepository orderRepository)
+        public MomoService(IContractServices _contractServices, IOptions<MomoOptionModel> options, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IAccountRepository accountRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IContractRespository contractRespository, IOrderRepository orderRepository, ICartRepository cartRepository, ICartProductServices cartProductServices, IMapper mapper)
         {
             _options = options;
             _ticketAccountService = ticketAccountService;
@@ -51,6 +55,9 @@ namespace CCSS_Service.Services
             _contractRespository = contractRespository;
             _orderRepository = orderRepository;
             this._contractServices = _contractServices;
+            this._cartRepository = cartRepository;
+            this._cartProductServices = cartProductServices;
+            this._mapper = mapper;
         }
         public async Task<MomoCreatePaymentResponse> CreatePaymentAsync(OrderInfoModel model)
         {
@@ -159,7 +166,7 @@ namespace CCSS_Service.Services
 
             // Mặc định giá trị null
             string? accountId = null;
-            string? ticketId = null;
+            int? ticketId = null;
             string? contractId = null;
             string? OrderPaymentId = null;
             int? ticketQuantity = null;
@@ -173,7 +180,7 @@ namespace CCSS_Service.Services
                 {
                     var extraDataObj = JsonConvert.DeserializeObject<dynamic>(extraData);
                     accountId = extraDataObj?.AccountId;
-                    ticketId = extraDataObj?.TicketId;
+                    //ticketId = extraDataObj?.TicketId;
                     contractId = extraDataObj?.ContractId;
                     OrderPaymentId = extraDataObj?.OrderPaymentID;
                     accountCouponId = extraDataObj?.AccountCoupon;
@@ -182,6 +189,10 @@ namespace CCSS_Service.Services
                     if (int.TryParse((string?)extraDataObj?.TicketQuantity, out int parsedQuantity))
                     {
                         ticketQuantity = parsedQuantity;
+                    }
+                    if (int.TryParse((string?)extraDataObj?.ticketId, out int parsedTicketId))
+                    {
+                        ticketId = parsedTicketId;
                     }
                     if (double.TryParse(amountSt, out double parsedAmount))
                     {
@@ -201,12 +212,12 @@ namespace CCSS_Service.Services
             }
             if (string.IsNullOrEmpty(orderId))
             {
-                return "Thiếu orderId!";
+                throw new Exception("Thiếu orderId!");
             }
             var existingPayment = await _paymentRepository.GetPaymentByTransactionId(orderId);
             if (existingPayment == null)
             {
-                return "Không tìm thấy payment để cập nhật!";
+                throw new Exception("Thiếu orderId");
             }
             var account = await _accountRepository.GetAccountByAccountId(accountId);
             var sendMail = new SendMail();
@@ -222,7 +233,7 @@ namespace CCSS_Service.Services
                     TicketAccountRequest ticketAccountRequest = new TicketAccountRequest
                     {
                         AccountId = accountId,
-                        TicketId = ticketId,
+                        TicketId = ticketId ?? 0,
                         Quantity = ticketQuantity.GetValueOrDefault(),
                         TotalPrice = amount.GetValueOrDefault(),
                     };
@@ -282,8 +293,13 @@ namespace CCSS_Service.Services
                     }
                     var order = await _orderRepository.GetOrderById(OrderPaymentId);
                     order.OrderStatus= OrderStatus.Completed;
-                    
-                    
+
+                    var products = await _orderRepository.GetProductByOrderId(OrderPaymentId);
+                    var cart = await _cartRepository.GetcartByAccount(accountId);
+                   
+                    var product = _mapper.Map<List<CartProductRequestDTO>>(products);
+                    await _cartProductServices.DeleteCartProductAfterPayment(cart.CartId, product);
+                    await _orderRepository.UpdateProductQuantitiesAfterPayment(OrderPaymentId);
                     await _orderRepository.UpdateOrder(order);
 
                     return "mua hàng thành công";
