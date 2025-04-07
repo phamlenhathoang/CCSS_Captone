@@ -17,4 +17,15 @@ namespace CCSS_Service.Model.Requests
         public string? CharacterId { get; set; }
   
     }
+    public class EventImageRequest
+    {
+        public IFormFile ImageUrl { get; set; }    
+        
+  
+    }
+    public class EventImageDeletedRequest
+    {
+        public string ImageId { get; set; } = Guid.NewGuid().ToString();
+
+    }
 }

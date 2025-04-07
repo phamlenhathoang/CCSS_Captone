@@ -10,6 +10,9 @@ namespace CCSS_Repository.Repositories
         Task<bool> AddOrder(Order order);
         Task<bool> UpdateOrder(Order order);
         Task<bool> DeleteOrder(string id);
+        Task<List<Order>> GetAllOrdersByAccountId(string accountId);
+        Task<List<Product>> GetProductByOrderId(string id);
+        Task<bool> UpdateProductQuantitiesAfterPayment(string orderId);
     }
 
     public class OrderRepository : IOrderRepository
@@ -32,6 +35,15 @@ namespace CCSS_Repository.Repositories
                 .Include(o => o.OrderProducts)
                 .ToListAsync();
         }
+        public async Task<List<Order>> GetAllOrdersByAccountId(string accountId)
+        {
+            return await _dbContext.Orders
+                .Include(o => o.Payment)
+                .Include(o => o.Account)
+                .Include(o => o.OrderProducts)
+                .Where(o=>o.AccountId==accountId)
+                .ToListAsync();
+        }
 
         /// <summary>
         /// Lấy đơn hàng theo ID
@@ -44,6 +56,14 @@ namespace CCSS_Repository.Repositories
                 .Include(o => o.OrderProducts)
                 .FirstOrDefaultAsync(o => o.OrderId == id);
         }
+
+        public async Task<List<Product>> GetProductByOrderId(string id)
+        {
+            return await _dbContext.Products
+                .Where(p => p.OrderProducts.Any(op => op.Order.OrderId == id))
+                .ToListAsync();
+        }
+
 
         /// <summary>
         /// Thêm mới một đơn hàng
@@ -70,6 +90,35 @@ namespace CCSS_Repository.Repositories
             _dbContext.Entry(existingOrder).CurrentValues.SetValues(order);
             int result = await _dbContext.SaveChangesAsync();
             return result > 0;
+        }
+        public async Task<bool> UpdateProductQuantitiesAfterPayment(string orderId)
+        {
+            // Lấy tất cả OrderProduct theo OrderId
+            var orderProducts = await _dbContext.OrderProducts
+                .Where(op => op.OrderId == orderId)
+                .Include(op => op.Product)
+                .ToListAsync();
+
+            if (orderProducts == null || !orderProducts.Any())
+            {
+                return false; // Không tìm thấy order hoặc không có sản phẩm
+            }
+
+            foreach (var orderProduct in orderProducts)
+            {
+                var product = orderProduct.Product;
+                if (product != null && product.Quantity.HasValue)
+                {
+                    product.Quantity -= orderProduct.Quantity;
+
+                    // Đảm bảo Quantity không âm
+                    if (product.Quantity < 0)
+                        product.Quantity = 0;
+                }
+            }
+
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
         /// <summary>

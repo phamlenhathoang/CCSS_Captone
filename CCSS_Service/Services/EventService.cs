@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Libraries;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using Microsoft.EntityFrameworkCore;
@@ -30,9 +31,10 @@ namespace CCSS_Service.Services
         private readonly ITaskRepository _taskRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly ICharacterRepository _characterRepository;
+        private readonly Image _image;
         //private readonly IImageService _imageService;
 
-        public EventService(IEventRepository repository, IMapper mapper, ITaskService taskService, ITaskRepository taskRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository)
+        public EventService(IEventRepository repository, IMapper mapper, ITaskService taskService, ITaskRepository taskRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, Image image)
         {
             _repository = repository;
             _mapper = mapper;
@@ -41,6 +43,7 @@ namespace CCSS_Service.Services
             _taskRepository = taskRepository;
             _accountRepository = accountRepository;
             _characterRepository = characterRepository;
+            _image = image;
         }
 
         public async Task<List<EventResponse>> GetAllEvents(string searchTerm)
@@ -86,11 +89,12 @@ namespace CCSS_Service.Services
                 if (eventRequest.Ticket != null)
                 {
                     var newTicket = _mapper.Map<Ticket>(eventRequest.Ticket);
-                    newTicket.TicketId = Guid.NewGuid().ToString(); // Tạo ID mới cho Ticket
+                    //newTicket.TicketId = Guid.NewGuid().ToString(); // Tạo ID mới cho Ticket
                     newTicket.EventId = newEvent.EventId; // Gán EventId để liên kết Ticket với Event
 
                     // Gán Ticket vào Event
-                    newEvent.Ticket = newTicket;
+                    newEvent.Ticket = new List<Ticket> { newTicket };
+
 
                 }
 
@@ -134,14 +138,28 @@ namespace CCSS_Service.Services
                 {
                     var eventActivities = eventRequest.EventActivityRequests.Select(ea => new EventActivity
                     {
-                        EventActivityId = Guid.NewGuid().ToString(), // Tạo ID mới
-                        EventId = newEvent.EventId, // Gán EventId để liên kết
-                        ActivityId = ea.ActivityId, // Gán ActivityId từ request
-                        CreateBy = ea.CreateBy, // Gán ActivityId từ request
-                        CreateDate = DateTime.Now, // Gán ActivityId từ request
+                        EventActivityId = Guid.NewGuid().ToString(), 
+                        EventId = newEvent.EventId, 
+                        ActivityId = ea.ActivityId, 
+                        CreateBy = ea.CreateBy, 
+                        CreateDate = DateTime.Now, 
                         
                     }).ToList();
                     newEvent.EventActivities = eventActivities;
+                }
+
+                if (eventRequest.Images != null && eventRequest.Images.Any())
+                {
+                    var imageTasks = eventRequest.Images.Select(async I => new EventImage
+                    {
+                        ImageId = Guid.NewGuid().ToString(),
+                        ImageUrl = await _image.UploadImageToFirebase(I.ImageUrl),
+                        CreateDate = DateTime.Now,
+                        EventId = newEvent.EventId,
+
+                    }).ToList();
+                    var images = await System.Threading.Tasks.Task.WhenAll(imageTasks);
+                    newEvent.EventImages = images.ToList();
                 }
                 // Lưu vào database
                 bool isAdded = await _repository.AddEvent(newEvent);
@@ -217,35 +235,31 @@ namespace CCSS_Service.Services
                 existingEvent.EndDate = eventRequest.EndDate != default ? eventRequest.EndDate : existingEvent.EndDate;
                 existingEvent.UpdateDate = DateTime.Now;
 
+                
                 // ✅ Xử lý Ticket (nếu có)
-                if (eventRequest.Ticket != null)
+                if (eventRequest.Ticket != null && eventRequest.Ticket.Any())
                 {
-                    if (existingEvent.Ticket == null)
-                    {
-                        if (eventRequest.Ticket.Quantity > 0 && eventRequest.Ticket.Price > 0)
-                        {
-                            existingEvent.Ticket = new Ticket
-                            {
-                                TicketId = Guid.NewGuid().ToString(),
-                                EventId = existingEvent.EventId,
-                                Quantity = eventRequest.Ticket.Quantity,
-                                Price = eventRequest.Ticket.Price
-                            };
-                        }
-                    }
-                    else
-                    {
-                        if (eventRequest.Ticket.Quantity > 0)
-                        {
-                            existingEvent.Ticket.Quantity = eventRequest.Ticket.Quantity;
-                        }
+                    // 🔥 Xoá hết vé cũ (nếu cần cập nhật lại toàn bộ)
+                    await _repository.DeleteTicketsByEventId(existingEvent.EventId);
 
-                        if (eventRequest.Ticket.Price > 0)
+                    // 🔥 Thêm danh sách vé mới
+                    foreach (var ticketRequest in eventRequest.Ticket)
+                    {
+                        if (ticketRequest.Quantity > 0 && ticketRequest.Price > 0)
                         {
-                            existingEvent.Ticket.Price = eventRequest.Ticket.Price;
+                            var newTicket = new Ticket
+                            {
+                                EventId = existingEvent.EventId,
+                                Quantity = ticketRequest.Quantity,
+                                Price = ticketRequest.Price
+                            };
+
+                            existingEvent.Ticket.Add(newTicket);
                         }
                     }
                 }
+
+
 
                 // ✅ Xử lý danh sách EventCharacter (nếu có)
                 if (eventRequest.EventCharacterRequests != null)
@@ -284,6 +298,33 @@ namespace CCSS_Service.Services
 
                     existingEvent.EventActivities = newEventActivity;
                 }
+
+                if (eventRequest.ImagesDeleted != null && eventRequest.ImagesDeleted.Any())
+                {
+                    foreach (var imageDeletedId in eventRequest.ImagesDeleted)
+                    {
+                        var imageToDelete = existingEvent.EventImages.FirstOrDefault(i => i.ImageId == imageDeletedId.ImageId);
+                        if (imageToDelete != null)
+                        {
+                            _repository.DeleteEventImageById(imageToDelete.ImageId); 
+                        }
+                    }
+                }
+                if (eventRequest.Images != null && eventRequest.Images.Any())
+                {
+                    var imageTasks = eventRequest.Images.Select(async I => new EventImage
+                    {
+                        ImageId = Guid.NewGuid().ToString(),
+                        ImageUrl = await _image.UploadImageToFirebase(I.ImageUrl),
+                        CreateDate = DateTime.Now,
+                        EventId = existingEvent.EventId,
+
+                    }).ToList();
+                    var images = await System.Threading.Tasks.Task.WhenAll(imageTasks);
+                    existingEvent.EventImages = images.ToList();
+                }
+
+
 
                 await _repository.UpdateEvent(existingEvent);
                 return "Update Success";

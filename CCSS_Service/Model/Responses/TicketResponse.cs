@@ -10,7 +10,7 @@ namespace CCSS_Service.Model.Responses
 {
     public class TicketResponse 
     {
-        public string TicketId { get; set; } 
+        public int TicketId { get; set; } 
 
 
         public int? Quantity { get; set; }

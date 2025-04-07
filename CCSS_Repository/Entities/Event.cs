@@ -24,7 +24,7 @@ namespace CCSS_Repository.Entities
         public DateTime? UpdateDate { get; set; }
         public string? CreateBy { get; set; }
 
-        public Ticket Ticket { get; set; } 
+        public ICollection<Ticket> Ticket { get; set; } 
         public ICollection<EventImage> EventImages { get; set; } = new List<EventImage>();
         public ICollection<EventCharacter> EventCharacters { get; set; } = new List<EventCharacter>();  
         public ICollection<EventActivity> EventActivities { get; set; } = new List<EventActivity>();    

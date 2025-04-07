@@ -26,12 +26,13 @@ namespace CCSS_Service.Model.Responses
         public string Token { get; set; }
         public string VnPayResponseCode { get; set; }
         public string AccountId { get; set; }
-        public string? TicketId { get; set; }
+        public int? TicketId { get; set; }
         public string? TicketQuantity { get; set; }
         public string Purpose { get; set; }
-        public string? ContractId { get; set; }
-        public string? CartId { get; set; }
-        public string? OrderPaymentId { get; set; }
+        //public string? ContractId { get; set; }
+        //public string? CartId { get; set; }
+        //public string? OrderPaymentId { get; set; }
+        public string? AccountCouponId { get; set; }
         public double Amount { get; set; }
 
     }

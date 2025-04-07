@@ -6,7 +6,7 @@ namespace CCSS_Repository.Repositories
 {
     public interface ITicketRepository
     {
-        Task<Ticket> GetTicket(string id);
+        Task<Ticket> GetTicket(int id);
         Task<bool> AddTicket(Ticket ticket);
         Task<bool> UpdateTicket(Ticket ticket);
         Task<bool> DeleteTicket(Ticket ticket);
@@ -21,7 +21,7 @@ namespace CCSS_Repository.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Ticket> GetTicket(string id)
+        public async Task<Ticket> GetTicket(int id)
         {
             return await _dbContext.Tickets
                 .Where(t => t.TicketId == id && t.Event.IsActive == true) // Chỉ lấy Ticket có Event.IsActive == true
@@ -50,5 +50,7 @@ namespace CCSS_Repository.Repositories
             int result = await _dbContext.SaveChangesAsync();
             return result > 0;
         }
+        
+
     }
 }

@@ -6,7 +6,7 @@ namespace CCSS_Service
 {
     public interface ITicketService
     {
-        Task<Ticket> GetTicketAsync(string id);
+        Task<Ticket> GetTicketAsync(int id);
         //Task<bool> AddTicketAsync(Ticket ticket);
         //Task<bool> UpdateTicketAsync(Ticket ticket);
         //Task<bool> DeleteTicketAsync(string ticketId);
@@ -21,7 +21,7 @@ namespace CCSS_Service
             _ticketRepository = ticketRepository;
         }
 
-        public async Task<Ticket> GetTicketAsync(string id)
+        public async Task<Ticket> GetTicketAsync(int id)
         {
             return await _ticketRepository.GetTicket(id);
         }
