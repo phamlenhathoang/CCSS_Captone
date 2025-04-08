@@ -10,9 +10,9 @@ namespace CCSS_Service.Model.Responses
 {
     public class TicketResponse 
     {
-        public int TicketId { get; set; } 
+        public int TicketId { get; set; }
 
-
+        public ticketType ticketType { get; set; }
         public int? Quantity { get; set; }
         public double? Price { get; set; }
 

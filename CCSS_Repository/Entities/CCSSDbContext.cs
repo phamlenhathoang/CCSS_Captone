@@ -575,7 +575,13 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
     new Ticket { TicketId = 9, Quantity = 550, Price = 65000.0, EventId = "E009", ticketType = ticketType.Nomal },
     new Ticket { TicketId = 10, Quantity = 700, Price = 70000.0, EventId = "E010", ticketType = ticketType.Nomal },
     new Ticket { TicketId = 11, Quantity = 150, Price = 25000.0, EventId = "E011", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 12, Quantity = 800, Price = 75000.0, EventId = "E012", ticketType = ticketType.Nomal }
+    new Ticket { TicketId = 12, Quantity = 800, Price = 75000.0, EventId = "E012", ticketType = ticketType.Nomal },
+    new Ticket { TicketId = 13, Quantity = 500, Price = 50000.0, EventId = "E001", ticketType = ticketType.Premium },
+    new Ticket { TicketId = 14, Quantity = 500, Price = 50000.0, EventId = "E002", ticketType = ticketType.Premium },
+    new Ticket { TicketId = 15, Quantity = 500, Price = 50000.0, EventId = "E003", ticketType = ticketType.Premium },
+    new Ticket { TicketId = 16, Quantity = 500, Price = 50000.0, EventId = "E004", ticketType = ticketType.Premium }
+
+
 );
             #endregion
 
