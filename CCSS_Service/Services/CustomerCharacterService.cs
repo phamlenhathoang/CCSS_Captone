@@ -273,7 +273,7 @@ namespace CCSS_Service.Services
 
                 if (status.ToUpper().Equals(CustomerCharacterStatus.Reject.ToString().ToUpper()))
                 {
-                    if (string.IsNullOrEmpty(reason))
+                    if (!string.IsNullOrEmpty(reason))
                     {
                         if (customerCharacter.Status == CustomerCharacterStatus.Pending)
                         {
