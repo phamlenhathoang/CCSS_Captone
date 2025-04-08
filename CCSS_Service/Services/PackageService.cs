@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,8 @@ namespace CCSS_Service.Services
         Task<PackageResponse> GetPackage(string packageId);
         Task<Package> GetPackageById(string id);
         Task<List<PackageResponse>> GetAll();
-        Task<string> AddPackage(PackageResponse packageResponse);
-        Task<string> UpdatePackage(string packageId, PackageResponse newPackage);
+        Task<string> AddPackage(PackageRequest packageResponse);
+        Task<string> UpdatePackage(string packageId, PackageRequest newPackage);
         Task<string> DeletePackage(string packageId);
     }
     public class PackageService : IPackageService
@@ -46,7 +47,7 @@ namespace CCSS_Service.Services
             return await _packageRepository.GetPackage(id);
         }
 
-        public async Task<string> AddPackage(PackageResponse packageResponse)
+        public async Task<string> AddPackage(PackageRequest packageResponse)
         {
             if (packageResponse == null)
             {
@@ -67,7 +68,7 @@ namespace CCSS_Service.Services
             }
         }
 
-        public async Task<string> UpdatePackage(string packageId, PackageResponse newPackage)
+        public async Task<string> UpdatePackage(string packageId, PackageRequest newPackage)
         {
             var package = await GetPackageById(packageId);
             if (package == null)

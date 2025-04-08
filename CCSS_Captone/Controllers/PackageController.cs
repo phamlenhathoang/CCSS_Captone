@@ -1,4 +1,5 @@
-﻿using CCSS_Service.Model.Responses;
+﻿using CCSS_Service.Model.Requests;
+using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +40,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePackage(PackageResponse packageResponse)
+        public async Task<IActionResult> CreatePackage(PackageRequest packageResponse)
         {
             if (ModelState.IsValid)
             {
@@ -51,7 +52,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePackage(string id, PackageResponse packageResponse)
+        public async Task<IActionResult> UpdatePackage(string id, PackageRequest packageResponse)
         {
             if (ModelState.IsValid)
             {
