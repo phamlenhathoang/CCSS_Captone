@@ -267,15 +267,6 @@ namespace CCSS_Service.Services
                         return "Delete Failed";
                     }
 
-                    product.Quantity -= cartProduct.Quantity;                
-                    product.UpdateDate = DateTime.Now;
-                    var result1 = await _productRepository.UpdateProduct(product);
-                    if (!result1)
-                    {
-                        await transaction.RollbackAsync();
-                        return "Add Failed";
-                    }
-
                     cart.TotalPrice -= (double)cartProduct.Price;
                     cart.UpdateDate = DateTime.Now;
                     var result2 = await _cartRepository.UpdateCart(cart);
