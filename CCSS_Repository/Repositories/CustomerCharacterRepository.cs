@@ -18,6 +18,7 @@ namespace CCSS_Repository.Repositories
         Task<CustomerCharacter> GetCustomerCharacterById(string id);
         Task<List<CustomerCharacter>> GetCustomerCharacters(string? customerCharacterId, string? accountId, string? categoryId, string? createDate, string? status);
         Task<bool> UpdateCustomerCharacter(CustomerCharacter customerCharacter);
+        Task<List<CustomerCharacter>> GetAllCustomerCharacterByAccountId(string accountId);
     }
     public class CustomerCharacterRepository : ICustomerCharacterRepository
     {
@@ -31,6 +32,11 @@ namespace CCSS_Repository.Repositories
         {
             await _context.AddAsync(customerCharacter);
             return await _context.SaveChangesAsync() > 0 ? true : false;
+        }
+
+        public async Task<List<CustomerCharacter>> GetAllCustomerCharacterByAccountId(string accountId)
+        {
+            return await _context.CustomerCharacters.Include(sc => sc.CustomerCharacterImages).Where(sc => sc.CreateBy.Equals(accountId)).ToListAsync();
         }
 
         public async Task<CustomerCharacter> GetCustomerCharacterById(string id)

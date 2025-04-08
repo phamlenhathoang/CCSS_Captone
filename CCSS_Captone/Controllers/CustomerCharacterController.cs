@@ -84,5 +84,16 @@ namespace CCSS_Captone.Controllers
             var account = await custromerCharacterService.GetCustomerCharacterList(customerCharacterId, accountId, categoryId, createDate, status);
             return Ok(account);
         }
+
+        [HttpGet("GetAllCustomerByAccount")]
+        public async Task<IActionResult> GetAllCustomerCharacterByAccount(string accountId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await custromerCharacterService.GetAllCustomerCharacterByAccountId(accountId);
+                return Ok(result);
+            }
+            return BadRequest();
+        }
     }
 }

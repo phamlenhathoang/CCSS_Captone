@@ -20,6 +20,7 @@ namespace CCSS_Service.Services
         Task<bool> UpdateCustomerCharacter(string accountId, string customerCharacterRequestId, UpdateCustomerCharacterRequest updateCustomerCharacterRequest);
         Task<bool> UpadateStatusCustomerCharacter(string customerCharacterId, string status, string? reason, double? price);
         Task<List<CustomerCharacterReponse>> GetCustomerCharacterList(string? customerCharacterId, string? accountId, string? categoryId, string? createDate,string? status);
+        Task<List<CustomerCharacterReponse>> GetAllCustomerCharacterByAccountId(string accountId);
     }
     public class CustomerCharacterService : ICustomerCharacterService
     {
@@ -130,6 +131,65 @@ namespace CCSS_Service.Services
             }
         }
 
+
+        public async Task<List<CustomerCharacterReponse>> GetAllCustomerCharacterByAccountId(string accountId)
+        {
+            try
+            {
+                List<CustomerCharacterReponse> ccr = new List<CustomerCharacterReponse>();
+                List<CustomerCharacterImageResponse> cci = new List<CustomerCharacterImageResponse>();
+                List<CustomerCharacter> customerCharacters = await customerCharacterRepository.GetAllCustomerCharacterByAccountId(accountId);
+
+                if (customerCharacters == null)
+                {
+                    return ccr;
+                }
+
+                foreach (CustomerCharacter customerCharacter in customerCharacters)
+                {
+                    foreach (var imageCusCha in customerCharacter.CustomerCharacterImages)
+                    {
+                        CustomerCharacterImageResponse customerCharacterImageResponse = new CustomerCharacterImageResponse()
+                        {
+                            CreateDate = imageCusCha.CreateDate?.ToString("HH:mm dd/MM/yyyy") ?? null,
+                            CustomerCharacterImageId = imageCusCha.CustomerCharacterImageId,
+                            UpdateDate = imageCusCha.UpdateDate?.ToString("HH:mm dd/MM/yyyy") ?? null,
+                            UrlImage = imageCusCha.UrlImage
+                        };
+
+                        cci.Add(customerCharacterImageResponse);
+                    }
+
+                    CustomerCharacterReponse customerCharacterReponse = new CustomerCharacterReponse()
+                    {
+                        CategoryId = customerCharacter.CategoryId,
+                        UpdateDate = customerCharacter.UpdateDate?.ToString("HH:mm dd/MM/yyyy") ?? null,
+                        CreateBy = customerCharacter.CreateBy,
+                        CreateDate = customerCharacter.CreateDate.ToString("HH:mm dd/MM/yyyy"),
+                        CustomerCharacterId = customerCharacter.CustomerCharacterId,
+                        Description = customerCharacter.Description,
+                        MaxHeight = customerCharacter.MaxHeight,
+                        MaxWeight = customerCharacter.MaxWeight,
+                        MinHeight = customerCharacter.MinHeight,
+                        MinWeight = customerCharacter.MinWeight,
+                        Name = customerCharacter.Name,
+                        Reason = customerCharacter.Reason,
+                        Status = customerCharacter.Status.ToString(),
+                        CustomerCharacterImageResponses = cci
+                    };
+
+                    ccr.Add(customerCharacterReponse);
+
+                    cci = new List<CustomerCharacterImageResponse>();
+                }
+
+                return ccr;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public async Task<List<CustomerCharacterReponse>> GetCustomerCharacterList(string? customerCharacterId, string? accountId, string? categoryId, string? createDate, string? status)
         {
             try

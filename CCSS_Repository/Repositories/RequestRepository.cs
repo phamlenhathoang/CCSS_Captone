@@ -35,6 +35,11 @@ namespace CCSS_Repository.Repositories
             return await _context.Requests.Include(sc => sc.RequestCharacters).ToListAsync();
         }
 
+        public async Task<List<Request>> GetAllRequestByServicesId(string servicesId)
+        {
+            return await _context.Requests.Include(rc => rc.RequestCharacters).Include(sc => sc.Service).Where(sc => sc.ServiceId.Equals(servicesId)).ToListAsync();
+        }
+
         public async Task<List<Request>> GetAllRequestByAccountId(string accountId)
         {
             return await _context.Requests.Include(c => c.RequestCharacters).Where(sc => sc.AccountId.Equals(accountId)).ToListAsync();
