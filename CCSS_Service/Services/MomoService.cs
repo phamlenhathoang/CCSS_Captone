@@ -180,7 +180,7 @@ namespace CCSS_Service.Services
                 {
                     var extraDataObj = JsonConvert.DeserializeObject<dynamic>(extraData);
                     accountId = extraDataObj?.AccountId;
-                    //ticketId = extraDataObj?.TicketId;
+                    ticketId = extraDataObj?.TicketId;
                     contractId = extraDataObj?.ContractId;
                     OrderPaymentId = extraDataObj?.OrderPaymentID;
                     accountCouponId = extraDataObj?.AccountCoupon;
