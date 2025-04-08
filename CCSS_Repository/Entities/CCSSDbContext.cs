@@ -564,22 +564,22 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Ticket
             modelBuilder.Entity<Ticket>().HasData(
-    new Ticket { TicketId = 1, Quantity = 500, Price = 50000.0, EventId = "E001", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 2, Quantity = 300, Price = 40000.0, EventId = "E002", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 3, Quantity = 200, Price = 30000.0, EventId = "E003", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 4, Quantity = 600, Price = 60000.0, EventId = "E004", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 5, Quantity = 400, Price = 45000.0, EventId = "E005", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 6, Quantity = 350, Price = 55000.0, EventId = "E006", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 7, Quantity = 250, Price = 35000.0, EventId = "E007", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 8, Quantity = 450, Price = 50000.0, EventId = "E008", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 9, Quantity = 550, Price = 65000.0, EventId = "E009", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 10, Quantity = 700, Price = 70000.0, EventId = "E010", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 11, Quantity = 150, Price = 25000.0, EventId = "E011", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 12, Quantity = 800, Price = 75000.0, EventId = "E012", ticketType = ticketType.Nomal },
-    new Ticket { TicketId = 13, Quantity = 500, Price = 50000.0, EventId = "E001", ticketType = ticketType.Premium },
-    new Ticket { TicketId = 14, Quantity = 500, Price = 50000.0, EventId = "E002", ticketType = ticketType.Premium },
-    new Ticket { TicketId = 15, Quantity = 500, Price = 50000.0, EventId = "E003", ticketType = ticketType.Premium },
-    new Ticket { TicketId = 16, Quantity = 500, Price = 50000.0, EventId = "E004", ticketType = ticketType.Premium }
+    new Ticket { TicketId = 1, Quantity = 500, Price = 50000.0, EventId = "E001", ticketType = ticketType.Nomal, Description="đứng nhìn" },
+    new Ticket { TicketId = 2, Quantity = 300, Price = 40000.0, EventId = "E002", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
+    new Ticket { TicketId = 3, Quantity = 200, Price = 30000.0, EventId = "E003", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
+    new Ticket { TicketId = 4, Quantity = 600, Price = 60000.0, EventId = "E004", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
+    new Ticket { TicketId = 5, Quantity = 400, Price = 45000.0, EventId = "E005", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
+    new Ticket { TicketId = 6, Quantity = 350, Price = 55000.0, EventId = "E006", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
+    new Ticket { TicketId = 7, Quantity = 250, Price = 35000.0, EventId = "E007", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
+    new Ticket { TicketId = 8, Quantity = 450, Price = 50000.0, EventId = "E008", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
+    new Ticket { TicketId = 9, Quantity = 550, Price = 65000.0, EventId = "E009", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
+    new Ticket { TicketId = 10, Quantity = 700, Price = 70000.0, EventId = "E010", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
+    new Ticket { TicketId = 11, Quantity = 150, Price = 25000.0, EventId = "E011", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
+    new Ticket { TicketId = 12, Quantity = 800, Price = 75000.0, EventId = "E012", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
+    new Ticket { TicketId = 13, Quantity = 500, Price = 50000.0, EventId = "E001", ticketType = ticketType.Premium, Description = "Được sờ nắn idol" },
+    new Ticket { TicketId = 14, Quantity = 500, Price = 50000.0, EventId = "E002", ticketType = ticketType.Premium, Description = "Được sờ nắn idol" },
+    new Ticket { TicketId = 15, Quantity = 500, Price = 50000.0, EventId = "E003", ticketType = ticketType.Premium, Description = "Được sờ nắn idol" },
+    new Ticket { TicketId = 16, Quantity = 500, Price = 50000.0, EventId = "E004", ticketType = ticketType.Premium, Description = "Được sờ nắn idol" }
 
 
 );

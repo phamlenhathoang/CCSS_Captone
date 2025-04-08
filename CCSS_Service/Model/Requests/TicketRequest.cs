@@ -15,6 +15,8 @@ namespace CCSS_Service.Model.Requests
 
         public int? Quantity { get; set; }
         public double? Price { get; set; }
+        public string Description { get; set; }
+
         public ticketType ticketType { get; set; }
         //[ForeignKey("EventId")]
         //public string? EventId { get; set; }

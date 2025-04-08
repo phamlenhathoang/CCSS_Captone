@@ -76,23 +76,21 @@ namespace CCSS_Service.Services
 
             try
             {
-                // Sử dụng AutoMapper để map từ CreateEventRequest sang Event
+              
                 var newEvent = _mapper.Map<Event>(eventRequest);
 
-                // Gán ID và thời gian tạo
                 newEvent.EventId = Guid.NewGuid().ToString();
                 newEvent.CreateDate = DateTime.Now;
                 newEvent.IsActive = true;
                 newEvent.UpdateDate = null;
 
-                // Nếu có thông tin Ticket trong request, sử dụng AutoMapper để map TicketRequest -> Ticket
+                
                 if (eventRequest.Ticket != null)
                 {
                     var newTicket = _mapper.Map<Ticket>(eventRequest.Ticket);
-                    //newTicket.TicketId = Guid.NewGuid().ToString(); // Tạo ID mới cho Ticket
-                    newTicket.EventId = newEvent.EventId; // Gán EventId để liên kết Ticket với Event
+                    newTicket.EventId = newEvent.EventId; 
 
-                    // Gán Ticket vào Event
+                    
                     newEvent.Ticket = new List<Ticket> { newTicket };
 
 
@@ -161,20 +159,19 @@ namespace CCSS_Service.Services
                     var images = await System.Threading.Tasks.Task.WhenAll(imageTasks);
                     newEvent.EventImages = images.ToList();
                 }
-                // Lưu vào database
+          
                 bool isAdded = await _repository.AddEvent(newEvent);
 
                 if (eventRequest.EventCharacterRequest != null && eventRequest.EventCharacterRequest.Any())
                 {
                     var taskEventRequests = eventRequest.EventCharacterRequest.Select((ec, index) => new AddTaskEventRequest
                     {
-                        AccountId = ec.CosplayerId, // Lấy CosplayerId từ EventCharacterRequest
-                        EventCharacterId = eventCharacters[index].EventCharacterId // Lấy EventCharacterId tương ứng
+                        AccountId = ec.CosplayerId, 
+                        EventCharacterId = eventCharacters[index].EventCharacterId 
                     }).ToList();
 
                     await _taskService.AddTask(taskEventRequests, null);
                 }
-                // Kiểm tra kết quả lưu database
                 if (!isAdded)
                 {
                     return "Failed to add event to database";
@@ -195,7 +192,6 @@ namespace CCSS_Service.Services
             }
             catch (DbUpdateException dbEx)
             {
-                // Bắt lỗi khi lưu vào database (Ví dụ: lỗi ràng buộc khóa ngoại, lỗi Unique Key,...)
                 return $"Database error: {dbEx.Message}";
             }
             catch (ArgumentNullException argEx)
@@ -204,7 +200,6 @@ namespace CCSS_Service.Services
             }
             catch (Exception ex)
             {
-                // Bắt lỗi chung
                 return $"An unexpected error occurred: {ex.Message}";
             }
         }
@@ -226,7 +221,6 @@ namespace CCSS_Service.Services
                     return "Event not found";
                 }
 
-                // ✅ Cập nhật các trường của Event (không ảnh hưởng Ticket hoặc EventCharacter)
                 existingEvent.EventName = eventRequest.EventName ?? existingEvent.EventName;
                 existingEvent.Description = eventRequest.Description ?? existingEvent.Description;
                 existingEvent.Location = eventRequest.Location ?? existingEvent.Location;
@@ -236,13 +230,10 @@ namespace CCSS_Service.Services
                 existingEvent.UpdateDate = DateTime.Now;
 
                 
-                // ✅ Xử lý Ticket (nếu có)
                 if (eventRequest.Ticket != null && eventRequest.Ticket.Any())
                 {
-                    // 🔥 Xoá hết vé cũ (nếu cần cập nhật lại toàn bộ)
                     await _repository.DeleteTicketsByEventId(existingEvent.EventId);
 
-                    // 🔥 Thêm danh sách vé mới
                     foreach (var ticketRequest in eventRequest.Ticket)
                     {
                         if (ticketRequest.Quantity > 0 && ticketRequest.Price > 0)
@@ -251,7 +242,8 @@ namespace CCSS_Service.Services
                             {
                                 EventId = existingEvent.EventId,
                                 Quantity = ticketRequest.Quantity,
-                                Price = ticketRequest.Price
+                                Price = ticketRequest.Price,
+                                Description = ticketRequest.Description
                             };
 
                             existingEvent.Ticket.Add(newTicket);
@@ -261,17 +253,16 @@ namespace CCSS_Service.Services
 
 
 
-                // ✅ Xử lý danh sách EventCharacter (nếu có)
                 if (eventRequest.EventCharacterRequests != null)
                 {
-                    // 🔥 Xóa toàn bộ EventCharacter cũ
+                   
                     await _repository.DeleteEventCharactersByEventId(existingEvent.EventId);
 
-                    // 🔥 Thêm EventCharacter mới từ danh sách request
+                   
                     var newEventCharacters = eventRequest.EventCharacterRequests.Select(ec => new EventCharacter
                     {
                         EventCharacterId = Guid.NewGuid().ToString(),
-                        EventId = existingEvent.EventId, // ✅ Đảm bảo EventId không null
+                        EventId = existingEvent.EventId,
                         CharacterId = ec.CharacterId
                     }).ToList();
 
@@ -281,14 +272,12 @@ namespace CCSS_Service.Services
                 {
                     var createDate = existingEvent.EventActivities.FirstOrDefault()?.CreateDate;
 
-                    // 🔥 Xóa toàn bộ EventActivity cũ
                     await _repository.DeleteEventActivityByEventId(existingEvent.EventId);
 
-                    // 🔥 Thêm EventActivity mới từ danh sách request
                     var newEventActivity = eventRequest.EventActivityRequests.Select(ec => new EventActivity
                     {
                         EventActivityId = Guid.NewGuid().ToString(),
-                        EventId = existingEvent.EventId, // ✅ Đảm bảo EventId không null
+                        EventId = existingEvent.EventId, 
                         ActivityId = ec.ActivityId,
                         CreateDate = createDate,
                         UpdateDate = DateTime.UtcNow,

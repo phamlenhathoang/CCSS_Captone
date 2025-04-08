@@ -21,6 +21,7 @@ namespace CCSS_Repository.Entities
         [ForeignKey("EventId")]
         public string? EventId { get; set; }
         public Event Event { get; set; }
+        public string Description { get; set; }
 
         public ICollection<TicketAccount> TicketAccounts { get; set; } = new List<TicketAccount>();
         public ticketType ticketType { get; set; }
