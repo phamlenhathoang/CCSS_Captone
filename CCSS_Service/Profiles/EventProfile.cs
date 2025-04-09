@@ -23,6 +23,8 @@ namespace CCSS_Service.Profiles
             CreateMap<Event, CreateEventRequest>().ReverseMap();
             CreateMap<Event, UpdateEventRequest>().ReverseMap();
             CreateMap<Event, EventRequest>().ReverseMap();
+            CreateMap<Event, EventticketResponse>().ReverseMap();
+
 
             
 
