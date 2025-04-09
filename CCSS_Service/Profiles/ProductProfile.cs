@@ -17,6 +17,9 @@ namespace CCSS_Service.Profiles
             //Response
             CreateMap<Product, CartProductRequestDTO>().ReverseMap();
 
+            CreateMap<Product, ProductResponse>()
+               .ForMember(dest => dest.ProductImages, opt => opt.MapFrom(src => src.ProductImages))
+               .ReverseMap();
         }
     }
 }

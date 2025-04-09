@@ -385,7 +385,7 @@ namespace CCSS_Repository.Entities
             modelBuilder.Entity<Account>().HasData(
 new Account { AccountId = "A001", Name = "John Doe", Email = "john@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.2, IsActive = true, Height = 180, Weight = 75, AverageStar = 4.5 },
 new Account { AccountId = "A002", Name = "Jane Smith", Email = "jane@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R001", SalaryIndex = null, IsActive = true },
-new Account { AccountId = "A003", Name = "Nam Bài Duồi", Email = "phuongnam26012002@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true },
+new Account { AccountId = "A003", Name = "Nammmmmmmm", Email = "phuongnam26012002@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true },
 new Account { AccountId = "A004", Name = "Bob Brown", Email = "bob@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.3, IsActive = true, Height = 175, Weight = 80, AverageStar = 4.2 },
 new Account { AccountId = "A005", Name = "Charlie White", Email = "charlie@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 1.4, IsActive = true, Height = 182, Weight = 78, AverageStar = 3.5 },
 new Account { AccountId = "A006", Name = "David Black", Email = "david@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true },
@@ -564,22 +564,22 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Ticket
             modelBuilder.Entity<Ticket>().HasData(
-    new Ticket { TicketId = 1, Quantity = 500, Price = 50000.0, EventId = "E001", ticketType = ticketType.Nomal, Description="đứng nhìn" },
-    new Ticket { TicketId = 2, Quantity = 300, Price = 40000.0, EventId = "E002", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
-    new Ticket { TicketId = 3, Quantity = 200, Price = 30000.0, EventId = "E003", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
-    new Ticket { TicketId = 4, Quantity = 600, Price = 60000.0, EventId = "E004", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
-    new Ticket { TicketId = 5, Quantity = 400, Price = 45000.0, EventId = "E005", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
-    new Ticket { TicketId = 6, Quantity = 350, Price = 55000.0, EventId = "E006", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
-    new Ticket { TicketId = 7, Quantity = 250, Price = 35000.0, EventId = "E007", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
-    new Ticket { TicketId = 8, Quantity = 450, Price = 50000.0, EventId = "E008", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
-    new Ticket { TicketId = 9, Quantity = 550, Price = 65000.0, EventId = "E009", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
-    new Ticket { TicketId = 10, Quantity = 700, Price = 70000.0, EventId = "E010", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
-    new Ticket { TicketId = 11, Quantity = 150, Price = 25000.0, EventId = "E011", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
-    new Ticket { TicketId = 12, Quantity = 800, Price = 75000.0, EventId = "E012", ticketType = ticketType.Nomal, Description = "đứng nhìn" },
-    new Ticket { TicketId = 13, Quantity = 500, Price = 50000.0, EventId = "E001", ticketType = ticketType.Premium, Description = "Được sờ nắn idol" },
-    new Ticket { TicketId = 14, Quantity = 500, Price = 50000.0, EventId = "E002", ticketType = ticketType.Premium, Description = "Được sờ nắn idol" },
-    new Ticket { TicketId = 15, Quantity = 500, Price = 50000.0, EventId = "E003", ticketType = ticketType.Premium, Description = "Được sờ nắn idol" },
-    new Ticket { TicketId = 16, Quantity = 500, Price = 50000.0, EventId = "E004", ticketType = ticketType.Premium, Description = "Được sờ nắn idol" }
+    new Ticket { TicketId = 1, Quantity = 500, Price = 50000.0, EventId = "E001", ticketType = ticketType.Nomal, Description="Được giao lưu với các idol cosplayer " },
+    new Ticket { TicketId = 2, Quantity = 300, Price = 40000.0, EventId = "E002", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
+    new Ticket { TicketId = 3, Quantity = 200, Price = 30000.0, EventId = "E003", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
+    new Ticket { TicketId = 4, Quantity = 600, Price = 60000.0, EventId = "E004", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
+    new Ticket { TicketId = 5, Quantity = 400, Price = 45000.0, EventId = "E005", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
+    new Ticket { TicketId = 6, Quantity = 350, Price = 55000.0, EventId = "E006", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
+    new Ticket { TicketId = 7, Quantity = 250, Price = 35000.0, EventId = "E007", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
+    new Ticket { TicketId = 8, Quantity = 450, Price = 50000.0, EventId = "E008", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
+    new Ticket { TicketId = 9, Quantity = 550, Price = 65000.0, EventId = "E009", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
+    new Ticket { TicketId = 10, Quantity = 700, Price = 70000.0, EventId = "E010", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
+    new Ticket { TicketId = 11, Quantity = 150, Price = 25000.0, EventId = "E011", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
+    new Ticket { TicketId = 12, Quantity = 800, Price = 75000.0, EventId = "E012", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
+    new Ticket { TicketId = 13, Quantity = 500, Price = 75000.0, EventId = "E001", ticketType = ticketType.Premium, Description = "Được tham gia các hoạt động do chương trình tổ chức" },
+    new Ticket { TicketId = 14, Quantity = 500, Price = 60000.0, EventId = "E002", ticketType = ticketType.Premium, Description = "Được tham gia các hoạt động do chương trình tổ chức" },
+    new Ticket { TicketId = 15, Quantity = 500, Price = 45000.0, EventId = "E003", ticketType = ticketType.Premium, Description = "Được tham gia các hoạt động do chương trình tổ chức" },
+    new Ticket { TicketId = 16, Quantity = 500, Price = 90000.0, EventId = "E004", ticketType = ticketType.Premium, Description = "Được tham gia các hoạt động do chương trình tổ chức" }
 
 
 );

@@ -41,6 +41,8 @@ namespace CCSS_Repository.Repositories
                 .Include(o => o.Payment)
                 .Include(o => o.Account)
                 .Include(o => o.OrderProducts)
+                .ThenInclude(o => o.Product)
+                .ThenInclude(o => o.ProductImages)
                 .Where(o=>o.AccountId==accountId)
                 .ToListAsync();
         }
