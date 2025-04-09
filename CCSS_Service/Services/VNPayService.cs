@@ -118,14 +118,14 @@ namespace CCSS_Service.Services
                 AccountId = model.AccountId,
                 TicketId = model.TicketId,
                 TicketQuantity = model.TicketQuantity,
-                Purpose = model.Purpose.ToString(), 
+                //Purpose = model.Purpose.ToString(), 
                 //ContractId = model.ContractId, 
                 AccountCouponId = model.AccountCouponId, 
                 //OrderPaymentId = model.OrderPaymentId,
                 //CartId = model.CartId,
                 PaymentId = payment.PaymentId
             };
-
+            Console.WriteLine(extraData);
             // Chuyển đối tượng thành chuỗi JSON và mã hóa Base64
             string jsonExtraData = System.Text.Json.JsonSerializer.Serialize(extraData);
             string base64ExtraData = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(jsonExtraData));
@@ -161,8 +161,8 @@ namespace CCSS_Service.Services
             
 
             //var Purpose = collection["vnp_OrderType"];
-                // Làm việc với purpose
-            
+            // Làm việc với purpose
+
             // Kiểm tra từng tham số trong collections để tìm các trường bổ sung
             if (collection.ContainsKey("vnp_OrderInfo"))
             {
@@ -184,8 +184,8 @@ namespace CCSS_Service.Services
                     if (extraData.ContainsKey("TicketQuantity"))
                         response.TicketQuantity = extraData["TicketQuantity"];
 
-                    if (extraData.ContainsKey("Purpose"))
-                        response.Purpose = extraData["Purpose"];
+                    //if (extraData.ContainsKey("Purpose"))
+                    //    response.Purpose = extraData["Purpose"];
 
                     if (extraData.ContainsKey("TicketId") && !string.IsNullOrEmpty(extraData["TicketId"]))
                     {
@@ -216,9 +216,9 @@ namespace CCSS_Service.Services
             //};
             existingPayment.Status = PaymentStatus.Complete;
             existingPayment.TransactionId = response.TransactionId;
-            PaymentPurpose purpose = (PaymentPurpose)Enum.Parse(typeof(PaymentPurpose), response.Purpose);
+            //PaymentPurpose purpose = (PaymentPurpose)Enum.Parse(typeof(PaymentPurpose), existingPayment.Purpose);
             var sendMail = new SendMail();
-            switch (purpose)
+            switch (existingPayment.Purpose)
             {
                 case PaymentPurpose.BuyTicket: // mua vé
                     TicketAccountRequest ticketAccountRequest = new TicketAccountRequest
@@ -239,7 +239,7 @@ namespace CCSS_Service.Services
                     var account = await _accountRepository.GetAccountByAccountId(response.AccountId);
                     var event1 = await _eventrepository.GetEventByTicketId(response.TicketId);
                     
-                    await sendMail.SendEmailNotification(purpose, account.Email, addTicketResult.TicketCode, event1.EventName, event1.Location, event1.StartDate, addTicketResult.Quantity, null, null);
+                    await sendMail.SendEmailNotification(existingPayment.Purpose, account.Email, addTicketResult.TicketCode, event1.EventName, event1.Location, event1.StartDate, addTicketResult.Quantity, null, null);
                     return "mua vé thành công";
 
                 case PaymentPurpose.ContractDeposit: // đặt cọc hợp đồng
@@ -253,7 +253,7 @@ namespace CCSS_Service.Services
                         throw new Exception("Can not update status contract");
                     }
 
-                    await sendMail.SendEmailNotification(purpose, customer.Email, null, contract.ContractName, null, DateTime.Now, null, response.Amount, customer.Name);
+                    await sendMail.SendEmailNotification(existingPayment.Purpose, customer.Email, null, contract.ContractName, null, DateTime.Now, null, response.Amount, customer.Name);
                     return "Đặt cọc thành công ";
 
                 case PaymentPurpose.contractSettlement:  // tất toán hợp đồng
@@ -265,7 +265,7 @@ namespace CCSS_Service.Services
                     {
                         throw new Exception("Can not update status contract");
                     }
-                    await sendMail.SendEmailNotification(purpose, customer1.Email, null, contract1.ContractName, null, DateTime.Now, null, response.Amount, customer1.Name);
+                    await sendMail.SendEmailNotification(existingPayment.Purpose, customer1.Email, null, contract1.ContractName, null, DateTime.Now, null, response.Amount, customer1.Name);
                     return "Thanh toán thành công ";
 
                 case PaymentPurpose.Order:      // mua hàng
