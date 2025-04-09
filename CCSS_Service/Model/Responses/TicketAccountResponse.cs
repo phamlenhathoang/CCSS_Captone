@@ -22,6 +22,6 @@ namespace CCSS_Service.Model.Responses
 
         //[ForeignKey("TicketId")]
         public int? TicketId { get; set; }
-        //public Ticket Ticket { get; set; }
+        public TicketResponse Ticket { get; set; }
     }
 }
