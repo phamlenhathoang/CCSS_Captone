@@ -501,6 +501,7 @@ namespace CCSS_Service.Services
                 }
 
                 requestExisting.Name = UpdateRequestDtos.Name;
+                requestExisting.Description = UpdateRequestDtos.Description;
                 requestExisting.StartDate = StartDate;
                 requestExisting.EndDate = EndDate;
                 requestExisting.Location = UpdateRequestDtos.Location;

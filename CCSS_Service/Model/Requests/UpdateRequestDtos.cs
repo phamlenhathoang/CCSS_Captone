@@ -9,7 +9,7 @@ namespace CCSS_Service.Model.Requests
     public class UpdateRequestDtos
     {             
             public string Name { get; set; }
-            //public RequestDescription? Description { get; set; }       
+            public string? Description { get; set; }       
             public string StartDate { get; set; }
             public string EndDate { get; set; }
             public string? Location { get; set; }
