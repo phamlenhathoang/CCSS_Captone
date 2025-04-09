@@ -4,6 +4,7 @@ using CCSS_Repository.Repositories;
 using CCSS_Service.Libraries;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -17,7 +18,7 @@ namespace CCSS_Service.Services
     {
         Task<List<EventResponse>> GetAllEvents(string searchTerm);
         Task<EventResponse> GetEvent(string id);
-        Task<string> AddEvent(CreateEventRequest eventRequest);
+        Task<string> AddEvent(CreateEventRequest eventRequest, List<IFormFile> ImageUrl);
         Task<string> UpdateEvent(string eventId, UpdateEventRequest eventRequest);
         Task<bool> DeleteEvent(string id);
     }
@@ -67,7 +68,7 @@ namespace CCSS_Service.Services
         }
 
 
-        public async Task<string> AddEvent(CreateEventRequest eventRequest)
+        public async Task<string> AddEvent(CreateEventRequest eventRequest, List<IFormFile> ImageUrl)
         {
             if (eventRequest == null)
             {
@@ -76,7 +77,8 @@ namespace CCSS_Service.Services
 
             try
             {
-              
+                
+
                 var newEvent = _mapper.Map<Event>(eventRequest);
 
                 newEvent.EventId = Guid.NewGuid().ToString();
@@ -84,16 +86,17 @@ namespace CCSS_Service.Services
                 newEvent.IsActive = true;
                 newEvent.UpdateDate = null;
 
-                
-                if (eventRequest.Ticket != null)
+
+                if (eventRequest.Ticket != null && eventRequest.Ticket.Any())
                 {
-                    var newTicket = _mapper.Map<Ticket>(eventRequest.Ticket);
-                    newTicket.EventId = newEvent.EventId; 
+                    var newTickets = _mapper.Map<List<Ticket>>(eventRequest.Ticket);
 
-                    
-                    newEvent.Ticket = new List<Ticket> { newTicket };
+                    foreach (var ticket in newTickets)
+                    {
+                        ticket.EventId = newEvent.EventId;
+                    }
 
-
+                    newEvent.Ticket = newTickets;
                 }
 
                 List<EventCharacter> eventCharacters = new List<EventCharacter>();
@@ -146,12 +149,12 @@ namespace CCSS_Service.Services
                     newEvent.EventActivities = eventActivities;
                 }
 
-                if (eventRequest.Images != null && eventRequest.Images.Any())
+                if (ImageUrl != null )
                 {
-                    var imageTasks = eventRequest.Images.Select(async I => new EventImage
+                    var imageTasks = ImageUrl.Select(async file => new EventImage
                     {
                         ImageId = Guid.NewGuid().ToString(),
-                        ImageUrl = await _image.UploadImageToFirebase(I.ImageUrl),
+                        ImageUrl = await _image.UploadImageToFirebase(file),
                         CreateDate = DateTime.Now,
                         EventId = newEvent.EventId,
 

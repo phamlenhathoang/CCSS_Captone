@@ -226,7 +226,7 @@ namespace CCSS_Service.Services
                         AccountId = response.AccountId,
                         TicketId = response.TicketId ?? 0,
                         Quantity = int.Parse(response.TicketQuantity),
-                        TotalPrice = response.Amount,
+                        TotalPrice = existingPayment.Amount ??0,
                     };
 
                     var addTicketResult = await _ticketAccountService.AddTicketAccount(ticketAccountRequest);
