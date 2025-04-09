@@ -20,6 +20,7 @@ namespace CCSS_Repository.Repositories
         Task<List<Contract>> GetContracts();
         Task<List<Contract>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId);
         Task<List<Contract>> GetAllContractByAccountId(string accountId);
+        Task<Contract> GetContractByRequestId(string requestId);
     }
 
     public class ContractRespository: IContractRespository
@@ -40,6 +41,11 @@ namespace CCSS_Repository.Repositories
         {
             await _context.Contracts.AddAsync(contract);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<Contract> GetContractByRequestId(string requestId)
+        {
+            return await _context.Contracts.Include(sc => sc.Request).FirstOrDefaultAsync(sc => sc.RequestId.Equals(requestId));
         }
 
         public async Task<bool> UpdateContract(Contract contract)

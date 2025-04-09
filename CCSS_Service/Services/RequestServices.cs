@@ -33,9 +33,10 @@ namespace CCSS_Service.Services
         private readonly IServiceRepository _serviceRepository;
         private readonly IAccountCouponRepository _accountCouponRepository;
         private readonly IBeginTransactionRepository _beginTransactionRepository;
+        private readonly IContractRespository _contractRepository;
 
 
-        public RequestServices(ITaskRepository taskRepository, IRequestRepository repository, IRequestCharacterRepository requestCharacterRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, IServiceRepository serviceRepository, IAccountCouponRepository accountCouponRepository, IBeginTransactionRepository beginTransactionRepository)
+        public RequestServices(ITaskRepository taskRepository, IRequestRepository repository, IRequestCharacterRepository requestCharacterRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, IServiceRepository serviceRepository, IAccountCouponRepository accountCouponRepository, IBeginTransactionRepository beginTransactionRepository, IContractRespository contractRepository)
         {
             _repository = repository;
             _characterRepository = characterRepository;
@@ -45,6 +46,7 @@ namespace CCSS_Service.Services
             _serviceRepository = serviceRepository;
             _accountCouponRepository = accountCouponRepository;
             _beginTransactionRepository = beginTransactionRepository;
+            _contractRepository = contractRepository;
         }
         #region GetAll Request
         public async Task<List<RequestResponse>> GetAllRequest()
@@ -302,21 +304,9 @@ namespace CCSS_Service.Services
 
                         foreach (var r in requestDtos.ListRequestCharacters)
                         {
-                            if (characteInRequest.Any(c => c.CosplayerId == r.CosplayerId))
-                            {
-                                await transaction.RollbackAsync();
-                                return $"Cosplayer with ID {r.CosplayerId} is already added.";
-                            }
-                            if (service.ServiceId == "S001")
+                            if (service.ServiceId != "S002")
                             {
                                 r.CosplayerId = null;
-                            }
-                            if (service.ServiceId != "S001")
-                            {
-                                r.Quantity = 1;
-                            }
-                            if (service.ServiceId == "S001")
-                            {
                                 var checkCharacter = await _characterRepository.GetCharacter(r.CharacterId);
                                 if (checkCharacter.Quantity == 0 || r.Quantity > checkCharacter.Quantity)
                                 {
@@ -324,35 +314,46 @@ namespace CCSS_Service.Services
                                     return $"Not enough stock for character {r.CharacterId}.";
                                 }
                             }
-                            if (r.CosplayerId != null)
+                            else /*(service.ServiceId == "S002")*/
                             {
-                                var checkCharacter = await _characterRepository.GetCharacter(r.CharacterId);
-                                if (checkCharacter == null)
+                                r.Quantity = 1;
+                                if (r.CosplayerId != null)
                                 {
-                                    await transaction.RollbackAsync();
-                                    return "Character does not exist";
-                                }
-                                var account = await _accountRepository.GetAccount(r.CosplayerId);
-                                bool checkAccount = await _characterRepository.CheckCharacterForAccount(account, r.CharacterId);
-                                if (!checkAccount)
-                                {
-                                    await transaction.RollbackAsync();
-                                    return "Cosplayer does not suitable.";
-                                }
+                                    if (characteInRequest.Any(c => c.CosplayerId == r.CosplayerId))
+                                    {
+                                        await transaction.RollbackAsync();
+                                        return $"Cosplayer with ID {r.CosplayerId} is already added.";
+                                    }
+                                    var checkCharacter = await _characterRepository.GetCharacter(r.CharacterId);
+                                    if (checkCharacter == null)
+                                    {
+                                        await transaction.RollbackAsync();
+                                        return "Character does not exist";
+                                    }
+                                    var account = await _accountRepository.GetAccount(r.CosplayerId);
+                                    bool checkAccount = await _characterRepository.CheckCharacterForAccount(account, r.CharacterId);
+                                    if (!checkAccount)
+                                    {
+                                        await transaction.RollbackAsync();
+                                        return "Cosplayer does not suitable.";
+                                    }
 
-                                bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
-                                if (!checkTask)
-                                {
-                                    await transaction.RollbackAsync();
-                                    return "This cosplayer is has another job. Please change datetime.";
-                                }
-                                var character = await _accountRepository.GetAccount(r.CosplayerId);
-                                if (character.RoleId != "R004" || character == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
-                                {
-                                    await transaction.RollbackAsync();
-                                    return "This cosplayer not found";
+                                    bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
+                                    if (!checkTask)
+                                    {
+                                        await transaction.RollbackAsync();
+                                        return "This cosplayer is has another job. Please change datetime.";
+                                    }
+                                    var character = await _accountRepository.GetAccount(r.CosplayerId);
+                                    if (character.RoleId != "R004" || character == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
+                                    {
+                                        await transaction.RollbackAsync();
+                                        return "This cosplayer not found";
+                                    }
                                 }
                             }
+                            var Getcharacter = await _characterRepository.GetCharacter(r.CharacterId);
+                            var totalPrice = Getcharacter.Price * r.Quantity;
                             // Nếu CosplayerId hợp lệ, thêm vào danh sách
                             characteInRequest.Add(new RequestCharacter
                             {
@@ -363,6 +364,7 @@ namespace CCSS_Service.Services
                                 CreateDate = newRequest.StartDate,
                                 Quantity = r.Quantity,
                                 CosplayerId = r.CosplayerId,
+                                TotalPrice = totalPrice,
                             });
                         }
                         var requestCharacterAdd = await _requestCharacterRepository.AddListRequestCharacter(characteInRequest);
@@ -371,16 +373,7 @@ namespace CCSS_Service.Services
                             await transaction.RollbackAsync();
                             return "Failed to add characters in Request";
                         }
-                        //foreach (var r in requestDtos.ListRequestCharacters)
-                        //{
-                        //    var characterToUpdate = await _characterRepository.GetCharacter(r.CharacterId);
 
-                        //    if (characterToUpdate != null)
-                        //    {
-                        //        characterToUpdate.Quantity -= r.Quantity;
-                        //        await _characterRepository.UpdateCharacter(characterToUpdate);
-                        //    }
-                        //}
                     }
                     await transaction.CommitAsync();
                     return "Add Request Success";
@@ -572,18 +565,27 @@ namespace CCSS_Service.Services
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
+                var contract = await _contractRepository.GetContractByRequestId(id);
                 var request = await _repository.GetRequestById(id);
-                var listCharacterRequest = await _requestCharacterRepository.GetListCharacterByRequest(request.RequestId);
-                if (request == null)
+                if (contract != null)
                 {
                     await transaction.RollbackAsync();
-                    return "Request not found";
+                    return $"contract is existed, cannot delete this request {request.RequestId}";
                 }
+                else
+                {
+                    if (request == null)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Request not found";
+                    }
 
-                await _requestCharacterRepository.DeleteListCharacterInRequest(listCharacterRequest);
-                await _repository.DeleteRequest(request);
-                await transaction.CommitAsync();
-                return "Delete Request Success";
+                    request.Status = RequestStatus.Cancel;
+                    await _repository.UpdateRequest(request);
+
+                    await transaction.CommitAsync();
+                    return "Delete Request Success";
+                }
             }
         }
         #endregion
