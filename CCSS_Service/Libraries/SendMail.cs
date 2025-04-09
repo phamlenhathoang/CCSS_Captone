@@ -302,6 +302,46 @@ namespace CCSS_Service.Libraries
             }
         }
 
+        public async Task<bool> SendPasswordChangePassword(string toEmail)
+        {
+            try
+            {
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .Build();
+
+                string fromEmail = configuration["FromEmail:Email"];
+                string emailPassword = configuration["FromEmail:Password"];
+
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("CCSS", fromEmail));
+                message.To.Add(new MailboxAddress("", toEmail));
+                message.Subject = "📢 Quên mật khẩu";
+
+                string emailBody = $@"
+        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+            <h2 style='color: #007bff;'>Bạn đã quên mật khẩu! 🎉</h2>
+            <p>Hệ thống đã thay đổi mật khẩu của bạn là 123456. Vui lòng vào hệ thống đăng nhập và thay đổi mật khẩu</p>
+        </div>";
+
+                message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
+
+                using var smtp = new SmtpClient();
+                await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(fromEmail, emailPassword);
+                await smtp.SendAsync(message);
+                await smtp.DisconnectAsync(true);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi gửi email: {ex.Message}");
+                return false;
+            }
+        }
+
 
         public async Task<bool> SendCustomerStatusCustomerCharacterEmail(string toEmail, string status)
         {
@@ -342,5 +382,8 @@ namespace CCSS_Service.Libraries
                 return false;
             }
         }
+
+
+
     }
 }

@@ -45,6 +45,7 @@ namespace CCSS_Service.Services
         Task<bool> AddCosplayer(string userName, string password);
         Task<AccountLoginResponse> LoginByGoogle(string email, string googleId);
         Task<AccountResponse> GetAccountByEventCharacterId(string eventCharacterId);
+        Task<bool> ChangePassword(string email);
     }
     public class AccountService : IAccountService
     {
@@ -933,6 +934,32 @@ namespace CCSS_Service.Services
                 }
 
                 return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> ChangePassword(string email)
+        {
+            try
+            {
+                SendMail sendMail = new SendMail();
+                Account account = await accountRepository.GetAccountByEmail(email);
+                if (account == null)
+                {
+                    throw new Exception("Account does not exist");
+                }
+
+                account.Password = PasswordHash.ConvertToEncrypt("123456");
+                bool result = await accountRepository.UpdateAccount(account);
+                if (result)
+                {
+                    await sendMail.SendPasswordChangePassword(account.Email);
+                    return true;
+                }
+                return false;
             }
             catch (Exception ex)
             {
