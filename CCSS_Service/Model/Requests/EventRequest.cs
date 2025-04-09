@@ -38,7 +38,7 @@ namespace CCSS_Service.Model.Requests
         public ICollection<TicketRequest> Ticket { get; set; }
         
         //public IFormFile ImageUrl { get; set; }
-        public ICollection<EventImageRequest> Images { get; set; } = new List<EventImageRequest>();
+        //public ICollection<EventImageRequest> Images { get; set; } = new List<EventImageRequest>();
         public ICollection<EventCharacterRequest> EventCharacterRequest { get; set; } = new List<EventCharacterRequest>();
         public ICollection<EventActivityRequest> EventActivityRequests { get; set; } = new List<EventActivityRequest>();
 

@@ -29,7 +29,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Payment>> GetAll()
         {
-            return await _context.Payments.ToListAsync();
+            return await _context.Payments.Where(p=> p.Status == PaymentStatus.Complete).ToListAsync();
         }
 
         public async Task<Payment> GetPayment(string paymentId)

@@ -79,14 +79,14 @@ namespace CCSS_Captone.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
         [HttpPost("AddEvent")]
-        public async Task<IActionResult> AddEvent([FromBody] CreateEventRequest eventRequest)
+        public async Task<IActionResult> AddEvent([FromForm] CreateEventRequest eventRequest,List<IFormFile> ImageUrl)
         {
             if (eventRequest == null)
                 return BadRequest("Invalid request: Event data is null");
 
             try
             {
-                var result = await _eventService.AddEvent(eventRequest);
+                var result = await _eventService.AddEvent(eventRequest, ImageUrl);
                 if (result.Contains("Success"))
                     return Ok(result);
 

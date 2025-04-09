@@ -43,7 +43,7 @@ namespace CCSS_Repository.Repositories
                 .Include(o => o.OrderProducts)
                 .ThenInclude(o => o.Product)
                 .ThenInclude(o => o.ProductImages)
-                .Where(o=>o.AccountId==accountId)
+                .Where(o=>o.AccountId==accountId && o.OrderStatus == OrderStatus.Completed)
                 .ToListAsync();
         }
 
