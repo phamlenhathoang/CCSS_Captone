@@ -26,6 +26,8 @@ namespace CCSS_Repository.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string? Location { get; set; }
+        public DateTime? CreatedDate { get; set; } = DateTime.Now;
+        public DateTime? UpdateDate { get; set; }
 
 
         [ForeignKey("ServiceId")]

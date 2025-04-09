@@ -127,6 +127,7 @@ builder.Services.AddDbContext<CCSSDbContext>(options =>
 builder.Services.AddHostedService<NotificationBackgroundService>();
 builder.Services.AddHostedService<ContractBackgroudService>();
 builder.Services.AddHostedService<OrderBackgroundService>();
+builder.Services.AddHostedService<RequestBackgroundService>();
 
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];
