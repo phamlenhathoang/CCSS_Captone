@@ -235,6 +235,12 @@ namespace CCSS_Service.Services
                 Package package = null;
                 foreach (var contract in contracts)
                 {
+                    Account customer = await _accountRepository.GetAccountByAccountId(contract.CreateBy);
+if(customer == null)
+{
+    throw new Exception("Account does not exist");
+}
+
                     ContractResponse crsItem = new ContractResponse()
                     {
                         ContractId = contract.ContractId,
@@ -475,6 +481,12 @@ namespace CCSS_Service.Services
                 if (contract == null)
                 {
                     return null;
+                }
+
+                Account customer = await _accountRepository.GetAccountByAccountId(contract.CreateBy);
+                if (customer == null)
+                {
+                    throw new Exception("Account does not exist");
                 }
 
                 ContractResponse crsItem = new ContractResponse()
