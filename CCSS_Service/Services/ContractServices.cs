@@ -247,6 +247,9 @@ namespace CCSS_Service.Services
                         Price = (double)contract.TotalPrice,
                         Status = contract.ContractStatus.ToString(),
                         Reason = contract.Reason,
+                        CreateBy = customer.Name,
+                        CreateDate = contract.CreateDate,
+                        UrlPdf = contract.UrlPdf,
                     };
 
                     if (contract.Request.PackageId != null)
@@ -352,6 +355,12 @@ namespace CCSS_Service.Services
                 Package package = null;
                 foreach (var contract in contracts)
                 {
+                    Account customer = await _accountRepository.GetAccountByAccountId(contract.CreateBy);
+                    if(customer == null)
+                    {
+                        throw new Exception("Account does not exist");
+                    }
+                    
                     ContractResponse crsItem = new ContractResponse()
                     {
                         ContractId = contract.ContractId,
@@ -364,6 +373,9 @@ namespace CCSS_Service.Services
                         Price = (double)contract.TotalPrice,
                         Status = contract.ContractStatus.ToString(),
                         Reason = contract.Reason,
+                        CreateBy = customer.Name,
+                        CreateDate = contract.CreateDate,
+                        UrlPdf = contract.UrlPdf,
                     };
 
                     if (contract.Request.PackageId != null)
@@ -477,6 +489,9 @@ namespace CCSS_Service.Services
                     Price = (double)contract.TotalPrice,
                     Status = contract.ContractStatus.ToString(),
                     Reason = contract.Reason,
+                    CreateBy = customer.Name,
+                    CreateDate = contract.CreateDate,
+                    UrlPdf = contract.UrlPdf,
                 };
 
                 Package package = new Package();

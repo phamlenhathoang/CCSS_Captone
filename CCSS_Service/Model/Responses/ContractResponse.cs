@@ -22,6 +22,9 @@ namespace CCSS_Service.Model.Responses
         public string? Status { get; set; }
         public string? StartDate { get; set; }
         public string? EndDate { get; set; }
+        public string? CreateBy { get; set; }
+        public string? UrlPdf { get; set; }
+        public DateTime? CreateDate { get; set; }
         public List<ListContractCharcterResponse>? ContractCharacters { get; set; }
     }
 
