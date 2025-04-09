@@ -10,9 +10,11 @@ using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Contract = CCSS_Repository.Entities.Contract;
 
 namespace CCSS_Service.Services
 {
@@ -39,10 +41,11 @@ namespace CCSS_Service.Services
         private readonly ICartRepository _cartRepository;
         private readonly ICartProductServices _cartProductServices;
         private readonly IMapper _mapper;
+        private readonly IContractServices _contractServices;
+        private readonly IContractRespository contractRespository;
 
 
-
-        public VNPayService(IConfiguration configuration, IAccountRepository accountRepository, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IOrderRepository orderRepository, ICartRepository cartRepository, ICartProductServices cartProductServices, IMapper mapper)
+        public VNPayService(IConfiguration configuration, IAccountRepository accountRepository, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IOrderRepository orderRepository, ICartRepository cartRepository, ICartProductServices cartProductServices, IMapper mapper, IContractServices contractServices, IContractRespository contractRespository)
         {
             _configuration = configuration;
             _accountRepository = accountRepository;
@@ -54,6 +57,8 @@ namespace CCSS_Service.Services
             _cartRepository = cartRepository;
             _cartProductServices = cartProductServices;
             _mapper = mapper;
+            _contractServices = contractServices;
+            this.contractRespository = contractRespository;
         }
 
 
@@ -212,6 +217,7 @@ namespace CCSS_Service.Services
             existingPayment.Status = PaymentStatus.Complete;
             existingPayment.TransactionId = response.TransactionId;
             PaymentPurpose purpose = (PaymentPurpose)Enum.Parse(typeof(PaymentPurpose), response.Purpose);
+            var sendMail = new SendMail();
             switch (purpose)
             {
                 case PaymentPurpose.BuyTicket: // mua vé
@@ -232,12 +238,35 @@ namespace CCSS_Service.Services
                     await _paymentRepository.UpdatePayment(existingPayment);
                     var account = await _accountRepository.GetAccountByAccountId(response.AccountId);
                     var event1 = await _eventrepository.GetEventByTicketId(response.TicketId);
-                    var sendMail = new SendMail();
+                    
                     await sendMail.SendEmailNotification(purpose, account.Email, addTicketResult.TicketCode, event1.EventName, event1.Location, event1.StartDate, addTicketResult.Quantity, null, null);
                     return "mua vé thành công";
 
                 case PaymentPurpose.ContractDeposit: // đặt cọc hợp đồng
+
+
+                    Contract contract = await contractRespository.GetContractById(existingPayment.ContractId);
+                    var customer = await _accountRepository.GetAccountByAccountId(response.AccountId);
+                    bool result = await _contractServices.UpdateStatusContract(contract.ContractId, "Progressing", null);
+                    if (!result)
+                    {
+                        throw new Exception("Can not update status contract");
+                    }
+
+                    await sendMail.SendEmailNotification(purpose, customer.Email, null, contract.ContractName, null, DateTime.Now, null, response.Amount, customer.Name);
+                    return "Đặt cọc thành công ";
+
                 case PaymentPurpose.contractSettlement:  // tất toán hợp đồng
+
+                    Contract contract1 = await contractRespository.GetContractById(existingPayment.ContractId);
+                    var customer1 = await _accountRepository.GetAccountByAccountId(response.AccountId);
+                    bool rs = await _contractServices.UpdateStatusContract(contract1.ContractId, "Completed", response.Amount);
+                    if (!rs)
+                    {
+                        throw new Exception("Can not update status contract");
+                    }
+                    await sendMail.SendEmailNotification(purpose, customer1.Email, null, contract1.ContractName, null, DateTime.Now, null, response.Amount, customer1.Name);
+                    return "Thanh toán thành công ";
 
                 case PaymentPurpose.Order:      // mua hàng
                     
