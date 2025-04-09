@@ -632,7 +632,7 @@ if(customer == null)
                         if (price != null)
                         {
                             contract.ContractStatus = ContractStatus.Completed;
-                            double amount = (double)contract.Amount - (double)price;
+                            contract.Amount = (double)contract.Amount - (double)price;
                         }
                         else
                         {
