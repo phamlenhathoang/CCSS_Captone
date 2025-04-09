@@ -29,6 +29,13 @@ namespace CCSS_Captone.Controllers
             return Ok(account);
         }
 
+        [HttpPut("{email}")]
+        public async Task<IActionResult> ChangePassword(string email)
+        {
+            var account = await accountService.ChangePassword(email);
+            return Ok(account);
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(AccountRequest accountRequest)
         {
