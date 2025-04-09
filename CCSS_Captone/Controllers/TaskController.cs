@@ -66,6 +66,13 @@ namespace CCSS_Captone.Controllers
             return Ok(task);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> AddTaskContractByManager(List<AddTaskContractRequest> contractCharacters, string requestId)
+        {
+            var task = await taskService.AddTaskContractByManager(contractCharacters, requestId);
+            return Ok(task);
+        }
+
         [HttpGet("totalHour")]
         public async Task<ActionResult> TotalHour(string startDate, string endDate)
         {

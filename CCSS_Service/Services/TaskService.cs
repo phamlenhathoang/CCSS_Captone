@@ -288,6 +288,13 @@ namespace CCSS_Service.Services
                     throw new Exception("Request does not exist");
                 }
 
+                if(request.ServiceId != "S003")
+                {
+                    throw new Exception($"Service in this request {request.RequestId} must be S003");
+                }
+
+                await requestCharacterRepository.DeleteListCharacterInRequest(await requestCharacterRepository.GetListCharacterByRequest(request.RequestId));
+
                 foreach (var taskRequest in contractCharacters)
                 {
                     if (taskRequest.CosplayerId != null)
@@ -306,16 +313,6 @@ namespace CCSS_Service.Services
                         if (character == null)
                         {
                             throw new Exception("Character does not exist");
-                        }
-
-                        RequestCharacter requestCharacter = await requestCharacterRepository.GetRequestCharacterByRequestIdAndCharacterId(requestId, taskRequest.CharacterId);
-                        if (requestCharacter != null)
-                        {
-                            bool checkDelete = await requestCharacterRepository.DeleteRequestCharacter(requestCharacter);
-                            if (!checkDelete)
-                            {
-                                throw new Exception("Can not delete RequestCharacter");
-                            }
                         }
 
                         RequestCharacter newRequestCharacter = new RequestCharacter()
