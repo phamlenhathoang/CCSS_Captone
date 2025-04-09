@@ -288,6 +288,11 @@ namespace CCSS_Service.Services
                     throw new Exception("Request does not exist");
                 }
 
+                if (request.Status != RequestStatus.Browsed)
+                {
+                    throw new Exception("Request must be browsed");
+                }
+
                 if(request.ServiceId != "S003")
                 {
                     throw new Exception($"Service in this request {request.RequestId} must be S003");
