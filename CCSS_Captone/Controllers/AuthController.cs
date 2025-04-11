@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace CCSS_Captone.Controllers
 {
@@ -51,6 +52,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpGet("googleResponse")]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GoogleResponse()
         {
             var result = User.Claims.ToDictionary(c => c.Type, c => c.Value);
