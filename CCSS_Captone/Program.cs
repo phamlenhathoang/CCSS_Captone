@@ -139,12 +139,15 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 })
-    .AddCookie()
+    .AddCookie(options => {
+        options.Cookie.SameSite = SameSiteMode.None; // Try this if cross-site issues
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    })
     .AddGoogle(options =>
 {
     options.ClientId = builder.Configuration["Google:ClientId"];  
     options.ClientSecret = builder.Configuration["Google:ClientSecret"];
-    options.CallbackPath = "/signin-google";
+    options.CallbackPath = builder.Configuration["Google:CallbackPath"];
 
 })
     .AddJwtBearer(options =>
