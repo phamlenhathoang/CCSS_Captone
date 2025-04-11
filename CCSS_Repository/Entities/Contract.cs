@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyModel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,18 +27,32 @@ namespace CCSS_Repository.Entities
         public DateTime? CreateDate { get; set; }
         public string? ContractName { get; set; }
         public string? Reason { get; set; }
-        public ContractStatus ContractStatus { get; set; }
+        public ContractStatus? ContractStatus { get; set; }
+        public DeliveryStatus? DeliveryStatus { get; set; }
+        public ContractRefund ContractRefund { get; set; }
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
         //public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
         public ICollection<ContractCharacter> ContractCharacters { get; set; } = new List<ContractCharacter>();
+        public ICollection<ContractImage> ContractImages { get; set; } = new List<ContractImage>();
     }
 
     public enum ContractStatus
     {
         Cancel,
-        Active,
-        Progressing,
+        Created,
+        Deposited,
+        FinalSettlement,
+        Refund,
         Completed,
         Expired,
+    }
+
+    public enum DeliveryStatus
+    {
+        Preparing,
+        Delivering,
+        Delevered,
+        Completed,
+        Cancel,
     }
 }

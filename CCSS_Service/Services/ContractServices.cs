@@ -174,7 +174,7 @@ namespace CCSS_Service.Services
                     CreateBy = request.AccountId,
                     ContractId = Guid.NewGuid().ToString(),
                     CreateDate = DateTime.Now,
-                    ContractStatus = ContractStatus.Active,
+                    ContractStatus = ContractStatus.Created,
                     ContractName = request.Service.ServiceName,
                     UrlPdf = await Image.UploadImageToFirebase(await pdfService.ConvertBytesToIFormFile(request, deposit)),
                 };
@@ -201,7 +201,7 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("Contract does not exist");
                 }
-                if (contract.ContractStatus != ContractStatus.Active)
+                if (contract.ContractStatus != ContractStatus.Created)
                 {
                     throw new Exception("Contract can not delete");
                 }
@@ -603,7 +603,7 @@ if(customer == null)
                 }
                 if (status.ToUpper() == ContractStatus.Cancel.ToString().ToUpper())
                 {
-                    if (contract.ContractStatus == ContractStatus.Active)
+                    if (contract.ContractStatus == ContractStatus.Created)
                     {
                         contract.ContractStatus = ContractStatus.Cancel;
                     }
@@ -613,11 +613,11 @@ if(customer == null)
                         throw new Exception("Can not update contract status");
                     }
                 }
-                if (status.ToUpper() == ContractStatus.Progressing.ToString().ToUpper())
+                if (status.ToUpper() == ContractStatus.Deposited.ToString().ToUpper())
                 {
-                    if (contract.ContractStatus == ContractStatus.Active)
+                    if (contract.ContractStatus == ContractStatus.Created)
                     {
-                        contract.ContractStatus = ContractStatus.Progressing;
+                        contract.ContractStatus = ContractStatus.Deposited;
                     }
                     else
                     {
@@ -627,7 +627,7 @@ if(customer == null)
                 }
                 if (status.ToUpper() == ContractStatus.Completed.ToString().ToUpper())
                 {
-                    if (contract.ContractStatus == ContractStatus.Progressing)
+                    if (contract.ContractStatus == ContractStatus.Deposited)
                     {
                         if (price != null)
                         {
@@ -652,7 +652,7 @@ if(customer == null)
                     return false;
                 }
 
-                if (contract.ContractStatus == ContractStatus.Progressing)
+                if (contract.ContractStatus == ContractStatus.Deposited)
                 {
                     bool checkAddContractCharacter = await contractCharacterService.AddListContractCharacter(contract);
                     if (!checkAddContractCharacter)

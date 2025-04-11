@@ -47,7 +47,7 @@ namespace CCSS_Service.BackgroundServices
                         {
                             foreach (var contract in contracts)
                             {
-                                if(contract.ContractStatus == ContractStatus.Active)
+                                if(contract.ContractStatus == ContractStatus.Created)
                                 {
                                     if (DateTime.Now.Date >= contract.CreateDate.GetValueOrDefault().Date.AddDays(3))
                                     {

@@ -51,6 +51,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpGet("googleResponse")]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GoogleResponse()
         {
             var result = User.Claims.ToDictionary(c => c.Type, c => c.Value);

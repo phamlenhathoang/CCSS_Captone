@@ -31,5 +31,6 @@ namespace CCSS_Repository.Entities
 
         public Task Task { get; set; }
         public Feedback Feedback { get; set; }
+        public ICollection<RequestDate> RequestDates { get; set; } = new List<RequestDate>();
     }
 }

@@ -29,5 +29,7 @@ namespace CCSS_Repository.Entities
         public string? Description { get; set; }
         public string? CosplayerId { get; set; }
         public int? Quantity { get; set; }
+
+        public ICollection<RequestDate> RequestDates { get; set; } = new List<RequestDate>();
     }
 }

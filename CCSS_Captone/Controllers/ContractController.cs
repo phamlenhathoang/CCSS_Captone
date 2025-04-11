@@ -65,7 +65,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpGet("GetRequestInContract/{accountId}")]
-        public async Task<IActionResult> GetAllContractByAccountId(string accountId)
+        public async Task<IActionResult> GetRequestInContractByAccountId(string accountId)
         {
             if (ModelState.IsValid)
             {
