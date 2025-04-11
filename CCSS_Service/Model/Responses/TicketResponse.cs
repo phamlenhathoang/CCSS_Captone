@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CCSS_Service.Model.Responses
 {
-    public class TicketResponse 
+    public class TicketResponse
     {
         public int TicketId { get; set; }
 
@@ -19,9 +19,10 @@ namespace CCSS_Service.Model.Responses
         public double? Price { get; set; }
 
         //public string? EventId { get; set; }
-        //public EventResponse Event { get; set; }
+        public EventticketResponse Event { get; set; }
 
         //public ICollection<TicketAccount> TicketAccounts { get; set; } = new List<TicketAccount>();
     }
+
 }
 

@@ -14,7 +14,9 @@ namespace CCSS_Service.Profiles
     {
         public OrderProductProfile() 
         {
-            CreateMap<OrderProduct, OrderProductResponse>().ReverseMap();
+            CreateMap<OrderProduct, OrderProductResponse>()
+                .ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product))
+                .ReverseMap();
             CreateMap<OrderProduct, OrderProductRequest>().ReverseMap();
         }
     }

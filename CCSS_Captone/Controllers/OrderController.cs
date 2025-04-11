@@ -22,7 +22,7 @@ namespace CCSS_Captone.Controllers
             var orders = await _orderService.GetAllOrders();
             return Ok(orders);
         }
-        [HttpGet("api/Order/{accountId}")]
+        [HttpGet("GetAllOrdersByAccountId/{id}")]
         public async Task<ActionResult<List<OrderResponse>>> GetAllOrdersByAccountId(string id)
         {
             var orders = await _orderService.GetAllOrdersByAccountId(id);
