@@ -22,8 +22,8 @@ namespace CCSS_Repository.Entities
         [ForeignKey("CharacterId")]
         public string CharacterId { get; set; }
         public Character Character { get; set; } 
-        public RequestCharacterStatus? status { get; set; }
-        public string? reason { get; set; }
+        public RequestCharacterStatus? Status { get; set; }
+        public string? Reason { get; set; }
         public double? TotalPrice { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }

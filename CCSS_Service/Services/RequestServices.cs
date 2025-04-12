@@ -18,6 +18,7 @@ namespace CCSS_Service.Services
         Task<RequestResponse> GetRequestById(string id);
         Task<string> DeleteRequest(string id);
         Task<string> AddRequest(RequestDtos requestDtos);
+        Task<string> AddRequestRentCosplayer(RequestRentCosplayer requestDtos);
         Task<string> UpdateRequest(string requestId, UpdateRequestDtos requestDtos);
         Task<string> UpdateStatusRequest(string requestId, RequestStatus requestStatus);
         Task<double> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices, string serviceId);
@@ -34,11 +35,13 @@ namespace CCSS_Service.Services
         private readonly IAccountCouponRepository _accountCouponRepository;
         private readonly IBeginTransactionRepository _beginTransactionRepository;
         private readonly IContractRespository _contractRepository;
+        private readonly IRequestDatesRepository _requestDatesRepository;
 
 
-        public RequestServices(ITaskRepository taskRepository, IRequestRepository repository, IRequestCharacterRepository requestCharacterRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, IServiceRepository serviceRepository, IAccountCouponRepository accountCouponRepository, IBeginTransactionRepository beginTransactionRepository, IContractRespository contractRepository)
+        public RequestServices(ITaskRepository taskRepository, IRequestRepository repository, IRequestCharacterRepository requestCharacterRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, IServiceRepository serviceRepository, IAccountCouponRepository accountCouponRepository, IBeginTransactionRepository beginTransactionRepository, IContractRespository contractRepository, IRequestDatesRepository requestDatesRepository)
         {
             _repository = repository;
+            _requestDatesRepository = requestDatesRepository;
             _characterRepository = characterRepository;
             _requestCharacterRepository = requestCharacterRepository;
             _accountRepository = accountRepository;
@@ -766,6 +769,236 @@ namespace CCSS_Service.Services
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+
+
+        public async Task<string> AddRequestRentCosplayer(RequestRentCosplayer requestDtos)
+        {
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
+            {
+                DateTime StartDate = DateTime.Now;
+                DateTime EndDate = DateTime.Now;
+
+                if (!string.IsNullOrEmpty(requestDtos.StartDate) || !string.IsNullOrEmpty(requestDtos.EndDate))
+                {
+                    string[] dateFormats = { "dd/MM/yyyy", "d/MM/yyyy", "dd/M/yyyy", "d/M/yyyy" };
+
+                    bool isValidDate = DateTime.TryParseExact(requestDtos.StartDate, dateFormats,
+                                                              System.Globalization.CultureInfo.InvariantCulture,
+                                                              System.Globalization.DateTimeStyles.None,
+                                                              out StartDate);
+
+                    bool isValidEndDate = DateTime.TryParseExact(requestDtos.EndDate, dateFormats,
+                                                                 System.Globalization.CultureInfo.InvariantCulture,
+                                                                 System.Globalization.DateTimeStyles.None,
+                                                                 out EndDate);
+
+                    if (!isValidDate || !isValidEndDate)
+                    {
+                        return "Date format is incorrect. Please enter the right format DateTime.";
+                    }
+                    if (StartDate < DateTime.Now)
+                    {
+                        return "Start date cannot be in the past.";
+                    }
+                    if(EndDate - StartDate < TimeSpan.FromDays(5))
+                    {
+                        return "The gap between StartDate and EndDate is 5 days.Please try again";
+                    }
+                    if (EndDate < DateTime.Now)
+                    {
+                        return "End date cannot be in the past.";
+                    }
+                    if (StartDate > EndDate)
+                    {
+                        return "End date must be greater than event date.";
+                    }
+                }
+                if (requestDtos == null)
+                {
+                    return "Need entry the field";
+                }
+                Account customer = await _accountRepository.GetAccount(requestDtos.AccountId);
+                if (customer == null)
+                {
+                    return "Customer does not exist";
+                }
+                if (customer.Role.RoleName != RoleName.Customer)
+                {
+                    return "Account must be customer";
+                }
+                if (!string.IsNullOrEmpty(requestDtos.AccountCouponId))
+                {
+                    var accountCoupon = await _accountCouponRepository.GetAccountCouponById(requestDtos.AccountCouponId);
+                    if (accountCoupon == null)
+                    {
+                        return "This AccountCoupon is not found";
+                    }
+                    if (accountCoupon.Coupon.Type != CouponType.ForContract)
+                    {
+                        return "This coupon not use for contract";
+                    }
+                    if (accountCoupon.IsActive == true)
+                    {
+                        return "This coupon be used";
+                    }
+                }
+                var newRequest = new Request()
+                {
+                    RequestId = Guid.NewGuid().ToString(),
+                    AccountId = requestDtos.AccountId,
+                    ServiceId = "S001",
+                    Name = requestDtos.Name,
+                    Price = requestDtos.Price,
+                    Description = requestDtos.Description,
+                    Status = RequestStatus.Pending,
+                    StartDate = StartDate,
+                    EndDate = EndDate,
+                    Location = requestDtos.Location,
+                    Deposit = requestDtos.Deposit,
+                    AccountCouponId = requestDtos.AccountCouponId ?? null,
+                };
+                var result = await _repository.AddRequest(newRequest);
+                if (!result)
+                {
+                    await transaction.RollbackAsync();
+                    return "Add Request Failed";
+                }
+                else
+                {
+                    if (requestDtos.CharactersRentCosplayers != null && requestDtos.CharactersRentCosplayers.Any())
+                    {
+                        List<RequestCharacter> characteInRequest = new List<RequestCharacter>();
+
+                        foreach (var r in requestDtos.CharactersRentCosplayers)
+                        {
+                            if (r.CosplayerId == null)
+                            {
+                                return "please choose cosplayer";
+                            }
+                            else
+                            {
+                                if (characteInRequest.Any(c => c.CosplayerId == r.CosplayerId && c.CharacterId == r.CharacterId))
+                                {
+                                    await transaction.RollbackAsync();
+                                    return $"Cosplayer with ID {r.CosplayerId} is already added.";
+                                }
+                                var checkCharacter = await _characterRepository.GetCharacter(r.CharacterId);
+                                if (checkCharacter == null)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "Character does not exist";
+                                }
+                                var account = await _accountRepository.GetAccount(r.CosplayerId);
+                                bool checkAccount = await _characterRepository.CheckCharacterForAccount(account, r.CharacterId);
+                                if (!checkAccount)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "Cosplayer does not suitable.";
+                                }
+                                //bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
+                                //if (!checkTask)
+                                //{
+                                //    await transaction.RollbackAsync();
+                                //    return "This cosplayer is has another job. Please change datetime.";
+                                //}                              
+                                if (account.RoleId != "R004" || account == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "This cosplayer not found";
+                                }
+                            }
+                            var Getcharacter = await _characterRepository.GetCharacter(r.CharacterId);
+                            var totalPrice = Getcharacter.Price * r.Quantity;
+                            // Nếu CosplayerId hợp lệ, thêm vào danh sách
+                            characteInRequest.Add(new RequestCharacter
+                            {
+                                RequestCharacterId = Guid.NewGuid().ToString(),
+                                RequestId = newRequest.RequestId,
+                                Description = r.Description,
+                                CharacterId = r.CharacterId,
+                                CreateDate = newRequest.StartDate,
+                                Quantity = 1,
+                                CosplayerId = r.CosplayerId,
+                                TotalPrice = totalPrice,
+                            });
+                        }
+                        var requestCharacterAdd = await _requestCharacterRepository.AddListRequestCharacter(characteInRequest);
+                        if (!requestCharacterAdd)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Failed to add characters in Request";
+                        }
+                        else
+                        {
+                            if (requestDtos.CharactersRentCosplayers.Any(c => c.ListRequestDates != null && c.ListRequestDates.Any()))
+                            {
+                                List<RequestDate> requestDates = new List<RequestDate>();
+                                foreach (var d in requestDtos.CharactersRentCosplayers)
+                                {
+                                    var requestCharacter = await _requestCharacterRepository.GetRequestCharacterCosplayerId(newRequest.RequestId, d.CharacterId, d.CosplayerId);
+                                    if (requestCharacter != null)
+                                    {
+                                       
+                                        foreach (var dateDtos in d.ListRequestDates)
+                                        {
+                                            TimeSpan StartTime = TimeSpan.Zero;
+                                            TimeSpan EndTime= TimeSpan.Zero;
+
+                                            if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
+                                            {
+                                        
+
+                                                bool isValidDate = TimeSpan.TryParseExact(dateDtos.StartDate, "HH:mm",
+                                                                                          System.Globalization.CultureInfo.InvariantCulture,out StartTime);
+
+                                                bool isValidEndDate = TimeSpan.TryParseExact(dateDtos.EndDate, "HH:mm",
+                                                                                             System.Globalization.CultureInfo.InvariantCulture,out EndTime);
+                                            }
+
+                                           DateTime StartTimeOnly = StartDate.Date.Add(StartTime);
+                                           DateTime EndTimeOnly = EndDate.Add(EndTime);
+
+                                            if (StartTimeOnly >= EndTimeOnly)
+                                            {
+                                                await transaction.RollbackAsync();
+                                                return "End date must be greater than start date.";
+                                            }
+
+                                            // Kiểm tra thời gian nằm trong khoảng thời gian của Request
+                                            if (StartTimeOnly < StartDate || EndTimeOnly > EndDate)
+                                            {
+                                                await transaction.RollbackAsync();
+                                                return "Date range must be within the request date range.";
+                                            }
+                                            requestDates.Add(new RequestDate
+                                            {
+                                                RequestDateId = Guid.NewGuid().ToString(),
+                                                RequestCharacterId = requestCharacter.RequestCharacterId,
+                                                StartDate = StartTimeOnly,
+                                                EndDate = EndTimeOnly
+                                            });
+                                        }
+                                    }
+                                }
+
+                                if (requestDates.Any())
+                                {
+                                    var RequestDates = await _requestDatesRepository.AddListRequestDates(requestDates);
+                                    if (!RequestDates)
+                                    {
+                                        await transaction.RollbackAsync();
+                                        return "Failed to add request dates";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    await transaction.CommitAsync();
+                    return "Add Request Success";
+                }
             }
         }
     }

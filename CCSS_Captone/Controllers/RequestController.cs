@@ -53,8 +53,6 @@ namespace CCSS_Captone.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRequest([FromBody] RequestDtos requestDtos)
         {
-
-
             if (ModelState.IsValid)
             {
                 var result = await _services.AddRequest(requestDtos);
@@ -63,7 +61,16 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-
+        [HttpPost("CreateRentCosplayer")]
+        public async Task<IActionResult> CreateRentCosplayerRequest([FromBody] RequestRentCosplayer requestDtos)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.AddRequestRentCosplayer(requestDtos);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
 
         [HttpPut]
         public async Task<IActionResult> UpdateRequest([FromQuery] string RequestId, [FromBody] UpdateRequestDtos updateRequestDtos)
