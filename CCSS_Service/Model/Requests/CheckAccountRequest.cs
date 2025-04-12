@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 
 namespace CCSS_Service.Model.Requests
 {
-    class CheckAccountRequest
+    public class CheckAccountRequest
     {
+        public string CharacterId { get; set; }
+        public List<Date> Dates { get; set; }
+    }
+
+    public class Date
+    {
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
     }
 }

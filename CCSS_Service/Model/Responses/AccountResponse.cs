@@ -16,6 +16,7 @@ namespace CCSS_Service.Model.Responses
         public string Password { get; set; }
         public double? AverageStar { get; set; }
         public string? Description { get; set; }
+        //[]
         public string? Birthday { get; set; }
         public int? Phone { get; set; }
         public bool? IsActive { get; set; }

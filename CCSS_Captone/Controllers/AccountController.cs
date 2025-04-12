@@ -88,9 +88,9 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpGet("characterId")]
-        public async Task<IActionResult> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate)
+        public async Task<IActionResult> GetAccountByCharacterAndDate(CheckAccountRequest checkAccountRequest)
         {
-            var account = await accountService.GetAccountByCharacterAndDate(characterId, startDate, endDate);
+            var account = await accountService.GetAccountByCharacterAndDate(checkAccountRequest.CharacterId, checkAccountRequest.Dates);
             return Ok(account);
         }
 

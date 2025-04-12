@@ -140,7 +140,7 @@ namespace CCSS_Repository.Repositories
         {
             return await dbContext.Accounts.Include(r => r.Role).Include(a => a.AccountImages).Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight
                                                         && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight
-                                                        && a.Role.RoleName == RoleName.Cosplayer).ToListAsync();
+                                                        && a.Role.RoleName == RoleName.Cosplayer).OrderByDescending(a => a.AverageStar).ToListAsync();
         }
 
         public async Task<List<Account>> GetAllAccountsByRoleId(string roleId)

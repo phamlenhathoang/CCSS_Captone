@@ -38,7 +38,7 @@ namespace CCSS_Service.Services
         Task<string> CodeValidation(string email, string code);
         Task<AccountResponse> GetAccountByAccountId(string accountId);
         Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest);
-        Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate);
+        Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, List<Date> dates);
         Task<List<AccountByCharacterAndDateResponse>> ViewAllAccountByCharacterName(string characterName, string? start, string? end);
         Task<List<AccountByCharacterAndDateResponse>> ViewAllCosplayerByContractId(string contractId);
         Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId);
@@ -572,6 +572,7 @@ namespace CCSS_Service.Services
             }
 
             var accountResponse = mapper.Map<AccountResponse>(account);
+            
 
             accountResponse.Images ??= new List<AccountImageResponse>();
 
@@ -676,7 +677,7 @@ namespace CCSS_Service.Services
             }
         }
 
-        public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, string startDate, string endDate)
+        public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, List<Date> dates)
         {
             try
             {
@@ -693,37 +694,40 @@ namespace CCSS_Service.Services
                 string format = "HH:mm dd/MM/yyyy";
                 CultureInfo culture = CultureInfo.InvariantCulture;
 
-                DateTime start = DateTime.ParseExact(startDate, format, culture);
-                DateTime end = DateTime.ParseExact(endDate, format, culture);
-
-                if (start > end)
+                foreach (var date in dates)
                 {
-                    throw new Exception("Start can not greater than EndDate");
-                }
+                    DateTime start = DateTime.ParseExact(date.StartDate, format, culture);
+                    DateTime end = DateTime.ParseExact(date.EndDate, format, culture);
 
-                foreach (Account account in accounts)
-                {
-                    bool result = await taskRepository.CheckTaskIsValid(account, start, end);
-                    if (result)
+                    if (start > end)
                     {
-                        AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
-                        accountRespose.Images ??= new List<AccountImageResponse>();
+                        throw new Exception("Start can not greater than EndDate");
+                    }
 
-                        if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                    foreach (Account account in accounts)
+                    {
+                        bool result = await taskRepository.CheckTaskIsValid(account, start, end);
+                        if (result)
                         {
-                            foreach (var image in account.AccountImages)
+                            AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                            accountRespose.Images ??= new List<AccountImageResponse>();
+
+                            if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
                             {
-                                accountRespose.Images.Add(new AccountImageResponse
+                                foreach (var image in account.AccountImages)
                                 {
-                                    AccountImageId = image.AccountImageId,
-                                    UrlImage = image.UrlImage,
-                                    CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
-                                    UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
-                                    IsAvatar = image.IsAvatar
-                                });
+                                    accountRespose.Images.Add(new AccountImageResponse
+                                    {
+                                        AccountImageId = image.AccountImageId,
+                                        UrlImage = image.UrlImage,
+                                        CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                        UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                        IsAvatar = image.IsAvatar
+                                    });
+                                }
                             }
+                            accountByCharacterAndDateResponses.Add(accountRespose);
                         }
-                        accountByCharacterAndDateResponses.Add(accountRespose);
                     }
                 }
 
