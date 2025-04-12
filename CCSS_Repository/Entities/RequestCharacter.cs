@@ -22,7 +22,8 @@ namespace CCSS_Repository.Entities
         [ForeignKey("CharacterId")]
         public string CharacterId { get; set; }
         public Character Character { get; set; } 
-
+        public RequestCharacterStatus? status { get; set; }
+        public string? reason { get; set; }
         public double? TotalPrice { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
@@ -31,5 +32,15 @@ namespace CCSS_Repository.Entities
         public int? Quantity { get; set; }
 
         public ICollection<RequestDate> RequestDates { get; set; } = new List<RequestDate>();
+
+        
+    }
+
+    public enum RequestCharacterStatus
+    {
+        None = 0,
+        Accept = 1,
+        Busy = 2,
+        Cancel = 3,
     }
 }
