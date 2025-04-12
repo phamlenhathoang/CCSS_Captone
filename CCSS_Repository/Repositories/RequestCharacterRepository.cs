@@ -1,4 +1,5 @@
 ﻿using CCSS_Repository.Entities;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> DeleteRequestCharacter(RequestCharacter requestCharacters);
         Task<RequestCharacter> GetRequestCharacterByRequestIdAndCharacterId(string requestId, string characterId);
         Task DeleteListCharacterInRequest(List<RequestCharacter> requestCharacterInRequest);
+        Task<RequestCharacter> GetRequestCharacterCosplayerId(string requestId, string characterId, string cosplayerId);
     }
 
 
@@ -47,6 +49,11 @@ namespace CCSS_Repository.Repositories
         public async Task<RequestCharacter> GetRequestCharacter(string requestId, string characterId)
         {
             return await _context.RequestsCharacters.FirstOrDefaultAsync(sc => sc.RequestId.Equals(requestId) && sc.CharacterId.Equals(characterId));
+        }
+
+        public async Task<RequestCharacter> GetRequestCharacterCosplayerId(string requestId, string characterId, string cosplayerId)
+        {
+            return await _context.RequestsCharacters.FirstOrDefaultAsync(sc => sc.RequestId.Equals(requestId) && sc.CharacterId.Equals(characterId) && sc.CosplayerId.Equals(cosplayerId));
         }
 
         public async Task<List<RequestCharacter>> GetListCharacterByRequest(string requestId)
