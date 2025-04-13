@@ -803,9 +803,9 @@ namespace CCSS_Service.Services
                     {
                         return "Start date cannot be in the past.";
                     }
-                    if(EndDate - StartDate < TimeSpan.FromDays(5))
+                    if(EndDate - StartDate > TimeSpan.FromDays(5))
                     {
-                        return "The gap between StartDate and EndDate is 5 days.Please try again";
+                        return "The gap between StartDate and EndDate max 5 days.Please try again";
                     }
                     if (EndDate < DateTime.Now)
                     {
@@ -977,6 +977,7 @@ namespace CCSS_Service.Services
                                             {
                                                 RequestDateId = Guid.NewGuid().ToString(),
                                                 RequestCharacterId = requestCharacter.RequestCharacterId,
+                                                Status = RequestDateStatus.Pending,
                                                 StartDate = StartTimeOnly,
                                                 EndDate = EndTimeOnly
                                             });
