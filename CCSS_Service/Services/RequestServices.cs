@@ -4,6 +4,7 @@ using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,11 @@ namespace CCSS_Service.Services
         Task<List<RequestResponse>> GetAllRequest();
         Task<List<RequestResponse>> GetAllRequestByAccountId(string accountId);
         Task<RequestResponse> GetRequestById(string id);
-        Task<string> DeleteRequest(string id);
+        Task<string> DeleteRequest(string id, string? reason);
         Task<string> AddRequest(RequestDtos requestDtos);
         Task<string> AddRequestRentCosplayer(RequestRentCosplayer requestDtos);
         Task<string> UpdateRequest(string requestId, UpdateRequestDtos requestDtos);
-        Task<string> UpdateStatusRequest(string requestId, RequestStatus requestStatus);
+        Task<string> UpdateStatusRequest(string requestId, RequestStatus requestStatus, string? reason);
         Task<double> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices, string serviceId);
         Task<bool> CheckRequest(string requestId);
     }
@@ -520,7 +521,7 @@ namespace CCSS_Service.Services
         #endregion
 
         #region Update Request Status
-        public async Task<string> UpdateStatusRequest(string requestId, RequestStatus requestStatus)
+        public async Task<string> UpdateStatusRequest(string requestId, RequestStatus requestStatus, string? reason)
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
@@ -554,6 +555,10 @@ namespace CCSS_Service.Services
                         }
                     }
                 }
+                else if(requestStatus == RequestStatus.Cancel)
+                {
+                    request.Reason = reason;
+                }
 
                 request.Status = requestStatus;
                 await _repository.UpdateRequest(request);
@@ -565,7 +570,7 @@ namespace CCSS_Service.Services
         #endregion
 
         #region Delete Request
-        public async Task<string> DeleteRequest(string id)
+        public async Task<string> DeleteRequest(string id, string? reason)
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
@@ -585,6 +590,7 @@ namespace CCSS_Service.Services
                     }
 
                     request.Status = RequestStatus.Cancel;
+                    request.Reason = reason;
                     await _repository.UpdateRequest(request);
 
                     await transaction.CommitAsync();
@@ -773,7 +779,7 @@ namespace CCSS_Service.Services
         }
 
 
-
+        #region Add Request Rent Cosplayer
         public async Task<string> AddRequestRentCosplayer(RequestRentCosplayer requestDtos)
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
@@ -898,12 +904,12 @@ namespace CCSS_Service.Services
                                     await transaction.RollbackAsync();
                                     return "Cosplayer does not suitable.";
                                 }
-                                //bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
-                                //if (!checkTask)
-                                //{
-                                //    await transaction.RollbackAsync();
-                                //    return "This cosplayer is has another job. Please change datetime.";
-                                //}                              
+                                bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
+                                if (!checkTask)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "This cosplayer is has another job. Please change datetime.";
+                                }
                                 if (account.RoleId != "R004" || account == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
                                 {
                                     await transaction.RollbackAsync();
@@ -920,6 +926,7 @@ namespace CCSS_Service.Services
                                 Description = r.Description,
                                 CharacterId = r.CharacterId,
                                 CreateDate = newRequest.StartDate,
+                                Status = RequestCharacterStatus.Pending,
                                 Quantity = 1,
                                 CosplayerId = r.CosplayerId,
                                 TotalPrice = totalPrice,
@@ -944,22 +951,30 @@ namespace CCSS_Service.Services
                                        
                                         foreach (var dateDtos in d.ListRequestDates)
                                         {
-                                            TimeSpan StartTime = TimeSpan.Zero;
-                                            TimeSpan EndTime= TimeSpan.Zero;
+                                            DateTime StartTime = DateTime.Now;
+                                            DateTime EndTime= DateTime.Now;
 
                                             if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
                                             {
-                                        
 
-                                                bool isValidDate = TimeSpan.TryParseExact(dateDtos.StartDate, "HH:mm",
-                                                                                          System.Globalization.CultureInfo.InvariantCulture,out StartTime);
+                                                string[] timeFormats = { "H:mm", "HH:mm", "h:mm", "hh:mm" };
 
-                                                bool isValidEndDate = TimeSpan.TryParseExact(dateDtos.EndDate, "HH:mm",
-                                                                                             System.Globalization.CultureInfo.InvariantCulture,out EndTime);
+                                                bool isValidStartTime = DateTime.TryParseExact(dateDtos.StartDate.Trim(), timeFormats,
+                                                                                          System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out StartTime);
+
+                                                bool isValidEndTime = DateTime.TryParseExact(dateDtos.EndDate.Trim(), timeFormats,
+                                                                                             System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out EndTime);
+                                                if (!isValidStartTime && !isValidEndTime)
+                                                {
+                                                    return "Valid Time is wrong";
+                                                }
                                             }
 
-                                           DateTime StartTimeOnly = StartDate.Date.Add(StartTime);
-                                           DateTime EndTimeOnly = EndDate.Add(EndTime);
+                                            TimeSpan startTimeOfDay = StartTime.TimeOfDay;
+                                            TimeSpan endTimeOfDay = EndTime.TimeOfDay;
+
+                                            DateTime StartTimeOnly = StartDate.Date.Add(startTimeOfDay);
+                                            DateTime EndTimeOnly = EndDate.Date.Add(endTimeOfDay);
 
                                             if (StartTimeOnly >= EndTimeOnly)
                                             {
@@ -968,7 +983,7 @@ namespace CCSS_Service.Services
                                             }
 
                                             // Kiểm tra thời gian nằm trong khoảng thời gian của Request
-                                            if (StartTimeOnly < StartDate || EndTimeOnly > EndDate)
+                                            if (StartTimeOnly < StartDate && EndTimeOnly > EndDate)
                                             {
                                                 await transaction.RollbackAsync();
                                                 return "Date range must be within the request date range.";
@@ -1002,5 +1017,6 @@ namespace CCSS_Service.Services
                 }
             }
         }
+        #endregion
     }
 }

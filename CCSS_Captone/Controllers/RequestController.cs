@@ -91,7 +91,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPut("Status")]
-        public async Task<IActionResult> UpdateStatusRequest(string requestId, RequestStatus requestStatus)
+        public async Task<IActionResult> UpdateStatusRequest(string requestId, RequestStatus requestStatus, string? reason)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace CCSS_Captone.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var result = await _services.UpdateStatusRequest(requestId, requestStatus);
+                var result = await _services.UpdateStatusRequest(requestId, requestStatus, reason);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -109,7 +109,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteRequest(string requestId)
+        public async Task<IActionResult> DeleteRequest(string requestId, string? reason)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace CCSS_Captone.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var result = await _services.DeleteRequest(requestId);
+                var result = await _services.DeleteRequest(requestId, reason);
                 return Ok(result);
             }
             catch (Exception ex)
