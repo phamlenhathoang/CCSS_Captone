@@ -675,20 +675,20 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
             #region Request
             modelBuilder.Entity<Request>().HasData(
     new Request { RequestId = "R001", AccountId = "A001", Name = "Rent Naruto Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 100000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 1, 10), EndDate = new DateTime(2025, 1, 15), ServiceId = "S001", Location = "HCM", PackageId= "PKG001" },
-    new Request { RequestId = "R002", AccountId = "A002", Name = "Rent Cosplayer for Event", Description = RequestDescription.RentCosplayer.ToString(), Price = 500000, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 2, 5), EndDate = new DateTime(2025, 2, 10), ServiceId = "S002", Location = "ĐN" },
+    new Request { RequestId = "R002", AccountId = "A002", Name = "Rent Cosplayer for Event", Description = RequestDescription.RentCosplayer.ToString(), Price = 500000, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 2, 5), EndDate = new DateTime(2025, 2, 10), ServiceId = "S002", Location = "ĐN", Reason = "Cosplayer is busy" },
     new Request { RequestId = "R003", AccountId = "A003", Name = "Create Anime Festival", Description = RequestDescription.CreateEvent.ToString(), Price = 2000000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 3, 1), EndDate = new DateTime(2025, 3, 5), ServiceId = "S003", Location = "BD" },
     new Request { RequestId = "R004", AccountId = "A004", Name = "Rent Samurai Armor", Description = RequestDescription.RentCostumes.ToString(), Price = 150000, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 4, 10), EndDate = new DateTime(2025, 4, 15), ServiceId = "S002", Location = "HN" },
     new Request { RequestId = "R005", AccountId = "A005", Name = "Hire Professional Cosplayer", Description = RequestDescription.RentCosplayer.ToString(), Price = 700000, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 5, 3), EndDate = new DateTime(2025, 5, 7), ServiceId = "S002",Location = "BT", PackageId = "PKG002" },
-    new Request { RequestId = "R006", AccountId = "A006", Name = "Organize Comic Convention", Description = RequestDescription.CreateEvent.ToString(), Price = 5000000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 6, 12), EndDate = new DateTime(2025, 6, 20), ServiceId = "S001", Location = "HCM" },
-    new Request { RequestId = "R007", AccountId = "A007", Name = "Rent Victorian Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 120000, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 7, 1), EndDate = new DateTime(2025, 7, 5), ServiceId = "S002", Location = "HCM" },
+    new Request { RequestId = "R006", AccountId = "A006", Name = "Organize Comic Convention", Description = RequestDescription.CreateEvent.ToString(), Price = 5000000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 6, 12), EndDate = new DateTime(2025, 6, 15), ServiceId = "S001", Location = "HCM" },
+    new Request { RequestId = "R007", AccountId = "A007", Name = "Rent Victorian Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 120000, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 7, 1), EndDate = new DateTime(2025, 7, 5), ServiceId = "S002", Location = "HCM", Reason = "Cosplayer is busy" },
     new Request { RequestId = "R008", AccountId = "A008", Name = "Book Cosplayer for Birthday Party", Description = RequestDescription.RentCosplayer.ToString(), Price = 350000, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 8, 15), EndDate = new DateTime(2025, 8, 18), ServiceId = "S003", Location = "QN" },
     new Request { RequestId = "R009", AccountId = "A009", Name = "Plan Fantasy Fair", Description = RequestDescription.CreateEvent.ToString(), Price = 3000000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 9, 10), EndDate = new DateTime(2025, 9, 15), ServiceId = "S003", Location = "CM" },
-    new Request { RequestId = "R010", AccountId = "A010", Name = "Rent Halloween Costumes", Description = RequestDescription.RentCostumes.ToString(), Price = 200000, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 10, 25), EndDate = new DateTime(2025, 10, 31), ServiceId = "S001", Location = "LĐ" },
-    new Request { RequestId = "R011", AccountId = "A011", Name = "Hire Cosplayer for Wedding", Description = RequestDescription.RentCosplayer.ToString(), Price = 800000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 11, 20), EndDate = new DateTime(2025, 11, 25), ServiceId = "S001", Location = "NT", PackageId = "PKG010" },
+    new Request { RequestId = "R010", AccountId = "A010", Name = "Rent Halloween Costumes", Description = RequestDescription.RentCostumes.ToString(), Price = 200000, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 10, 25), EndDate = new DateTime(2025, 10, 25), ServiceId = "S001", Location = "LĐ" },
+    new Request { RequestId = "R011", AccountId = "A011", Name = "Hire Cosplayer for Wedding", Description = RequestDescription.RentCosplayer.ToString(), Price = 800000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 11, 20), EndDate = new DateTime(2025, 11, 20), ServiceId = "S001", Location = "NT", PackageId = "PKG010" },
     new Request { RequestId = "R012", AccountId = "A012", Name = "Create Sci-Fi Convention", Description = RequestDescription.CreateEvent.ToString(), Price = 4500000, Status = RequestStatus.Cancel, StartDate = new DateTime(2025, 12, 5), EndDate = new DateTime(2025, 12, 10), ServiceId = "S002", Location = "VT" },
     new Request { RequestId = "R013", AccountId = "A013", Name = "Rent Santa Claus Costume", Description = RequestDescription.RentCostumes.ToString(), Price = 130000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 20), EndDate = new DateTime(2025, 12, 25), ServiceId = "S003", Location = "HCM" },
     new Request { RequestId = "R014", AccountId = "A014", Name = "Book Cosplayer for Product Launch", Description = RequestDescription.RentCosplayer.ToString(), Price = 600000, Status = RequestStatus.Browsed, StartDate = new DateTime(2025, 6, 30), EndDate = new DateTime(2025, 7, 2), ServiceId = "S001", Location = "HN" },
-    new Request { RequestId = "R015", AccountId = "A015", Name = "Host Christmas Event", Description = RequestDescription.CreateEvent.ToString(), Price = 5500000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 15), EndDate = new DateTime(2025, 12, 31), ServiceId = "S002", Location = "HCM", PackageId = "PKG015" }
+    new Request { RequestId = "R015", AccountId = "A015", Name = "Host Christmas Event", Description = RequestDescription.CreateEvent.ToString(), Price = 5500000, Status = RequestStatus.Pending, StartDate = new DateTime(2025, 12, 15), EndDate = new DateTime(2025, 12, 15), ServiceId = "S002", Location = "HCM", PackageId = "PKG015" }
 );
             #endregion
 
@@ -1069,7 +1069,281 @@ new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015",
 );
             #endregion
 
+            #region RequestDate
+            modelBuilder.Entity<RequestDate>().HasData(
+    new RequestDate
+    {
+        RequestDateId = "RD01",
+        RequestCharacterId = "RC01",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-01-10 08:30:00"),
+        EndDate = DateTime.Parse("2025-01-10 16:30:00"), 
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD02",
+        RequestCharacterId = "RC01",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-01-11 14:30:00"),
+        EndDate = DateTime.Parse("2025-01-11 14:30:00"),
+    }, 
+    new RequestDate
+    {
+        RequestDateId = "RD03",
+        RequestCharacterId = "RC01",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-01-13 14:30:00"),
+        EndDate = DateTime.Parse("2025-01-13 14:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD04",
+        RequestCharacterId = "RC01",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-01-14 14:30:00"),
+        EndDate = DateTime.Parse("2025-01-14 14:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD05",
+        RequestCharacterId = "RC01",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-01-15 14:30:00"),
+        EndDate = DateTime.Parse("2025-01-15 14:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD06",
+        RequestCharacterId = "RC02",
+        Status = RequestDateStatus.Reject,
+        Reason = "Cosplayer is busy"
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD07",
+        RequestCharacterId = "RC04",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-04-10 09:00:00"),
+        EndDate = DateTime.Parse("2025-04-10 17:00:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD08",
+        RequestCharacterId = "RC04",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-04-11 09:00:00"),
+        EndDate = DateTime.Parse("2025-04-11 17:00:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD09",
+        RequestCharacterId = "RC04",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-04-12 09:00:00"),
+        EndDate = DateTime.Parse("2025-04-12 17:00:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD10",
+        RequestCharacterId = "RC04",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-04-13 09:00:00"),
+        EndDate = DateTime.Parse("2025-04-13 17:00:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD11",
+        RequestCharacterId = "RC04",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-04-14 09:00:00"),
+        EndDate = DateTime.Parse("2025-04-14 17:00:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD12",
+        RequestCharacterId = "RC04",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-04-15 09:00:00"),
+        EndDate = DateTime.Parse("2025-04-15 17:00:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD13",
+        RequestCharacterId = "RC05",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-05-03 08:30:00"),
+        EndDate = DateTime.Parse("2025-05-03 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD14",
+        RequestCharacterId = "RC05",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-05-04 08:30:00"),
+        EndDate = DateTime.Parse("2025-05-04 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD15",
+        RequestCharacterId = "RC05",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-05-05 08:30:00"),
+        EndDate = DateTime.Parse("2025-05-05 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD16",
+        RequestCharacterId = "RC05",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-05-06 08:30:00"),
+        EndDate = DateTime.Parse("2025-05-06 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD17",
+        RequestCharacterId = "RC05",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-05-07 08:30:00"),
+        EndDate = DateTime.Parse("2025-05-07 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD18",
+        RequestCharacterId = "RC06",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-06-12 08:30:00"),
+        EndDate = DateTime.Parse("2025-06-12 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD19",
+        RequestCharacterId = "RC06",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-06-13 08:30:00"),
+        EndDate = DateTime.Parse("2025-06-13 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD20",
+        RequestCharacterId = "RC06",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-06-14 08:30:00"),
+        EndDate = DateTime.Parse("2025-06-14 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD21",
+        RequestCharacterId = "RC06",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-06-15 08:30:00"),
+        EndDate = DateTime.Parse("2025-06-15 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD22",
+        RequestCharacterId = "RC07",
+        Status = RequestDateStatus.Reject,
+        Reason = "Cosplayer is busy"
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD23",
+        RequestCharacterId = "RC10",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-10-25 08:30:00"),
+        EndDate = DateTime.Parse("2025-10-25 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD24",
+        RequestCharacterId = "RC11",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-11-20 08:30:00"),
+        EndDate = DateTime.Parse("2025-11-20 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD25",
+        RequestCharacterId = "RC12",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-12-05 08:30:00"),
+        EndDate = DateTime.Parse("2025-12-05 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD26",
+        RequestCharacterId = "RC12",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-12-06 08:30:00"),
+        EndDate = DateTime.Parse("2025-12-06 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD27",
+        RequestCharacterId = "RC12",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-12-07 08:30:00"),
+        EndDate = DateTime.Parse("2025-12-07 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD28",
+        RequestCharacterId = "RC12",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-12-08 08:30:00"),
+        EndDate = DateTime.Parse("2025-12-08 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD29",
+        RequestCharacterId = "RC12",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-12-09 08:30:00"),
+        EndDate = DateTime.Parse("2025-12-09 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD30",
+        RequestCharacterId = "RC12",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-12-10 08:30:00"),
+        EndDate = DateTime.Parse("2025-12-10 16:30:00"),
+    }, 
+    new RequestDate
+    {
+        RequestDateId = "RD31",
+        RequestCharacterId = "RC14",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-06-30 08:30:00"),
+        EndDate = DateTime.Parse("2025-06-30 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD32",
+        RequestCharacterId = "RC14",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-07-01 08:30:00"),
+        EndDate = DateTime.Parse("2025-07-01 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD33",
+        RequestCharacterId = "RC14",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-07-02 08:30:00"),
+        EndDate = DateTime.Parse("2025-07-02 16:30:00"),
+    },
+    new RequestDate
+    {
+        RequestDateId = "RD34",
+        RequestCharacterId = "RC15",
+        Status = RequestDateStatus.Accept,
+        StartDate = DateTime.Parse("2025-12-15 08:30:00"),
+        EndDate = DateTime.Parse("2025-12-15 16:30:00"),
+    }
 
+);
+            #endregion
 
             base.OnModelCreating(modelBuilder);
         }

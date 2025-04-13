@@ -24,5 +24,14 @@ namespace CCSS_Repository.Entities
 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public string? Reason { get; set; }
+        public RequestDateStatus? Status { get; set; }
+    }
+
+    public enum RequestDateStatus
+    {
+        Pending,
+        Reject,
+        Accept,
     }
 }
