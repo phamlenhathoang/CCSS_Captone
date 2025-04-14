@@ -36,6 +36,8 @@ namespace CCSS_Service.Model.Responses
         public float? MinHeight { get; set; }
         public float? MinWeight { get; set; }
         public ICollection<CharacterImageDto> CharacterImages { get; set; }
+
+        public List<RequestDateResponse> RequestDateResponses { get; set; }
     }
 
     public class CharacterImageDto

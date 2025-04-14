@@ -77,6 +77,15 @@ namespace CCSS_Service.Services
                                           CharacterImageId = img.CharacterImageId,
                                           UrlImage = img.UrlImage
                                       }).ToList(),
+                    RequestDateResponses = c.RequestDates.Select(rd => new RequestDateResponse
+                                                            {
+                                                                RequestDateId = rd.RequestDateId,
+                                                                RequestCharacterId = rd.RequestCharacterId,
+                                                                StartDate = rd.StartDate,
+                                                                EndDate = rd.EndDate,
+                                                                Status = rd.Status,
+                                                                Reason = rd.Reason,
+                                                            }).ToList(),
                 }).ToList();
 
                 RequestResponse response = new RequestResponse()
@@ -122,7 +131,16 @@ namespace CCSS_Service.Services
                                       {
                                           CharacterImageId = img.CharacterImageId,
                                           UrlImage = img.UrlImage
-                                      }).ToList()
+                                      }).ToList(),
+                RequestDateResponses = c.RequestDates.Select(rd => new RequestDateResponse
+                                        {
+                                            RequestDateId = rd.RequestDateId,
+                                            RequestCharacterId = rd.RequestCharacterId,
+                                            StartDate = rd.StartDate,
+                                            EndDate = rd.EndDate,
+                                            Status = rd.Status,
+                                            Reason = rd.Reason,
+                                        }).ToList(),
             }).ToList();
 
             var response = new RequestResponse()
@@ -174,6 +192,15 @@ namespace CCSS_Service.Services
                                           CharacterImageId = img.CharacterImageId,
                                           UrlImage = img.UrlImage
                                       }).ToList(),
+                    RequestDateResponses = c.RequestDates.Select(rd => new RequestDateResponse
+                                        {
+                                            RequestDateId = rd.RequestDateId,
+                                            RequestCharacterId = rd.RequestCharacterId,
+                                            StartDate = rd.StartDate,
+                                            EndDate = rd.EndDate,
+                                            Status = rd.Status,
+                                            Reason = rd.Reason,
+                                        }).ToList(),
                 }).ToList();
 
                 RequestResponse response = new RequestResponse()
@@ -397,7 +424,7 @@ namespace CCSS_Service.Services
 
                 if (!string.IsNullOrEmpty(UpdateRequestDtos.StartDate) || !string.IsNullOrEmpty(UpdateRequestDtos.EndDate))
                 {
-                    string[] dateFormats = { "HH:mm dd/MM/yyyy", "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
+                    string[] dateFormats = { "dd/MM/yyyy", "d/MM/yyyy", "dd/M/yyyy", "d/M/yyyy" };
 
                     bool isValidDate = DateTime.TryParseExact(UpdateRequestDtos.StartDate, dateFormats,
                                                               System.Globalization.CultureInfo.InvariantCulture,
@@ -450,6 +477,89 @@ namespace CCSS_Service.Services
                             await transaction.RollbackAsync();
                             return "Cosplayer does not suitable.";
                         }
+                        List<RequestDate> dateInRequest = new List<RequestDate>();
+                        if (r.ListUpdateRequestDates != null && r.ListUpdateRequestDates.Any())
+                        {
+                            foreach (var dateRange in r.ListUpdateRequestDates)
+                            {
+                                DateTime StartTime = DateTime.Now;
+                                DateTime EndTime = DateTime.Now;
+
+                                if (!string.IsNullOrEmpty(dateRange.StartDate) || !string.IsNullOrEmpty(dateRange.EndDate))
+                                {
+
+                                    string[] timeFormats = { "H:mm", "HH:mm", "h:mm", "hh:mm" };
+
+                                    bool isValidStartTime = DateTime.TryParseExact(dateRange.StartDate.Trim(), timeFormats,
+                                                                              System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out StartTime);
+
+                                    bool isValidEndTime = DateTime.TryParseExact(dateRange.EndDate.Trim(), timeFormats,
+                                                                                 System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out EndTime);
+                                    if (!isValidStartTime && !isValidEndTime)
+                                    {
+                                        return "Valid Time is wrong";
+                                    }
+                                }
+
+                                TimeSpan startTimeOfDay = StartTime.TimeOfDay;
+                                TimeSpan endTimeOfDay = EndTime.TimeOfDay;
+
+                                DateTime StartTimeOnly = StartDate.Date.Add(startTimeOfDay);
+                                DateTime EndTimeOnly = EndDate.Date.Add(endTimeOfDay);
+
+                                if (StartTimeOnly >= EndTimeOnly)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "End date must be greater than start date.";
+                                }
+
+                                // Kiểm tra thời gian nằm trong khoảng thời gian của Request
+                                if (StartTimeOnly < StartDate && EndTimeOnly > EndDate)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "Date range must be within the request date range.";
+                                }
+
+                                var requestCharacterInDate = await _requestCharacterRepository.GetRequestCharacterCosplayerId(requestExisting.RequestId, r.CharacterId, r.CosplayerId);
+                                if (requestCharacterInDate == null)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "Request Character not found";
+                                }
+                                var requestDateExisting = await _requestDatesRepository.GetRequestDateById(dateRange.RequestDateId);
+                                if (requestDateExisting != null)
+                                {
+                                    requestDateExisting.StartDate = StartTimeOnly;
+                                    requestDateExisting.EndDate = EndTimeOnly;
+                                    requestDateExisting.Status = RequestDateStatus.Pending;
+                                    requestDateExisting.RequestCharacterId = requestCharacterInDate.RequestCharacterId;
+
+                                    await _requestDatesRepository.UpdateRequestDate(requestDateExisting);
+                                }
+                                else
+                                {
+                                    RequestDate newRequestDate = new RequestDate
+                                    {
+                                        RequestDateId = requestDateExisting.RequestDateId,
+                                        RequestCharacterId = requestCharacterInDate.RequestCharacterId,
+                                        StartDate = StartTimeOnly,
+                                        EndDate = EndTimeOnly,
+                                        Status = RequestDateStatus.Pending,
+                                    };
+                                    dateInRequest.Add(newRequestDate);
+                                }
+                            }
+                            if (dateInRequest.Any())
+                            {
+                                var RequestDates = await _requestDatesRepository.AddListRequestDates(dateInRequest);
+                                if (!RequestDates)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "Failed to add request dates";
+                                }
+                            }
+                        }
+
                         bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
                         if (!checkTask)
                         {
@@ -468,8 +578,35 @@ namespace CCSS_Service.Services
                     var character = await _characterRepository.GetCharacter(r.CharacterId);
                     if (requestCharacter == null)
                     {
-                        await transaction.RollbackAsync();
-                        return "Request Character not found";
+                        var totalPrice = character.Price * r.Quantity;
+                        RequestCharacter newRequestCharacter = new RequestCharacter()
+                        {
+                            RequestCharacterId = Guid.NewGuid().ToString(),
+                            RequestId = requestExisting.RequestId,
+                            Description = r.Description,
+                            CharacterId = r.CharacterId,
+                            CreateDate = requestExisting.StartDate,
+                            Status = RequestCharacterStatus.Pending,
+                            Quantity = 1,
+                            CosplayerId = r.CosplayerId,
+                            TotalPrice = totalPrice,
+                        };
+                        characterInRequest.Add(newRequestCharacter);
+
+                        if (characterInRequest.Any())
+                        {
+                            var newResult = await _requestCharacterRepository.AddListRequestCharacter(characterInRequest);
+                            if (!newResult)
+                            {
+                                await transaction.RollbackAsync();
+                                return "Cannot add new character in request";
+                            }
+                        }
+                        else
+                        {
+                            await transaction.RollbackAsync();
+                            return "Can not find characterinRequest";
+                        }
                     }
                     else
                     {
@@ -479,7 +616,6 @@ namespace CCSS_Service.Services
                             await transaction.RollbackAsync();
                             return $"Not enough stock for character {character.CharacterName}.";
                         }
-
 
                         requestCharacter.CreateDate = StartDate;
                         requestCharacter.UpdateDate = DateTime.Now;
@@ -492,11 +628,15 @@ namespace CCSS_Service.Services
                         character.Quantity -= quantity;
                         await _characterRepository.UpdateCharacter(character);
                     }
-                }
-
+                }      
                 if (characterInRequest.Any())
                 {
-                    await _requestCharacterRepository.UpdateListRequestCharacter(characterInRequest);
+                    var existResult = await _requestCharacterRepository.UpdateListRequestCharacter(characterInRequest);
+                    if (!existResult)
+                    {
+                        await transaction.RollbackAsync();
+                        return $"Cannot update the character in request";
+                    }
                 }
                 else
                 {
@@ -555,7 +695,7 @@ namespace CCSS_Service.Services
                         }
                     }
                 }
-                else if(requestStatus == RequestStatus.Cancel)
+                else if (requestStatus == RequestStatus.Cancel)
                 {
                     request.Reason = reason;
                 }
@@ -809,7 +949,7 @@ namespace CCSS_Service.Services
                     {
                         return "Start date cannot be in the past.";
                     }
-                    if(EndDate - StartDate > TimeSpan.FromDays(5))
+                    if (EndDate - StartDate > TimeSpan.FromDays(5))
                     {
                         return "The gap between StartDate and EndDate max 5 days.Please try again";
                     }
@@ -855,7 +995,7 @@ namespace CCSS_Service.Services
                 {
                     RequestId = Guid.NewGuid().ToString(),
                     AccountId = requestDtos.AccountId,
-                    ServiceId = "S001",
+                    ServiceId = "S002",
                     Name = requestDtos.Name,
                     Price = requestDtos.Price,
                     Description = requestDtos.Description,
@@ -948,11 +1088,11 @@ namespace CCSS_Service.Services
                                     var requestCharacter = await _requestCharacterRepository.GetRequestCharacterCosplayerId(newRequest.RequestId, d.CharacterId, d.CosplayerId);
                                     if (requestCharacter != null)
                                     {
-                                       
+
                                         foreach (var dateDtos in d.ListRequestDates)
                                         {
                                             DateTime StartTime = DateTime.Now;
-                                            DateTime EndTime= DateTime.Now;
+                                            DateTime EndTime = DateTime.Now;
 
                                             if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
                                             {
