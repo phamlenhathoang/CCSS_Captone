@@ -70,13 +70,13 @@ namespace CCSS_Service.Services
                         throw new Exception("Can not add ContractCharacter");
                     }
 
-                    List<RequestDate> requestDates = await _requestDatesRepository.GetRequestDatesByRequestCharacterId(requestCharacter.RequestCharacterId);
+                    List<RequestDate> requestDates = await _requestDatesRepository.GetListRequestDateByRequestCharacterId(requestCharacter.RequestCharacterId);
 
                     foreach(var requestDate in requestDates)
                     {
                         requestDate.ContractCharacterId = character.ContractCharacterId;
 
-                        bool checkUpdate = await _requestDatesRepository.Update(requestDate);
+                        bool checkUpdate = await _requestDatesRepository.UpdateRequestDate(requestDate);
                         if (!checkUpdate)
                         {
                             throw new Exception("Can not update RequestDate");

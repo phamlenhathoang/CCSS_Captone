@@ -163,6 +163,7 @@ namespace CCSS_Service.Services
         }
         #endregion
 
+        #region Get AllRequest By AccountId
         public async Task<List<RequestResponse>> GetAllRequestByAccountId(string accountId)
         {
             var account = await _accountRepository.GetAccountByAccountId(accountId);
@@ -223,6 +224,7 @@ namespace CCSS_Service.Services
             }
             return listRequest;
         }
+        #endregion
 
         #region Add Request
         public async Task<string> AddRequest(RequestDtos requestDtos)
@@ -534,7 +536,11 @@ namespace CCSS_Service.Services
                                     requestDateExisting.Status = RequestDateStatus.Pending;
                                     requestDateExisting.RequestCharacterId = requestCharacterInDate.RequestCharacterId;
 
-                                    await _requestDatesRepository.UpdateRequestDate(requestDateExisting);
+                                    var resultRequestDate = await _requestDatesRepository.UpdateRequestDate(requestDateExisting);
+                                    if (!resultRequestDate)
+                                    {
+                                        return "Can not update Request Date";
+                                    }
                                 }
                                 else
                                 {
