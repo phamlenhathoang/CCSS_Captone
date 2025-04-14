@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace CCSS_Repository.Repositories
 {
@@ -13,8 +14,10 @@ namespace CCSS_Repository.Repositories
         Task<List<RequestDate>> GetAllRequestDates();
         Task<RequestDate> GetRequestDateById(string id);
         Task<bool> AddListRequestDates(List<RequestDate> requestDate);
-        Task<List<RequestDate>> GetRequestDatesByRequestCharacterId(string requestCharacterId);
-        Task<bool> Update(RequestDate requestDate);
+        Task<bool> UpdateListRequestDates(List<RequestDate> requestDate);
+        Task<List<RequestDate>> GetListRequestDateByRequestCharacterId(string requestCharacterId);
+        Task DeleteAllRequestDateByRequestCharacterId(string requestCharacterId);
+        Task UpdateRequestDate(RequestDate requestDate);
     }
 
     public class RequestDatesRepository: IRequestDatesRepository
@@ -31,6 +34,11 @@ namespace CCSS_Repository.Repositories
         {
             return await _context.RequestDates.ToListAsync();
         }
+
+        public async Task<List<RequestDate>> GetListRequestDateByRequestCharacterId(string requestCharacterId)
+        {
+            return await _context.RequestDates.Include(rc => rc.RequestCharacter).Where(sc => sc.RequestCharacterId.Equals(requestCharacterId)).ToListAsync();
+        }
         public async Task<RequestDate> GetRequestDateById(string id)
         {
             return await _context.RequestDates.FirstOrDefaultAsync(sc => sc.RequestDateId.Equals(id));  
@@ -41,15 +49,16 @@ namespace CCSS_Repository.Repositories
            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<RequestDate>> GetRequestDatesByRequestCharacterId(string requestCharacterId)
-        {
-            return await _context.RequestDates.Include(rc => rc.RequestCharacter).Where(rd => rd.RequestCharacterId.Equals(requestCharacterId)).ToListAsync();
-        }
-
-        public async Task<bool> Update(RequestDate requestDate)
+        public async Task UpdateRequestDate(RequestDate requestDate)
         {
             _context.RequestDates.Update(requestDate);
-            return await _context.SaveChangesAsync() > 0 ? true : false;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> UpdateListRequestDates(List<RequestDate> requestDate)
+        {
+            _context.RequestDates.UpdateRange(requestDate);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
