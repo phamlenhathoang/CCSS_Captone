@@ -34,7 +34,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Contract> GetContractById(string id)
         {
-            return await _context.Contracts.Include(c => c.ContractCharacters).Include(c => c.Request).ThenInclude(rc => rc.RequestCharacters).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
+            return await _context.Contracts.Include(c => c.ContractCharacters).Include(c => c.Request).ThenInclude(rc => rc.RequestCharacters).ThenInclude(rc => rc.RequestDates).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
         }
 
         public async Task<bool> AddContract(Contract contract)

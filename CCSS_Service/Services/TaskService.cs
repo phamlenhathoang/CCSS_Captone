@@ -42,6 +42,7 @@ namespace CCSS_Service.Services
         Task<TaskResponse> GetTaskByTaskId(string taskId);
         Task<bool> AddTaskContractByManager(List<AddTaskContractRequest> contractCharacters, string requestId);
         Task<bool> UpdateStatusTaskByContractId(string contractId);
+        Task<bool> UpdateStatusTaskByTaskId(string taskId, string status);
     }
     public class TaskService : ITaskService
     {
@@ -222,37 +223,40 @@ namespace CCSS_Service.Services
                             throw new Exception("ContractCharacter does not exist");
                         }
 
-                        Task task = new Task();
-
-                        task.ContractCharacterId = taskRequest.ContractCharacterId;
-                        task.AccountId = taskRequest.CosplayerId;
-                        task.CreateDate = DateTime.Now;
-                        task.Description = contractCharacter.Description;
-                        task.EndDate = contractCharacter.Contract.Request.EndDate;
-                        task.StartDate = contractCharacter.Contract.Request.StartDate;
-                        task.TaskName = contractCharacter.CharacterId;
-                        task.Location = contractCharacter.Contract.Request.Location;
-                        task.IsActive = true;
-                        task.Status = TaskStatus.Assignment;
-                        task.Type = "Contract";
-                        task.TaskId = Guid.NewGuid().ToString();
-                        task.UpdateDate = null;
-
-                        bool check = await taskRepository.AddTask(task);
-                        if (!check)
+                        foreach(var item in contractCharacter.RequestDates)
                         {
-                            //await transaction.RollbackAsync();
-                            throw new Exception($"Task {task.TaskId} đã xảy ra lỗi vào lúc {DateTime.Now}");
-                        }
+                            Task task = new Task();
 
-                        tasks.Add(task);
+                            task.ContractCharacterId = taskRequest.ContractCharacterId;
+                            task.AccountId = taskRequest.CosplayerId;
+                            task.CreateDate = DateTime.Now;
+                            task.Description = contractCharacter.Description;
+                            task.EndDate = item.EndDate;
+                            task.StartDate = item.StartDate;
+                            task.TaskName = contractCharacter.CharacterId;
+                            task.Location = contractCharacter.Contract.Request.Location;
+                            task.IsActive = true;
+                            task.Status = TaskStatus.Assignment;
+                            task.Type = "Contract";
+                            task.TaskId = Guid.NewGuid().ToString();
+                            task.UpdateDate = null;
+
+                            bool check = await taskRepository.AddTask(task);
+                            if (!check)
+                            {
+                                //await transaction.RollbackAsync();
+                                throw new Exception($"Task {task.TaskId} đã xảy ra lỗi vào lúc {DateTime.Now}");
+                            }
+
+                            //tasks.Add(task);
+                        }
                     }
                 }
 
-                bool result = await NortificationUser(tasks) ? true : false;
+                //bool result = await NortificationUser(tasks) ? true : false;
 
                 //await transaction.CommitAsync();
-                return result;
+                return true;
             }
             catch (Exception ex)
             {
@@ -461,7 +465,7 @@ namespace CCSS_Service.Services
                     throw new Exception("Cosplayer does not exist");
                 }
 
-                if (status.ToLower().Equals("progressing"))
+                if (status.ToLower().Equals(TaskStatus.Progressing.ToString().ToLower()))
                 {
                     if (task.Status.ToString().ToLower().Equals(TaskStatus.Assignment.ToString().ToLower()))
                     {
@@ -469,11 +473,10 @@ namespace CCSS_Service.Services
                     }
                     else
                     {
-                        throw new Exception("Can not update status task");
+                        throw new Exception("Can not update status");
                     }
                 }
-
-                if (status.ToLower().Equals("completed"))
+                if (status.ToLower().Equals(TaskStatus.Completed.ToString().ToLower()))
                 {
                     if (task.Status.ToString().ToLower().Equals(TaskStatus.Progressing.ToString().ToLower()))
                     {
@@ -481,7 +484,7 @@ namespace CCSS_Service.Services
                     }
                     else
                     {
-                        throw new Exception("Can not update status task");
+                        throw new Exception("Can not update status");
                     }
                 }
 
@@ -665,6 +668,54 @@ namespace CCSS_Service.Services
                 return true;    
             }
             catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> UpdateStatusTaskByTaskId(string taskId, string status)
+        {
+            try
+            {
+                Task task = await taskRepository.GetTaskByTaskId(taskId);
+                if (task != null)
+                {
+                    throw new Exception("Task does not exist");
+                }
+
+                if (status.ToLower().Equals(TaskStatus.Progressing.ToString().ToLower()))
+                {
+                    if (task.Status.ToString().ToLower().Equals(TaskStatus.Assignment.ToString().ToLower()))
+                    {
+                        task.Status = TaskStatus.Progressing;
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update status");
+                    }
+                }
+                if (status.ToLower().Equals(TaskStatus.Completed.ToString().ToLower()))
+                {
+                    if (task.Status.ToString().ToLower().Equals(TaskStatus.Progressing.ToString().ToLower()))
+                    {
+                        task.Status = TaskStatus.Completed;
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update status");
+                    }
+                }
+
+                bool result = await taskRepository.UpdateTask(task);
+
+                if (!result)
+                {
+                    throw new Exception("Can not update status");
+                }
+
+                return result;
+            }
+            catch(Exception ex) 
             {
                 throw new Exception(ex.Message);
             }

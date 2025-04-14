@@ -18,8 +18,8 @@ namespace CCSS_Captone.Controllers
             _momoService = momoService;
         }
 
-        [Authorize(Roles = "Customer")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Customer")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
         [HttpPost]
         [SwaggerOperation(Description = "purpose==0 (Mua vé)<br>" +

@@ -66,6 +66,13 @@ namespace CCSS_Captone.Controllers
             return Ok(task);
         }
 
+        [HttpPut("taskId")]
+        public async Task<ActionResult> UpdateStatusTaskByTaskId(string taskId, string status)
+        {
+            var task = await taskService.UpdateStatusTaskByTaskId(taskId, status);
+            return Ok(task);
+        }
+
         [HttpPost]
         public async Task<ActionResult> AddTaskContractByManager(List<AddTaskContractRequest> contractCharacters, string requestId)
         {
