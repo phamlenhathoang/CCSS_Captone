@@ -142,7 +142,7 @@ namespace CCSS_Repository.Repositories
                 .Include(r => r.Role)
                 .Include(a => a.AccountImages)
                 .Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight && a.Role.RoleName == RoleName.Cosplayer);
-            if (string.IsNullOrEmpty(accountId))
+            if (!string.IsNullOrEmpty(accountId))
             {
                 query = query.Where(a => !a.AccountId.Equals(accountId));
             }
