@@ -16,8 +16,8 @@ namespace CCSS_Service.Model.Responses
         public string? Description { get; set; }
         public double? Price { get; set; }
         public string Status { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public string? StartDate { get; set; }
+        public string? EndDate { get; set; }
         public string? Location { get; set; }     
         public string? ServiceId { get; set; }
         public string? PackageId { get; set; }
