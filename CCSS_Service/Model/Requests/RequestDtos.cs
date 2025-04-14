@@ -17,8 +17,7 @@ namespace CCSS_Service.Model.Requests
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string? Location { get; set; }
-        public string? ServiceId { get; set; }
-        public string? PackageId { get; set; }
+        public string? Deposit { get; set; }
         public string? AccountCouponId { get; set; }
         public List<CharacterList> ListRequestCharacters { get; set; }
 
@@ -27,9 +26,9 @@ namespace CCSS_Service.Model.Requests
     public class CharacterList
     {
         public string CharacterId { get; set; }
-        public string? CosplayerId { get; set; }
         public string? Description { get; set; }
         public int? Quantity { get; set; }
+        public List<RequestDateDtos> ListRequestDates { get; set; }
     }
 
     public class RequestTotalPrice

@@ -50,12 +50,12 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateRequest([FromBody] RequestDtos requestDtos)
+        [HttpPost("CreateRentCostume")]
+        public async Task<IActionResult> CreateRentCostumeRequest([FromBody] RequestDtos requestDtos)
         {
             if (ModelState.IsValid)
             {
-                var result = await _services.AddRequest(requestDtos);
+                var result = await _services.AddRequestRentCostume(requestDtos);
                 return Ok(result);
             }
             return BadRequest(ModelState);
@@ -67,6 +67,17 @@ namespace CCSS_Captone.Controllers
             if (ModelState.IsValid)
             {
                 var result = await _services.AddRequestRentCosplayer(requestDtos);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpPost("CreateCreateEvent")]
+        public async Task<IActionResult> CreateCreateEventRequest([FromBody] RequestCreateEvent requestDtos)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.AddRequestCreateEvent(requestDtos);
                 return Ok(result);
             }
             return BadRequest(ModelState);
