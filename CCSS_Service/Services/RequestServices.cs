@@ -598,7 +598,7 @@ namespace CCSS_Service.Services
                                 {
                                     RequestDate newRequestDate = new RequestDate
                                     {
-                                        RequestDateId = requestDateExisting.RequestDateId,
+                                        RequestDateId = Guid.NewGuid().ToString(),
                                         RequestCharacterId = requestCharacterInDate.RequestCharacterId,
                                         StartDate = StartTimeOnly,
                                         EndDate = EndTimeOnly,
