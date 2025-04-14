@@ -247,7 +247,7 @@ namespace CCSS_Service.Services
 
                     Contract contract = await contractRespository.GetContractById(existingPayment.ContractId);
                     var customer = await _accountRepository.GetAccountByAccountId(response.AccountId);
-                    bool result = await _contractServices.UpdateStatusContract(contract.ContractId, "Progressing", null);
+                    bool result = await _contractServices.UpdateStatusContract(contract.ContractId, "Deposited", null);
                     if (!result)
                     {
                         throw new Exception("Can not update status contract");
@@ -260,7 +260,7 @@ namespace CCSS_Service.Services
 
                     Contract contract1 = await contractRespository.GetContractById(existingPayment.ContractId);
                     var customer1 = await _accountRepository.GetAccountByAccountId(response.AccountId);
-                    bool rs = await _contractServices.UpdateStatusContract(contract1.ContractId, "Completed", response.Amount);
+                    bool rs = await _contractServices.UpdateStatusContract(contract1.ContractId, "FinalSettlement", response.Amount);
                     if (!rs)
                     {
                         throw new Exception("Can not update status contract");
