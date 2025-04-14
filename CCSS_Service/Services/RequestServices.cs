@@ -102,7 +102,8 @@ namespace CCSS_Service.Services
                     Location = item.Location,
                     ServiceId = item.ServiceId,
                     PackageId = item.PackageId,
-                    //ContractId = item.ContractId,
+                    Deposit = item.Deposit,
+                    Reason = item.Reason,           
                     CharactersListResponse = characterResponses
                 };
                 listRequest.Add(response); ;
@@ -157,7 +158,10 @@ namespace CCSS_Service.Services
                 Location = request.Location,
                 ServiceId = request.ServiceId,
                 PackageId = request.PackageId,
-                //ContractId = request.ContractId,
+                Deposit = request.Deposit,
+                Reason = request.Reason,
+
+             
                 CharactersListResponse = characterResponses
             };
             return response;
@@ -218,7 +222,8 @@ namespace CCSS_Service.Services
                     Location = item.Location,
                     ServiceId = item.ServiceId,
                     PackageId = item.PackageId,
-                    //ContractId = item.ContractId,
+                    Deposit = item.Deposit,
+                    Reason = item.Reason,                    
                     CharactersListResponse = characterResponses
                 };
                 listRequest.Add(response); ;
