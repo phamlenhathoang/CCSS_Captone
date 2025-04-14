@@ -24,7 +24,7 @@ namespace CCSS_Repository.Repositories
         Task<Account> GetAccountByEmailAndCode(string email, string code);
         Task<bool> AddAccount(Account account);
         Task<bool> UpdateAccount(Account account);
-        Task<List<Account>> GetAllAccountsByCharacter(Character character);
+        Task<List<Account>> GetAllAccountsByCharacter(Character character, string? accountId);
         Task<List<Account>> GetAccountsByCharacter(Character character, List<Account> accounts);
         Task<List<Account>> GetAllAccountsByRoleId(string roleId);
         Task<List<Account>> GetAllAccountRoleManager();
@@ -136,11 +136,18 @@ namespace CCSS_Repository.Repositories
             return await dbContext.Accounts.Include(r => r.Role).Where(a => a.Role.RoleName == RoleName.Manager).ToListAsync();
         }
 
-        public async Task<List<Account>> GetAllAccountsByCharacter(Character character)
+        public async Task<List<Account>> GetAllAccountsByCharacter(Character character, string? accountId)
         {
-            return await dbContext.Accounts.Include(r => r.Role).Include(a => a.AccountImages).Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight
-                                                        && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight
-                                                        && a.Role.RoleName == RoleName.Cosplayer).OrderByDescending(a => a.AverageStar).ToListAsync();
+            IQueryable<Account> query = dbContext.Accounts
+                .Include(r => r.Role)
+                .Include(a => a.AccountImages)
+                .Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight && a.Role.RoleName == RoleName.Cosplayer);
+            if (!string.IsNullOrEmpty(accountId))
+            {
+                query = query.Where(a => !a.AccountId.Equals(accountId));
+            }
+
+            return await query.OrderByDescending(a => a.AverageStar).ToListAsync();
         }
 
         public async Task<List<Account>> GetAllAccountsByRoleId(string roleId)

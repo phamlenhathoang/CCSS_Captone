@@ -60,15 +60,5 @@ namespace CCSS_Repository.Repositories
             _context.RequestDates.UpdateRange(requestDate);
             return await _context.SaveChangesAsync() > 0;
         }
-
-        public async Task DeleteAllRequestDateByRequestCharacterId(string requestCharacterId)
-        {
-            var requestDate = await GetListRequestDateByRequestCharacterId(requestCharacterId);
-            if (requestDate != null && requestDate.Any())
-            {           
-                _context.RequestDates.RemoveRange(requestDate);             
-                await _context.SaveChangesAsync();
-            }
-        }
     }
 }

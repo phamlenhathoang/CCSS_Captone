@@ -22,14 +22,16 @@ namespace CCSS_Service.Profiles
                             src.Birthday.HasValue
                                 ? src.Birthday.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)
                                 : string.Empty))
+                    .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.AccountImages))
+                    .ReverseMap();
+
+
+            CreateMap<Account, AccountByCharacterAndDateResponse>()
                     .ReverseMap();
             CreateMap<Account, AccountDashBoardResponse>()
                     .ReverseMap();
 
-           CreateMap<Account, AccountResponse>()
-          .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.AccountImages));
-            CreateMap<Account, AccountByCharacterAndDateResponse>()
-                    .ReverseMap();
+
             //Request 
             CreateMap<Account, UpdateAccountRequest>().ReverseMap();
         }

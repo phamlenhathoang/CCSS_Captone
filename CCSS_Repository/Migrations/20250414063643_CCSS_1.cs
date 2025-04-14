@@ -911,21 +911,21 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "ActivityId", "CreateDate", "Description", "Name", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "ACT001", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4063), "A relaxing yoga session", "Yoga Class", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4064) },
-                    { "ACT002", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4068), "Learn to cook delicious meals", "Cooking Workshop", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4069) },
-                    { "ACT003", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4071), "Live music performance", "Music Concert", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4072) },
-                    { "ACT004", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4075), "Showcase of local artists", "Art Exhibition", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4076) },
-                    { "ACT005", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4106), "Discussion on latest technology trends", "Tech Talk", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4107) },
-                    { "ACT006", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4109), "5K run for a good cause", "Charity Run", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4109) },
-                    { "ACT007", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4111), "Monthly book discussion", "Book Club", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4112) },
-                    { "ACT008", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4114), "Learn photography skills", "Photography Workshop", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4114) },
-                    { "ACT009", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4116), "Dance battle for all ages", "Dance Competition", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4116) },
-                    { "ACT010", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4118), "Competitive chess matches", "Chess Tournament", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4119) },
-                    { "ACT011", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4122), "Outdoor movie screening", "Movie Night", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4122) },
-                    { "ACT012", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4126), "Showcase of scientific projects", "Science Fair", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4127) },
-                    { "ACT013", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4129), "Intensive coding workshop", "Coding Bootcamp", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4130) },
-                    { "ACT014", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4132), "Learn gardening techniques", "Gardening Workshop", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4132) },
-                    { "ACT015", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4134), "Guided meditation practice", "Meditation Session", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4135) }
+                    { "ACT001", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1733), "A relaxing yoga session", "Yoga Class", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1733) },
+                    { "ACT002", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1740), "Learn to cook delicious meals", "Cooking Workshop", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1741) },
+                    { "ACT003", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1743), "Live music performance", "Music Concert", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1744) },
+                    { "ACT004", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1746), "Showcase of local artists", "Art Exhibition", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1746) },
+                    { "ACT005", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1748), "Discussion on latest technology trends", "Tech Talk", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1749) },
+                    { "ACT006", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1751), "5K run for a good cause", "Charity Run", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1752) },
+                    { "ACT007", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1753), "Monthly book discussion", "Book Club", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1754) },
+                    { "ACT008", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1756), "Learn photography skills", "Photography Workshop", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1756) },
+                    { "ACT009", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1758), "Dance battle for all ages", "Dance Competition", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1759) },
+                    { "ACT010", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1762), "Competitive chess matches", "Chess Tournament", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1763) },
+                    { "ACT011", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1765), "Outdoor movie screening", "Movie Night", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1765) },
+                    { "ACT012", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1767), "Showcase of scientific projects", "Science Fair", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1768) },
+                    { "ACT013", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1769), "Intensive coding workshop", "Coding Bootcamp", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1770) },
+                    { "ACT014", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1772), "Learn gardening techniques", "Gardening Workshop", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1772) },
+                    { "ACT015", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1774), "Guided meditation practice", "Meditation Session", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1775) }
                 });
 
             migrationBuilder.InsertData(
@@ -977,18 +977,18 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "EventId", "CreateBy", "CreateDate", "Description", "EndDate", "EventName", "IsActive", "Location", "StartDate", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "E001", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2534), "A grand celebration to welcome the new year", new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "New Year Festival", true, "Times Square, New York", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { "E002", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2539), "Experience the beauty of cherry blossoms", new DateTime(2025, 2, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Spring Blossom Fest", true, "Kyoto, Japan", new DateTime(2025, 2, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { "E003", "Manager", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2542), "Showcasing the latest in technology and AI", new DateTime(2025, 3, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "Tech Innovation Summit", true, "Silicon Valley", new DateTime(2025, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { "E004", "Manager", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2545), "Live performances from top artists", new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "Music Fest", true, "Coachella, California", new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { "E005", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2548), "A must-attend event for comic book fans", new DateTime(2025, 5, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Comic-Con International", true, "San Diego Convention Center", new DateTime(2025, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { "E006", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2552), "Largest anime convention in the world", new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Anime Expo", true, "Los Angeles Convention Center", new DateTime(2025, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { "E007", "Manager", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2557), "Latest trends and releases in gaming", new DateTime(2025, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Gaming Expo", true, "Las Vegas Convention Center", new DateTime(2025, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { "E008", "Manager", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2560), "A fun-filled summer celebration", new DateTime(2025, 8, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Summer Festival", true, "Miami Beach, Florida", new DateTime(2025, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { "E009", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2562), "A paradise for cosplayers", new DateTime(2025, 9, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Cosplay Festival", true, "Tokyo Big Sight", new DateTime(2025, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { "E010", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2565), "Showcasing the best movies of the year", new DateTime(2025, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Film Festival", true, "Cannes, France", new DateTime(2025, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { "E011", "Manager", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2568), "Spooky celebrations and costume parties", new DateTime(2025, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Halloween Night", true, "Salem, Massachusetts", new DateTime(2025, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { "E012", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2571), "Festive shopping and holiday cheer", new DateTime(2025, 12, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Christmas Market", true, "Nuremberg, Germany", new DateTime(2025, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), null }
+                    { "E001", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(31), "A grand celebration to welcome the new year", new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "New Year Festival", true, "Times Square, New York", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { "E002", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(35), "Experience the beauty of cherry blossoms", new DateTime(2025, 2, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Spring Blossom Fest", true, "Kyoto, Japan", new DateTime(2025, 2, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { "E003", "Manager", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(38), "Showcasing the latest in technology and AI", new DateTime(2025, 3, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "Tech Innovation Summit", true, "Silicon Valley", new DateTime(2025, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { "E004", "Manager", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(43), "Live performances from top artists", new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "Music Fest", true, "Coachella, California", new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { "E005", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(46), "A must-attend event for comic book fans", new DateTime(2025, 5, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Comic-Con International", true, "San Diego Convention Center", new DateTime(2025, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { "E006", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(49), "Largest anime convention in the world", new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Anime Expo", true, "Los Angeles Convention Center", new DateTime(2025, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { "E007", "Manager", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(52), "Latest trends and releases in gaming", new DateTime(2025, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Gaming Expo", true, "Las Vegas Convention Center", new DateTime(2025, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { "E008", "Manager", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(54), "A fun-filled summer celebration", new DateTime(2025, 8, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Summer Festival", true, "Miami Beach, Florida", new DateTime(2025, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { "E009", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(57), "A paradise for cosplayers", new DateTime(2025, 9, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), "Cosplay Festival", true, "Tokyo Big Sight", new DateTime(2025, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { "E010", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(60), "Showcasing the best movies of the year", new DateTime(2025, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Film Festival", true, "Cannes, France", new DateTime(2025, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { "E011", "Manager", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(63), "Spooky celebrations and costume parties", new DateTime(2025, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Halloween Night", true, "Salem, Massachusetts", new DateTime(2025, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { "E012", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(67), "Festive shopping and holiday cheer", new DateTime(2025, 12, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Christmas Market", true, "Nuremberg, Germany", new DateTime(2025, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), null }
                 });
 
             migrationBuilder.InsertData(
@@ -1018,21 +1018,21 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "ProductId", "CreateDate", "Description", "IsActive", "Price", "ProductName", "Quantity", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "P001", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2311), "A wig for Naruto cosplay", true, 30000.0, "Naruto Wig", 10, null },
-                    { "P002", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2315), "A hat for Mario cosplay", true, 20000.0, "Mario Hat", 15, null },
-                    { "P003", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2318), "Complete costume for Sasuke cosplay", true, 80000.0, "Sasuke Costume", 5, null },
-                    { "P004", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2322), "Replica sword from The Legend of Zelda", true, 100000.0, "Zelda Sword", 7, null },
-                    { "P005", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2327), "Iconic straw hat from One Piece", true, 25000.0, "One Piece Straw Hat", 20, null },
-                    { "P006", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2330), "Hatsune Miku blue twin-tail wig", true, 40000.0, "Miku Wig", 12, null },
-                    { "P007", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2333), "Tanjiro's iconic hanafuda earrings", true, 15000.0, "Demon Slayer Earrings", 30, null },
-                    { "P008", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2336), "Survey Corps uniform jacket", true, 50000.0, "Attack on Titan Jacket", 10, null },
-                    { "P009", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2338), "Cozy Pikachu-themed onesie", true, 60000.0, "Pikachu Onesie", 8, null },
-                    { "P010", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2342), "Final Fantasy VII replica sword", true, 120000.0, "Cloud's Buster Sword", 4, null },
-                    { "P011", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2345), "LED Vision accessory from Genshin Impact", true, 35000.0, "Genshin Impact Vision", 25, null },
-                    { "P012", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2347), "Jinx cosplay wig from Arcane", true, 45000.0, "Jinx Wig", 6, null },
-                    { "P013", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2352), "Golden tiara from Sailor Moon", true, 18000.0, "Sailor Moon Tiara", 15, null },
-                    { "P014", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2355), "High-quality Spider-Man suit", true, 90000.0, "Spider-Man Suit", 3, null },
-                    { "P015", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2376), "Replica wand from Harry Potter series", true, 22000.0, "Harry Potter Wand", 50, null }
+                    { "P001", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9668), "A wig for Naruto cosplay", true, 30000.0, "Naruto Wig", 10, null },
+                    { "P002", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9674), "A hat for Mario cosplay", true, 20000.0, "Mario Hat", 15, null },
+                    { "P003", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9679), "Complete costume for Sasuke cosplay", true, 80000.0, "Sasuke Costume", 5, null },
+                    { "P004", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9682), "Replica sword from The Legend of Zelda", true, 100000.0, "Zelda Sword", 7, null },
+                    { "P005", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9752), "Iconic straw hat from One Piece", true, 25000.0, "One Piece Straw Hat", 20, null },
+                    { "P006", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9755), "Hatsune Miku blue twin-tail wig", true, 40000.0, "Miku Wig", 12, null },
+                    { "P007", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9758), "Tanjiro's iconic hanafuda earrings", true, 15000.0, "Demon Slayer Earrings", 30, null },
+                    { "P008", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9761), "Survey Corps uniform jacket", true, 50000.0, "Attack on Titan Jacket", 10, null },
+                    { "P009", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9764), "Cozy Pikachu-themed onesie", true, 60000.0, "Pikachu Onesie", 8, null },
+                    { "P010", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9767), "Final Fantasy VII replica sword", true, 120000.0, "Cloud's Buster Sword", 4, null },
+                    { "P011", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9798), "LED Vision accessory from Genshin Impact", true, 35000.0, "Genshin Impact Vision", 25, null },
+                    { "P012", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9802), "Jinx cosplay wig from Arcane", true, 45000.0, "Jinx Wig", 6, null },
+                    { "P013", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9805), "Golden tiara from Sailor Moon", true, 18000.0, "Sailor Moon Tiara", 15, null },
+                    { "P014", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9809), "High-quality Spider-Man suit", true, 90000.0, "Spider-Man Suit", 3, null },
+                    { "P015", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9813), "Replica wand from Harry Potter series", true, 22000.0, "Harry Potter Wand", 50, null }
                 });
 
             migrationBuilder.InsertData(
@@ -1052,9 +1052,9 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "ServiceId", "CreateDate", "Description", "ServiceName", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "S001", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2272), "Rent characters for events and parties", "Character Rental", null },
-                    { "S002", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2277), "Live cosplay performances at events", "Cosplay Rental", null },
-                    { "S003", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2278), "Professional photoshoot with cosplayers", "Create event", null }
+                    { "S001", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9625), "Rent characters for events and parties", "Character Rental", null },
+                    { "S002", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9630), "Live cosplay performances at events", "Cosplay Rental", null },
+                    { "S003", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9631), "Professional photoshoot with cosplayers", "Create event", null }
                 });
 
             migrationBuilder.InsertData(
@@ -1062,46 +1062,46 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "AccountId", "AverageStar", "Birthday", "Code", "Description", "Email", "GoogleId", "Height", "IsActive", "Leader", "Name", "OnTask", "Password", "Phone", "RoleId", "SalaryIndex", "TaskQuantity", "UserName", "Weight" },
                 values: new object[,]
                 {
-                    { "A001", 4.5, null, null, null, "john@example.com", null, 180f, true, null, "John Doe", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.2, null, null, 75f },
+                    { "A001", 4.5, null, null, null, "john@example.com", null, 180f, true, null, "John Doe", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 45000.0, null, null, 75f },
                     { "A002", null, null, null, null, "jane@example.com", null, null, true, null, "Jane Smith", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R001", null, null, null, null },
                     { "A003", null, null, null, null, "phuongnam26012002@gmail.com", null, null, true, null, "Nammmmmmmm", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R005", null, null, null, null },
-                    { "A004", 4.2000000000000002, null, null, null, "bob@example.com", null, 175f, true, null, "Bob Brown", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3, null, null, 80f },
-                    { "A005", 3.5, null, null, null, "charlie@example.com", null, 182f, true, null, "Charlie White", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3999999999999999, null, null, 78f },
+                    { "A004", 4.2000000000000002, null, null, null, "bob@example.com", null, 175f, true, null, "Bob Brown", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 42000.0, null, null, 80f },
+                    { "A005", 3.5, null, null, null, "charlie@example.com", null, 182f, true, null, "Charlie White", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 35000.0, null, null, 78f },
                     { "A006", null, null, null, null, "david@example.com", null, null, true, null, "David Black", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R005", null, null, null, null },
-                    { "A007", 4.0999999999999996, null, null, null, "emma@example.com", null, 168f, true, null, "Emma Green", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.1000000000000001, null, null, 60f },
-                    { "A008", 4.5999999999999996, null, null, null, "frank@example.com", null, 185f, true, null, "Frank Blue", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.5, null, null, 85f },
+                    { "A007", 4.0999999999999996, null, null, null, "emma@example.com", null, 168f, true, null, "Emma Green", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 41000.0, null, null, 60f },
+                    { "A008", 4.5999999999999996, null, null, null, "frank@example.com", null, 185f, true, null, "Frank Blue", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 46000.0, null, null, 85f },
                     { "A009", null, null, null, null, "grace@example.com", null, null, true, null, "Grace Pink", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R001", null, null, null, null },
-                    { "A010", 2.5, null, null, null, "henry@example.com", null, 178f, true, null, "Henry Purple", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3, null, null, 77f },
+                    { "A010", 2.5, null, null, null, "henry@example.com", null, 178f, true, null, "Henry Purple", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 25000.0, null, null, 77f },
                     { "A011", null, null, null, null, "isla@example.com", null, null, true, null, "Isla Red", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R005", null, null, null, null },
-                    { "A012", 3.7999999999999998, null, null, null, "jack@example.com", null, 172f, true, null, "Jack Yellow", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.2, null, null, 70f },
-                    { "A013", 2.5899999999999999, null, null, null, "katie@example.com", null, 165f, true, null, "Katie Orange", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.1000000000000001, null, null, 55f },
+                    { "A012", 3.7999999999999998, null, null, null, "jack@example.com", null, 172f, true, null, "Jack Yellow", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 38000.0, null, null, 70f },
+                    { "A013", 2.5, null, null, null, "katie@example.com", null, 165f, true, null, "Katie Orange", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 25000.0, null, null, 55f },
                     { "A014", null, null, null, null, "liam@example.com", null, null, true, null, "Liam Gray", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R005", null, null, null, null },
-                    { "A015", 1.5, null, null, null, "mia@example.com", null, 170f, true, null, "Mia Cyan", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3999999999999999, null, null, 65f },
-                    { "A016", 3.7000000000000002, null, null, null, "noah@example.com", null, 175f, true, null, "Noah Silver", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3, null, null, 70f },
-                    { "A017", 4.7999999999999998, null, null, null, "olivia@example.com", null, 168f, true, null, "Olivia Gold", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.2, null, null, 55f },
-                    { "A018", 3.2000000000000002, null, null, null, "william@example.com", null, 180f, true, null, "William Amber", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3999999999999999, null, null, 75f },
-                    { "A019", 3.2999999999999998, null, null, null, "sophia@example.com", null, 165f, true, null, "Sophia Ivory", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3, null, null, 50f },
-                    { "A020", 3.3999999999999999, null, null, null, "james@example.com", null, 178f, true, null, "James Navy", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.5, null, null, 72f },
-                    { "A021", 3.5, null, null, null, "ava@example.com", null, 162f, true, null, "Ava Teal", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.2, null, null, 48f },
-                    { "A022", 3.6000000000000001, null, null, null, "benjamin@example.com", null, 177f, true, null, "Benjamin Lime", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3, null, null, 70f },
-                    { "A023", 3.7000000000000002, null, null, null, "charlotte@example.com", null, 164f, true, null, "Charlotte Beige", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.2, null, null, 52f },
-                    { "A024", 3.7999999999999998, null, null, null, "lucas@example.com", null, 180f, true, null, "Lucas Maroon", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3, null, null, 74f },
-                    { "A025", 3.8999999999999999, null, null, null, "mia@example.com", null, 159f, true, null, "Mia Pearl", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.1000000000000001, null, null, 47f },
-                    { "A026", 2.5, null, null, null, "ethan@example.com", null, 176f, true, null, "Ethan Olive", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3, null, null, 71f },
-                    { "A027", 2.6000000000000001, null, null, null, "amelia@example.com", null, 167f, true, null, "Amelia Ruby", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.2, null, null, 53f },
-                    { "A028", 2.7000000000000002, null, null, null, "henry@example.com", null, 182f, true, null, "Henry Saffron", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3999999999999999, null, null, 76f },
-                    { "A029", 2.7999999999999998, null, null, null, "ella@example.com", null, 160f, true, null, "Ella Coral", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.1000000000000001, null, null, 49f },
-                    { "A030", 2.8999999999999999, null, null, null, "daniel@example.com", null, 175f, true, null, "Daniel Cyan", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3, null, null, 72f },
-                    { "A031", 3.0, null, null, null, "logan@example.com", null, 180f, true, null, "Logan Indigo", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3999999999999999, null, null, 73f },
-                    { "A032", 4.0, null, null, null, "lily@example.com", null, 165f, true, null, "Lily Violet", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.2, null, null, 52f },
-                    { "A033", 4.0999999999999996, null, null, null, "mason@example.com", null, 178f, true, null, "Mason Turquoise", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3, null, null, 74f },
-                    { "A034", 4.2000000000000002, null, null, null, "zoe@example.com", null, 160f, true, null, "Zoe Lavender", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.1000000000000001, null, null, 48f },
-                    { "A035", 4.2999999999999998, null, null, null, "elijah@example.com", null, 182f, true, null, "Elijah Crimson", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.5, null, null, 77f },
-                    { "A036", 4.4000000000000004, null, null, null, "aria@example.com", null, 164f, true, null, "Aria Mint", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.2, null, null, 50f },
-                    { "A037", 4.5, null, null, null, "sebastian@example.com", null, 179f, true, null, "Sebastian Bronze", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3, null, null, 72f },
-                    { "A038", 4.5999999999999996, null, null, null, "harper@example.com", null, 168f, true, null, "Harper Rose", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.2, null, null, 53f },
-                    { "A039", 4.7000000000000002, null, null, null, "caleb@example.com", null, 181f, true, null, "Caleb Onyx", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.3999999999999999, null, null, 75f },
-                    { "A040", 4.7999999999999998, null, null, null, "scarlett@example.com", null, 162f, true, null, "Scarlett Magenta", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 1.1000000000000001, null, null, 51f }
+                    { "A015", 1.5, null, null, null, "mia@example.com", null, 170f, true, null, "Mia Cyan", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 15000.0, null, null, 65f },
+                    { "A016", 3.7000000000000002, null, null, null, "noah@example.com", null, 175f, true, null, "Noah Silver", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 37000.0, null, null, 70f },
+                    { "A017", 4.7999999999999998, null, null, null, "olivia@example.com", null, 168f, true, null, "Olivia Gold", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 48000.0, null, null, 55f },
+                    { "A018", 3.2000000000000002, null, null, null, "william@example.com", null, 180f, true, null, "William Amber", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 32000.0, null, null, 75f },
+                    { "A019", 3.2999999999999998, null, null, null, "sophia@example.com", null, 165f, true, null, "Sophia Ivory", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 33000.0, null, null, 50f },
+                    { "A020", 3.3999999999999999, null, null, null, "james@example.com", null, 178f, true, null, "James Navy", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 34000.0, null, null, 72f },
+                    { "A021", 3.5, null, null, null, "ava@example.com", null, 162f, true, null, "Ava Teal", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 35000.0, null, null, 48f },
+                    { "A022", 3.6000000000000001, null, null, null, "benjamin@example.com", null, 177f, true, null, "Benjamin Lime", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 36000.0, null, null, 70f },
+                    { "A023", 3.7000000000000002, null, null, null, "charlotte@example.com", null, 164f, true, null, "Charlotte Beige", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 37000.0, null, null, 52f },
+                    { "A024", 3.7999999999999998, null, null, null, "lucas@example.com", null, 180f, true, null, "Lucas Maroon", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 38000.0, null, null, 74f },
+                    { "A025", 3.8999999999999999, null, null, null, "mia@example.com", null, 159f, true, null, "Mia Pearl", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 39000.0, null, null, 47f },
+                    { "A026", 2.5, null, null, null, "ethan@example.com", null, 176f, true, null, "Ethan Olive", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 25000.0, null, null, 71f },
+                    { "A027", 2.6000000000000001, null, null, null, "amelia@example.com", null, 167f, true, null, "Amelia Ruby", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 26000.0, null, null, 53f },
+                    { "A028", 2.7000000000000002, null, null, null, "henry@example.com", null, 182f, true, null, "Henry Saffron", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 27000.0, null, null, 76f },
+                    { "A029", 2.7999999999999998, null, null, null, "ella@example.com", null, 160f, true, null, "Ella Coral", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 28000.0, null, null, 49f },
+                    { "A030", 2.8999999999999999, null, null, null, "daniel@example.com", null, 175f, true, null, "Daniel Cyan", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 29000.0, null, null, 72f },
+                    { "A031", 3.0, null, null, null, "logan@example.com", null, 180f, true, null, "Logan Indigo", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 30000.0, null, null, 73f },
+                    { "A032", 4.0, null, null, null, "lily@example.com", null, 165f, true, null, "Lily Violet", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 40000.0, null, null, 52f },
+                    { "A033", 4.0999999999999996, null, null, null, "mason@example.com", null, 178f, true, null, "Mason Turquoise", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 41000.0, null, null, 74f },
+                    { "A034", 4.2000000000000002, null, null, null, "zoe@example.com", null, 160f, true, null, "Zoe Lavender", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 42000.0, null, null, 48f },
+                    { "A035", 4.2999999999999998, null, null, null, "elijah@example.com", null, 182f, true, null, "Elijah Crimson", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 43000.0, null, null, 77f },
+                    { "A036", 4.4000000000000004, null, null, null, "aria@example.com", null, 164f, true, null, "Aria Mint", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 44000.0, null, null, 50f },
+                    { "A037", 4.5, null, null, null, "sebastian@example.com", null, 179f, true, null, "Sebastian Bronze", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 45000.0, null, null, 72f },
+                    { "A038", 4.5999999999999996, null, null, null, "harper@example.com", null, 168f, true, null, "Harper Rose", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 46000.0, null, null, 53f },
+                    { "A039", 4.7000000000000002, null, null, null, "caleb@example.com", null, 181f, true, null, "Caleb Onyx", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 47000.0, null, null, 75f },
+                    { "A040", 4.7999999999999998, null, null, null, "scarlett@example.com", null, 162f, true, null, "Scarlett Magenta", null, "ZkmcwLVZC7B06TE7qd/qoA==", null, "R004", 48000.0, null, null, 51f }
                 });
 
             migrationBuilder.InsertData(
@@ -1109,21 +1109,21 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "CharacterId", "CategoryId", "CharacterName", "CreateDate", "Description", "IsActive", "MaxHeight", "MaxWeight", "MinHeight", "MinWeight", "Price", "Quantity", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "CH001", "C3", "Naruto", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2142), "Ninja from Konoha", true, 180f, 80f, 160f, 50f, 100000.0, 5, null },
-                    { "CH002", "C3", "Sasuke", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2149), "Naruto’s rival", true, 185f, 85f, 165f, 55f, 120000.0, 3, null },
-                    { "CH003", "C3", "Goku", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2154), "Saiyan warrior", true, 190f, 90f, 170f, 60f, 150000.0, 4, null },
-                    { "CH004", "C4", "Luffy", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2159), "Pirate King", true, 175f, 70f, 155f, 45f, 110000.0, 6, null },
-                    { "CH005", "C4", "Ichigo", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2164), "Soul Reaper", true, 185f, 85f, 165f, 55f, 130000.0, 3, null },
-                    { "CH006", "C14", "Mario", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2170), "Plumber hero", true, 160f, 70f, 140f, 50f, 80000.0, 5, null },
-                    { "CH007", "C14", "Luigi", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2174), "Mario’s brother", true, 170f, 75f, 150f, 55f, 85000.0, 4, null },
-                    { "CH008", "C14", "Link", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2177), "Hero of Hyrule", true, 180f, 80f, 160f, 50f, 140000.0, 2, null },
-                    { "CH009", "C16", "Zelda", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2181), "Hyrule princess", true, 175f, 70f, 155f, 50f, 135000.0, 3, null },
-                    { "CH010", "C16", "Samus", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2213), "Bounty hunter", true, 185f, 85f, 165f, 55f, 145000.0, 3, null },
-                    { "CH011", "C13", "Cloud", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2217), "Ex-SOLDIER", true, 185f, 85f, 165f, 55f, 125000.0, 3, null },
-                    { "CH012", "C13", "Sephiroth", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2223), "One-Winged Angel", true, 190f, 90f, 170f, 60f, 155000.0, 2, null },
-                    { "CH013", "C8", "Kratos", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2228), "God of War", true, 195f, 100f, 175f, 70f, 160000.0, 2, null },
-                    { "CH014", "C8", "Pikachu", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2231), "Electric Pokemon", true, 50f, 20f, 30f, 10f, 90000.0, 10, null },
-                    { "CH015", "C8", "Kirby", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(2236), "Pink puffball", true, 60f, 25f, 40f, 15f, 95000.0, 8, null }
+                    { "CH001", "C3", "Naruto", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9495), "Ninja from Konoha", true, 180f, 80f, 160f, 50f, 100000.0, 5, null },
+                    { "CH002", "C3", "Sasuke", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9504), "Naruto’s rival", true, 185f, 85f, 165f, 55f, 120000.0, 3, null },
+                    { "CH003", "C3", "Goku", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9509), "Saiyan warrior", true, 190f, 90f, 170f, 60f, 150000.0, 4, null },
+                    { "CH004", "C4", "Luffy", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9513), "Pirate King", true, 175f, 70f, 155f, 45f, 110000.0, 6, null },
+                    { "CH005", "C4", "Ichigo", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9517), "Soul Reaper", true, 185f, 85f, 165f, 55f, 130000.0, 3, null },
+                    { "CH006", "C14", "Mario", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9548), "Plumber hero", true, 160f, 70f, 140f, 50f, 80000.0, 5, null },
+                    { "CH007", "C14", "Luigi", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9553), "Mario’s brother", true, 170f, 75f, 150f, 55f, 85000.0, 4, null },
+                    { "CH008", "C14", "Link", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9557), "Hero of Hyrule", true, 180f, 80f, 160f, 50f, 140000.0, 2, null },
+                    { "CH009", "C16", "Zelda", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9561), "Hyrule princess", true, 175f, 70f, 155f, 50f, 135000.0, 3, null },
+                    { "CH010", "C16", "Samus", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9567), "Bounty hunter", true, 185f, 85f, 165f, 55f, 145000.0, 3, null },
+                    { "CH011", "C13", "Cloud", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9573), "Ex-SOLDIER", true, 185f, 85f, 165f, 55f, 125000.0, 3, null },
+                    { "CH012", "C13", "Sephiroth", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9578), "One-Winged Angel", true, 190f, 90f, 170f, 60f, 155000.0, 2, null },
+                    { "CH013", "C8", "Kratos", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9582), "God of War", true, 195f, 100f, 175f, 70f, 160000.0, 2, null },
+                    { "CH014", "C8", "Pikachu", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9586), "Electric Pokemon", true, 50f, 20f, 30f, 10f, 90000.0, 10, null },
+                    { "CH015", "C8", "Kirby", new DateTime(2025, 4, 14, 6, 36, 41, 812, DateTimeKind.Utc).AddTicks(9590), "Pink puffball", true, 60f, 25f, 40f, 15f, 95000.0, 8, null }
                 });
 
             migrationBuilder.InsertData(
@@ -1131,21 +1131,21 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "EventActivityId", "ActivityId", "CreateBy", "CreateDate", "Description", "EventId", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "EA001", "ACT001", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3843), "Yoga for a fresh start", "E001", null },
-                    { "EA002", "ACT005", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3845), "Tech trends in the new year", "E001", null },
-                    { "EA003", "ACT004", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3847), "Painting cherry blossoms", "E002", null },
-                    { "EA004", "ACT013", "Manager", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3849), "AI and future coding", "E003", null },
-                    { "EA005", "ACT009", "Manager", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3852), "Dance battles live", "E004", null },
-                    { "EA006", "ACT003", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3854), "Comic-Con live music", "E005", null },
-                    { "EA007", "ACT007", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3856), "Anime and book discussions", "E006", null },
-                    { "EA008", "ACT010", "Manager", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3858), "Chess and gaming", "E007", null },
-                    { "EA009", "ACT011", "Manager", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3861), "Outdoor movie fun", "E008", null },
-                    { "EA010", "ACT015", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3863), "Meditation for cosplayers", "E009", null },
-                    { "EA011", "ACT012", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3865), "Science in filmmaking", "E010", null },
-                    { "EA012", "ACT006", "Manager", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3867), "Halloween charity run", "E011", null },
-                    { "EA013", "ACT014", "Admin", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3869), "Christmas gardening", "E012", null },
-                    { "EA014", "ACT002", "Manager", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3871), "Cooking for music lovers", "E004", null },
-                    { "EA015", "ACT008", "Manager", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3873), "Photography in tech", "E003", null }
+                    { "EA001", "ACT001", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1474), "Yoga for a fresh start", "E001", null },
+                    { "EA002", "ACT005", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1476), "Tech trends in the new year", "E001", null },
+                    { "EA003", "ACT004", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1478), "Painting cherry blossoms", "E002", null },
+                    { "EA004", "ACT013", "Manager", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1480), "AI and future coding", "E003", null },
+                    { "EA005", "ACT009", "Manager", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1482), "Dance battles live", "E004", null },
+                    { "EA006", "ACT003", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1484), "Comic-Con live music", "E005", null },
+                    { "EA007", "ACT007", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1488), "Anime and book discussions", "E006", null },
+                    { "EA008", "ACT010", "Manager", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1490), "Chess and gaming", "E007", null },
+                    { "EA009", "ACT011", "Manager", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1492), "Outdoor movie fun", "E008", null },
+                    { "EA010", "ACT015", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1493), "Meditation for cosplayers", "E009", null },
+                    { "EA011", "ACT012", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1496), "Science in filmmaking", "E010", null },
+                    { "EA012", "ACT006", "Manager", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1497), "Halloween charity run", "E011", null },
+                    { "EA013", "ACT014", "Admin", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1526), "Christmas gardening", "E012", null },
+                    { "EA014", "ACT002", "Manager", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1530), "Cooking for music lovers", "E004", null },
+                    { "EA015", "ACT008", "Manager", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1534), "Photography in tech", "E003", null }
                 });
 
             migrationBuilder.InsertData(
@@ -1153,18 +1153,18 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "ImageId", "CreateDate", "EventId", "ImageUrl", "IsAvatar", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "EI001", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4332), "E001", "https://example.com/event1.jpg", null, null },
-                    { "EI002", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4335), "E002", "https://example.com/event2.jpg", null, null },
-                    { "EI003", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4337), "E003", "https://example.com/event3.jpg", null, null },
-                    { "EI004", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4339), "E004", "https://example.com/event4.jpg", null, null },
-                    { "EI005", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4341), "E005", "https://example.com/event5.jpg", null, null },
-                    { "EI006", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4344), "E006", "https://example.com/event6.jpg", null, null },
-                    { "EI007", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4346), "E007", "https://example.com/event7.jpg", null, null },
-                    { "EI008", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4348), "E008", "https://example.com/event8.jpg", null, null },
-                    { "EI009", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4349), "E009", "https://example.com/event9.jpg", null, null },
-                    { "EI010", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4351), "E010", "https://example.com/event10.jpg", null, null },
-                    { "EI011", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4353), "E011", "https://example.com/event11.jpg", null, null },
-                    { "EI012", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4354), "E012", "https://example.com/event12.jpg", null, null }
+                    { "EI001", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2168), "E001", "https://example.com/event1.jpg", null, null },
+                    { "EI002", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2171), "E002", "https://example.com/event2.jpg", null, null },
+                    { "EI003", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2174), "E003", "https://example.com/event3.jpg", null, null },
+                    { "EI004", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2177), "E004", "https://example.com/event4.jpg", null, null },
+                    { "EI005", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2179), "E005", "https://example.com/event5.jpg", null, null },
+                    { "EI006", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2181), "E006", "https://example.com/event6.jpg", null, null },
+                    { "EI007", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2183), "E007", "https://example.com/event7.jpg", null, null },
+                    { "EI008", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2185), "E008", "https://example.com/event8.jpg", null, null },
+                    { "EI009", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2187), "E009", "https://example.com/event9.jpg", null, null },
+                    { "EI010", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2189), "E010", "https://example.com/event10.jpg", null, null },
+                    { "EI011", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2191), "E011", "https://example.com/event11.jpg", null, null },
+                    { "EI012", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2194), "E012", "https://example.com/event12.jpg", null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -1172,21 +1172,21 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "ProductImageId", "CreateDate", "IsAvatar", "ProductId", "UpdateDate", "UrlImage" },
                 values: new object[,]
                 {
-                    { "IMG001", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4665), null, "P001", null, "https://example.com/images/naruto_wig.jpg" },
-                    { "IMG002", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4668), null, "P002", null, "https://example.com/images/mario_hat.jpg" },
-                    { "IMG003", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4670), null, "P003", null, "https://example.com/images/sasuke_costume.jpg" },
-                    { "IMG004", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4672), null, "P004", null, "https://example.com/images/zelda_sword.jpg" },
-                    { "IMG005", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4674), null, "P005", null, "https://example.com/images/one_piece_hat.jpg" },
-                    { "IMG006", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4676), null, "P006", null, "https://example.com/images/miku_wig.jpg" },
-                    { "IMG007", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4679), null, "P007", null, "https://example.com/images/demon_slayer_earrings.jpg" },
-                    { "IMG008", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4681), null, "P008", null, "https://example.com/images/aot_jacket.jpg" },
-                    { "IMG009", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4683), null, "P009", null, "https://example.com/images/pikachu_onesie.jpg" },
-                    { "IMG010", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4685), null, "P010", null, "https://example.com/images/buster_sword.jpg" },
-                    { "IMG011", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4687), null, "P011", null, "https://example.com/images/genshin_vision.jpg" },
-                    { "IMG012", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4688), null, "P012", null, "https://example.com/images/jinx_wig.jpg" },
-                    { "IMG013", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4690), null, "P013", null, "https://example.com/images/sailor_moon_tiara.jpg" },
-                    { "IMG014", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4691), null, "P014", null, "https://example.com/images/spiderman_suit.jpg" },
-                    { "IMG015", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4695), null, "P015", null, "https://example.com/images/harry_potter_wand.jpg" }
+                    { "IMG001", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2491), null, "P001", null, "https://example.com/images/naruto_wig.jpg" },
+                    { "IMG002", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2494), null, "P002", null, "https://example.com/images/mario_hat.jpg" },
+                    { "IMG003", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2496), null, "P003", null, "https://example.com/images/sasuke_costume.jpg" },
+                    { "IMG004", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2498), null, "P004", null, "https://example.com/images/zelda_sword.jpg" },
+                    { "IMG005", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2502), null, "P005", null, "https://example.com/images/one_piece_hat.jpg" },
+                    { "IMG006", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2504), null, "P006", null, "https://example.com/images/miku_wig.jpg" },
+                    { "IMG007", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2506), null, "P007", null, "https://example.com/images/demon_slayer_earrings.jpg" },
+                    { "IMG008", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2508), null, "P008", null, "https://example.com/images/aot_jacket.jpg" },
+                    { "IMG009", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2510), null, "P009", null, "https://example.com/images/pikachu_onesie.jpg" },
+                    { "IMG010", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2512), null, "P010", null, "https://example.com/images/buster_sword.jpg" },
+                    { "IMG011", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2514), null, "P011", null, "https://example.com/images/genshin_vision.jpg" },
+                    { "IMG012", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2516), null, "P012", null, "https://example.com/images/jinx_wig.jpg" },
+                    { "IMG013", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2520), null, "P013", null, "https://example.com/images/sailor_moon_tiara.jpg" },
+                    { "IMG014", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2522), null, "P014", null, "https://example.com/images/spiderman_suit.jpg" },
+                    { "IMG015", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2524), null, "P015", null, "https://example.com/images/harry_potter_wand.jpg" }
                 });
 
             migrationBuilder.InsertData(
@@ -1239,21 +1239,21 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "AccountImageId", "AccountId", "CreateDate", "IsAvatar", "UpdateDate", "UrlImage" },
                 values: new object[,]
                 {
-                    { "AI1", "A001", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4005), null, null, "https://example.com/admin.jpg" },
-                    { "AI10", "A010", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4023), null, null, "https://example.com/user8.jpg" },
-                    { "AI11", "A011", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4026), null, null, "https://example.com/user9.jpg" },
-                    { "AI12", "A012", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4028), null, null, "https://example.com/user10.jpg" },
-                    { "AI13", "A013", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4030), null, null, "https://example.com/user11.jpg" },
-                    { "AI14", "A014", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4032), null, null, "https://example.com/user12.jpg" },
-                    { "AI15", "A015", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4033), null, null, "https://example.com/user13.jpg" },
-                    { "AI2", "A002", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4007), null, null, "https://example.com/manager.jpg" },
-                    { "AI3", "A003", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4010), null, null, "https://example.com/user1.jpg" },
-                    { "AI4", "A004", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4012), null, null, "https://example.com/user2.jpg" },
-                    { "AI5", "A005", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4014), null, null, "https://example.com/user3.jpg" },
-                    { "AI6", "A006", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4016), null, null, "https://example.com/user4.jpg" },
-                    { "AI7", "A007", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4017), null, null, "https://example.com/user5.jpg" },
-                    { "AI8", "A008", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4019), null, null, "https://example.com/user6.jpg" },
-                    { "AI9", "A009", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4021), null, null, "https://example.com/user7.jpg" }
+                    { "AI1", "A001", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1641), null, null, "https://example.com/admin.jpg" },
+                    { "AI10", "A010", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1659), null, null, "https://example.com/user8.jpg" },
+                    { "AI11", "A011", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1660), null, null, "https://example.com/user9.jpg" },
+                    { "AI12", "A012", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1662), null, null, "https://example.com/user10.jpg" },
+                    { "AI13", "A013", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1664), null, null, "https://example.com/user11.jpg" },
+                    { "AI14", "A014", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1665), null, null, "https://example.com/user12.jpg" },
+                    { "AI15", "A015", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1667), null, null, "https://example.com/user13.jpg" },
+                    { "AI2", "A002", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1643), null, null, "https://example.com/manager.jpg" },
+                    { "AI3", "A003", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1645), null, null, "https://example.com/user1.jpg" },
+                    { "AI4", "A004", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1647), null, null, "https://example.com/user2.jpg" },
+                    { "AI5", "A005", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1649), null, null, "https://example.com/user3.jpg" },
+                    { "AI6", "A006", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1650), null, null, "https://example.com/user4.jpg" },
+                    { "AI7", "A007", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1652), null, null, "https://example.com/user5.jpg" },
+                    { "AI8", "A008", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1654), null, null, "https://example.com/user6.jpg" },
+                    { "AI9", "A009", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1657), null, null, "https://example.com/user7.jpg" }
                 });
 
             migrationBuilder.InsertData(
@@ -1261,10 +1261,10 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "CartId", "AccountId", "CreateDate", "TotalPrice", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "C001", "A003", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3219), 0.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3220) },
-                    { "C002", "A006", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3224), 0.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3224) },
-                    { "C003", "A011", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3226), 0.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3227) },
-                    { "C004", "A014", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3229), 0.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3229) }
+                    { "C001", "A003", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(898), 0.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(898) },
+                    { "C002", "A006", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(901), 0.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(901) },
+                    { "C003", "A011", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(903), 0.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(904) },
+                    { "C004", "A014", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(946), 0.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(946) }
                 });
 
             migrationBuilder.InsertData(
@@ -1272,21 +1272,21 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "CharacterImageId", "CharacterId", "CreateDate", "IsAvatar", "UpdateDate", "UrlImage" },
                 values: new object[,]
                 {
-                    { "CI001", "CH001", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4248), null, null, "https://example.com/img1.jpg" },
-                    { "CI002", "CH002", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4252), null, null, "https://example.com/img2.jpg" },
-                    { "CI003", "CH003", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4254), null, null, "https://example.com/img3.jpg" },
-                    { "CI004", "CH004", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4256), null, null, "https://example.com/img4.jpg" },
-                    { "CI005", "CH005", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4260), null, null, "https://example.com/img5.jpg" },
-                    { "CI006", "CH006", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4261), null, null, "https://example.com/img6.jpg" },
-                    { "CI007", "CH007", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4283), null, null, "https://example.com/img7.jpg" },
-                    { "CI008", "CH008", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4286), null, null, "https://example.com/img8.jpg" },
-                    { "CI009", "CH009", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4288), null, null, "https://example.com/img9.jpg" },
-                    { "CI010", "CH010", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4289), null, null, "https://example.com/img10.jpg" },
-                    { "CI011", "CH011", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4291), null, null, "https://example.com/img11.jpg" },
-                    { "CI012", "CH012", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4293), null, null, "https://example.com/img12.jpg" },
-                    { "CI013", "CH013", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4297), null, null, "https://example.com/img13.jpg" },
-                    { "CI014", "CH014", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4298), null, null, "https://example.com/img14.jpg" },
-                    { "CI015", "CH015", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4300), null, null, "https://example.com/img15.jpg" }
+                    { "CI001", "CH001", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1917), null, null, "https://example.com/img1.jpg" },
+                    { "CI002", "CH002", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1922), null, null, "https://example.com/img2.jpg" },
+                    { "CI003", "CH003", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1925), null, null, "https://example.com/img3.jpg" },
+                    { "CI004", "CH004", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1927), null, null, "https://example.com/img4.jpg" },
+                    { "CI005", "CH005", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1929), null, null, "https://example.com/img5.jpg" },
+                    { "CI006", "CH006", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1931), null, null, "https://example.com/img6.jpg" },
+                    { "CI007", "CH007", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1933), null, null, "https://example.com/img7.jpg" },
+                    { "CI008", "CH008", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2120), null, null, "https://example.com/img8.jpg" },
+                    { "CI009", "CH009", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2122), null, null, "https://example.com/img9.jpg" },
+                    { "CI010", "CH010", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2124), null, null, "https://example.com/img10.jpg" },
+                    { "CI011", "CH011", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2127), null, null, "https://example.com/img11.jpg" },
+                    { "CI012", "CH012", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2129), null, null, "https://example.com/img12.jpg" },
+                    { "CI013", "CH013", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2131), null, null, "https://example.com/img13.jpg" },
+                    { "CI014", "CH014", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2133), null, null, "https://example.com/img14.jpg" },
+                    { "CI015", "CH015", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2134), null, null, "https://example.com/img15.jpg" }
                 });
 
             migrationBuilder.InsertData(
@@ -1294,18 +1294,18 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "EventCharacterId", "CharacterId", "CreateDate", "Description", "EventId", "IsAssign", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "EC001", "CH001", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3785), null, "E001", true, null },
-                    { "EC002", "CH002", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3790), null, "E002", true, null },
-                    { "EC003", "CH003", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3792), null, "E003", true, null },
-                    { "EC004", "CH004", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3795), null, "E004", true, null },
-                    { "EC005", "CH005", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3799), null, "E005", true, null },
-                    { "EC006", "CH006", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3801), null, "E006", true, null },
-                    { "EC007", "CH007", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3803), null, "E007", true, null },
-                    { "EC008", "CH008", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3805), null, "E008", true, null },
-                    { "EC009", "CH009", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3807), null, "E009", true, null },
-                    { "EC010", "CH010", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3809), null, "E010", true, null },
-                    { "EC011", "CH011", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3811), null, "E011", true, null },
-                    { "EC012", "CH012", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3813), null, "E012", true, null }
+                    { "EC001", "CH001", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1414), null, "E001", true, null },
+                    { "EC002", "CH002", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1417), null, "E002", true, null },
+                    { "EC003", "CH003", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1421), null, "E003", true, null },
+                    { "EC004", "CH004", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1423), null, "E004", true, null },
+                    { "EC005", "CH005", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1425), null, "E005", true, null },
+                    { "EC006", "CH006", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1427), null, "E006", true, null },
+                    { "EC007", "CH007", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1429), null, "E007", true, null },
+                    { "EC008", "CH008", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1431), null, "E008", true, null },
+                    { "EC009", "CH009", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1433), null, "E009", true, null },
+                    { "EC010", "CH010", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1435), null, "E010", true, null },
+                    { "EC011", "CH011", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1439), null, "E011", true, null },
+                    { "EC012", "CH012", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1441), null, "E012", true, null }
                 });
 
             migrationBuilder.InsertData(
@@ -1313,21 +1313,21 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "Id", "AccountId", "CreatedAt", "IsRead", "IsSentMail", "Message" },
                 values: new object[,]
                 {
-                    { "N001", "A001", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3153), false, true, "Welcome to the system!" },
-                    { "N002", "A002", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3155), false, true, "Your account has been upgraded." },
-                    { "N003", "A003", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3157), true, true, "New promotional offer available!" },
-                    { "N004", "A004", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3159), false, true, "Your request has been approved." },
-                    { "N005", "A005", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3162), true, true, "System maintenance scheduled." },
-                    { "N006", "A006", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3164), false, true, "Your order has been shipped!" },
-                    { "N007", "A007", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3166), false, true, "New event registration open." },
-                    { "N008", "A008", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3168), true, true, "Reminder: Payment due soon." },
-                    { "N009", "A009", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3172), false, true, "Your password was changed." },
-                    { "N010", "A010", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3174), false, true, "Admin announcement update." },
-                    { "N011", "A011", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3176), true, true, "New message from support." },
-                    { "N012", "A012", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3178), false, true, "Upcoming event invitation." },
-                    { "N013", "A013", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3180), false, true, "New cosplayer contest." },
-                    { "N014", "A014", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3182), true, true, "Loyalty points updated." },
-                    { "N015", "A015", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(3184), false, true, "Your subscription expired." }
+                    { "N001", "A001", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(700), false, true, "Welcome to the system!" },
+                    { "N002", "A002", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(703), false, true, "Your account has been upgraded." },
+                    { "N003", "A003", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(705), true, true, "New promotional offer available!" },
+                    { "N004", "A004", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(707), false, true, "Your request has been approved." },
+                    { "N005", "A005", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(709), true, true, "System maintenance scheduled." },
+                    { "N006", "A006", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(711), false, true, "Your order has been shipped!" },
+                    { "N007", "A007", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(715), false, true, "New event registration open." },
+                    { "N008", "A008", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(717), true, true, "Reminder: Payment due soon." },
+                    { "N009", "A009", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(719), false, true, "Your password was changed." },
+                    { "N010", "A010", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(721), false, true, "Admin announcement update." },
+                    { "N011", "A011", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(723), true, true, "New message from support." },
+                    { "N012", "A012", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(725), false, true, "Upcoming event invitation." },
+                    { "N013", "A013", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(727), false, true, "New cosplayer contest." },
+                    { "N014", "A014", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(729), true, true, "Loyalty points updated." },
+                    { "N015", "A015", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(733), false, true, "Your subscription expired." }
                 });
 
             migrationBuilder.InsertData(
@@ -1357,21 +1357,21 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "RequestId", "AccountCouponId", "AccountId", "CreatedDate", "Deposit", "Description", "EndDate", "Location", "Name", "PackageId", "Price", "Reason", "ServiceId", "StartDate", "Status", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "R001", null, "A001", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3252), null, "RentCostumes", new DateTime(2025, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "HCM", "Rent Naruto Costume", "PKG001", 100000.0, null, "S001", new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null },
-                    { "R002", null, "A002", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3286), null, "RentCosplayer", new DateTime(2025, 2, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "ĐN", "Rent Cosplayer for Event", null, 500000.0, "Cosplayer is busy", "S002", new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null },
-                    { "R003", null, "A003", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3319), null, "CreateEvent", new DateTime(2025, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "BD", "Create Anime Festival", null, 2000000.0, null, "S003", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null },
-                    { "R004", null, "A004", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3323), null, "RentCostumes", new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "HN", "Rent Samurai Armor", null, 150000.0, null, "S002", new DateTime(2025, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, null },
-                    { "R005", null, "A005", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3327), null, "RentCosplayer", new DateTime(2025, 5, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "BT", "Hire Professional Cosplayer", "PKG002", 700000.0, null, "S002", new DateTime(2025, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null },
-                    { "R006", null, "A006", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3332), null, "CreateEvent", new DateTime(2025, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "HCM", "Organize Comic Convention", null, 5000000.0, null, "S001", new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null },
-                    { "R007", null, "A007", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3336), null, "RentCostumes", new DateTime(2025, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "HCM", "Rent Victorian Costume", null, 120000.0, "Cosplayer is busy", "S002", new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, null },
-                    { "R008", null, "A008", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3339), null, "RentCosplayer", new DateTime(2025, 8, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "QN", "Book Cosplayer for Birthday Party", null, 350000.0, null, "S003", new DateTime(2025, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null },
-                    { "R009", null, "A009", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3343), null, "CreateEvent", new DateTime(2025, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "CM", "Plan Fantasy Fair", null, 3000000.0, null, "S003", new DateTime(2025, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null },
-                    { "R010", null, "A010", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3348), null, "RentCostumes", new DateTime(2025, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "LĐ", "Rent Halloween Costumes", null, 200000.0, null, "S001", new DateTime(2025, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null },
-                    { "R011", null, "A011", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3351), null, "RentCosplayer", new DateTime(2025, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "NT", "Hire Cosplayer for Wedding", "PKG010", 800000.0, null, "S001", new DateTime(2025, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null },
-                    { "R012", null, "A012", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3355), null, "CreateEvent", new DateTime(2025, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "VT", "Create Sci-Fi Convention", null, 4500000.0, null, "S002", new DateTime(2025, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, null },
-                    { "R013", null, "A013", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3358), null, "RentCostumes", new DateTime(2025, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "HCM", "Rent Santa Claus Costume", null, 130000.0, null, "S003", new DateTime(2025, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null },
-                    { "R014", null, "A014", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3364), null, "RentCosplayer", new DateTime(2025, 7, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "HN", "Book Cosplayer for Product Launch", null, 600000.0, null, "S001", new DateTime(2025, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null },
-                    { "R015", null, "A015", new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3367), null, "CreateEvent", new DateTime(2025, 12, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "HCM", "Host Christmas Event", "PKG015", 5500000.0, null, "S002", new DateTime(2025, 12, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null }
+                    { "R001", null, "A001", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(973), null, "RentCostumes", new DateTime(2025, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "HCM", "Rent Naruto Costume", "PKG001", 100000.0, null, "S001", new DateTime(2025, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null },
+                    { "R002", null, "A002", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(998), null, "RentCosplayer", new DateTime(2025, 2, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "ĐN", "Rent Cosplayer for Event", null, 500000.0, "Cosplayer is busy", "S002", new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null },
+                    { "R003", null, "A003", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1003), null, "CreateEvent", new DateTime(2025, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "BD", "Create Anime Festival", null, 2000000.0, null, "S003", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null },
+                    { "R004", null, "A004", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1008), null, "RentCostumes", new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "HN", "Rent Samurai Armor", null, 150000.0, null, "S002", new DateTime(2025, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, null },
+                    { "R005", null, "A005", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1012), null, "RentCosplayer", new DateTime(2025, 5, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "BT", "Hire Professional Cosplayer", "PKG002", 700000.0, null, "S002", new DateTime(2025, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null },
+                    { "R006", null, "A006", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1016), null, "CreateEvent", new DateTime(2025, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "HCM", "Organize Comic Convention", null, 5000000.0, null, "S001", new DateTime(2025, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null },
+                    { "R007", null, "A007", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1019), null, "RentCostumes", new DateTime(2025, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "HCM", "Rent Victorian Costume", null, 120000.0, "Cosplayer is busy", "S002", new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, null },
+                    { "R008", null, "A008", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1024), null, "RentCosplayer", new DateTime(2025, 8, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), "QN", "Book Cosplayer for Birthday Party", null, 350000.0, null, "S003", new DateTime(2025, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null },
+                    { "R009", null, "A009", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1027), null, "CreateEvent", new DateTime(2025, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "CM", "Plan Fantasy Fair", null, 3000000.0, null, "S003", new DateTime(2025, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null },
+                    { "R010", null, "A010", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1032), null, "RentCostumes", new DateTime(2025, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "LĐ", "Rent Halloween Costumes", null, 200000.0, null, "S001", new DateTime(2025, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null },
+                    { "R011", null, "A011", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1036), null, "RentCosplayer", new DateTime(2025, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "NT", "Hire Cosplayer for Wedding", "PKG010", 800000.0, null, "S001", new DateTime(2025, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null },
+                    { "R012", null, "A012", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1042), null, "CreateEvent", new DateTime(2025, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "VT", "Create Sci-Fi Convention", null, 4500000.0, null, "S002", new DateTime(2025, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, null },
+                    { "R013", null, "A013", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1045), null, "RentCostumes", new DateTime(2025, 12, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "HCM", "Rent Santa Claus Costume", null, 130000.0, null, "S003", new DateTime(2025, 12, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null },
+                    { "R014", null, "A014", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1050), null, "RentCosplayer", new DateTime(2025, 7, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "HN", "Book Cosplayer for Product Launch", null, 600000.0, null, "S001", new DateTime(2025, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null },
+                    { "R015", null, "A015", new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1055), null, "CreateEvent", new DateTime(2025, 12, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "HCM", "Host Christmas Event", "PKG015", 5500000.0, null, "S002", new DateTime(2025, 12, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), 0, null }
                 });
 
             migrationBuilder.InsertData(
@@ -1401,18 +1401,18 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "CartProductId", "CartId", "CreatedDate", "Price", "ProductId", "Quantity" },
                 values: new object[,]
                 {
-                    { "0888a355-213e-4063-b431-6bbcf61a88f0", "C002", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4192), 40000.0, "P006", 2 },
-                    { "0a2fd489-77af-4396-a874-d3d23b5aa02d", "C003", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4197), 15000.0, "P007", 5 },
-                    { "2c7d86f4-2be8-4bdf-856f-b94f1082db3c", "C002", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4188), 25000.0, "P005", 3 },
-                    { "3361d3ed-f82d-4d7f-802e-e9582e5f9499", "C001", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4181), 80000.0, "P003", 1 },
-                    { "49d28f8f-0b73-40e5-976c-dc66f7c87fe2", "C003", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4200), 50000.0, "P008", 2 },
-                    { "5d62d72b-5050-44a5-b0d0-5bb41106c8a9", "C003", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4204), 60000.0, "P009", 1 },
-                    { "6e4427e6-ae60-4de2-bbfd-403187ac206d", "C004", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4215), 45000.0, "P012", 1 },
-                    { "74930bab-a6b0-4c35-b872-b293f164a97c", "C001", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4175), 20000.0, "P002", 1 },
-                    { "9a517cea-3b6a-401a-a89b-de4d42f5b766", "C004", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4212), 35000.0, "P011", 2 },
-                    { "ca99ba5d-a3d2-4116-bf0d-3bf252e9578e", "C001", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4171), 30000.0, "P001", 2 },
-                    { "f0a566ee-9bba-43e7-bc30-83fb11ee0391", "C002", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4184), 100000.0, "P004", 1 },
-                    { "ffeb2aac-b616-4b1a-92e5-6f3591d034af", "C004", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4207), 120000.0, "P010", 1 }
+                    { "000dee86-a4a3-48dc-8d9e-52f332577848", "C003", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1844), 50000.0, "P008", 2 },
+                    { "01bb8206-b736-41ac-b33d-f394acef9584", "C001", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1822), 20000.0, "P002", 1 },
+                    { "240445ed-ed32-4729-b89d-f43f796fc3b5", "C002", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1837), 40000.0, "P006", 2 },
+                    { "2744f109-3ead-468a-90c1-0269d8ad3c3f", "C003", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1847), 60000.0, "P009", 1 },
+                    { "595c596c-851f-4d65-a2b7-72e5affd0236", "C003", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1841), 15000.0, "P007", 5 },
+                    { "7372af6f-9469-4f99-8e40-d087e38af149", "C004", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1859), 45000.0, "P012", 1 },
+                    { "9fb2b704-db6d-4a72-8b28-41d5e51e751c", "C001", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1815), 30000.0, "P001", 2 },
+                    { "b9641fb1-ce84-41cc-8310-b89d0a6bc68b", "C002", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1832), 25000.0, "P005", 3 },
+                    { "bb614278-8c17-40e0-af68-13ead8691918", "C001", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1825), 80000.0, "P003", 1 },
+                    { "d19e67e1-d430-45c7-b9d9-8c01187d1359", "C004", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1856), 35000.0, "P011", 2 },
+                    { "ea23589a-29a6-4de5-9328-519f2860564d", "C002", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1829), 100000.0, "P004", 1 },
+                    { "f1ef44dc-2ad8-4736-9634-ae2bb56eaba9", "C004", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(1852), 120000.0, "P010", 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -1432,36 +1432,36 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "OrderProductId", "CreateDate", "OrderId", "Price", "ProductId", "Quantity" },
                 values: new object[,]
                 {
-                    { "0a5bfd98-f4e4-410d-93c3-94c8d7112153", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4489), "O011", 40000.0, "P006", 2 },
-                    { "0ca9a684-073b-4a35-9a13-231415860932", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4508), "O014", 45000.0, "P012", 3 },
-                    { "12ff41a2-2ced-4877-9b4c-a3e91a73a169", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4477), "O009", 20000.0, "P002", 6 },
-                    { "1b2400db-87b3-48e0-9440-544daf80b3eb", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4470), "O008", 22000.0, "P015", 4 },
-                    { "32b126d7-5984-4ed4-8f5f-6bb031ada0ea", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4473), "O008", 30000.0, "P001", 1 },
-                    { "36fa000c-386e-4182-9c51-bb09d3ac40b4", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4480), "O009", 80000.0, "P003", 2 },
-                    { "3f777146-889a-48bc-a735-a10c29666d52", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4485), "O010", 25000.0, "P005", 3 },
-                    { "478c8bb0-4c82-49ef-9586-40059cb0137c", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4413), "O005", 120000.0, "P010", 1 },
-                    { "4830c88b-114f-4376-b93f-a3185f4149d3", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4394), "O002", 100000.0, "P004", 1 },
-                    { "53e36fa7-4db6-452e-a291-c0621f5f4114", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4391), "O002", 80000.0, "P003", 1 },
-                    { "570fdfa6-7ca8-4ddf-a901-4eef0da39aa1", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4404), "O004", 15000.0, "P007", 4 },
-                    { "65d9c0c0-ef56-4628-9150-3201b2808e16", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4458), "O006", 35000.0, "P011", 2 },
-                    { "7d6836c9-a8c0-4e2d-ac44-8c752f041bb0", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4468), "O007", 90000.0, "P014", 2 },
-                    { "7dd7164b-aa84-47fc-b88c-2c3166ac0896", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4410), "O005", 60000.0, "P009", 1 },
-                    { "8027304b-17d1-46f6-95bc-c62bb50d2a17", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4497), "O012", 60000.0, "P009", 1 },
-                    { "866bd771-fa16-4d40-a247-67c6f168c2d1", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4515), "O015", 90000.0, "P014", 2 },
-                    { "879c0969-e368-49e0-8c4f-f15704217114", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4501), "O013", 120000.0, "P010", 1 },
-                    { "90fb4bc1-d13d-409b-b307-162ccf56c643", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4384), "O001", 30000.0, "P001", 3 },
-                    { "9e936b24-d0ba-4b9c-a1b3-6eb1cb8a9af9", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4483), "O010", 100000.0, "P004", 1 },
-                    { "c0406826-9bde-4746-b154-923f5b425407", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4492), "O011", 15000.0, "P007", 4 },
-                    { "c08ab557-aec7-4b16-a8b9-2a8fc3505f11", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4406), "O004", 50000.0, "P008", 2 },
-                    { "c1f0f0ae-25dc-4d02-bc89-93906f795354", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4398), "O003", 25000.0, "P005", 2 },
-                    { "c5d02672-4bf4-4195-8409-3305bdc20eca", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4465), "O007", 18000.0, "P013", 5 },
-                    { "cf73ed34-ed43-4b3c-ac4e-84259b1a598c", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4504), "O013", 35000.0, "P011", 2 },
-                    { "d0d0b544-b3ee-4010-9be6-02263099b9d7", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4388), "O001", 20000.0, "P002", 5 },
-                    { "d11d54c5-d266-4a07-8732-1a6aa3204c89", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4517), "O015", 22000.0, "P015", 4 },
-                    { "f16dcc19-08e7-4f7d-8b17-08b84fa91c05", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4401), "O003", 40000.0, "P006", 3 },
-                    { "f639fe5e-8315-4bd1-9bc9-695ae3f032b3", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4461), "O006", 45000.0, "P012", 3 },
-                    { "f6b195bd-4176-4c00-8173-f64c56a6ae0f", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4495), "O012", 50000.0, "P008", 2 },
-                    { "f95b6862-ac98-4ccc-9a1a-6496d0163c67", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4511), "O014", 18000.0, "P013", 5 }
+                    { "036ad167-718a-4bd1-93a6-8873216a49a8", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2305), "O010", 25000.0, "P005", 3 },
+                    { "05f02128-6608-413e-9c5b-ed877eb1755e", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2311), "O011", 15000.0, "P007", 4 },
+                    { "0944dd3e-05a2-48b8-8adb-16719ddc7ca3", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2275), "O006", 35000.0, "P011", 2 },
+                    { "11384f9c-d550-47d8-9023-5f3f1910c6a0", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2228), "O002", 80000.0, "P003", 1 },
+                    { "1d5d4f65-5672-4e7b-b7a2-8e4840f101d3", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2279), "O006", 45000.0, "P012", 3 },
+                    { "1f5c451c-71fe-4e08-9078-f007f3147c08", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2272), "O005", 120000.0, "P010", 1 },
+                    { "20f28d1f-7d9f-48b3-b556-f71307e9ba26", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2282), "O007", 18000.0, "P013", 5 },
+                    { "2257b900-078e-4804-b0db-ff1257f42f04", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2298), "O009", 80000.0, "P003", 2 },
+                    { "34d04e80-3103-4088-a9cb-530634b9b821", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2335), "O015", 90000.0, "P014", 2 },
+                    { "41e8bf76-2c88-4ba0-b4ba-34bfc2de67d4", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2325), "O013", 35000.0, "P011", 2 },
+                    { "50d0a55c-72c9-4fb3-9690-a682271c60e2", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2328), "O014", 45000.0, "P012", 3 },
+                    { "5446ddfe-a72d-4f31-8286-a99bf3fbcae1", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2332), "O014", 18000.0, "P013", 5 },
+                    { "62118a71-973d-4058-9b87-49761e5e7f99", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2240), "O003", 40000.0, "P006", 3 },
+                    { "64fb5d21-2bbf-498d-914c-f496940309ed", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2285), "O007", 90000.0, "P014", 2 },
+                    { "672ae561-d661-47f5-9e91-ad9ed6fe2555", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2288), "O008", 22000.0, "P015", 4 },
+                    { "71c987d2-f1b6-48d8-b816-ef7da4be2e34", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2319), "O012", 60000.0, "P009", 1 },
+                    { "80705c3d-8100-497f-9c00-cf80dc2ce3de", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2295), "O009", 20000.0, "P002", 6 },
+                    { "827474be-bc27-4eea-963c-9cb794c3e5c5", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2237), "O003", 25000.0, "P005", 2 },
+                    { "847f313f-7628-4792-9680-586d0c8b15c2", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2261), "O004", 15000.0, "P007", 4 },
+                    { "912bb02b-6be3-4492-a27e-708b3f6f67c9", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2292), "O008", 30000.0, "P001", 1 },
+                    { "9a0716f0-0e7c-4034-b1f1-23a5de167a5b", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2308), "O011", 40000.0, "P006", 2 },
+                    { "abc43807-94f7-4960-aca0-8b46231b9347", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2222), "O001", 30000.0, "P001", 3 },
+                    { "bd0f9e0b-2ffd-4b2f-bb0c-edf17a2a3274", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2322), "O013", 120000.0, "P010", 1 },
+                    { "d135045c-e37d-4dde-89e7-ea63d7a42918", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2233), "O002", 100000.0, "P004", 1 },
+                    { "d1c669ab-7f95-4031-8063-0a4c25cdd1e8", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2225), "O001", 20000.0, "P002", 5 },
+                    { "e5448675-48bd-4353-b069-36e5c9fb2b51", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2314), "O012", 50000.0, "P008", 2 },
+                    { "e6b893d6-4a87-4a01-afcf-8ce41e7eaf8f", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2266), "O004", 50000.0, "P008", 2 },
+                    { "ec15d416-bca9-42f8-ae48-fc5956e2496c", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2269), "O005", 60000.0, "P009", 1 },
+                    { "f23fa49e-f379-4d9c-a920-a529f4eb0147", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2301), "O010", 100000.0, "P004", 1 },
+                    { "f33a861b-793a-4b01-b03e-9a1e7e89b084", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2338), "O015", 22000.0, "P015", 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -1486,21 +1486,21 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "RequestCharacterId", "CharacterId", "CosplayerId", "CreateDate", "Description", "Quantity", "Reason", "RequestId", "Status", "TotalPrice", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "RC01", "CH001", "A025", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4729), "Yêu cầu cosplay nhân vật CH001", 1, null, "R001", null, 50000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4730) },
-                    { "RC02", "CH002", "A026", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4734), "Yêu cầu cosplay nhân vật CH002", 1, null, "R002", null, 60000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4734) },
-                    { "RC03", "CH003", "A027", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4738), "Yêu cầu cosplay nhân vật CH003", 1, null, "R003", null, 70000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4738) },
-                    { "RC04", "CH004", "A028", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4741), "Yêu cầu cosplay nhân vật CH004", 1, null, "R004", null, 80000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4742) },
-                    { "RC05", "CH005", "A029", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4744), "Yêu cầu cosplay nhân vật CH005", 1, null, "R005", null, 90000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4745) },
-                    { "RC06", "CH006", null, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4748), "Yêu cầu cosplay nhân vật CH006", 5, null, "R006", null, 100000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4748) },
-                    { "RC07", "CH007", "A031", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4751), "Yêu cầu cosplay nhân vật CH007", 1, null, "R007", null, 110000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4751) },
-                    { "RC08", "CH008", null, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4757), "Yêu cầu cosplay nhân vật CH008", 7, null, "R008", null, 120000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4757) },
-                    { "RC09", "CH009", "A033", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4760), "Yêu cầu cosplay nhân vật CH009", 1, null, "R009", null, 130000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4760) },
-                    { "RC10", "CH010", null, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4763), "Yêu cầu cosplay nhân vật CH010", 9, null, "R010", null, 140000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4764) },
-                    { "RC11", "CH011", "A035", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4766), "Yêu cầu cosplay nhân vật CH011", 1, null, "R011", null, 150000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4767) },
-                    { "RC12", "CH012", "A036", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4797), "Yêu cầu cosplay nhân vật CH012", 1, null, "R012", null, 160000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4797) },
-                    { "RC13", "CH013", null, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4800), "Yêu cầu cosplay nhân vật CH013", 10, null, "R013", null, 170000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4801) },
-                    { "RC14", "CH014", "A038", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4803), "Yêu cầu cosplay nhân vật CH014", 1, null, "R014", null, 180000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4804) },
-                    { "RC15", "CH015", "A039", new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4806), "Yêu cầu cosplay nhân vật CH015", 1, null, "R015", null, 190000.0, new DateTime(2025, 4, 13, 6, 30, 29, 246, DateTimeKind.Utc).AddTicks(4807) }
+                    { "RC01", "CH001", "A025", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2554), "Yêu cầu cosplay nhân vật CH001", 1, null, "R001", null, 50000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2555) },
+                    { "RC02", "CH002", "A026", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2558), "Yêu cầu cosplay nhân vật CH002", 1, null, "R002", null, 60000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2559) },
+                    { "RC03", "CH003", "A027", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2562), "Yêu cầu cosplay nhân vật CH003", 1, null, "R003", null, 70000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2563) },
+                    { "RC04", "CH004", "A028", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2566), "Yêu cầu cosplay nhân vật CH004", 1, null, "R004", null, 80000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2566) },
+                    { "RC05", "CH005", "A029", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2569), "Yêu cầu cosplay nhân vật CH005", 1, null, "R005", null, 90000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2569) },
+                    { "RC06", "CH006", null, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2574), "Yêu cầu cosplay nhân vật CH006", 5, null, "R006", null, 100000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2574) },
+                    { "RC07", "CH007", "A031", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2610), "Yêu cầu cosplay nhân vật CH007", 1, null, "R007", null, 110000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2611) },
+                    { "RC08", "CH008", null, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2614), "Yêu cầu cosplay nhân vật CH008", 7, null, "R008", null, 120000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2615) },
+                    { "RC09", "CH009", "A033", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2617), "Yêu cầu cosplay nhân vật CH009", 1, null, "R009", null, 130000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2618) },
+                    { "RC10", "CH010", null, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2621), "Yêu cầu cosplay nhân vật CH010", 9, null, "R010", null, 140000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2621) },
+                    { "RC11", "CH011", "A035", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2624), "Yêu cầu cosplay nhân vật CH011", 1, null, "R011", null, 150000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2625) },
+                    { "RC12", "CH012", "A036", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2628), "Yêu cầu cosplay nhân vật CH012", 1, null, "R012", null, 160000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2628) },
+                    { "RC13", "CH013", null, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2631), "Yêu cầu cosplay nhân vật CH013", 10, null, "R013", null, 170000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2632) },
+                    { "RC14", "CH014", "A038", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2638), "Yêu cầu cosplay nhân vật CH014", 1, null, "R014", null, 180000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2638) },
+                    { "RC15", "CH015", "A039", new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2641), "Yêu cầu cosplay nhân vật CH015", 1, null, "R015", null, 190000.0, new DateTime(2025, 4, 14, 6, 36, 41, 813, DateTimeKind.Utc).AddTicks(2642) }
                 });
 
             migrationBuilder.InsertData(
@@ -1508,18 +1508,18 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "TaskId", "AccountId", "ContractCharacterId", "CreateDate", "Description", "EndDate", "EventCharacterId", "IsActive", "Location", "StartDate", "Status", "TaskName", "Type", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "T001", "A001", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3417), "Cosplay as anime characters", new DateTime(2025, 4, 16, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3416), "EC001", true, "Tokyo", new DateTime(2025, 4, 15, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3409), 0, "CH001", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3418) },
-                    { "T002", "A004", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3424), "Join cosplay contest", new DateTime(2025, 4, 18, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3424), "EC002", true, "Los Angeles", new DateTime(2025, 4, 17, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3422), 1, "CH002", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3425) },
-                    { "T003", "A005", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3429), "Teach costume making", new DateTime(2025, 4, 20, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3429), "EC003", true, "New York", new DateTime(2025, 4, 19, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3428), 2, "CH003", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3430) },
-                    { "T004", "A007", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3434), "Host a live event", new DateTime(2025, 4, 14, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3433), "EC004", true, "Online", new DateTime(2025, 4, 14, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3433), 3, "CH004", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3435) },
-                    { "T005", "A008", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3439), "Professional cosplay photoshoot", new DateTime(2025, 4, 22, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3438), "EC005", true, "Paris", new DateTime(2025, 4, 21, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3438), 0, "CH005", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3439) },
-                    { "T006", "A010", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3445), "Evaluate contestants", new DateTime(2025, 4, 24, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3444), "EC006", true, "Berlin", new DateTime(2025, 4, 23, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3442), 1, "CH006", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3446) },
-                    { "T007", "A012", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3452), "Walk in parade", new DateTime(2025, 4, 26, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3451), "EC007", true, "Seoul", new DateTime(2025, 4, 25, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3450), 2, "CH007", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3452) },
-                    { "T008", "A013", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3456), "Perform on live TV", new DateTime(2025, 4, 28, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3455), "EC008", true, "London", new DateTime(2025, 4, 27, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3455), 3, "CH008", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3457) },
-                    { "T009", "A015", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3461), "Perform for charity", new DateTime(2025, 4, 30, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3460), "EC009", true, "Sydney", new DateTime(2025, 4, 29, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3459), 4, "CH008", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3461) },
-                    { "T010", "A005", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3495), "Talk about cosplay industry", new DateTime(2025, 5, 2, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3494), "EC010", true, "San Diego", new DateTime(2025, 5, 1, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3493), 0, "CH009", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3496) },
-                    { "T011", "A008", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3501), "New character shoot", new DateTime(2025, 5, 4, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3500), "EC011", true, "Bangkok", new DateTime(2025, 5, 3, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3499), 1, "CH010", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3502) },
-                    { "T012", "A007", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3506), "Host main event", new DateTime(2025, 5, 6, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3505), "EC012", true, "Jakarta", new DateTime(2025, 5, 5, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3505), 2, "CH011", null, new DateTime(2025, 4, 13, 13, 30, 29, 246, DateTimeKind.Local).AddTicks(3507) }
+                    { "T001", "A001", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1101), "Cosplay as anime characters", new DateTime(2025, 4, 17, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1100), "EC001", true, "Tokyo", new DateTime(2025, 4, 16, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1093), 0, "CH001", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1102) },
+                    { "T002", "A004", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1111), "Join cosplay contest", new DateTime(2025, 4, 19, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1110), "EC002", true, "Los Angeles", new DateTime(2025, 4, 18, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1109), 1, "CH002", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1111) },
+                    { "T003", "A005", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1118), "Teach costume making", new DateTime(2025, 4, 21, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1116), "EC003", true, "New York", new DateTime(2025, 4, 20, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1115), 2, "CH003", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1118) },
+                    { "T004", "A007", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1123), "Host a live event", new DateTime(2025, 4, 15, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1122), "EC004", true, "Online", new DateTime(2025, 4, 15, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1122), 3, "CH004", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1124) },
+                    { "T005", "A008", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1131), "Professional cosplay photoshoot", new DateTime(2025, 4, 23, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1130), "EC005", true, "Paris", new DateTime(2025, 4, 22, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1130), 0, "CH005", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1132) },
+                    { "T006", "A010", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1162), "Evaluate contestants", new DateTime(2025, 4, 25, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1161), "EC006", true, "Berlin", new DateTime(2025, 4, 24, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1160), 1, "CH006", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1163) },
+                    { "T007", "A012", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1167), "Walk in parade", new DateTime(2025, 4, 27, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1167), "EC007", true, "Seoul", new DateTime(2025, 4, 26, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1166), 2, "CH007", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1168) },
+                    { "T008", "A013", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1172), "Perform on live TV", new DateTime(2025, 4, 29, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1172), "EC008", true, "London", new DateTime(2025, 4, 28, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1171), 3, "CH008", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1173) },
+                    { "T009", "A015", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1177), "Perform for charity", new DateTime(2025, 5, 1, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1176), "EC009", true, "Sydney", new DateTime(2025, 4, 30, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1176), 4, "CH008", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1177) },
+                    { "T010", "A005", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1183), "Talk about cosplay industry", new DateTime(2025, 5, 3, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1182), "EC010", true, "San Diego", new DateTime(2025, 5, 2, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1180), 0, "CH009", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1183) },
+                    { "T011", "A008", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1188), "New character shoot", new DateTime(2025, 5, 5, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1188), "EC011", true, "Bangkok", new DateTime(2025, 5, 4, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1186), 1, "CH010", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1189) },
+                    { "T012", "A007", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1193), "Host main event", new DateTime(2025, 5, 7, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1192), "EC012", true, "Jakarta", new DateTime(2025, 5, 6, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1192), 2, "CH011", null, new DateTime(2025, 4, 14, 13, 36, 41, 813, DateTimeKind.Local).AddTicks(1194) }
                 });
 
             migrationBuilder.InsertData(
@@ -1602,15 +1602,15 @@ namespace CCSS_Repository.Migrations
                 columns: new[] { "FeedbackId", "AccountId", "ContractCharacterId", "CreateBy", "CreateDate", "Description", "Star", "UpdateDate" },
                 values: new object[,]
                 {
-                    { "0023aa95-0c55-4deb-a9f0-5fdf806a595a", "A007", "CC0051", "A007", new DateTime(2025, 6, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Enjoyed the event!", null, null },
-                    { "08ca1b39-a0f1-4c8b-9c7f-c5c876a273d8", "A005", "CC0023", "A005", new DateTime(2025, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nice cosplay session!", null, null },
-                    { "1545a202-b29b-4c26-87cd-ed75bc58980d", "A013", "CC0082", "A013", new DateTime(2025, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nice crowd and management!", null, null },
-                    { "347d7dc4-bd89-482d-a61b-bd6b97023052", "A015", "CC0083", "A015", new DateTime(2025, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Amazing experience!", null, null },
-                    { "4e805ccb-eb69-4c3c-9166-833bf7b7ce27", "A008", "CC0052", "A008", new DateTime(2025, 7, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Would love to join again!", null, null },
-                    { "6d1f93c5-88be-43be-bafc-5d0056b8d35c", "A001", "CC0021", "A001", new DateTime(2025, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Great experience!", null, null },
-                    { "7d432d80-41b5-4d58-aaf6-d476a160344d", "A012", "CC0081", "A012", new DateTime(2025, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Best cosplay event!", null, null },
-                    { "a7ca80ab-595c-45e6-8a0d-6ec4a76d56a9", "A010", "CC0053", "A010", new DateTime(2025, 8, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "The atmosphere was amazing!", null, null },
-                    { "ca330fed-347c-4195-89b1-54964177fec0", "A004", "CC0022", "A004", new DateTime(2025, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Loved the event!", null, null }
+                    { "0480eefb-4c03-41fc-bf72-c09134c44a2e", "A004", "CC0022", "A004", new DateTime(2025, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Loved the event!", null, null },
+                    { "1fb9cdbe-865f-4381-90cc-666b52684563", "A015", "CC0083", "A015", new DateTime(2025, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Amazing experience!", null, null },
+                    { "6c231371-740e-4493-854a-b8bfb268c2db", "A013", "CC0082", "A013", new DateTime(2025, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nice crowd and management!", null, null },
+                    { "701760e5-e859-4628-83be-b3646cc5a383", "A012", "CC0081", "A012", new DateTime(2025, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Best cosplay event!", null, null },
+                    { "91253482-6fc7-437f-843f-a172d4e0b5b6", "A008", "CC0052", "A008", new DateTime(2025, 7, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Would love to join again!", null, null },
+                    { "ad807b16-6a50-4b1c-aaed-6552672d1557", "A010", "CC0053", "A010", new DateTime(2025, 8, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "The atmosphere was amazing!", null, null },
+                    { "d2d967d6-ff85-41a9-b585-a7fc83b48d19", "A007", "CC0051", "A007", new DateTime(2025, 6, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "Enjoyed the event!", null, null },
+                    { "f2f57389-34f1-4d73-9adc-cca5360db259", "A005", "CC0023", "A005", new DateTime(2025, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Nice cosplay session!", null, null },
+                    { "f34a7cd8-b0d8-4d19-ab29-e72e2ce8b439", "A001", "CC0021", "A001", new DateTime(2025, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Great experience!", null, null }
                 });
 
             migrationBuilder.CreateIndex(

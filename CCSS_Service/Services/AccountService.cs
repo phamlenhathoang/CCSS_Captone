@@ -38,7 +38,7 @@ namespace CCSS_Service.Services
         Task<string> CodeValidation(string email, string code);
         Task<AccountResponse> GetAccountByAccountId(string accountId);
         Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest);
-        Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, List<Date> dates);
+        Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, List<Date> dates, string accountId);
         Task<List<AccountByCharacterAndDateResponse>> ViewAllAccountByCharacterName(string characterName, string? start, string? end);
         Task<List<AccountByCharacterAndDateResponse>> ViewAllCosplayerByContractId(string contractId);
         Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId);
@@ -677,7 +677,7 @@ namespace CCSS_Service.Services
             }
         }
 
-        public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, List<Date> dates)
+        public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, List<Date> dates, string accountId)
         {
             try
             {
@@ -689,7 +689,7 @@ namespace CCSS_Service.Services
                     throw new Exception("Character does not exist");
                 }
 
-                List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character);
+                List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character, accountId);
 
                 string format = "HH:mm dd/MM/yyyy";
                 CultureInfo culture = CultureInfo.InvariantCulture;
@@ -748,7 +748,7 @@ namespace CCSS_Service.Services
             {
                 throw new Exception("Character not found!");
             }
-            List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character);
+            List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character, null);
 
             if (!string.IsNullOrEmpty(start) && !string.IsNullOrEmpty(end))
             {

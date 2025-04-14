@@ -87,10 +87,10 @@ namespace CCSS_Captone.Controllers
             return Ok(account);
         }
 
-        [HttpGet("characterId")]
+        [HttpPost("characterId")]
         public async Task<IActionResult> GetAccountByCharacterAndDate(CheckAccountRequest checkAccountRequest)
         {
-            var account = await accountService.GetAccountByCharacterAndDate(checkAccountRequest.CharacterId, checkAccountRequest.Dates);
+            var account = await accountService.GetAccountByCharacterAndDate(checkAccountRequest.CharacterId, checkAccountRequest.Dates, checkAccountRequest.AccountId);
             return Ok(account);
         }
 
