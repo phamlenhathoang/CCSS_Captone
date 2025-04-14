@@ -21,7 +21,9 @@ namespace CCSS_Service.Model.Responses
         public string? Location { get; set; }     
         public string? ServiceId { get; set; }
         public string? PackageId { get; set; }
-        public string? ContractId { get; set; }   
+        public string? Deposit { get; set; }
+        public string? Reason { get; set; }
+        public string? AccountCouponId { get; set; }
         public List<CharacterRequestResponse> CharactersListResponse { get; set; } 
     }
 
