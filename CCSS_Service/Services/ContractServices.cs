@@ -621,17 +621,16 @@ if(customer == null)
                     }
                     else
                     {
-                        //await transaction.RollbackAsync();
                         throw new Exception("Can not update contract status");
                     }
                 }
-                if (status.ToUpper() == ContractStatus.Completed.ToString().ToUpper())
+                if (status.ToUpper() == ContractStatus.FinalSettlement.ToString().ToUpper())
                 {
                     if (contract.ContractStatus == ContractStatus.Deposited)
                     {
                         if (price != null)
                         {
-                            contract.ContractStatus = ContractStatus.Completed;
+                            contract.ContractStatus = ContractStatus.FinalSettlement;
                             contract.Amount = (double)contract.Amount - (double)price;
                         }
                         else
@@ -645,7 +644,18 @@ if(customer == null)
                         throw new Exception("Can not update contract status");
                     }
                 }
-
+                if (status.ToUpper() == ContractStatus.Completed.ToString().ToUpper())
+                {
+                    if (contract.ContractStatus == ContractStatus.FinalSettlement)
+                    {
+                        contract.ContractStatus = ContractStatus.Completed;
+                    }
+                    else
+                    {
+                        //await transaction.RollbackAsync();
+                        throw new Exception("Can not update contract status");
+                    }
+                }
                 bool result = await _contractRespository.UpdateContract(contract);
                 if (!result)
                 {
@@ -659,15 +669,6 @@ if(customer == null)
                     {
                         //await transaction.RollbackAsync();
                         throw new Exception("Cannot add ContractCharacter");
-                    }
-                }
-                if (contract.ContractStatus == ContractStatus.Completed)
-                {
-                    bool checkTask = await taskService.UpdateStatusTaskByContractId(contract.ContractId);
-                    if (!checkTask)
-                    {
-                        //await transaction.RollbackAsync();
-                        throw new Exception("Cannot update status task");
                     }
                 }
                 //scope.Complete();

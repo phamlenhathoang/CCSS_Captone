@@ -259,7 +259,7 @@ namespace CCSS_Service.Services
                     existingPayment.ContractId = contractId;
                     await _paymentRepository.UpdatePayment(existingPayment);
 
-                    bool result = await _contractServices.UpdateStatusContract(contractId, "Progressing", null);
+                    bool result = await _contractServices.UpdateStatusContract(contractId, "Deposited", null);
                     if (!result)
                     {
                         throw new Exception("Can not update status contract");
@@ -274,7 +274,7 @@ namespace CCSS_Service.Services
                     
                     existingPayment.ContractId = contractId;
                     await _paymentRepository.UpdatePayment(existingPayment);
-                    bool rs = await _contractServices.UpdateStatusContract(contractId, "Completed", amount);
+                    bool rs = await _contractServices.UpdateStatusContract(contractId, "FinalSettlement", amount);
                     if (!rs)
                     {
                         throw new Exception("Can not update status contract");

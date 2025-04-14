@@ -13,6 +13,8 @@ namespace CCSS_Repository.Repositories
         Task<List<RequestDate>> GetAllRequestDates();
         Task<RequestDate> GetRequestDateById(string id);
         Task<bool> AddListRequestDates(List<RequestDate> requestDate);
+        Task<List<RequestDate>> GetRequestDatesByRequestCharacterId(string requestCharacterId);
+        Task<bool> Update(RequestDate requestDate);
     }
 
     public class RequestDatesRepository: IRequestDatesRepository
@@ -37,6 +39,17 @@ namespace CCSS_Repository.Repositories
         {
             _context.RequestDates.AddRange(requestDate);
            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<List<RequestDate>> GetRequestDatesByRequestCharacterId(string requestCharacterId)
+        {
+            return await _context.RequestDates.Include(rc => rc.RequestCharacter).Where(rd => rd.RequestCharacterId.Equals(requestCharacterId)).ToListAsync();
+        }
+
+        public async Task<bool> Update(RequestDate requestDate)
+        {
+            _context.RequestDates.Update(requestDate);
+            return await _context.SaveChangesAsync() > 0 ? true : false;
         }
     }
 }

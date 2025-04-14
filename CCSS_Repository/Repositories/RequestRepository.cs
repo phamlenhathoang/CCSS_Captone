@@ -73,7 +73,7 @@ namespace CCSS_Repository.Repositories
         {
             return await _context.Requests.Include(a => a.Account).Include(c => c.Contract)
                                           .Include(s => s.Service)
-                                          .Include(rc => rc.RequestCharacters)
+                                          .Include(rc => rc.RequestCharacters).ThenInclude(rc => rc.RequestDates)
                                           .FirstOrDefaultAsync(sc => sc.RequestId.Equals(id));
         }
 
