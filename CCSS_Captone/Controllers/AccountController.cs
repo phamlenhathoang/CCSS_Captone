@@ -90,7 +90,7 @@ namespace CCSS_Captone.Controllers
         [HttpGet("characterId")]
         public async Task<IActionResult> GetAccountByCharacterAndDate(CheckAccountRequest checkAccountRequest)
         {
-            var account = await accountService.GetAccountByCharacterAndDate(checkAccountRequest.CharacterId, checkAccountRequest.Dates);
+            var account = await accountService.GetAccountByCharacterAndDate(checkAccountRequest.CharacterId, checkAccountRequest.Dates, checkAccountRequest.AccountId);
             return Ok(account);
         }
 
