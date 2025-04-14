@@ -10,6 +10,7 @@ namespace CCSS_Service.Model.Requests
     {
         public string CharacterId { get; set; }
         public List<Date> Dates { get; set; }
+        public string? AccountId { get; set; }
     }
 
     public class Date
