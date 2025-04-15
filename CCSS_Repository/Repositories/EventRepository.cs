@@ -58,6 +58,7 @@ namespace CCSS_Repository.Repositories
             
             query = query
                 .Include(e => e.Ticket)
+                .ThenInclude(e => e.TicketAccounts)
                 .Include(e => e.EventCharacters)
                 .Include(e => e.EventImages)
                 .Include(e => e.EventActivities)
@@ -81,6 +82,7 @@ namespace CCSS_Repository.Repositories
             return await _dbContext.Events
                 .Where(e => e.IsActive == true) // 🔥 Chỉ lấy sự kiện có IsActive == true
                 .Include(e => e.Ticket)
+                .ThenInclude(e => e.TicketAccounts)
                 .Include(e => e.EventCharacters)
                 .Include(e => e.EventImages)
                 .Include(e => e.EventActivities)

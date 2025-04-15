@@ -595,22 +595,22 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Ticket
             modelBuilder.Entity<Ticket>().HasData(
-    new Ticket { TicketId = 1, Quantity = 500, Price = 50000.0, EventId = "E001", ticketType = ticketType.Nomal, Description="Được giao lưu với các idol cosplayer " },
-    new Ticket { TicketId = 2, Quantity = 300, Price = 40000.0, EventId = "E002", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
-    new Ticket { TicketId = 3, Quantity = 200, Price = 30000.0, EventId = "E003", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
-    new Ticket { TicketId = 4, Quantity = 600, Price = 60000.0, EventId = "E004", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
-    new Ticket { TicketId = 5, Quantity = 400, Price = 45000.0, EventId = "E005", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
-    new Ticket { TicketId = 6, Quantity = 350, Price = 55000.0, EventId = "E006", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
-    new Ticket { TicketId = 7, Quantity = 250, Price = 35000.0, EventId = "E007", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
-    new Ticket { TicketId = 8, Quantity = 450, Price = 50000.0, EventId = "E008", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
-    new Ticket { TicketId = 9, Quantity = 550, Price = 65000.0, EventId = "E009", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
-    new Ticket { TicketId = 10, Quantity = 700, Price = 70000.0, EventId = "E010", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
-    new Ticket { TicketId = 11, Quantity = 150, Price = 25000.0, EventId = "E011", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
-    new Ticket { TicketId = 12, Quantity = 800, Price = 75000.0, EventId = "E012", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer " },
-    new Ticket { TicketId = 13, Quantity = 500, Price = 75000.0, EventId = "E001", ticketType = ticketType.Premium, Description = "Được tham gia các hoạt động do chương trình tổ chức" },
-    new Ticket { TicketId = 14, Quantity = 500, Price = 60000.0, EventId = "E002", ticketType = ticketType.Premium, Description = "Được tham gia các hoạt động do chương trình tổ chức" },
-    new Ticket { TicketId = 15, Quantity = 500, Price = 45000.0, EventId = "E003", ticketType = ticketType.Premium, Description = "Được tham gia các hoạt động do chương trình tổ chức" },
-    new Ticket { TicketId = 16, Quantity = 500, Price = 90000.0, EventId = "E004", ticketType = ticketType.Premium, Description = "Được tham gia các hoạt động do chương trình tổ chức" }
+    new Ticket { TicketId = 1, Quantity = 500, Price = 50000.0, EventId = "E001", ticketType = ticketType.Nomal, Description="Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 2, Quantity = 300, Price = 40000.0, EventId = "E002", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 3, Quantity = 200, Price = 30000.0, EventId = "E003", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 4, Quantity = 600, Price = 60000.0, EventId = "E004", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 5, Quantity = 400, Price = 45000.0, EventId = "E005", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 6, Quantity = 350, Price = 55000.0, EventId = "E006", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 7, Quantity = 250, Price = 35000.0, EventId = "E007", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 8, Quantity = 450, Price = 50000.0, EventId = "E008", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 9, Quantity = 550, Price = 65000.0, EventId = "E009", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 10, Quantity = 700, Price = 70000.0, EventId = "E010", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 11, Quantity = 150, Price = 25000.0, EventId = "E011", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 12, Quantity = 800, Price = 75000.0, EventId = "E012", ticketType = ticketType.Nomal, Description = "Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 13, Quantity = 500, Price = 75000.0, EventId = "E001", ticketType = ticketType.Premium, Description = "Được tham gia các hoạt động do chương trình tổ chức", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 14, Quantity = 500, Price = 60000.0, EventId = "E002", ticketType = ticketType.Premium, Description = "Được tham gia các hoạt động do chương trình tổ chức", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 15, Quantity = 500, Price = 45000.0, EventId = "E003", ticketType = ticketType.Premium, Description = "Được tham gia các hoạt động do chương trình tổ chức", ticketStatus = ticketStatus.available },
+    new Ticket { TicketId = 16, Quantity = 500, Price = 90000.0, EventId = "E004", ticketType = ticketType.Premium, Description = "Được tham gia các hoạt động do chương trình tổ chức", ticketStatus = ticketStatus.available }
 
 
 );
@@ -713,21 +713,21 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region TicketAccount
             modelBuilder.Entity<TicketAccount>().HasData(
-   new TicketAccount { TicketAccountId = "TA001", AccountId = "A003", TicketCode = "TC001", TicketId = 1, Quantity = 2, TotalPrice = 100000.0 },
-   new TicketAccount { TicketAccountId = "TA002", AccountId = "A006", TicketCode = "TC002", TicketId = 2, Quantity = 1, TotalPrice = 40000.0 },
-   new TicketAccount { TicketAccountId = "TA003", AccountId = "A011", TicketCode = "TC003", TicketId = 3, Quantity = 3, TotalPrice = 90000.0 },
-   new TicketAccount { TicketAccountId = "TA004", AccountId = "A014", TicketCode = "TC004", TicketId = 4, Quantity = 2, TotalPrice = 120000.0 },
-   new TicketAccount { TicketAccountId = "TA005", AccountId = "A003", TicketCode = "TC005", TicketId = 5, Quantity = 4, TotalPrice = 180000.0 },
-   new TicketAccount { TicketAccountId = "TA006", AccountId = "A006", TicketCode = "TC006", TicketId = 6, Quantity = 2, TotalPrice = 110000.0 },
-   new TicketAccount { TicketAccountId = "TA007", AccountId = "A011", TicketCode = "TC007", TicketId = 7, Quantity = 1, TotalPrice = 35000.0 },
-   new TicketAccount { TicketAccountId = "TA008", AccountId = "A014", TicketCode = "TC008", TicketId = 8, Quantity = 3, TotalPrice = 150000.0 },
-   new TicketAccount { TicketAccountId = "TA009", AccountId = "A003", TicketCode = "TC009", TicketId = 9, Quantity = 2, TotalPrice = 130000.0 },
-   new TicketAccount { TicketAccountId = "TA010", AccountId = "A006", TicketCode = "TC010", TicketId = 10, Quantity = 1, TotalPrice = 70000.0 },
-   new TicketAccount { TicketAccountId = "TA011", AccountId = "A011", TicketCode = "TC011", TicketId = 11, Quantity = 5, TotalPrice = 125000.0 },
-   new TicketAccount { TicketAccountId = "TA012", AccountId = "A014", TicketCode = "TC012", TicketId = 12, Quantity = 2, TotalPrice = 150000.0 },
-   new TicketAccount { TicketAccountId = "TA013", AccountId = "A003", TicketCode = "TC013", TicketId = 3, Quantity = 3, TotalPrice = 90000.0 },
-   new TicketAccount { TicketAccountId = "TA014", AccountId = "A006", TicketCode = "TC014", TicketId = 5, Quantity = 2, TotalPrice = 90000.0 },
-   new TicketAccount { TicketAccountId = "TA015", AccountId = "A011", TicketCode = "TC015", TicketId = 7, Quantity = 1, TotalPrice = 35000.0 }
+   new TicketAccount { TicketAccountId = "TA001", AccountId = "A003", TicketCode = "TC001", TicketId = 1, Quantity = 2, TotalPrice = 100000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA002", AccountId = "A006", TicketCode = "TC002", TicketId = 2, Quantity = 1, TotalPrice = 40000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA003", AccountId = "A011", TicketCode = "TC003", TicketId = 3, Quantity = 3, TotalPrice = 90000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA004", AccountId = "A014", TicketCode = "TC004", TicketId = 4, Quantity = 2, TotalPrice = 120000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA005", AccountId = "A003", TicketCode = "TC005", TicketId = 5, Quantity = 4, TotalPrice = 180000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA006", AccountId = "A006", TicketCode = "TC006", TicketId = 6, Quantity = 2, TotalPrice = 110000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA007", AccountId = "A011", TicketCode = "TC007", TicketId = 7, Quantity = 1, TotalPrice = 35000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA008", AccountId = "A014", TicketCode = "TC008", TicketId = 8, Quantity = 3, TotalPrice = 150000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA009", AccountId = "A003", TicketCode = "TC009", TicketId = 9, Quantity = 2, TotalPrice = 130000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA010", AccountId = "A006", TicketCode = "TC010", TicketId = 10, Quantity = 1, TotalPrice = 70000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA011", AccountId = "A011", TicketCode = "TC011", TicketId = 11, Quantity = 5, TotalPrice = 125000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA012", AccountId = "A014", TicketCode = "TC012", TicketId = 12, Quantity = 2, TotalPrice = 150000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA013", AccountId = "A003", TicketCode = "TC013", TicketId = 3, Quantity = 3, TotalPrice = 90000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA014", AccountId = "A006", TicketCode = "TC014", TicketId = 5, Quantity = 2, TotalPrice = 90000.0, participantQuantity = 0 },
+   new TicketAccount { TicketAccountId = "TA015", AccountId = "A011", TicketCode = "TC015", TicketId = 7, Quantity = 1, TotalPrice = 35000.0, participantQuantity = 0 }
 );
             #endregion
 

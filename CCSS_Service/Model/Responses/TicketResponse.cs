@@ -13,6 +13,7 @@ namespace CCSS_Service.Model.Responses
         public int TicketId { get; set; }
 
         public ticketType ticketType { get; set; }
+        public ticketStatus ticketStatus { get; set; }
         public string Description { get; set; }
 
         public int? Quantity { get; set; }

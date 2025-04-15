@@ -167,7 +167,8 @@ namespace CCSS_Service.Services
             var totalInitialTickets = existingTicketAccount.Quantity;
             //_mapper.Map(request, existingTicketAccount);
             existingTicketAccount.Quantity -= request.quantity;
-             var update = await _ticketAccountRepository.UpdateTicketAccount(existingTicketAccount);
+            existingTicketAccount.participantQuantity += request.quantity;
+            var update = await _ticketAccountRepository.UpdateTicketAccount(existingTicketAccount);
             if (!update)
             {
                 throw new Exception("update ticket fail");
