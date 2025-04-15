@@ -25,9 +25,9 @@ namespace CCSS_Captone.Controllers
         /// <summary>
         /// Lấy danh sách tất cả sự kiện có thể tìm kiếm theo tên
         /// </summary>
-        [SwaggerOperation(Description = "role: Mamager, Customer")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(Roles = "Manager, Customer")]
+        //[SwaggerOperation(Description = "role: Mamager, Customer, Consultant")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Manager, Customer")]
         [HttpGet("GetAllEvents")]
         public async Task<IActionResult> GetAllEvents([FromQuery] string? searchTerm)
         {

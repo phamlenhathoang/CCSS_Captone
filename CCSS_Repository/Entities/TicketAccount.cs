@@ -19,6 +19,7 @@ namespace CCSS_Repository.Entities
         public string TicketCode { get; set; }
         public Account Account { get; set; }
         public int Quantity { get; set; }
+        public int participantQuantity { get; set; }
         public double TotalPrice { get; set; }
         
 

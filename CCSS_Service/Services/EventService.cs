@@ -57,6 +57,15 @@ namespace CCSS_Service.Services
             }
 
             var result = _mapper.Map<List<EventResponse>>(events);
+            for (int i = 0; i < result.Count; i++)
+            {
+                var eventEntity = events[i];
+                int totalParticipants = eventEntity.Ticket
+                    .SelectMany(t => t.TicketAccounts)
+                    .Sum(ta => ta.participantQuantity);
+
+                result[i].participantQuantity = totalParticipants;
+            }
             return result;
         }
 
@@ -64,8 +73,17 @@ namespace CCSS_Service.Services
         public async Task<EventResponse> GetEvent(string id)
         {
             var evt = await _repository.GetEventById(id);
-            return _mapper.Map<EventResponse>(evt);
+
+            var response = _mapper.Map<EventResponse>(evt);
+
+            // Tính participantQuantity
+            response.participantQuantity = evt.Ticket?
+                .SelectMany(t => t.TicketAccounts)
+                .Sum(ta => ta.participantQuantity) ?? 0;
+
+            return response;
         }
+
 
 
         public async Task<string> AddEvent(CreateEventRequest eventRequest, List<IFormFile> ImageUrl)
@@ -94,6 +112,7 @@ namespace CCSS_Service.Services
                     foreach (var ticket in newTickets)
                     {
                         ticket.EventId = newEvent.EventId;
+                        ticket.ticketStatus = ticketStatus.available;
                     }
 
                     newEvent.Ticket = newTickets;
@@ -246,7 +265,8 @@ namespace CCSS_Service.Services
                                 EventId = existingEvent.EventId,
                                 Quantity = ticketRequest.Quantity,
                                 Price = ticketRequest.Price,
-                                Description = ticketRequest.Description
+                                Description = ticketRequest.Description,
+                                ticketStatus = ticketStatus.available,
                             };
 
                             existingEvent.Ticket.Add(newTicket);

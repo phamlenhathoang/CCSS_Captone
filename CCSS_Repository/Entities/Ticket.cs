@@ -25,11 +25,17 @@ namespace CCSS_Repository.Entities
 
         public ICollection<TicketAccount> TicketAccounts { get; set; } = new List<TicketAccount>();
         public ticketType ticketType { get; set; }
+        public ticketStatus ticketStatus { get; set; }
 
     }
     public enum ticketType
     {
         Nomal,
         Premium
+    }
+    public enum ticketStatus
+    {
+        available,
+        invalid
     }
 }
