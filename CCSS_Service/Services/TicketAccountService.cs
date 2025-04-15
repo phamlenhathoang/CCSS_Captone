@@ -22,7 +22,7 @@ namespace CCSS_Service.Services
         Task<TicketAccountResponse> GetTicketAccount(string id);
         Task<List<TicketAccountResponse>> GetTicketAccountByAccountId(string id);
         Task<TicketAccountResponse> AddTicketAccount(TicketAccountRequest request);
-        Task<string> TicketCheck(TicketCheckRequest request);
+        Task<TicketCheckResponse> TicketCheck(TicketCheckRequest request);
         Task<string> UpdateTicketAccount(string id, TicketAccountRequest request);
         Task<bool> DeleteTicketAccount(string id);
     }
@@ -137,26 +137,48 @@ namespace CCSS_Service.Services
         {
             return await _ticketAccountRepository.DeleteTicketAccount(id);
         }
-        public async Task<string> TicketCheck(TicketCheckRequest request)
+        public async Task<TicketCheckResponse> TicketCheck(TicketCheckRequest request)
         {
             var existingTicketAccount = await _ticketAccountRepository.GetTicketAccountByTicketCode(request.TicketCode);
-            if (existingTicketAccount == null)
+            var requestEvent = await _eventrepository.GetEventByTicketId(existingTicketAccount.TicketId);
+            var currentEvent = await _eventrepository.GetEventByEventId(request.eventId);
+
+            if (existingTicketAccount == null || currentEvent.EventId != requestEvent.EventId)
             {
-                return "Ticket not found";
+                return new TicketCheckResponse
+                {
+                    Notification = "Ticket not found"
+                };
             }
             else if (existingTicketAccount.Quantity == 0)
             {
-                return "Ticket has expired";
+                return new TicketCheckResponse
+                {
+                    Notification = "Ticket has expired"
+                };
             }
             else if (existingTicketAccount.Quantity < request.quantity)
             {
-                return "exceed ticket capacity";
+                return new TicketCheckResponse
+                {
+                    Notification = "exceed ticket capacity"
+                };
             }
-
-            _mapper.Map(request, existingTicketAccount);
+            var totalInitialTickets = existingTicketAccount.Quantity;
+            //_mapper.Map(request, existingTicketAccount);
             existingTicketAccount.Quantity -= request.quantity;
-            await _ticketAccountRepository.UpdateTicketAccount(existingTicketAccount);
-            return "Check Success";
+             var update = await _ticketAccountRepository.UpdateTicketAccount(existingTicketAccount);
+            if (!update)
+            {
+                throw new Exception("update ticket fail");
+            }
+            return new TicketCheckResponse
+            {
+                TotalInitialTickets = totalInitialTickets,
+                TotalRemainingTickets = existingTicketAccount.Quantity,
+                TicketCode=request.TicketCode,
+                Notification = "Check Success"
+            };
         }
 
 

@@ -132,11 +132,11 @@ namespace CCSS_Captone.Controllers
             try
             {
                 var result = await _ticketAccountService.TicketCheck(request);
-                if (result.Contains("Success"))
+                if (result.Notification == "Ticket not found" || result.Notification == "Ticket has expired" || result.Notification == "Exceed ticket capacity")
                 {
-                    return Ok(result);
+                    return NotFound(result); // Trả về 404 với thông báo lỗi nếu không tìm thấy vé hoặc vé hết hạn
                 }
-                return BadRequest(result);
+                return Ok(result);
             }
             catch (Exception ex)
             {
