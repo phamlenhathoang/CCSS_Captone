@@ -25,6 +25,7 @@ namespace CCSS_Service.Model.Requests
     }
     public class TicketCheckRequest
     {
+        public string eventId { get; set; }
         public int quantity { get; set; }
         public string? TicketCode { get; set; }
     }

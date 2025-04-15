@@ -24,4 +24,12 @@ namespace CCSS_Service.Model.Responses
         public int? TicketId { get; set; }
         public TicketResponse Ticket { get; set; }
     }
+    public class TicketCheckResponse
+    {
+        public string? eventId { get; set; }
+        public int? TotalInitialTickets { get; set; }
+        public int? TotalRemainingTickets { get; set; }
+        public string? TicketCode { get; set; }
+        public string? Notification { get; set; }
+    }
 }
