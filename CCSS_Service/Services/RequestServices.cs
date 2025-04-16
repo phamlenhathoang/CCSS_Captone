@@ -684,7 +684,8 @@ namespace CCSS_Service.Services
                         requestCharacter.UpdateDate = DateTime.Now;
                         requestCharacter.CosplayerId = r.CosplayerId;
                         requestCharacter.Description = r.Description;
-                        requestCharacter.Quantity = quantity;                     
+                        requestCharacter.Quantity = quantity;       
+                        requestCharacter.TotalPrice = character.Price * r.Quantity;
 
                         characterInRequest.Add(requestCharacter);
 
@@ -714,6 +715,8 @@ namespace CCSS_Service.Services
                 requestExisting.Location = UpdateRequestDtos.Location;
                 requestExisting.ServiceId = UpdateRequestDtos.ServiceId;
                 requestExisting.PackageId = requestExisting.ServiceId == "S003" ? UpdateRequestDtos.PackageId : null;
+                requestExisting.Price = UpdateRequestDtos.Price;
+                requestExisting.UpdateDate = DateTime.Now;
 
 
                 await _repository.UpdateRequest(requestExisting);
