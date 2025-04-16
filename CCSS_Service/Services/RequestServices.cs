@@ -579,7 +579,7 @@ namespace CCSS_Service.Services
                                     return "Date range must be within the request date range.";
                                 }
 
-                                var requestCharacterInDate = await _requestCharacterRepository.GetRequestCharacterCosplayerId(requestExisting.RequestId, r.CharacterId, r.CosplayerId);
+                                var requestCharacterInDate = await _requestCharacterRepository.GetRequestCharacter(requestExisting.RequestId, r.CharacterId);
                                 if (requestCharacterInDate == null)
                                 {
                                     await transaction.RollbackAsync();
@@ -684,7 +684,7 @@ namespace CCSS_Service.Services
                         requestCharacter.UpdateDate = DateTime.Now;
                         requestCharacter.CosplayerId = r.CosplayerId;
                         requestCharacter.Description = r.Description;
-                        requestCharacter.Quantity = quantity;
+                        requestCharacter.Quantity = quantity;                     
 
                         characterInRequest.Add(requestCharacter);
 
@@ -713,6 +713,8 @@ namespace CCSS_Service.Services
                 requestExisting.EndDate = EndDate;
                 requestExisting.Location = UpdateRequestDtos.Location;
                 requestExisting.ServiceId = UpdateRequestDtos.ServiceId;
+                requestExisting.PackageId = requestExisting.ServiceId == "S003" ? UpdateRequestDtos.PackageId : null;
+
 
                 await _repository.UpdateRequest(requestExisting);
 
