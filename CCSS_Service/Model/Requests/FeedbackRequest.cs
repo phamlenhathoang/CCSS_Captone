@@ -9,7 +9,6 @@ namespace CCSS_Service.Model.Requests
     public class FeedbackRequest
     {
         public string ContractCharacterId { get; set; }
-        public string? CosplayerId { get; set; }
         public int? Star { get; set; }
         public string? Description { get; set; }
     }
