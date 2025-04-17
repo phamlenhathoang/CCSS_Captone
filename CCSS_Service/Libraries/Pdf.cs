@@ -212,14 +212,14 @@ namespace CCSS_Service.Libraries
             </tr>";
                         double totalHours = 0;
                         int day = 0;
-
+                        int count = 0;
 
 
                         foreach (RequestCharacter requestCharacter in request.RequestCharacters)
                         {
                             Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
 
-                            int count = 0;
+                            
 
                             if (count == 0)
                             {
