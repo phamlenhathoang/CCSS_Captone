@@ -49,7 +49,7 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpGet("ListRequestDateByRequestDate")]
+        [HttpGet("CalculateTotalHoursByRequestDate")]
         public async Task<IActionResult> CalculateTotalHoursInRequestDate(string requestDateId)
         {
             if (ModelState.IsValid)
