@@ -64,6 +64,7 @@ namespace CCSS_Service.Services
 
                 List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(item.RequestId)).Select(c => new CharacterRequestResponse()
                 {
+                    RequestCharacterId = c.RequestCharacterId,
                     CharacterId = c.CharacterId,
                     CosplayerId = c.CosplayerId,
                     Description = c.Description,
@@ -120,6 +121,7 @@ namespace CCSS_Service.Services
 
             List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(request.RequestId)).Select(c => new CharacterRequestResponse()
             {
+                RequestCharacterId = c.RequestCharacterId,
                 CharacterId = c.CharacterId,
                 CosplayerId = c.CosplayerId,
                 Description = c.Description,
@@ -184,6 +186,7 @@ namespace CCSS_Service.Services
 
                 List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(item.RequestId)).Select(c => new CharacterRequestResponse()
                 {
+                    RequestCharacterId = c.RequestCharacterId,
                     CharacterId = c.CharacterId,
                     CosplayerId = c.CosplayerId,
                     Description = c.Description,
@@ -411,33 +414,28 @@ namespace CCSS_Service.Services
                                             if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
                                             {
 
-                                                string[] timeFormats = { "H:mm", "HH:mm", "h:mm", "hh:mm" };
+                                                string[] timeFormats = { "HH:mm dd/MM/yyyy", "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
 
                                                 bool isValidStartTime = DateTime.TryParseExact(dateDtos.StartDate.Trim(), timeFormats,
-                                                                                          System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out StartTime);
+                                                                                          System.Globalization.CultureInfo.InvariantCulture,
+                                                                                          System.Globalization.DateTimeStyles.None, out StartTime);
 
                                                 bool isValidEndTime = DateTime.TryParseExact(dateDtos.EndDate.Trim(), timeFormats,
-                                                                                             System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out EndTime);
+                                                                                             System.Globalization.CultureInfo.InvariantCulture,
+                                                                                             System.Globalization.DateTimeStyles.None, out EndTime);
                                                 if (!isValidStartTime && !isValidEndTime)
                                                 {
                                                     return "Valid Time is wrong";
                                                 }
                                             }
-
-                                            TimeSpan startTimeOfDay = StartTime.TimeOfDay;
-                                            TimeSpan endTimeOfDay = EndTime.TimeOfDay;
-
-                                            DateTime StartTimeOnly = StartDate.Date.Add(startTimeOfDay);
-                                            DateTime EndTimeOnly = EndDate.Date.Add(endTimeOfDay);
-
-                                            if (StartTimeOnly >= EndTimeOnly)
+                                            if (StartTime >= EndTime)
                                             {
                                                 await transaction.RollbackAsync();
                                                 return "End date must be greater than start date.";
                                             }
 
                                             // Kiểm tra thời gian nằm trong khoảng thời gian của Request
-                                            if (StartTimeOnly < StartDate && EndTimeOnly > EndDate)
+                                            if (StartTime < StartDate && EndTime > EndDate)
                                             {
                                                 await transaction.RollbackAsync();
                                                 return "Date range must be within the request date range.";
@@ -447,8 +445,8 @@ namespace CCSS_Service.Services
                                                 RequestDateId = Guid.NewGuid().ToString(),
                                                 RequestCharacterId = requestCharacter.RequestCharacterId,
                                                 Status = RequestDateStatus.Pending,
-                                                StartDate = StartTimeOnly,
-                                                EndDate = EndTimeOnly
+                                                StartDate = StartTime,
+                                                EndDate = EndTime
                                             });
                                         }
                                     }
@@ -547,33 +545,28 @@ namespace CCSS_Service.Services
                                 if (!string.IsNullOrEmpty(dateRange.StartDate) || !string.IsNullOrEmpty(dateRange.EndDate))
                                 {
 
-                                    string[] timeFormats = { "H:mm", "HH:mm", "h:mm", "hh:mm" };
+                                    string[] timeFormats = { "HH:mm dd/MM/yyyy", "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
 
                                     bool isValidStartTime = DateTime.TryParseExact(dateRange.StartDate.Trim(), timeFormats,
-                                                                              System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out StartTime);
+                                                                              System.Globalization.CultureInfo.InvariantCulture,
+                                                                              System.Globalization.DateTimeStyles.None, out StartTime);
 
                                     bool isValidEndTime = DateTime.TryParseExact(dateRange.EndDate.Trim(), timeFormats,
-                                                                                 System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out EndTime);
+                                                                                 System.Globalization.CultureInfo.InvariantCulture,
+                                                                                 System.Globalization.DateTimeStyles.None, out EndTime);
                                     if (!isValidStartTime && !isValidEndTime)
                                     {
                                         return "Valid Time is wrong";
                                     }
                                 }
-
-                                TimeSpan startTimeOfDay = StartTime.TimeOfDay;
-                                TimeSpan endTimeOfDay = EndTime.TimeOfDay;
-
-                                DateTime StartTimeOnly = StartDate.Date.Add(startTimeOfDay);
-                                DateTime EndTimeOnly = EndDate.Date.Add(endTimeOfDay);
-
-                                if (StartTimeOnly >= EndTimeOnly)
+                                if (StartTime >= EndTime)
                                 {
                                     await transaction.RollbackAsync();
                                     return "End date must be greater than start date.";
                                 }
 
                                 // Kiểm tra thời gian nằm trong khoảng thời gian của Request
-                                if (StartTimeOnly < StartDate && EndTimeOnly > EndDate)
+                                if (StartTime < StartDate && EndTime > EndDate)
                                 {
                                     await transaction.RollbackAsync();
                                     return "Date range must be within the request date range.";
@@ -588,8 +581,8 @@ namespace CCSS_Service.Services
                                 var requestDateExisting = await _requestDatesRepository.GetRequestDateById(dateRange.RequestDateId);
                                 if (requestDateExisting != null)
                                 {
-                                    requestDateExisting.StartDate = StartTimeOnly;
-                                    requestDateExisting.EndDate = EndTimeOnly;
+                                    requestDateExisting.StartDate = StartTime;
+                                    requestDateExisting.EndDate = EndTime;
                                     requestDateExisting.Status = RequestDateStatus.Pending;
                                     requestDateExisting.RequestCharacterId = requestCharacterInDate.RequestCharacterId;
 
@@ -605,8 +598,8 @@ namespace CCSS_Service.Services
                                     {
                                         RequestDateId = Guid.NewGuid().ToString(),
                                         RequestCharacterId = requestCharacterInDate.RequestCharacterId,
-                                        StartDate = StartTimeOnly,
-                                        EndDate = EndTimeOnly,
+                                        StartDate = StartTime,
+                                        EndDate = EndTime,
                                         Status = RequestDateStatus.Pending,
                                     };
                                     dateInRequest.Add(newRequestDate);
@@ -1168,33 +1161,28 @@ namespace CCSS_Service.Services
                                             if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
                                             {
 
-                                                string[] timeFormats = { "H:mm", "HH:mm", "h:mm", "hh:mm" };
+                                                string[] timeFormats = { "HH:mm dd/MM/yyyy" , "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
 
                                                 bool isValidStartTime = DateTime.TryParseExact(dateDtos.StartDate.Trim(), timeFormats,
-                                                                                          System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out StartTime);
+                                                                                          System.Globalization.CultureInfo.InvariantCulture, 
+                                                                                          System.Globalization.DateTimeStyles.None, out StartTime);
 
                                                 bool isValidEndTime = DateTime.TryParseExact(dateDtos.EndDate.Trim(), timeFormats,
-                                                                                             System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out EndTime);
+                                                                                             System.Globalization.CultureInfo.InvariantCulture, 
+                                                                                             System.Globalization.DateTimeStyles.None, out EndTime);
                                                 if (!isValidStartTime && !isValidEndTime)
                                                 {
                                                     return "Valid Time is wrong";
                                                 }
-                                            }
-
-                                            TimeSpan startTimeOfDay = StartTime.TimeOfDay;
-                                            TimeSpan endTimeOfDay = EndTime.TimeOfDay;
-
-                                            DateTime StartTimeOnly = StartDate.Date.Add(startTimeOfDay);
-                                            DateTime EndTimeOnly = EndDate.Date.Add(endTimeOfDay);
-
-                                            if (StartTimeOnly >= EndTimeOnly)
+                                            }                                         
+                                            if (StartTime >= EndTime)
                                             {
                                                 await transaction.RollbackAsync();
                                                 return "End date must be greater than start date.";
                                             }
 
                                             // Kiểm tra thời gian nằm trong khoảng thời gian của Request
-                                            if (StartTimeOnly < StartDate && EndTimeOnly > EndDate)
+                                            if (StartTime < StartDate && EndTime > EndDate)
                                             {
                                                 await transaction.RollbackAsync();
                                                 return "Date range must be within the request date range.";
@@ -1204,8 +1192,8 @@ namespace CCSS_Service.Services
                                                 RequestDateId = Guid.NewGuid().ToString(),
                                                 RequestCharacterId = requestCharacter.RequestCharacterId,
                                                 Status = RequestDateStatus.Pending,
-                                                StartDate = StartTimeOnly,
-                                                EndDate = EndTimeOnly
+                                                StartDate = StartTime,
+                                                EndDate = EndTime
                                             });
                                         }
                                     }
@@ -1372,33 +1360,28 @@ namespace CCSS_Service.Services
                                             if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
                                             {
 
-                                                string[] timeFormats = { "H:mm", "HH:mm", "h:mm", "hh:mm" };
+                                                string[] timeFormats = { "HH:mm dd/MM/yyyy", "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
 
                                                 bool isValidStartTime = DateTime.TryParseExact(dateDtos.StartDate.Trim(), timeFormats,
-                                                                                          System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out StartTime);
+                                                                                          System.Globalization.CultureInfo.InvariantCulture,
+                                                                                          System.Globalization.DateTimeStyles.None, out StartTime);
 
                                                 bool isValidEndTime = DateTime.TryParseExact(dateDtos.EndDate.Trim(), timeFormats,
-                                                                                             System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out EndTime);
+                                                                                             System.Globalization.CultureInfo.InvariantCulture,
+                                                                                             System.Globalization.DateTimeStyles.None, out EndTime);
                                                 if (!isValidStartTime && !isValidEndTime)
                                                 {
                                                     return "Valid Time is wrong";
                                                 }
                                             }
-
-                                            TimeSpan startTimeOfDay = StartTime.TimeOfDay;
-                                            TimeSpan endTimeOfDay = EndTime.TimeOfDay;
-
-                                            DateTime StartTimeOnly = StartDate.Date.Add(startTimeOfDay);
-                                            DateTime EndTimeOnly = EndDate.Date.Add(endTimeOfDay);
-
-                                            if (StartTimeOnly >= EndTimeOnly)
+                                            if (StartTime >= EndTime)
                                             {
                                                 await transaction.RollbackAsync();
                                                 return "End date must be greater than start date.";
                                             }
 
                                             // Kiểm tra thời gian nằm trong khoảng thời gian của Request
-                                            if (StartTimeOnly < StartDate && EndTimeOnly > EndDate)
+                                            if (StartTime < StartDate && EndTime > EndDate)
                                             {
                                                 await transaction.RollbackAsync();
                                                 return "Date range must be within the request date range.";
@@ -1408,8 +1391,8 @@ namespace CCSS_Service.Services
                                                 RequestDateId = Guid.NewGuid().ToString(),
                                                 RequestCharacterId = requestCharacter.RequestCharacterId,
                                                 Status = RequestDateStatus.Pending,
-                                                StartDate = StartTimeOnly,
-                                                EndDate = EndTimeOnly
+                                                StartDate = StartTime,
+                                                EndDate = EndTime
                                             });
                                         }
                                     }

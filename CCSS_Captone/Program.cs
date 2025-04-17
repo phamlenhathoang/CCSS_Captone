@@ -94,6 +94,7 @@ builder.Services.AddScoped<ICartProductServices, CartProductServices>();
 builder.Services.AddScoped<IVNPayService, VNPayService>();
 builder.Services.AddScoped<IServiceServices, ServiceServices>();
 builder.Services.AddScoped<IAccountImageService, AccountImageService>();
+builder.Services.AddScoped<IRequestDateServices, RequestDateServices>();
 
 
 
