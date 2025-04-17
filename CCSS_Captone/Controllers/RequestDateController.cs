@@ -48,5 +48,16 @@ namespace CCSS_Captone.Controllers
             }
             return BadRequest(ModelState);
         }
+
+        [HttpGet("ListRequestDateByRequestDate")]
+        public async Task<IActionResult> CalculateTotalHoursInRequestDate(string requestDateId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.CaculateTotalHourInRequestDate(requestDateId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
     }
 }
