@@ -19,6 +19,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> UpdateRequestDate(RequestDate requestDate);
         Task<bool> DeleteListRequestDateByRequestCharacterId(string requestCharacterId);
         Task<List<RequestDate>> GetListRequestDateByRequestCharacter(string requestCharacterId);
+        public List<RequestDate> GetListRequestDateByRequestCharacterNotAyncs(string requestCharacterId);
     }
 
     public class RequestDatesRepository: IRequestDatesRepository
@@ -44,6 +45,10 @@ namespace CCSS_Repository.Repositories
         public async Task<List<RequestDate>> GetListRequestDateByRequestCharacter(string requestCharacterId)
         {
             return await _context.RequestDates.Where(sc => sc.RequestCharacterId.Equals(requestCharacterId)).ToListAsync();
+        }
+        public List<RequestDate> GetListRequestDateByRequestCharacterNotAyncs(string requestCharacterId)
+        {
+            return  _context.RequestDates.Where(sc => sc.RequestCharacterId.Equals(requestCharacterId)).ToList();
         }
 
         public async Task<RequestDate> GetRequestDateById(string id)
