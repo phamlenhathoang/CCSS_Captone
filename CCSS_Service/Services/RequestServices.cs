@@ -60,9 +60,7 @@ namespace CCSS_Service.Services
             var request = await _repository.GetAllRequest();
             foreach (var item in request)
             {
-                int totalDate = 0;
-                TimeSpan duration = item.EndDate - item.StartDate;
-                totalDate += (int)duration.TotalDays;
+                int totalDate = (item.EndDate.Date - item.StartDate.Date).Days + 1;
                 var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
 
                 List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(item.RequestId)).Select(c => new CharacterRequestResponse()
@@ -127,9 +125,7 @@ namespace CCSS_Service.Services
         public async Task<RequestResponse> GetRequestById(string id)
         {
             var request = await _repository.GetRequestById(id);
-            int totalDate = 0;
-            TimeSpan duration = request.EndDate - request.StartDate;
-            totalDate += (int)duration.TotalDays;
+            int totalDate = (request.EndDate.Date - request.StartDate.Date).Days + 1;
             var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
 
             List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(request.RequestId)).Select(c => new CharacterRequestResponse()
@@ -203,9 +199,7 @@ namespace CCSS_Service.Services
             var request = await _repository.GetAllRequestByAccountId(account.AccountId);
             foreach (var item in request)
             {
-                int totalDate = 0;
-                TimeSpan duration = item.EndDate - item.StartDate;
-                totalDate += (int)duration.TotalDays;
+                int totalDate = (item.EndDate.Date - item.StartDate.Date).Days + 1;
                 var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
 
                 List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(item.RequestId)).Select(c => new CharacterRequestResponse()
