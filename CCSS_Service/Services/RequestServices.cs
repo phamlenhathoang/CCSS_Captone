@@ -8,8 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Task = System.Threading.Tasks.Task;
-
+using Task = CCSS_Repository.Entities.Task;
 
 namespace CCSS_Service.Services
 {
@@ -61,11 +60,8 @@ namespace CCSS_Service.Services
             var request = await _repository.GetAllRequest();
             foreach (var item in request)
             {
-                int totalDays = 0;
-                TimeSpan duration = item.EndDate - item.StartDate;
-                totalDays += (int)duration.TotalDays;
-
                 var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
+
                 List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(item.RequestId)).Select(c => new CharacterRequestResponse()
                 {
                     RequestCharacterId = c.RequestCharacterId,
@@ -83,22 +79,15 @@ namespace CCSS_Service.Services
                                           CharacterImageId = img.CharacterImageId,
                                           UrlImage = img.UrlImage
                                       }).ToList(),
-                    RequestDateResponses = c.RequestDates.OrderBy(s => s.StartDate).Select(rd =>
-                    {
-                        TimeSpan hoursDuration = rd.EndDate - rd.StartDate;
-                        decimal totalHours = (decimal)hoursDuration.TotalHours;
-                        return new RequestDateResponse
-                        {
-
-                            RequestDateId = rd.RequestDateId,
-                            RequestCharacterId = rd.RequestCharacterId,
-                            StartDate = rd.StartDate.ToString("HH:mm dd/MM/yyyy"),
-                            EndDate = rd.EndDate.ToString("HH:mm dd/MM/yyyy"),
-                            Status = rd.Status,
-                            TotalHours = totalHours,
-                            Reason = rd.Reason,
-                        };
-                    }).ToList(),
+                    RequestDateResponses = c.RequestDates.OrderBy(s => s.StartDate).Select(rd => new RequestDateResponse
+                                                            {
+                                                                RequestDateId = rd.RequestDateId,
+                                                                RequestCharacterId = rd.RequestCharacterId,
+                                                                StartDate = rd.StartDate.ToString("HH:mm dd/MM/yyyy"),
+                                                                EndDate = rd.EndDate.ToString("HH:mm dd/MM/yyyy"),
+                                                                Status = rd.Status,
+                                                                Reason = rd.Reason,
+                                                            }).ToList(),
                 }).ToList();
 
                 RequestResponse response = new RequestResponse()
@@ -115,8 +104,7 @@ namespace CCSS_Service.Services
                     ServiceId = item.ServiceId,
                     PackageId = item.PackageId,
                     Deposit = item.Deposit,
-                    Reason = item.Reason,
-                    TotalDate = totalDays,
+                    Reason = item.Reason,           
                     CharactersListResponse = characterResponses
                 };
                 listRequest.Add(response); ;
@@ -129,11 +117,6 @@ namespace CCSS_Service.Services
         public async Task<RequestResponse> GetRequestById(string id)
         {
             var request = await _repository.GetRequestById(id);
-
-            int totalDays = 0;
-            TimeSpan duration = request.EndDate - request.StartDate;
-            totalDays += (int)duration.TotalDays;
-
             var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
 
             List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(request.RequestId)).Select(c => new CharacterRequestResponse()
@@ -153,21 +136,15 @@ namespace CCSS_Service.Services
                                           CharacterImageId = img.CharacterImageId,
                                           UrlImage = img.UrlImage
                                       }).ToList(),
-                RequestDateResponses = c.RequestDates.OrderBy(s => s.StartDate).Select(rd =>
-                {
-                    TimeSpan hoursDuration = rd.EndDate - rd.StartDate;
-                    decimal totalHours = (decimal)hoursDuration.TotalHours;
-                    return new RequestDateResponse
-                    {
-                        RequestDateId = rd.RequestDateId,
-                        RequestCharacterId = rd.RequestCharacterId,
-                        StartDate = rd.StartDate.ToString("HH:mm dd/MM/yyyy"),
-                        EndDate = rd.EndDate.ToString("HH:mm dd/MM/yyyy"),
-                        Status = rd.Status,
-                        TotalHours = totalHours,
-                        Reason = rd.Reason,
-                    };
-                }).ToList(),
+                RequestDateResponses = c.RequestDates.OrderBy(s => s.StartDate).Select(rd => new RequestDateResponse
+                                        {
+                                            RequestDateId = rd.RequestDateId,
+                                            RequestCharacterId = rd.RequestCharacterId,
+                                            StartDate = rd.StartDate.ToString("HH:mm dd/MM/yyyy"),
+                                            EndDate = rd.EndDate.ToString("HH:mm dd/MM/yyyy"),
+                                            Status = rd.Status,
+                                            Reason = rd.Reason,
+                                        }).ToList(),
             }).ToList();
 
             var response = new RequestResponse()
@@ -185,8 +162,8 @@ namespace CCSS_Service.Services
                 PackageId = request.PackageId,
                 Deposit = request.Deposit,
                 Reason = request.Reason,
-                TotalDate = totalDays,
 
+             
                 CharactersListResponse = characterResponses
             };
             return response;
@@ -205,9 +182,6 @@ namespace CCSS_Service.Services
             var request = await _repository.GetAllRequestByAccountId(account.AccountId);
             foreach (var item in request)
             {
-                int totalDays = 0;
-                TimeSpan duration = item.EndDate - item.StartDate;
-                totalDays += (int)duration.TotalDays;
                 var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
 
                 List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(item.RequestId)).Select(c => new CharacterRequestResponse()
@@ -227,21 +201,15 @@ namespace CCSS_Service.Services
                                           CharacterImageId = img.CharacterImageId,
                                           UrlImage = img.UrlImage
                                       }).ToList(),
-                    RequestDateResponses = c.RequestDates.OrderBy(s => s.StartDate).Select(rd =>
-                    {
-                        TimeSpan hoursDuration = rd.EndDate - rd.StartDate;
-                        decimal totalHours = (decimal)hoursDuration.TotalHours;
-                        return new RequestDateResponse
-                        {
-                            RequestDateId = rd.RequestDateId,
-                            RequestCharacterId = rd.RequestCharacterId,
-                            StartDate = rd.StartDate.ToString("HH:mm dd/MM/yyyy"),
-                            EndDate = rd.EndDate.ToString("HH:mm dd/MM/yyyy"),
-                            Status = rd.Status,
-                            TotalHours = totalHours,
-                            Reason = rd.Reason,
-                        };
-                    }).ToList(),
+                    RequestDateResponses = c.RequestDates.OrderBy(s => s.StartDate).Select(rd => new RequestDateResponse
+                                        {
+                                            RequestDateId = rd.RequestDateId,
+                                            RequestCharacterId = rd.RequestCharacterId,
+                                            StartDate = rd.StartDate.ToString("HH:mm dd/MM/yyyy"),
+                                            EndDate = rd.EndDate.ToString("HH:mm dd/MM/yyyy"),
+                                            Status = rd.Status,
+                                            Reason = rd.Reason,
+                                        }).ToList(),
                 }).ToList();
 
                 RequestResponse response = new RequestResponse()
@@ -258,8 +226,7 @@ namespace CCSS_Service.Services
                     ServiceId = item.ServiceId,
                     PackageId = item.PackageId,
                     Deposit = item.Deposit,
-                    Reason = item.Reason,
-                    TotalDate = totalDays,
+                    Reason = item.Reason,                    
                     CharactersListResponse = characterResponses
                 };
                 listRequest.Add(response); ;
@@ -710,7 +677,7 @@ namespace CCSS_Service.Services
                         requestCharacter.UpdateDate = DateTime.Now;
                         requestCharacter.CosplayerId = r.CosplayerId;
                         requestCharacter.Description = r.Description;
-                        requestCharacter.Quantity = quantity;
+                        requestCharacter.Quantity = quantity;       
                         requestCharacter.TotalPrice = character.Price * r.Quantity;
 
                         characterInRequest.Add(requestCharacter);
@@ -718,7 +685,7 @@ namespace CCSS_Service.Services
                         character.Quantity -= quantity;
                         await _characterRepository.UpdateCharacter(character);
                     }
-                }
+                }      
                 if (characterInRequest.Any())
                 {
                     var existResult = await _requestCharacterRepository.UpdateListRequestCharacter(characterInRequest);
@@ -1194,20 +1161,20 @@ namespace CCSS_Service.Services
                                             if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
                                             {
 
-                                                string[] timeFormats = { "HH:mm dd/MM/yyyy", "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
+                                                string[] timeFormats = { "HH:mm dd/MM/yyyy" , "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
 
                                                 bool isValidStartTime = DateTime.TryParseExact(dateDtos.StartDate.Trim(), timeFormats,
-                                                                                          System.Globalization.CultureInfo.InvariantCulture,
+                                                                                          System.Globalization.CultureInfo.InvariantCulture, 
                                                                                           System.Globalization.DateTimeStyles.None, out StartTime);
 
                                                 bool isValidEndTime = DateTime.TryParseExact(dateDtos.EndDate.Trim(), timeFormats,
-                                                                                             System.Globalization.CultureInfo.InvariantCulture,
+                                                                                             System.Globalization.CultureInfo.InvariantCulture, 
                                                                                              System.Globalization.DateTimeStyles.None, out EndTime);
                                                 if (!isValidStartTime && !isValidEndTime)
                                                 {
                                                     return "Valid Time is wrong";
                                                 }
-                                            }
+                                            }                                         
                                             if (StartTime >= EndTime)
                                             {
                                                 await transaction.RollbackAsync();
@@ -1351,7 +1318,7 @@ namespace CCSS_Service.Services
                         List<RequestCharacter> characteInRequest = new List<RequestCharacter>();
 
                         foreach (var r in requestDtos.ListRequestCharacters)
-                        {
+                        {                                                 
                             var Getcharacter = await _characterRepository.GetCharacter(r.CharacterId);
                             var totalPrice = Getcharacter.Price * r.Quantity;
                             // Nếu CosplayerId hợp lệ, thêm vào danh sách
