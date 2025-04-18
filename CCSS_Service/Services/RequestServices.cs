@@ -139,6 +139,7 @@ namespace CCSS_Service.Services
                 MaxHeight = c.Character.MaxHeight,
                 MinWeight = c.Character.MinWeight,
                 MaxWeight = c.Character.MaxWeight,
+                Status = c.Status.ToString(),
                 CharacterImages = c.Character.CharacterImages
                                       .Select(img => new CharacterImageDto
                                       {
