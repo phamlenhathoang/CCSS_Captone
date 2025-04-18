@@ -79,7 +79,7 @@ namespace CCSS_Service.Services
                                           CharacterImageId = img.CharacterImageId,
                                           UrlImage = img.UrlImage
                                       }).ToList(),
-                    RequestDateResponses = c.RequestDates.Select(rd => new RequestDateResponse
+                    RequestDateResponses = c.RequestDates.OrderBy(s => s.StartDate).Select(rd => new RequestDateResponse
                                                             {
                                                                 RequestDateId = rd.RequestDateId,
                                                                 RequestCharacterId = rd.RequestCharacterId,
@@ -136,7 +136,7 @@ namespace CCSS_Service.Services
                                           CharacterImageId = img.CharacterImageId,
                                           UrlImage = img.UrlImage
                                       }).ToList(),
-                RequestDateResponses = c.RequestDates.Select(rd => new RequestDateResponse
+                RequestDateResponses = c.RequestDates.OrderBy(s => s.StartDate).Select(rd => new RequestDateResponse
                                         {
                                             RequestDateId = rd.RequestDateId,
                                             RequestCharacterId = rd.RequestCharacterId,
@@ -201,7 +201,7 @@ namespace CCSS_Service.Services
                                           CharacterImageId = img.CharacterImageId,
                                           UrlImage = img.UrlImage
                                       }).ToList(),
-                    RequestDateResponses = c.RequestDates.Select(rd => new RequestDateResponse
+                    RequestDateResponses = c.RequestDates.OrderBy(s => s.StartDate).Select(rd => new RequestDateResponse
                                         {
                                             RequestDateId = rd.RequestDateId,
                                             RequestCharacterId = rd.RequestCharacterId,
