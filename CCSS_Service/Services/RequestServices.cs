@@ -39,13 +39,11 @@ namespace CCSS_Service.Services
         private readonly IBeginTransactionRepository _beginTransactionRepository;
         private readonly IContractRespository _contractRepository;
         private readonly IRequestDatesRepository _requestDatesRepository;
-        private readonly IRequestDateServices _requestDateServices;
 
 
-        public RequestServices(ITaskRepository taskRepository, IRequestRepository repository, IRequestCharacterRepository requestCharacterRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, IServiceRepository serviceRepository, IAccountCouponRepository accountCouponRepository, IBeginTransactionRepository beginTransactionRepository, IContractRespository contractRepository, IRequestDatesRepository requestDatesRepository, IRequestDateServices requestDateServices)
+        public RequestServices(ITaskRepository taskRepository, IRequestRepository repository, IRequestCharacterRepository requestCharacterRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, IServiceRepository serviceRepository, IAccountCouponRepository accountCouponRepository, IBeginTransactionRepository beginTransactionRepository, IContractRespository contractRepository, IRequestDatesRepository requestDatesRepository)
         {
             _repository = repository;
-            _requestDateServices = requestDateServices;
             _requestDatesRepository = requestDatesRepository;
             _characterRepository = characterRepository;
             _requestCharacterRepository = requestCharacterRepository;
