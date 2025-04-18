@@ -15,7 +15,6 @@ namespace CCSS_Service.Model.Responses
         public string? StartDate { get; set; }
         public string? EndDate { get; set; }
         public string? Reason { get; set; }
-        public decimal? TotalHours { get; set; }
         public RequestDateStatus? Status { get; set; }
     }
 }

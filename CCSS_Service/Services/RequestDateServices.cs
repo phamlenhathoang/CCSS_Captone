@@ -14,7 +14,6 @@ namespace CCSS_Service.Services
         Task<decimal> CaculateTotalHourInRequestDate(string requestDateId);
         Task<decimal> CaculateTotalHour(string requestCharacterId);
         Task<RequestDate> GetRequestDate(string id);
-        public decimal CaculateTotalHourNotAsync(string requestCharacterId);
     }
     public class RequestDateServices : IRequestDateServices
     {
@@ -38,25 +37,6 @@ namespace CCSS_Service.Services
         public async Task<decimal> CaculateTotalHour(string requestCharacterId)
         {
             var listRequestDate = await _requestDatesRepository.GetListRequestDateByRequestCharacter(requestCharacterId);
-            if (listRequestDate == null)
-            {
-                throw new Exception("Request date is not found");
-            }
-            else
-            {
-                decimal totalHour = 0;
-                foreach (var item in listRequestDate)
-                {
-                    TimeSpan duration = item.EndDate - item.StartDate;
-                    totalHour += (decimal)duration.TotalHours;
-                }
-                return totalHour;
-            }
-        }
-
-        public decimal CaculateTotalHourNotAsync(string requestCharacterId)
-        {
-            var listRequestDate =  _requestDatesRepository.GetListRequestDateByRequestCharacterNotAyncs(requestCharacterId);
             if (listRequestDate == null)
             {
                 throw new Exception("Request date is not found");

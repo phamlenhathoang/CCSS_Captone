@@ -24,7 +24,6 @@ namespace CCSS_Service.Model.Responses
         public string? Deposit { get; set; }
         public string? Reason { get; set; }
         public string? AccountCouponId { get; set; }
-        public int? TotalDate { get; set; }
         public List<CharacterRequestResponse> CharactersListResponse { get; set; } 
     }
 
