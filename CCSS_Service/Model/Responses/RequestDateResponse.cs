@@ -14,6 +14,7 @@ namespace CCSS_Service.Model.Responses
         public string? ContractCharacterId { get; set; }
         public string? StartDate { get; set; }
         public string? EndDate { get; set; }
+        public decimal? TotalHour { get; set; }
         public string? Reason { get; set; }
         public RequestDateStatus? Status { get; set; }
     }
