@@ -49,5 +49,16 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
 
         }
+
+        [HttpGet("CheckRequestCharacter")]
+        public async Task<IActionResult> CheckRequestCharacter(string requestId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _characterServices.CheckRequestChracter(requestId);
+            return Ok(result);
+        }
     }
 }
