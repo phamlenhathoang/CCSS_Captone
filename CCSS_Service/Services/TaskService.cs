@@ -432,7 +432,7 @@ namespace CCSS_Service.Services
                     var taskResponse = new TaskResponse()
                     {
                         TaskName = character.CharacterName,
-                        AccountId = task.TaskId,
+                        AccountId = task.AccountId,
                         CreateDate = task.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
                         Description = task.Description,
                         EndDate = task.EndDate?.ToString("HH:mm dd/MM/yyyy"),
