@@ -20,6 +20,7 @@ namespace CCSS_Service.Services
         Task<RequestCharacter> GetRequestCharacter(string requestId, string characterId);
         Task<List<RequestCharacterResponse>> GetRequestCharacterByCosplayer(string cosplayerId);
         Task<string> UpdateStatus(string requestcharacterId, RequestCharacterStatus status);
+        Task<string> CheckRequestChracter(string requestId);
     }
 
     public class RequestCharacterService : IRequestCharacterService
@@ -27,12 +28,14 @@ namespace CCSS_Service.Services
         private readonly IRequestCharacterRepository _requestCharacterRepository;
         private readonly ICharacterRepository _characterRepository;
         private readonly IRequestDatesRepository _requestDatesRepository;
+        private readonly IRequestRepository _requestRepository;
 
-        public RequestCharacterService(IRequestCharacterRepository requestCharacterRepository, ICharacterRepository characterRepository, IRequestDatesRepository requestDatesRepository)
+        public RequestCharacterService(IRequestCharacterRepository requestCharacterRepository, ICharacterRepository characterRepository, IRequestDatesRepository requestDatesRepository, IRequestRepository requestRepository)
         {
             _requestCharacterRepository = requestCharacterRepository;
             _characterRepository = characterRepository;
             _requestDatesRepository = requestDatesRepository;
+            _requestRepository = requestRepository;
         }
 
         public async Task<List<RequestCharacter>> GetAllCharacterInRequest()
@@ -40,9 +43,36 @@ namespace CCSS_Service.Services
             return await _requestCharacterRepository.GetAllRequestCharacter();
         }
 
+
+        public async Task<string> CheckRequestChracter(string requestId)
+        {
+            var request = await _requestRepository.GetRequestById(requestId);
+            if (request == null)
+            {
+                return "Request is not found";
+            }
+            var listRequestCharacter = await _requestCharacterRepository.GetListCharacterByRequest(requestId);
+            if (listRequestCharacter == null)
+            {
+                return "This Request do not have requestCharacter";
+            }
+            foreach (var character in listRequestCharacter)
+            {
+                if (character.Status == RequestCharacterStatus.Busy)
+                {
+                    request.Status = RequestStatus.Pending;
+                    await _requestRepository.UpdateRequest(request);
+
+                    return "This request has a requestCharacter busy, need to wait customer change requestCharacter";
+                }
+            }
+            return "This request can change status";
+
+        }
+
         public async Task<RequestCharacterResponse> GetCharacterInRequestById(string Id)
         {
-           var requestCharacter = await _requestCharacterRepository.GetRequestCharacterById(Id);
+            var requestCharacter = await _requestCharacterRepository.GetRequestCharacterById(Id);
             var character = await _characterRepository.GetCharacter(requestCharacter.CharacterId);
             RequestCharacterResponse requestCharacterResponse = new RequestCharacterResponse()
             {
