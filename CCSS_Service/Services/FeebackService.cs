@@ -139,7 +139,7 @@ namespace CCSS_Service.Services
                             totalStar += (int)fb.Star;
                         }
 
-                        cosplayer.AverageStar = (double)totalStar / count;
+                        cosplayer.AverageStar = (double)totalStar + account.AverageStar / count + 1;
 
                         bool result = await _accountRepository.UpdateAccount(cosplayer);
 
@@ -186,10 +186,6 @@ namespace CCSS_Service.Services
                 if(contract == null)
                 {
                     throw new Exception("Contract does not exist");
-                }
-                if(contract.ContractStatus != ContractStatus.Completed)
-                {
-                    throw new Exception("Contract not completed");    
                 }
                 if (!contract.ContractCharacters.Any())
                 {
