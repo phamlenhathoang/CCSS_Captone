@@ -596,6 +596,18 @@ if(customer == null)
             try
             {
                 Contract contract = await _contractRespository.GetContractById(contractId);
+
+                if (contract.Request == null)
+                {
+                    throw new Exception("Request does not exist");
+                }
+
+                if(contract.Request.RequestCharacters == null)
+                {
+                    throw new Exception("RequestCharacter does not exist");
+                }
+
+
                 if (contract == null)
                 {
                     //await transaction.RollbackAsync();
@@ -609,7 +621,6 @@ if(customer == null)
                     }
                     else
                     {
-                        //await transaction.RollbackAsync();
                         throw new Exception("Can not update contract status");
                     }
                 }
@@ -618,6 +629,25 @@ if(customer == null)
                     if (contract.ContractStatus == ContractStatus.Created)
                     {
                         contract.ContractStatus = ContractStatus.Deposited;
+
+                        foreach(RequestCharacter requestCharacter in contract.Request.RequestCharacters)
+                        {
+                            Character character = await _characterRepository.GetCharacter(requestCharacter.CharacterId);
+
+                            if (character == null)
+                            {
+                                throw new Exception("Character does not exist");
+                            }
+
+                            character.Quantity -= requestCharacter.Quantity;
+
+                            bool checkUpdate = await _characterRepository.UpdateCharacter(character);
+
+                            if (!checkUpdate)
+                            {
+                                throw new Exception("Can not update Character");
+                            }
+                        }
                     }
                     else
                     {
@@ -632,6 +662,30 @@ if(customer == null)
                         {
                             contract.ContractStatus = ContractStatus.FinalSettlement;
                             contract.Amount = (double)contract.Amount - (double)price;
+
+                            if(contract.ContractCharacters == null)
+                            {
+                                throw new Exception("ContractCharacter does not exist");
+                            }
+
+                            foreach(ContractCharacter contractCharacter in contract.ContractCharacters)
+                            {
+                                Character character = await _characterRepository.GetCharacter(contractCharacter.CharacterId);
+
+                                if (character == null)
+                                {
+                                    throw new Exception("Character does not exist");
+                                }
+
+                                character.Quantity += contractCharacter.Quantity;
+
+                                bool checkUpdate = await _characterRepository.UpdateCharacter(character);
+
+                                if (!checkUpdate)
+                                {
+                                    throw new Exception("Can not update Character");
+                                }
+                            }
                         }
                         else
                         {
