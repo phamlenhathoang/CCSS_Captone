@@ -139,7 +139,8 @@ namespace CCSS_Service.Services
                             totalStar += (int)fb.Star;
                         }
 
-                        cosplayer.AverageStar = (double)totalStar + account.AverageStar / count + 1;
+                        decimal avgStar = ((decimal)totalStar + (decimal)(cosplayer.AverageStar ?? 0)) / (count + 1);
+                        cosplayer.AverageStar = (double)Math.Floor(avgStar * 10) / 10;
 
                         bool result = await _accountRepository.UpdateAccount(cosplayer);
 
@@ -269,7 +270,8 @@ namespace CCSS_Service.Services
                         totalStar += (int)fb.Star;
                     }
 
-                    feedback.Account.AverageStar = (double)totalStar / count;
+                    decimal avgStar = ((decimal)totalStar + (decimal)(feedback.Account.AverageStar ?? 0)) / (count + 1);
+                    feedback.Account.AverageStar = (double)Math.Floor(avgStar * 10) / 10;
 
                     bool result = await _accountRepository.UpdateAccount(feedback.Account);
 
