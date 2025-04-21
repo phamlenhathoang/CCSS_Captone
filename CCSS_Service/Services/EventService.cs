@@ -112,7 +112,7 @@ namespace CCSS_Service.Services
                     foreach (var ticket in newTickets)
                     {
                         ticket.EventId = newEvent.EventId;
-                        ticket.ticketStatus = ticketStatus.available;
+                        ticket.ticketStatus = ticketStatus.valid;
                     }
 
                     newEvent.Ticket = newTickets;
@@ -266,7 +266,7 @@ namespace CCSS_Service.Services
                                 Quantity = ticketRequest.Quantity,
                                 Price = ticketRequest.Price,
                                 Description = ticketRequest.Description,
-                                ticketStatus = ticketStatus.available,
+                                ticketStatus = ticketStatus.valid,
                             };
 
                             existingEvent.Ticket.Add(newTicket);

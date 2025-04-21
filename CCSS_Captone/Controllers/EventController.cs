@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Newtonsoft.Json;
 
 namespace CCSS_Captone.Controllers
 {
@@ -79,13 +80,14 @@ namespace CCSS_Captone.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
         [HttpPost("AddEvent")]
-        public async Task<IActionResult> AddEvent([FromForm] CreateEventRequest eventRequest,List<IFormFile> ImageUrl)
+        public async Task<IActionResult> AddEvent(string eventJson, List<IFormFile> ImageUrl)
         {
-            if (eventRequest == null)
+            if (eventJson == null)
                 return BadRequest("Invalid request: Event data is null");
 
             try
             {
+                var eventRequest = JsonConvert.DeserializeObject<CreateEventRequest>(eventJson);
                 var result = await _eventService.AddEvent(eventRequest, ImageUrl);
                 if (result.Contains("Success"))
                     return Ok(result);

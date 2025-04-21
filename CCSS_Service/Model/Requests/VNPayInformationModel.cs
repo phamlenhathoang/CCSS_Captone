@@ -28,6 +28,7 @@ namespace CCSS_Service.Model.Requests
         public string? ContractId { get; set; }
         //public string? CartId { get; set; }
         public string? OrderPaymentId { get; set; }
+        public bool isWeb { get; set; }
 
 
     }

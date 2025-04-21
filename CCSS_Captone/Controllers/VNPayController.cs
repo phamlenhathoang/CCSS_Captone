@@ -41,9 +41,25 @@ namespace CCSS_Captone.Controllers
         [Route("PaymentCallBack")]
         public async Task<IActionResult> PaymentCallbackVnpay()
         {
+            var isWeb = HttpContext.Request.Query["platform"].ToString().ToLower() == "web";
             var response = await _vNPayService.VNPayPaymentExecuteAsync(Request.Query);
+            
+            if (isWeb && response.Equals("Thanh toán thất bại"))
+            {
+                return Redirect("http://localhost:3000/fail-payment");
 
-            return Redirect("http://localhost:3000/success-payment");
+            }
+            else if (isWeb )
+            {
+                return Redirect("http://localhost:3000/success-payment");
+               
+            }
+
+            if (response.Equals("Thanh toán thất bại"))
+            {
+                return Redirect("ccss://payment-fail");
+            }
+            return Redirect("ccss://payment-success");
         }
 
     }
