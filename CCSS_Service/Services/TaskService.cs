@@ -538,6 +538,11 @@ namespace CCSS_Service.Services
                     throw new Exception("Account does not exist");
                 }
 
+                if (account.Role.RoleName != RoleName.Cosplayer)
+                {
+                    throw new Exception("Account must be cosplayer");
+                }
+
                 List<TaskResponse> taskResponses = new List<TaskResponse>();
                 var tasks = await taskRepository.GetTasksByAccountId(accountId);
                 if (tasks == null)

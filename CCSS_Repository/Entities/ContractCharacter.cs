@@ -29,7 +29,7 @@ namespace CCSS_Repository.Entities
         public string? CosplayerId { get; set; }
         public int? Quantity { get; set; }
 
-        public Task Task { get; set; }
+        public List<Task> Tasks { get; set; } = new List<Task> { };
         public Feedback Feedback { get; set; }
         public ICollection<RequestDate> RequestDates { get; set; } = new List<RequestDate>();
     }
