@@ -552,27 +552,7 @@ namespace CCSS_Service.Services
 
                 foreach (var task in tasks)
                 {
-                    Contract contract = new Contract();
-
-                    if (task.ContractCharacter != null)
-                    {
-                        contract = await contractRespository.GetContractById(task.ContractCharacter.ContractId);
-                        if (contract == null)
-                        {
-                            throw new Exception("Contract does not exist");
-                        }
-                    }
-
-                    Event e = new Event();
-                    if (task.EventCharacter != null)
-                    {
-                        e = await eventRepository.GetEventByEventId(task.EventCharacter.EventId);
-                        if (e == null)
-                        {
-                            throw new Exception("Event does not exist");
-                        }
-                    }
-
+                    
                     Character character = await characterRepository.GetCharacter(task.TaskName);
                     if (character == null)
                     {
@@ -582,11 +562,9 @@ namespace CCSS_Service.Services
                     var tasResponse = new TaskResponse()
                     {
                         AccountId = task.AccountId,
-                        ContractId = contract.ContractId,
                         CreateDate = task.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
                         Description = task.Description,
                         EndDate = task.EndDate?.ToString("HH:mm dd/MM/yyyy"),
-                        EventId = e.EventId,
                         IsActive = task.IsActive,
                         Location = task.Location,
                         StartDate = task.StartDate?.ToString("HH:mm dd/MM/yyyy"),
@@ -595,6 +573,30 @@ namespace CCSS_Service.Services
                         TaskName = character.CharacterName,
                         UpdateDate = task.UpdateDate?.ToString("HH:mm dd/MM/yyyy") ?? null,
                     };
+
+                    if (task.ContractCharacterId != null)
+                    {
+                        ContractCharacter contractCharacter = await contractCharacterRepository.GetContractCharacterById(task.ContractCharacterId);
+
+                        if (contractCharacter == null)
+                        {
+                            throw new Exception("ContractCharacter does not exist");
+                        }
+
+                        tasResponse.ContractId = contractCharacter.ContractId;
+                    }
+
+                    if (task.EventCharacterId != null)
+                    {
+                        EventCharacter eventCharacter = await eventChacracterRepository.GetEventCharacterById(task.EventCharacterId);
+
+                        if (eventCharacter == null)
+                        {
+                            throw new Exception("EventCharacter does not exist");
+                        }
+
+                        tasResponse.EventId = eventCharacter.EventId;
+                    }
 
                     taskResponses.Add(tasResponse);
                 }
