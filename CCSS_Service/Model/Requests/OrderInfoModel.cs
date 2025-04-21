@@ -21,5 +21,6 @@ namespace CCSS_Service.Model.Requests
         public string? TicketQuantity { get; set; }
         public string? ContractId {  get; set; }
         public string? OrderpaymentId { get; set; }
+        public bool isWeb { get; set; }
     }
 }

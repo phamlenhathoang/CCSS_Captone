@@ -35,7 +35,7 @@ namespace CCSS_Repository.Entities
     }
     public enum ticketStatus
     {
-        available,
+        valid,
         invalid
     }
 }

@@ -25,7 +25,7 @@ namespace CCSS_Service.Services
     public interface IMomoService
     {
         Task<MomoCreatePaymentResponse> CreatePaymentAsync(OrderInfoModel model);
-        Task<string> MomoPaymentExecuteAsync(IQueryCollection collection);
+        Task<MomoExecuteResult> MomoPaymentExecuteAsync(IQueryCollection collection);
     }
 
     public class MomoService : IMomoService
@@ -94,7 +94,8 @@ namespace CCSS_Service.Services
                 TicketQuantity = model.TicketQuantity,
                 AccountCoupon = model.AccountCouponId,
                 ContractId = model.ContractId,
-                OrderPaymentID = model.OrderpaymentId
+                OrderPaymentID = model.OrderpaymentId,
+                IsWeb = model.isWeb
 
             };
             string extraData = JsonConvert.SerializeObject(extraDataObj);
@@ -157,13 +158,14 @@ namespace CCSS_Service.Services
 
         }
 
-        public async Task<string> MomoPaymentExecuteAsync(IQueryCollection collection)
+        public async Task<MomoExecuteResult> MomoPaymentExecuteAsync(IQueryCollection collection)
         {
             var amountSt = collection["amount"].ToString();
             var orderInfo = collection["orderInfo"].ToString();
             var orderId = collection["orderId"].ToString();
             var extraData = collection["extraData"].ToString();
-
+            var Resultcode = collection["errorCode"].ToString();
+            
             // Mặc định giá trị null
             string? accountId = null;
             int? ticketId = null;
@@ -172,6 +174,7 @@ namespace CCSS_Service.Services
             int? ticketQuantity = null;
             double? amount = null;
             string? accountCouponId = null;
+            bool? isWeb = false;
             PaymentPurpose? purpose = null;
 
             if (!string.IsNullOrEmpty(extraData))
@@ -198,6 +201,10 @@ namespace CCSS_Service.Services
                     {
                         amount = parsedAmount;
                     }
+                    if (bool.TryParse((string?)extraDataObj?.IsWeb, out var parsedIsWeb))
+                    {
+                        isWeb = parsedIsWeb;
+                    }
                     // Parse Purpose từ string sang enum
                     if (Enum.TryParse<PaymentPurpose>((string?)extraDataObj?.Purpose, out var parsedPurpose))
                     {
@@ -209,6 +216,14 @@ namespace CCSS_Service.Services
                 {
                     Console.WriteLine($"Lỗi parse extraData: {ex.Message}");
                 }
+            }
+            if (Resultcode != "0")
+            {
+                return new MomoExecuteResult
+                {
+                    Message = "Thanh toán thất bại",
+                    IsWeb = isWeb ?? false
+                };
             }
             if (string.IsNullOrEmpty(orderId))
             {
@@ -252,7 +267,12 @@ namespace CCSS_Service.Services
                     
                     
                     await sendMail.SendEmailNotification(purpose, account.Email, addTicketResult.TicketCode, event1.EventName, event1.Location, event1.StartDate, addTicketResult.Quantity, null, null);
-                    return "mua vé thành công";
+                    
+                    return new MomoExecuteResult
+                    {
+                        Message = "mua vé thành công",
+                        IsWeb = isWeb ?? false
+                    };
 
                 case PaymentPurpose.ContractDeposit: // đặt cọc hợp đồng
                     
@@ -267,7 +287,11 @@ namespace CCSS_Service.Services
                     
                     await sendMail.SendEmailNotification(purpose, account.Email, null, contract.ContractName, null, DateTime.Now, null, amount, account.Name);
 
-                    return "Đặt cọc thành công ";
+                    return new MomoExecuteResult
+                    {
+                        Message = "Đặt cọc thành công ",
+                        IsWeb = isWeb ?? false
+                    };
 
                 case PaymentPurpose.contractSettlement:  // tất toán hợp đồng
 
@@ -280,7 +304,12 @@ namespace CCSS_Service.Services
                         throw new Exception("Can not update status contract");
                     }
                     await sendMail.SendEmailNotification(purpose, account.Email, null, contract.ContractName, null, DateTime.Now, null, amount, account.Name);
-                    return "Thanh toán thành công ";
+                    
+                    return new MomoExecuteResult
+                    {
+                        Message = "Thanh toán thành công ",
+                        IsWeb = isWeb ?? false
+                    };
 
                 case PaymentPurpose.Order:      // mua hàng
                     existingPayment.OrderId = OrderPaymentId;
@@ -302,7 +331,11 @@ namespace CCSS_Service.Services
                     await _orderRepository.UpdateProductQuantitiesAfterPayment(OrderPaymentId);
                     await _orderRepository.UpdateOrder(order);
 
-                    return "mua hàng thành công";
+                    return new MomoExecuteResult
+                    {
+                        Message = "mua hàng thành công",
+                        IsWeb = isWeb ?? false
+                    };
 
                 default:
                     return null;

@@ -1,7 +1,9 @@
 ﻿using CCSS_Repository.Entities;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,14 +37,13 @@ namespace CCSS_Service.Model.Requests
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string? CreateBy { get; set; }
-        public ICollection<TicketRequest> Ticket { get; set; }
+
         
-        //public IFormFile ImageUrl { get; set; }
-        //public ICollection<EventImageRequest> Images { get; set; } = new List<EventImageRequest>();
+        public ICollection<TicketRequest> Ticket { get; set; }
+
         public ICollection<EventCharacterRequest> EventCharacterRequest { get; set; } = new List<EventCharacterRequest>();
         public ICollection<EventActivityRequest> EventActivityRequests { get; set; } = new List<EventActivityRequest>();
 
-        //public ICollection<Task> Tasks { get; set; } = new List<Task>();
     }
     public class UpdateEventRequest
     {

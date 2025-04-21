@@ -91,7 +91,11 @@ namespace CCSS_Service.Services
             var tick = DateTime.Now.Ticks.ToString();
             var pay = new VNPayLibrary();
             //var urlCallBack = _configuration["PaymentCallBack:ReturnUrl"]
-            var urlCallBack = _configuration["Vnpay:PaymentBackReturnUrl"];
+            //var urlCallBack = _configuration["Vnpay:PaymentBackReturnUrl"];
+            var urlCallBack = model.isWeb
+                    ? _configuration["Vnpay:PaymentBackReturnUrl"] + "?platform=web"
+                    : _configuration["Vnpay:PaymentBackReturnUrl"];
+
             Console.WriteLine(urlCallBack);
 
             pay.AddRequestData("vnp_Version", _configuration["Vnpay:Version"]);
@@ -158,13 +162,21 @@ namespace CCSS_Service.Services
             var response = pay.GetFullResponseData(collection, _configuration["Vnpay:HashSecret"]);
 
 
-            
+            if (collection.ContainsKey("vnp_TransactionStatus"))
+            {
+                string TransactionStatus = collection["vnp_TransactionStatus"];
+                Console.WriteLine("aaaaaaaaaaa" + TransactionStatus);
+                if (!TransactionStatus.Equals("00"))
+                {
+                    return "Thanh toán thất bại";
+                }
 
-            //var Purpose = collection["vnp_OrderType"];
-            // Làm việc với purpose
+            }
+                //var Purpose = collection["vnp_OrderType"];
+                // Làm việc với purpose
 
-            // Kiểm tra từng tham số trong collections để tìm các trường bổ sung
-            if (collection.ContainsKey("vnp_OrderInfo"))
+                // Kiểm tra từng tham số trong collections để tìm các trường bổ sung
+                if (collection.ContainsKey("vnp_OrderInfo"))
             {
                 string orderInfo = collection["vnp_OrderInfo"];
 
@@ -253,7 +265,7 @@ namespace CCSS_Service.Services
                         throw new Exception("Can not update status contract");
                     }
 
-                    await sendMail.SendEmailNotification(existingPayment.Purpose, customer.Email, null, contract.ContractName, null, DateTime.Now, null, response.Amount, customer.Name);
+                    await sendMail.SendEmailNotification(existingPayment.Purpose, customer.Email, null, contract.ContractName, null, DateTime.Now, null, existingPayment.Amount, customer.Name);
                     return "Đặt cọc thành công ";
 
                 case PaymentPurpose.contractSettlement:  // tất toán hợp đồng
@@ -265,7 +277,7 @@ namespace CCSS_Service.Services
                     {
                         throw new Exception("Can not update status contract");
                     }
-                    await sendMail.SendEmailNotification(existingPayment.Purpose, customer1.Email, null, contract1.ContractName, null, DateTime.Now, null, response.Amount, customer1.Name);
+                    await sendMail.SendEmailNotification(existingPayment.Purpose, customer1.Email, null, contract1.ContractName, null, DateTime.Now, null, existingPayment.Amount, customer1.Name);
                     return "Thanh toán thành công ";
 
                 case PaymentPurpose.Order:      // mua hàng

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
 
 namespace CCSS_Captone.Controllers
 {
@@ -34,7 +35,7 @@ namespace CCSS_Captone.Controllers
             {
                 return BadRequest(response.ErrorMessage);
             }
-            return Ok(response.PayUrl);
+            return Ok(response);
         }
         [SwaggerOperation(Description = "role: không call cái này")]
         [HttpGet]
@@ -43,7 +44,23 @@ namespace CCSS_Captone.Controllers
         public async Task<IActionResult> PaymentCallBack()
         {
             var response = await _momoService.MomoPaymentExecuteAsync(HttpContext.Request.Query);
-            return Redirect("http://localhost:3000/success-payment");
+
+            if (response.IsWeb && response.Message.Equals("Thanh toán thất bại"))
+            {
+
+                return Redirect("http://localhost:3000/fail-payment");
+
+            } 
+            else if (response.IsWeb)
+            {
+
+                return Redirect("http://localhost:3000/success-payment");
+            }
+            if (response.Message.Equals("Thanh toán thất bại"))
+            {
+                return Redirect("ccss://payment-fail");
+            }
+            return Redirect("ccss://payment-success");
         }
     }
 }
