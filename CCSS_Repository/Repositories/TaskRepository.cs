@@ -64,7 +64,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Task>> GetAllTask()
         {
-            return await _dbContext.Tasks.Where(t => t.IsActive == true).ToListAsync();    
+            return await _dbContext.Tasks.Where(t => t.IsActive == true).OrderBy(t => t.StartDate).ToListAsync();    
         }
 
         public async Task<bool> CheckTaskIsValid(Account account, DateTime startDate, DateTime endDate)
@@ -243,7 +243,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Task>> GetTasksByAccountId(string accountId)
         {
-            return await _dbContext.Tasks.Where(t => t.AccountId.Equals(accountId)).ToListAsync();
+            return await _dbContext.Tasks.Where(t => t.AccountId.Equals(accountId)).Include(t => t.ContractCharacter).Include(t => t.EventCharacter).OrderBy(t => t.StartDate).ToListAsync();
         }
 
         public async Task<Task> GetTaskByContractCharacterId(string contractCharacterId)

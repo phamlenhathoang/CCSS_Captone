@@ -44,6 +44,7 @@ namespace CCSS_Repository.Entities
         FinalSettlement,
         Refund,
         Completed,
+        Feedbacked,
         Expired,
     }
 

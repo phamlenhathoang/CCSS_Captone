@@ -60,10 +60,12 @@ namespace CCSS_Service.Services
             var request = await _repository.GetAllRequest();
             foreach (var item in request)
             {
+                int totalDate = (item.EndDate.Date - item.StartDate.Date).Days + 1;
                 var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
 
                 List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(item.RequestId)).Select(c => new CharacterRequestResponse()
                 {
+                    RequestCharacterId = c.RequestCharacterId,
                     CharacterId = c.CharacterId,
                     CosplayerId = c.CosplayerId,
                     Description = c.Description,
@@ -78,15 +80,21 @@ namespace CCSS_Service.Services
                                           CharacterImageId = img.CharacterImageId,
                                           UrlImage = img.UrlImage
                                       }).ToList(),
-                    RequestDateResponses = c.RequestDates.Select(rd => new RequestDateResponse
-                                                            {
-                                                                RequestDateId = rd.RequestDateId,
-                                                                RequestCharacterId = rd.RequestCharacterId,
-                                                                StartDate = rd.StartDate.ToString("HH:mm dd/MM/yyyy"),
-                                                                EndDate = rd.EndDate.ToString("HH:mm dd/MM/yyyy"),
-                                                                Status = rd.Status,
-                                                                Reason = rd.Reason,
-                                                            }).ToList(),
+                    RequestDateResponses = c.RequestDates.OrderBy(s => s.StartDate).Select(rd =>
+                    {
+                        TimeSpan hourDuration = rd.EndDate - rd.StartDate;
+                        decimal totalhours = (decimal)hourDuration.TotalHours;
+                        return new RequestDateResponse
+                        {
+                            RequestDateId = rd.RequestDateId,
+                            RequestCharacterId = rd.RequestCharacterId,
+                            StartDate = rd.StartDate.ToString("HH:mm dd/MM/yyyy"),
+                            EndDate = rd.EndDate.ToString("HH:mm dd/MM/yyyy"),
+                            Status = rd.Status,
+                            Reason = rd.Reason,
+                            TotalHour = totalhours,
+                        };
+                    }).ToList(),
                 }).ToList();
 
                 RequestResponse response = new RequestResponse()
@@ -103,7 +111,8 @@ namespace CCSS_Service.Services
                     ServiceId = item.ServiceId,
                     PackageId = item.PackageId,
                     Deposit = item.Deposit,
-                    Reason = item.Reason,           
+                    Reason = item.Reason,
+                    TotalDate = totalDate,
                     CharactersListResponse = characterResponses
                 };
                 listRequest.Add(response); ;
@@ -116,10 +125,12 @@ namespace CCSS_Service.Services
         public async Task<RequestResponse> GetRequestById(string id)
         {
             var request = await _repository.GetRequestById(id);
+            int totalDate = (request.EndDate.Date - request.StartDate.Date).Days + 1;
             var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
 
             List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(request.RequestId)).Select(c => new CharacterRequestResponse()
             {
+                RequestCharacterId = c.RequestCharacterId,
                 CharacterId = c.CharacterId,
                 CosplayerId = c.CosplayerId,
                 Description = c.Description,
@@ -128,21 +139,28 @@ namespace CCSS_Service.Services
                 MaxHeight = c.Character.MaxHeight,
                 MinWeight = c.Character.MinWeight,
                 MaxWeight = c.Character.MaxWeight,
+                Status = c.Status.ToString(),
                 CharacterImages = c.Character.CharacterImages
                                       .Select(img => new CharacterImageDto
                                       {
                                           CharacterImageId = img.CharacterImageId,
                                           UrlImage = img.UrlImage
                                       }).ToList(),
-                RequestDateResponses = c.RequestDates.Select(rd => new RequestDateResponse
-                                        {
-                                            RequestDateId = rd.RequestDateId,
-                                            RequestCharacterId = rd.RequestCharacterId,
-                                            StartDate = rd.StartDate.ToString("HH:mm dd/MM/yyyy"),
-                                            EndDate = rd.EndDate.ToString("HH:mm dd/MM/yyyy"),
-                                            Status = rd.Status,
-                                            Reason = rd.Reason,
-                                        }).ToList(),
+                RequestDateResponses = c.RequestDates.OrderBy(s => s.StartDate).Select(rd =>
+                {
+                    TimeSpan hourDuration = rd.EndDate - rd.StartDate;
+                    decimal totalhours = (decimal)hourDuration.TotalHours;
+                    return new RequestDateResponse
+                    {
+                        RequestDateId = rd.RequestDateId,
+                        RequestCharacterId = rd.RequestCharacterId,
+                        StartDate = rd.StartDate.ToString("HH:mm dd/MM/yyyy"),
+                        EndDate = rd.EndDate.ToString("HH:mm dd/MM/yyyy"),
+                        Status = rd.Status,
+                        Reason = rd.Reason,
+                        TotalHour = totalhours,
+                    };
+                }).ToList(),
             }).ToList();
 
             var response = new RequestResponse()
@@ -160,8 +178,9 @@ namespace CCSS_Service.Services
                 PackageId = request.PackageId,
                 Deposit = request.Deposit,
                 Reason = request.Reason,
+                TotalDate = totalDate,
 
-             
+
                 CharactersListResponse = characterResponses
             };
             return response;
@@ -171,6 +190,7 @@ namespace CCSS_Service.Services
         #region Get AllRequest By AccountId
         public async Task<List<RequestResponse>> GetAllRequestByAccountId(string accountId)
         {
+
             var account = await _accountRepository.GetAccountByAccountId(accountId);
             if (account == null)
             {
@@ -180,10 +200,12 @@ namespace CCSS_Service.Services
             var request = await _repository.GetAllRequestByAccountId(account.AccountId);
             foreach (var item in request)
             {
+                int totalDate = (item.EndDate.Date - item.StartDate.Date).Days + 1;
                 var listRequestCharacter = await _requestCharacterRepository.GetAllRequestCharacter();
 
                 List<CharacterRequestResponse> characterResponses = listRequestCharacter.Where(sc => sc.RequestId.Equals(item.RequestId)).Select(c => new CharacterRequestResponse()
                 {
+                    RequestCharacterId = c.RequestCharacterId,
                     CharacterId = c.CharacterId,
                     CosplayerId = c.CosplayerId,
                     Description = c.Description,
@@ -198,15 +220,22 @@ namespace CCSS_Service.Services
                                           CharacterImageId = img.CharacterImageId,
                                           UrlImage = img.UrlImage
                                       }).ToList(),
-                    RequestDateResponses = c.RequestDates.Select(rd => new RequestDateResponse
-                                        {
-                                            RequestDateId = rd.RequestDateId,
-                                            RequestCharacterId = rd.RequestCharacterId,
-                                            StartDate = rd.StartDate.ToString("HH:mm dd/MM/yyyy"),
-                                            EndDate = rd.EndDate.ToString("HH:mm dd/MM/yyyy"),
-                                            Status = rd.Status,
-                                            Reason = rd.Reason,
-                                        }).ToList(),
+                    RequestDateResponses = c.RequestDates.OrderBy(s => s.StartDate).Select(rd =>
+                    {
+                        TimeSpan hourDuration = rd.EndDate - rd.StartDate;
+                        decimal totalhours = (decimal)hourDuration.TotalHours;
+                        return new RequestDateResponse
+                        {
+                            RequestDateId = rd.RequestDateId,
+                            RequestCharacterId = rd.RequestCharacterId,
+                            StartDate = rd.StartDate.ToString("HH:mm dd/MM/yyyy"),
+                            EndDate = rd.EndDate.ToString("HH:mm dd/MM/yyyy"),
+                            Status = rd.Status,
+                            Reason = rd.Reason,
+                            TotalHour = totalhours,
+                        };
+                    }).ToList(),
+
                 }).ToList();
 
                 RequestResponse response = new RequestResponse()
@@ -223,7 +252,8 @@ namespace CCSS_Service.Services
                     ServiceId = item.ServiceId,
                     PackageId = item.PackageId,
                     Deposit = item.Deposit,
-                    Reason = item.Reason,                    
+                    TotalDate = totalDate,
+                    Reason = item.Reason,
                     CharactersListResponse = characterResponses
                 };
                 listRequest.Add(response); ;
@@ -411,33 +441,28 @@ namespace CCSS_Service.Services
                                             if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
                                             {
 
-                                                string[] timeFormats = { "H:mm", "HH:mm", "h:mm", "hh:mm" };
+                                                string[] timeFormats = { "HH:mm dd/MM/yyyy", "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
 
                                                 bool isValidStartTime = DateTime.TryParseExact(dateDtos.StartDate.Trim(), timeFormats,
-                                                                                          System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out StartTime);
+                                                                                          System.Globalization.CultureInfo.InvariantCulture,
+                                                                                          System.Globalization.DateTimeStyles.None, out StartTime);
 
                                                 bool isValidEndTime = DateTime.TryParseExact(dateDtos.EndDate.Trim(), timeFormats,
-                                                                                             System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out EndTime);
+                                                                                             System.Globalization.CultureInfo.InvariantCulture,
+                                                                                             System.Globalization.DateTimeStyles.None, out EndTime);
                                                 if (!isValidStartTime && !isValidEndTime)
                                                 {
                                                     return "Valid Time is wrong";
                                                 }
                                             }
-
-                                            TimeSpan startTimeOfDay = StartTime.TimeOfDay;
-                                            TimeSpan endTimeOfDay = EndTime.TimeOfDay;
-
-                                            DateTime StartTimeOnly = StartDate.Date.Add(startTimeOfDay);
-                                            DateTime EndTimeOnly = EndDate.Date.Add(endTimeOfDay);
-
-                                            if (StartTimeOnly >= EndTimeOnly)
+                                            if (StartTime >= EndTime)
                                             {
                                                 await transaction.RollbackAsync();
                                                 return "End date must be greater than start date.";
                                             }
 
                                             // Kiểm tra thời gian nằm trong khoảng thời gian của Request
-                                            if (StartTimeOnly < StartDate && EndTimeOnly > EndDate)
+                                            if (StartTime < StartDate && EndTime > EndDate)
                                             {
                                                 await transaction.RollbackAsync();
                                                 return "Date range must be within the request date range.";
@@ -447,8 +472,8 @@ namespace CCSS_Service.Services
                                                 RequestDateId = Guid.NewGuid().ToString(),
                                                 RequestCharacterId = requestCharacter.RequestCharacterId,
                                                 Status = RequestDateStatus.Pending,
-                                                StartDate = StartTimeOnly,
-                                                EndDate = EndTimeOnly
+                                                StartDate = StartTime,
+                                                EndDate = EndTime
                                             });
                                         }
                                     }
@@ -536,89 +561,87 @@ namespace CCSS_Service.Services
                             await transaction.RollbackAsync();
                             return "Cosplayer does not suitable.";
                         }
-                        List<RequestDate> dateInRequest = new List<RequestDate>();
-                        if (r.ListUpdateRequestDates != null && r.ListUpdateRequestDates.Any())
+                        if (requestExisting.ServiceId != "S001")
                         {
-                            foreach (var dateRange in r.ListUpdateRequestDates)
+                            List<RequestDate> dateInRequest = new List<RequestDate>();
+                            if (r.ListUpdateRequestDates != null && r.ListUpdateRequestDates.Any())
                             {
-                                DateTime StartTime = DateTime.Now;
-                                DateTime EndTime = DateTime.Now;
-
-                                if (!string.IsNullOrEmpty(dateRange.StartDate) || !string.IsNullOrEmpty(dateRange.EndDate))
+                                foreach (var dateRange in r.ListUpdateRequestDates)
                                 {
+                                    DateTime StartTime = DateTime.Now;
+                                    DateTime EndTime = DateTime.Now;
 
-                                    string[] timeFormats = { "H:mm", "HH:mm", "h:mm", "hh:mm" };
-
-                                    bool isValidStartTime = DateTime.TryParseExact(dateRange.StartDate.Trim(), timeFormats,
-                                                                              System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out StartTime);
-
-                                    bool isValidEndTime = DateTime.TryParseExact(dateRange.EndDate.Trim(), timeFormats,
-                                                                                 System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out EndTime);
-                                    if (!isValidStartTime && !isValidEndTime)
+                                    if (!string.IsNullOrEmpty(dateRange.StartDate) || !string.IsNullOrEmpty(dateRange.EndDate))
                                     {
-                                        return "Valid Time is wrong";
+
+                                        string[] timeFormats = { "HH:mm dd/MM/yyyy", "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
+
+                                        bool isValidStartTime = DateTime.TryParseExact(dateRange.StartDate.Trim(), timeFormats,
+                                                                                  System.Globalization.CultureInfo.InvariantCulture,
+                                                                                  System.Globalization.DateTimeStyles.None, out StartTime);
+
+                                        bool isValidEndTime = DateTime.TryParseExact(dateRange.EndDate.Trim(), timeFormats,
+                                                                                     System.Globalization.CultureInfo.InvariantCulture,
+                                                                                     System.Globalization.DateTimeStyles.None, out EndTime);
+                                        if (!isValidStartTime && !isValidEndTime)
+                                        {
+                                            return "Valid Time is wrong";
+                                        }
+                                    }
+                                    if (StartTime >= EndTime)
+                                    {
+                                        await transaction.RollbackAsync();
+                                        return "End date must be greater than start date.";
+                                    }
+
+                                    // Kiểm tra thời gian nằm trong khoảng thời gian của Request
+                                    if (StartTime < StartDate && EndTime > EndDate)
+                                    {
+                                        await transaction.RollbackAsync();
+                                        return "Date range must be within the request date range.";
+                                    }
+
+                                    var requestCharacterInDate = await _requestCharacterRepository.GetRequestCharacter(requestExisting.RequestId, r.CharacterId);
+                                    if (requestCharacterInDate == null)
+                                    {
+                                        await transaction.RollbackAsync();
+                                        return "Request Character not found";
+                                    }
+                                    var requestDateExisting = await _requestDatesRepository.GetRequestDateById(dateRange.RequestDateId);
+                                    if (requestDateExisting != null)
+                                    {
+                                        requestDateExisting.StartDate = StartTime;
+                                        requestDateExisting.EndDate = EndTime;
+                                        requestDateExisting.Status = RequestDateStatus.Pending;
+                                        requestDateExisting.RequestCharacterId = requestCharacterInDate.RequestCharacterId;
+
+                                        var resultRequestDate = await _requestDatesRepository.UpdateRequestDate(requestDateExisting);
+                                        if (!resultRequestDate)
+                                        {
+                                            return "Can not update Request Date";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        RequestDate newRequestDate = new RequestDate
+                                        {
+                                            RequestDateId = Guid.NewGuid().ToString(),
+                                            RequestCharacterId = requestCharacterInDate.RequestCharacterId,
+                                            StartDate = StartTime,
+                                            EndDate = EndTime,
+                                            Status = RequestDateStatus.Pending,
+                                        };
+                                        dateInRequest.Add(newRequestDate);
                                     }
                                 }
-
-                                TimeSpan startTimeOfDay = StartTime.TimeOfDay;
-                                TimeSpan endTimeOfDay = EndTime.TimeOfDay;
-
-                                DateTime StartTimeOnly = StartDate.Date.Add(startTimeOfDay);
-                                DateTime EndTimeOnly = EndDate.Date.Add(endTimeOfDay);
-
-                                if (StartTimeOnly >= EndTimeOnly)
+                                if (dateInRequest.Any())
                                 {
-                                    await transaction.RollbackAsync();
-                                    return "End date must be greater than start date.";
-                                }
-
-                                // Kiểm tra thời gian nằm trong khoảng thời gian của Request
-                                if (StartTimeOnly < StartDate && EndTimeOnly > EndDate)
-                                {
-                                    await transaction.RollbackAsync();
-                                    return "Date range must be within the request date range.";
-                                }
-
-                                var requestCharacterInDate = await _requestCharacterRepository.GetRequestCharacterCosplayerId(requestExisting.RequestId, r.CharacterId, r.CosplayerId);
-                                if (requestCharacterInDate == null)
-                                {
-                                    await transaction.RollbackAsync();
-                                    return "Request Character not found";
-                                }
-                                var requestDateExisting = await _requestDatesRepository.GetRequestDateById(dateRange.RequestDateId);
-                                if (requestDateExisting != null)
-                                {
-                                    requestDateExisting.StartDate = StartTimeOnly;
-                                    requestDateExisting.EndDate = EndTimeOnly;
-                                    requestDateExisting.Status = RequestDateStatus.Pending;
-                                    requestDateExisting.RequestCharacterId = requestCharacterInDate.RequestCharacterId;
-
-                                    var resultRequestDate = await _requestDatesRepository.UpdateRequestDate(requestDateExisting);
-                                    if (!resultRequestDate)
+                                    var RequestDates = await _requestDatesRepository.AddListRequestDates(dateInRequest);
+                                    if (!RequestDates)
                                     {
-                                        return "Can not update Request Date";
+                                        await transaction.RollbackAsync();
+                                        return "Failed to add request dates";
                                     }
-                                }
-                                else
-                                {
-                                    RequestDate newRequestDate = new RequestDate
-                                    {
-                                        RequestDateId = Guid.NewGuid().ToString(),
-                                        RequestCharacterId = requestCharacterInDate.RequestCharacterId,
-                                        StartDate = StartTimeOnly,
-                                        EndDate = EndTimeOnly,
-                                        Status = RequestDateStatus.Pending,
-                                    };
-                                    dateInRequest.Add(newRequestDate);
-                                }
-                            }
-                            if (dateInRequest.Any())
-                            {
-                                var RequestDates = await _requestDatesRepository.AddListRequestDates(dateInRequest);
-                                if (!RequestDates)
-                                {
-                                    await transaction.RollbackAsync();
-                                    return "Failed to add request dates";
                                 }
                             }
                         }
@@ -685,13 +708,12 @@ namespace CCSS_Service.Services
                         requestCharacter.CosplayerId = r.CosplayerId;
                         requestCharacter.Description = r.Description;
                         requestCharacter.Quantity = quantity;
+                        requestCharacter.TotalPrice = character.Price * r.Quantity;
 
                         characterInRequest.Add(requestCharacter);
-
-                        character.Quantity -= quantity;
-                        await _characterRepository.UpdateCharacter(character);
+                   
                     }
-                }      
+                }
                 if (characterInRequest.Any())
                 {
                     var existResult = await _requestCharacterRepository.UpdateListRequestCharacter(characterInRequest);
@@ -713,6 +735,10 @@ namespace CCSS_Service.Services
                 requestExisting.EndDate = EndDate;
                 requestExisting.Location = UpdateRequestDtos.Location;
                 requestExisting.ServiceId = UpdateRequestDtos.ServiceId;
+                requestExisting.PackageId = requestExisting.ServiceId == "S003" ? UpdateRequestDtos.PackageId : null;
+                requestExisting.Price = UpdateRequestDtos.Price;
+                requestExisting.UpdateDate = DateTime.Now;
+
 
                 await _repository.UpdateRequest(requestExisting);
 
@@ -1163,33 +1189,28 @@ namespace CCSS_Service.Services
                                             if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
                                             {
 
-                                                string[] timeFormats = { "H:mm", "HH:mm", "h:mm", "hh:mm" };
+                                                string[] timeFormats = { "HH:mm dd/MM/yyyy", "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
 
                                                 bool isValidStartTime = DateTime.TryParseExact(dateDtos.StartDate.Trim(), timeFormats,
-                                                                                          System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out StartTime);
+                                                                                          System.Globalization.CultureInfo.InvariantCulture,
+                                                                                          System.Globalization.DateTimeStyles.None, out StartTime);
 
                                                 bool isValidEndTime = DateTime.TryParseExact(dateDtos.EndDate.Trim(), timeFormats,
-                                                                                             System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out EndTime);
+                                                                                             System.Globalization.CultureInfo.InvariantCulture,
+                                                                                             System.Globalization.DateTimeStyles.None, out EndTime);
                                                 if (!isValidStartTime && !isValidEndTime)
                                                 {
                                                     return "Valid Time is wrong";
                                                 }
                                             }
-
-                                            TimeSpan startTimeOfDay = StartTime.TimeOfDay;
-                                            TimeSpan endTimeOfDay = EndTime.TimeOfDay;
-
-                                            DateTime StartTimeOnly = StartDate.Date.Add(startTimeOfDay);
-                                            DateTime EndTimeOnly = EndDate.Date.Add(endTimeOfDay);
-
-                                            if (StartTimeOnly >= EndTimeOnly)
+                                            if (StartTime >= EndTime)
                                             {
                                                 await transaction.RollbackAsync();
                                                 return "End date must be greater than start date.";
                                             }
 
                                             // Kiểm tra thời gian nằm trong khoảng thời gian của Request
-                                            if (StartTimeOnly < StartDate && EndTimeOnly > EndDate)
+                                            if (StartTime < StartDate && EndTime > EndDate)
                                             {
                                                 await transaction.RollbackAsync();
                                                 return "Date range must be within the request date range.";
@@ -1199,8 +1220,8 @@ namespace CCSS_Service.Services
                                                 RequestDateId = Guid.NewGuid().ToString(),
                                                 RequestCharacterId = requestCharacter.RequestCharacterId,
                                                 Status = RequestDateStatus.Pending,
-                                                StartDate = StartTimeOnly,
-                                                EndDate = EndTimeOnly
+                                                StartDate = StartTime,
+                                                EndDate = EndTime
                                             });
                                         }
                                     }
@@ -1325,7 +1346,7 @@ namespace CCSS_Service.Services
                         List<RequestCharacter> characteInRequest = new List<RequestCharacter>();
 
                         foreach (var r in requestDtos.ListRequestCharacters)
-                        {                                                 
+                        {
                             var Getcharacter = await _characterRepository.GetCharacter(r.CharacterId);
                             var totalPrice = Getcharacter.Price * r.Quantity;
                             // Nếu CosplayerId hợp lệ, thêm vào danh sách
@@ -1347,79 +1368,6 @@ namespace CCSS_Service.Services
                         {
                             await transaction.RollbackAsync();
                             return "Failed to add characters in Request";
-                        }
-                        else
-                        {
-                            if (requestDtos.ListRequestCharacters.Any(c => c.ListRequestDates != null && c.ListRequestDates.Any()))
-                            {
-                                List<RequestDate> requestDates = new List<RequestDate>();
-                                foreach (var d in requestDtos.ListRequestCharacters)
-                                {
-                                    var requestCharacter = await _requestCharacterRepository.GetRequestCharacter(newRequest.RequestId, d.CharacterId);
-                                    if (requestCharacter != null)
-                                    {
-
-                                        foreach (var dateDtos in d.ListRequestDates)
-                                        {
-                                            DateTime StartTime = DateTime.Now;
-                                            DateTime EndTime = DateTime.Now;
-
-                                            if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
-                                            {
-
-                                                string[] timeFormats = { "H:mm", "HH:mm", "h:mm", "hh:mm" };
-
-                                                bool isValidStartTime = DateTime.TryParseExact(dateDtos.StartDate.Trim(), timeFormats,
-                                                                                          System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out StartTime);
-
-                                                bool isValidEndTime = DateTime.TryParseExact(dateDtos.EndDate.Trim(), timeFormats,
-                                                                                             System.Globalization.CultureInfo.InvariantCulture, DateTimeStyles.None, out EndTime);
-                                                if (!isValidStartTime && !isValidEndTime)
-                                                {
-                                                    return "Valid Time is wrong";
-                                                }
-                                            }
-
-                                            TimeSpan startTimeOfDay = StartTime.TimeOfDay;
-                                            TimeSpan endTimeOfDay = EndTime.TimeOfDay;
-
-                                            DateTime StartTimeOnly = StartDate.Date.Add(startTimeOfDay);
-                                            DateTime EndTimeOnly = EndDate.Date.Add(endTimeOfDay);
-
-                                            if (StartTimeOnly >= EndTimeOnly)
-                                            {
-                                                await transaction.RollbackAsync();
-                                                return "End date must be greater than start date.";
-                                            }
-
-                                            // Kiểm tra thời gian nằm trong khoảng thời gian của Request
-                                            if (StartTimeOnly < StartDate && EndTimeOnly > EndDate)
-                                            {
-                                                await transaction.RollbackAsync();
-                                                return "Date range must be within the request date range.";
-                                            }
-                                            requestDates.Add(new RequestDate
-                                            {
-                                                RequestDateId = Guid.NewGuid().ToString(),
-                                                RequestCharacterId = requestCharacter.RequestCharacterId,
-                                                Status = RequestDateStatus.Pending,
-                                                StartDate = StartTimeOnly,
-                                                EndDate = EndTimeOnly
-                                            });
-                                        }
-                                    }
-                                }
-
-                                if (requestDates.Any())
-                                {
-                                    var RequestDates = await _requestDatesRepository.AddListRequestDates(requestDates);
-                                    if (!RequestDates)
-                                    {
-                                        await transaction.RollbackAsync();
-                                        return "Failed to add request dates";
-                                    }
-                                }
-                            }
                         }
                     }
                     await transaction.CommitAsync();

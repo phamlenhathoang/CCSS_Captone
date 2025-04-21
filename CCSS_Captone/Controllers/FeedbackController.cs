@@ -17,9 +17,9 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddFeedback(List<FeedbackRequest> feedbackRequests, string accountId)
+        public async Task<IActionResult> AddFeedback(List<FeedbackRequest> feedbackRequests, string accountId, string contractId)
         {
-            var result = await feedbackService.AddFeedback(feedbackRequests, accountId);
+            var result = await feedbackService.AddFeedback(feedbackRequests, accountId, contractId);
             return Ok(result);
         }
 

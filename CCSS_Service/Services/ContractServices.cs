@@ -164,12 +164,11 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("This request created contract");
                 }
-
                 Contract contract = new Contract()
                 {
                     Deposit = deposit.ToString(),
                     TotalPrice = request.Price,
-                    Amount = request.Price - ((request.Price * deposit) / 100),
+                    
                     RequestId = requestId,
                     CreateBy = request.AccountId,
                     ContractId = Guid.NewGuid().ToString(),
@@ -178,6 +177,16 @@ namespace CCSS_Service.Services
                     ContractName = request.Service.ServiceName,
                     UrlPdf = await Image.UploadImageToFirebase(await pdfService.ConvertBytesToIFormFile(request, deposit)),
                 };
+
+
+                if (request.Service.ServiceId != "S001")
+                {
+                    contract.Amount = request.Price - ((request.Price * deposit) / 100);
+                }
+                else
+                {
+                    contract.Amount = deposit - request.Price;
+                }
 
                 bool result = await _contractRespository.AddContract(contract);
                 if (result)
@@ -596,6 +605,18 @@ if(customer == null)
             try
             {
                 Contract contract = await _contractRespository.GetContractById(contractId);
+
+                if (contract.Request == null)
+                {
+                    throw new Exception("Request does not exist");
+                }
+
+                if(contract.Request.RequestCharacters == null)
+                {
+                    throw new Exception("RequestCharacter does not exist");
+                }
+
+
                 if (contract == null)
                 {
                     //await transaction.RollbackAsync();
@@ -609,7 +630,6 @@ if(customer == null)
                     }
                     else
                     {
-                        //await transaction.RollbackAsync();
                         throw new Exception("Can not update contract status");
                     }
                 }
@@ -618,6 +638,25 @@ if(customer == null)
                     if (contract.ContractStatus == ContractStatus.Created)
                     {
                         contract.ContractStatus = ContractStatus.Deposited;
+
+                        foreach(RequestCharacter requestCharacter in contract.Request.RequestCharacters)
+                        {
+                            Character character = await _characterRepository.GetCharacter(requestCharacter.CharacterId);
+
+                            if (character == null)
+                            {
+                                throw new Exception("Character does not exist");
+                            }
+
+                            character.Quantity -= requestCharacter.Quantity;
+
+                            bool checkUpdate = await _characterRepository.UpdateCharacter(character);
+
+                            if (!checkUpdate)
+                            {
+                                throw new Exception("Can not update Character");
+                            }
+                        }
                     }
                     else
                     {
@@ -632,6 +671,30 @@ if(customer == null)
                         {
                             contract.ContractStatus = ContractStatus.FinalSettlement;
                             contract.Amount = (double)contract.Amount - (double)price;
+
+                            if(contract.ContractCharacters == null)
+                            {
+                                throw new Exception("ContractCharacter does not exist");
+                            }
+
+                            foreach(ContractCharacter contractCharacter in contract.ContractCharacters)
+                            {
+                                Character character = await _characterRepository.GetCharacter(contractCharacter.CharacterId);
+
+                                if (character == null)
+                                {
+                                    throw new Exception("Character does not exist");
+                                }
+
+                                character.Quantity += contractCharacter.Quantity;
+
+                                bool checkUpdate = await _characterRepository.UpdateCharacter(character);
+
+                                if (!checkUpdate)
+                                {
+                                    throw new Exception("Can not update Character");
+                                }
+                            }
                         }
                         else
                         {

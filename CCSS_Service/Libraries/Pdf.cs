@@ -24,14 +24,16 @@ namespace CCSS_Service.Libraries
         private readonly IRequestRepository requestRepository;
         private readonly IAccountCouponRepository accountCouponRepository;
         private readonly IPackageRepository packageRepository;
+        private readonly IRequestDatesRepository requestDatesRepository;
 
-        public Pdf(IPackageRepository packageRepository, ICharacterRepository characterRepository, IAccountRepository accountRepository, IRequestRepository requestRepository, IAccountCouponRepository accountCouponRepository)
+        public Pdf(IPackageRepository packageRepository, ICharacterRepository characterRepository, IAccountRepository accountRepository, IRequestRepository requestRepository, IAccountCouponRepository accountCouponRepository, IRequestDatesRepository requestDatesRepository)
         {
             this.characterRepository = characterRepository;
             this.accountRepository = accountRepository;
             this.requestRepository = requestRepository;
             this.accountCouponRepository = accountCouponRepository;
             this.packageRepository = packageRepository;
+            this.requestDatesRepository = requestDatesRepository;
         }
         public async Task<byte[]> GeneratePdf(Request request, int deposit)
         {
@@ -83,9 +85,8 @@ namespace CCSS_Service.Libraries
                     htmlContent += $"<p>Họ và tên: {request.Account.Name.ToUpper()}</p>";
                     htmlContent += $"<p>Địa chỉ: {request.Location}</p>";
                     htmlContent += $"<p>Số điện thoại: {request.Account.Phone}</p>";
-                    string formattedStartDate = now.ToString("hh:mm tt dd 'tháng' MM 'năm' yyyy");
-                    string formattedEndDate = now.ToString("hh:mm tt dd 'tháng' MM 'năm' yyyy");
-                    htmlContent += $"<p><i>Xét yêu cầu của bên B. Hai bên thỏa thuận ký hợp đồng {request.Service.ServiceName.ToLower()}, sự kiện sẽ bắt đầu vào {formattedEndDate} và kết thúc vào {formattedEndDate}. Hợp đồng thuê sẽ bao gồm các nội dung quan trọng sau:</i></p>";
+
+                    htmlContent += $"<p><i>Xét yêu cầu của bên B. Hai bên thỏa thuận ký hợp đồng {request.Service.ServiceName.ToLower()}. Hợp đồng thuê sẽ bao gồm các nội dung quan trọng sau:</i></p>";
 
                     // Thêm CSS để làm đẹp bảng
 
@@ -209,9 +210,30 @@ namespace CCSS_Service.Libraries
                 <th>Đơn giá</th>
                 <th>Thành tiền</th>
             </tr>";
+                        double totalHours = 0;
+                        int day = 0;
+                        int count = 0;
+
+
                         foreach (RequestCharacter requestCharacter in request.RequestCharacters)
                         {
                             Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
+
+                            
+
+                            if (count == 0)
+                            {
+                                List<RequestDate> requestDates = await requestDatesRepository.GetListRequestDateByRequestCharacterId(requestCharacter.RequestCharacterId);
+
+                                foreach (RequestDate requestDate in requestDates)
+                                {
+                                    totalHours += (requestDate.EndDate - requestDate.StartDate).TotalHours;
+                                    day++;
+                                }
+
+                                count++;
+                            }
+
 
                             htmlContent += $@"<tr>
                         <td>{index}</td>
@@ -219,20 +241,22 @@ namespace CCSS_Service.Libraries
                         <td>Bộ</td>
                         <td>{requestCharacter.Quantity}</td>
                         <td>{character.Price}</td>
-                        <td>{(double)requestCharacter.Quantity * character.Price}</td>
+                        <td>{day * character.Price}</td>
                     </tr>";
                             index++;
 
                             if (requestCharacter.CosplayerId != null)
                             {
                                 Account account = await accountRepository.GetAccount(requestCharacter.CosplayerId);
+
+
                                 htmlContent += $@"<tr>
                             <td>{index}</td>
                             <td>{account.Name}</td>
                             <td>Cosplayer</td>
                             <td>-</td>
-                            <td>{character.Price * account.SalaryIndex - character.Price}</td>
-                            <td>{character.Price * account.SalaryIndex - character.Price}</td>
+                            <td>{account.SalaryIndex}</td>
+                            <td>{account.SalaryIndex * totalHours}</td>
                         </tr>";
                                 index++;
                             }
@@ -263,6 +287,25 @@ namespace CCSS_Service.Libraries
                 </tr>";
 
                         htmlContent += "</table>";
+                    }
+
+                    htmlContent += "<p>Hợp đồng cho thuê vào các khung giờ.</p>";
+                    int c = 0;
+                    foreach (RequestCharacter requestCharacter in request.RequestCharacters)
+                    {
+                        if(c == 0)
+                        {
+                            List<RequestDate> requestDates = await requestDatesRepository.GetListRequestDateByRequestCharacterId(requestCharacter.RequestCharacterId);
+                            foreach (RequestDate requestDate in requestDates)
+                            {
+                                string formattedStartDate = requestDate.StartDate.ToString("hh:mm tt dd 'tháng' MM 'năm' yyyy");
+                                string formattedEndDate = requestDate.EndDate.ToString("hh:mm tt dd 'tháng' MM 'năm' yyyy");
+                                htmlContent += $"<p>{formattedStartDate}<p>";
+                                htmlContent += $"<p>{formattedEndDate}<p>";
+                            }
+                            c++;
+                        }
+
                     }
 
                     // Thông tin hợp đồng
@@ -318,22 +361,27 @@ namespace CCSS_Service.Libraries
 
         public async Task<double> CalculateTotalAmount(Request request, string amount, double price)
         {
-            double totalAmount = 0;
             double totalHours = 0;
-            DateTime start = request.StartDate;
-            DateTime end = request.EndDate;
+            int day = 0;
+            int count = 0;
 
-            while (start.Date <= end.Date)
+            foreach (RequestCharacter requestCharacter in request.RequestCharacters)
             {
-                DateTime nextDay = start.Date.AddDays(1); // 00:00 ngày hôm sau
-                DateTime effectiveEnd = (nextDay < end) ? nextDay : end; // Xác định điểm dừng trong ngày
+                if (count == 0)
+                {
+                    List<RequestDate> requestDates = await requestDatesRepository.GetListRequestDateByRequestCharacterId(requestCharacter.RequestCharacterId);
 
-                double hoursInDay = (effectiveEnd - start).TotalHours;
-                hoursInDay = Math.Min(hoursInDay, 8); // Giới hạn tối đa 8 tiếng
+                    foreach (RequestDate requestDate in requestDates)
+                    {
+                        totalHours += (requestDate.EndDate - requestDate.StartDate).TotalHours;
+                        day++;
+                    }
 
-                totalHours += hoursInDay;
-                start = nextDay; // Chuyển sang ngày tiếp theo
+                    count++;
+                }
             }
+
+            double totalAmount = 0;
 
             foreach (RequestCharacter requestCharacter in request.RequestCharacters)
             {
@@ -341,9 +389,10 @@ namespace CCSS_Service.Libraries
 
                 if (requestCharacter.CosplayerId != null)
                 {
-                    totalAmount = (double)requestCharacter.Quantity * (double)character.Price;
+                    double totalPrice = 0;
                     Account account = await accountRepository.GetAccount(requestCharacter.CosplayerId);
-                    totalAmount += (double)account.SalaryIndex * totalHours;
+                    totalPrice = (double)character.Price * day + (double)account.SalaryIndex * totalHours;
+                    totalAmount += totalPrice;
                 }
                 else
                 {
@@ -355,10 +404,9 @@ namespace CCSS_Service.Libraries
             {
                 return totalAmount - parsedAmount + price;
             }
-            if(request.ServiceId != "S001")
+            if (request.ServiceId != "S001")
             {
-                double total = (int)Math.Ceiling((request.EndDate - request.StartDate).TotalHours);
-                return total  * totalAmount;
+                return day * totalAmount;
             }
             return totalAmount;
         }

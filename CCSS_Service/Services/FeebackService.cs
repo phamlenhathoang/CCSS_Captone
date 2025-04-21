@@ -13,7 +13,7 @@ namespace CCSS_Service.Services
 {
     public interface IFeedbackService
     {
-        Task<bool> AddFeedback(List<FeedbackRequest> feedbackRequests, string accountId);
+        Task<bool> AddFeedback(List<FeedbackRequest> feedbackRequests, string accountId, string contractId);
         Task<bool> UpdateFeedback(UpdateFeedbackRequest feedbackRequest, string accountId);
         Task<List<FeedbackResponse>> GetFeedbackByContractId(string contractId);
         Task<List<FeedbackResponse>> GetAllFeedback();
@@ -40,26 +40,13 @@ namespace CCSS_Service.Services
             _beginTransactionRepository = beginTransactionRepository;
         }
 
-        public async Task<bool> AddFeedback(List<FeedbackRequest> feedbackRequests, string accountId)
+        public async Task<bool> AddFeedback(List<FeedbackRequest> feedbackRequests, string accountId, string contractId)
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
                 try
                 {
-                    var uniqueElements = new HashSet<string>();
-
-                    foreach (var feedbackRequest in feedbackRequests)
-                    {
-                        bool checkAccount = uniqueElements.Add(feedbackRequest.CosplayerId);
-
-                        if (!checkAccount)
-                        {
-                            throw new Exception("Cosplayer is duplicate");
-                        }
-                    }
-
                     Account account = await _accountRepository.GetAccount(accountId);
-
                     if (account == null)
                     {
                         throw new Exception("Account does not exist");
@@ -70,6 +57,12 @@ namespace CCSS_Service.Services
                         throw new Exception("Account must be customer");
                     }
 
+                    Contract contract = await contractRespository.GetContractById(contractId);
+                    if (contract == null)
+                    {
+                        throw new Exception("Contract does not exist");
+                    }
+
                     if (!feedbackRequests.Any())
                     {
                         throw new Exception("FeedbackRequests are null");
@@ -77,28 +70,31 @@ namespace CCSS_Service.Services
 
                     foreach (var feedbackRequest in feedbackRequests)
                     {
-                        Account cosplayer = await _accountRepository.GetAccountByAccountId(feedbackRequest.CosplayerId);
-                        if (cosplayer == null)
-                        {
-                            throw new Exception("Cosplayer does not exist");
-                        }
+                        
                         ContractCharacter contractCharacter = await _contractCharacterRepository.GetContractCharacterById(feedbackRequest.ContractCharacterId);
                         if (contractCharacter == null)
                         {
                             throw new Exception("ContractCharacter does not exist");
                         }
+
+                        Account cosplayer = await _accountRepository.GetAccountByAccountId(contractCharacter.CosplayerId);
+                        if (cosplayer == null)
+                        {
+                            throw new Exception("Cosplayer does not exist");
+                        }
+
+                        if (contractCharacter.Contract.ContractStatus != ContractStatus.Completed)
+                        {
+                            throw new Exception("StatusContract must be completed");
+                        }
                         if (!contractCharacter.Contract.Request.AccountId.ToLower().Equals(accountId.ToLower()))
                         {
                             throw new Exception("Account must be create contract");
                         }
-                        if (!contractCharacter.CosplayerId.ToLower().Equals(cosplayer.AccountId.ToLower()))
+                        if (!contractCharacter.Contract.ContractId.ToLower().Equals(contractId.ToLower()))
                         {
-                            throw new Exception("This cosplayer has not in this contract");
-                        }
-                        if (contractCharacter.Contract.ContractStatus != ContractStatus.Completed)
-                        {
-                            throw new Exception("Contract does not completed");
-                        }
+                            throw new Exception("ContractCharacter does not belong contract");
+                        }   
                         Feedback checkExist = await _feedbackRepository.GetFeedbackByContractCharacterId(feedbackRequest.ContractCharacterId);
                         if (checkExist != null)
                         {
@@ -108,7 +104,7 @@ namespace CCSS_Service.Services
 
                         Feedback feedback = new Feedback()
                         {
-                            AccountId = feedbackRequest.CosplayerId,
+                            AccountId = contractCharacter.CosplayerId,
                             ContractCharacterId = feedbackRequest.ContractCharacterId,
                             CreateDate = DateTime.UtcNow,
                             CreateBy = account.AccountId,
@@ -126,7 +122,7 @@ namespace CCSS_Service.Services
                             throw new Exception("Can not add feedback");
                         }
 
-                        List<Feedback> feedbacks = await _feedbackRepository.GetAllFeedbacksByCosplayerId(feedbackRequest.CosplayerId);
+                        List<Feedback> feedbacks = await _feedbackRepository.GetAllFeedbacksByCosplayerId(contractCharacter.CosplayerId);
 
                         if (!feedbacks.Any())
                         {
@@ -143,7 +139,8 @@ namespace CCSS_Service.Services
                             totalStar += (int)fb.Star;
                         }
 
-                        cosplayer.AverageStar = (double)totalStar / count;
+                        decimal avgStar = ((decimal)totalStar + (decimal)(cosplayer.AverageStar ?? 0)) / (count + 1);
+                        cosplayer.AverageStar = (double)Math.Floor(avgStar * 10) / 10;
 
                         bool result = await _accountRepository.UpdateAccount(cosplayer);
 
@@ -152,6 +149,15 @@ namespace CCSS_Service.Services
                             await transaction.RollbackAsync();
                             throw new Exception("Can not update average star of cosplayer");
                         }
+                    }
+
+                    contract.ContractStatus = ContractStatus.Feedbacked;
+                    bool checkUpdate = await contractRespository.UpdateContract(contract);
+
+                    if (!checkUpdate)
+                    {
+                        await transaction.RollbackAsync();
+                        throw new Exception("Can not update status contract");
                     }
 
                     await transaction.CommitAsync();
@@ -181,10 +187,6 @@ namespace CCSS_Service.Services
                 if(contract == null)
                 {
                     throw new Exception("Contract does not exist");
-                }
-                if(contract.ContractStatus != ContractStatus.Completed)
-                {
-                    throw new Exception("Contract not completed");    
                 }
                 if (!contract.ContractCharacters.Any())
                 {
@@ -268,7 +270,8 @@ namespace CCSS_Service.Services
                         totalStar += (int)fb.Star;
                     }
 
-                    feedback.Account.AverageStar = (double)totalStar / count;
+                    decimal avgStar = ((decimal)totalStar + (decimal)(feedback.Account.AverageStar ?? 0)) / (count + 1);
+                    feedback.Account.AverageStar = (double)Math.Floor(avgStar * 10) / 10;
 
                     bool result = await _accountRepository.UpdateAccount(feedback.Account);
 

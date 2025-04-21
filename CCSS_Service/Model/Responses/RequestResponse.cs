@@ -23,12 +23,14 @@ namespace CCSS_Service.Model.Responses
         public string? PackageId { get; set; }
         public string? Deposit { get; set; }
         public string? Reason { get; set; }
+        public int? TotalDate { get; set; }
         public string? AccountCouponId { get; set; }
         public List<CharacterRequestResponse> CharactersListResponse { get; set; } 
     }
 
     public class CharacterRequestResponse
     {
+        public string RequestCharacterId { get; set; }
         public string CharacterId { get; set; }
         public string? CosplayerId { get; set; }
         public string? Description { get; set; }
@@ -37,6 +39,7 @@ namespace CCSS_Service.Model.Responses
         public float? MaxWeight { get; set; }
         public float? MinHeight { get; set; }
         public float? MinWeight { get; set; }
+        public string? Status { get; set; }
         public ICollection<CharacterImageDto> CharacterImages { get; set; }
 
         public List<RequestDateResponse> RequestDateResponses { get; set; }

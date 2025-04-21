@@ -37,6 +37,7 @@ namespace CCSS_Service.BackgroundServices
                     {
                         var _requestRepository = scope.ServiceProvider.GetRequiredService<IRequestRepository>();
                         var _requestCharacterRepository = scope.ServiceProvider.GetRequiredService<IRequestCharacterRepository>();
+                        var _requestDateRepositoy = scope.ServiceProvider.GetRequiredService<IRequestDatesRepository>();
 
                         List<Request> requests = await _requestRepository.GetAllRequest();
 
@@ -49,6 +50,10 @@ namespace CCSS_Service.BackgroundServices
                                     if (DateTime.Now.Date >= request.CreatedDate.GetValueOrDefault().Date.AddDays(3))
                                     {
                                         var listRequestCharacter = await _requestCharacterRepository.GetListCharacterByRequest(request.RequestId);
+                                        foreach (var character in listRequestCharacter)
+                                        {
+                                            await _requestDateRepositoy.DeleteListRequestDateByRequestCharacterId(character.RequestCharacterId);
+                                        }
                                         await _requestCharacterRepository.DeleteListCharacterInRequest(listRequestCharacter);
                                         await _requestRepository.DeleteRequest(request);
                                     }
