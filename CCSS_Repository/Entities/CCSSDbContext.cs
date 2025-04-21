@@ -380,8 +380,8 @@ namespace CCSS_Repository.Entities
             //Task - ContractCharacter
             modelBuilder.Entity<Task>()
                .HasOne(a => a.ContractCharacter)
-               .WithOne(r => r.Task)
-               .HasForeignKey<Task>(a => a.ContractCharacterId)
+               .WithMany(r => r.Tasks)
+               .HasForeignKey(a => a.ContractCharacterId)
                .OnDelete(DeleteBehavior.NoAction);
 
             //Request - Package 
