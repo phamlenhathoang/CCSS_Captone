@@ -165,19 +165,38 @@ namespace CCSS_Service.Services
                     throw new Exception("This request created contract");
                 }
 
-                Contract contract = new Contract()
+                if(request.Service.ServiceId != "S001")
                 {
-                    Deposit = deposit.ToString(),
-                    TotalPrice = request.Price,
-                    Amount = request.Price - ((request.Price * deposit) / 100),
-                    RequestId = requestId,
-                    CreateBy = request.AccountId,
-                    ContractId = Guid.NewGuid().ToString(),
-                    CreateDate = DateTime.Now,
-                    ContractStatus = ContractStatus.Created,
-                    ContractName = request.Service.ServiceName,
-                    UrlPdf = await Image.UploadImageToFirebase(await pdfService.ConvertBytesToIFormFile(request, deposit)),
-                };
+                    Contract contract = new Contract()
+                    {
+                        Deposit = deposit.ToString(),
+                        TotalPrice = request.Price,
+                        Amount = request.Price - ((request.Price * deposit) / 100),
+                        RequestId = requestId,
+                        CreateBy = request.AccountId,
+                        ContractId = Guid.NewGuid().ToString(),
+                        CreateDate = DateTime.Now,
+                        ContractStatus = ContractStatus.Created,
+                        ContractName = request.Service.ServiceName,
+                        UrlPdf = await Image.UploadImageToFirebase(await pdfService.ConvertBytesToIFormFile(request, deposit)),
+                    };
+                }
+                else
+                {
+                    Contract contract = new Contract()
+                    {
+                        Deposit = deposit.ToString(),
+                        TotalPrice = request.Price,
+                        Amount = deposit - request.Price,
+                        RequestId = requestId,
+                        CreateBy = request.AccountId,
+                        ContractId = Guid.NewGuid().ToString(),
+                        CreateDate = DateTime.Now,
+                        ContractStatus = ContractStatus.Created,
+                        ContractName = request.Service.ServiceName,
+                        UrlPdf = await Image.UploadImageToFirebase(await pdfService.ConvertBytesToIFormFile(request, deposit)),
+                    };
+                }
 
                 bool result = await _contractRespository.AddContract(contract);
                 if (result)
