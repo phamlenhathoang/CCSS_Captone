@@ -35,7 +35,7 @@ namespace CCSS_Captone.Controllers
             {
                 return BadRequest(response.ErrorMessage);
             }
-            return Ok(response);
+            return Ok(response.PayUrl);
         }
         [SwaggerOperation(Description = "role: không call cái này")]
         [HttpGet]
