@@ -20,6 +20,7 @@ namespace CCSS_Service.Services
     public interface ICharacterService
     {
         Task<CharacterResponse> GetCharacter(string characterId);
+        Task<List<CharacterResponse>> GetAllCharacters();
         Task<List<CharacterResponse>> GetCharacters(string? characterId, string? categoryId, string? characterName, double? MaxHeight, double? MinHeight, double? Maxweight, double? MinWeight, double? MinPrice, double? MaxPrice);
         Task<Character> GetCharacterById(string characterId);
         Task<string> AddCharacter(CharacterRequest characterResponse, List<IFormFile> imageFiles);
@@ -43,6 +44,11 @@ namespace CCSS_Service.Services
             this._imageRepository = _imageRepository;
             this.image = image;
             _beginTransactionRepository = beginTransactionRepository;
+        }
+        public async Task<List<CharacterResponse>> GetAllCharacters()
+        {
+            var characters = await _characterRepository.GetAll();
+            return mapper.Map<List<CharacterResponse>>(characters);
         }
         public async Task<List<CharacterResponse>> GetCharacters(string? characterId, string? categoryId, string? characterName, double? MaxHeight, double? MinHeight, double? Maxweight, double? MinWeight, double? MinPrice, double? MaxPrice)
         {
