@@ -40,6 +40,12 @@ namespace CCSS_Captone.Controllers
         //    }
         //    return Ok(characters);
         //}
+        [HttpGet("all")]
+        public async Task<ActionResult<CharacterResponse>> GetAll()
+        {
+            var result = await _characterService.GetAllCharacters();
+            return Ok(result);
+        }
 
         [HttpGet]
         public async Task<ActionResult<CharacterResponse>> GetCharacters(string? characterId, string? categoryId, string? characterName, double? MaxHeight, double? MinHeight, double? Maxweight, double? MinWeight, double? MinPrice, double? MaxPrice)
