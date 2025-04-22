@@ -74,10 +74,10 @@ namespace CCSS_Captone.Controllers
         /// <summary>
         /// Tạo một sự kiện mới
         /// </summary>
-        [SwaggerOperation(Description = "role: Mamager")]
+        //[SwaggerOperation(Description = "role: Mamager")]
 
-        [Authorize(Roles = "Manager")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Manager")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
         [HttpPost("AddEvent")]
         public async Task<IActionResult> AddEvent(string eventJson, List<IFormFile> ImageUrl)

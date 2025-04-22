@@ -64,6 +64,7 @@ builder.Services.AddScoped<ICartProductRepository, CartProductRepository>();
 builder.Services.AddScoped<IBeginTransactionRepository, BeginTransactionRepository>();
 builder.Services.AddScoped<IAccountImageRepository, AccountImageRepository>();
 builder.Services.AddScoped<IRequestDatesRepository, RequestDatesRepository>();
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 
 
 //Service
@@ -95,6 +96,7 @@ builder.Services.AddScoped<IVNPayService, VNPayService>();
 builder.Services.AddScoped<IServiceServices, ServiceServices>();
 builder.Services.AddScoped<IAccountImageService, AccountImageService>();
 builder.Services.AddScoped<IRequestDateServices, RequestDateServices>();
+builder.Services.AddScoped<IActivityService, ActivityService>();
 
 
 
