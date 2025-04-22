@@ -18,7 +18,15 @@ namespace CCSS_Service.Model.Requests
         public string? Deposit { get; set; }
         public string? PackageId { get; set; }
         public string? AccountCouponId { get; set; }
-        public List<CharacterListRentCosplayer> ListRequestCharactersCreateEvent { get; set; }
+        public List<CharacterRequestListCreateEvent> ListRequestCharactersCreateEvent { get; set; }
 
+    }
+
+    public class CharacterRequestListCreateEvent
+    {
+        public string CharacterId { get; set; }
+        public string? Description { get; set; }
+        public int? Quantity { get; set; }
+        public List<RequestDateDtos> ListRequestDates { get; set; }
     }
 }
