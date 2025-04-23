@@ -798,7 +798,7 @@ namespace CCSS_Service.Services
 
                     SendMail sendMail = new SendMail();
 
-                    await sendMail.SendPasswordChangePassword(eventCharacter.Task.Account.Email);
+                    await sendMail.SendCosplayerUpdateTask(eventCharacter.Task.Account.Email);
                 }
 
 
