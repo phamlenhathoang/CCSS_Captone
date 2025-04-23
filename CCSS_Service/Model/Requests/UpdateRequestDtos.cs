@@ -21,6 +21,7 @@ namespace CCSS_Service.Model.Requests
     }
     public class UpdateCharacterList
     {
+        public string RequestCharacterId { get; set; }
         public string CharacterId { get; set; }
         public string? CosplayerId { get; set; }
         public string? Description { get; set; }
