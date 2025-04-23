@@ -263,7 +263,7 @@ if(customer == null)
                         Status = contract.ContractStatus.ToString(),
                         Reason = contract.Reason,
                         CreateBy = customer.Name,
-                        CreateDate = contract.CreateDate,
+                        CreateDate = contract.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
                         UrlPdf = contract.UrlPdf,
                     };
 
@@ -389,7 +389,7 @@ if(customer == null)
                         Status = contract.ContractStatus.ToString(),
                         Reason = contract.Reason,
                         CreateBy = customer.Name,
-                        CreateDate = contract.CreateDate,
+                        CreateDate = contract.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
                         UrlPdf = contract.UrlPdf,
                     };
 
@@ -511,7 +511,7 @@ if(customer == null)
                     Status = contract.ContractStatus.ToString(),
                     Reason = contract.Reason,
                     CreateBy = customer.Name,
-                    CreateDate = contract.CreateDate,
+                    CreateDate = contract.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
                     UrlPdf = contract.UrlPdf,
                 };
 
