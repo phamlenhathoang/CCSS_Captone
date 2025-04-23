@@ -161,7 +161,7 @@ namespace CCSS_Repository.Repositories
 
         public Task<Event> GetEventByEventId(string id)
         {
-            return _dbContext.Events.FirstOrDefaultAsync(e => e.EventId.Equals(id)); 
+            return _dbContext.Events.Include(e => e.EventCharacters).FirstOrDefaultAsync(e => e.EventId.Equals(id)); 
         }
         public async Task<bool> DeleteTicketsByEventId(string eventId)
         {

@@ -104,5 +104,13 @@ namespace CCSS_Captone.Controllers
 
             return Ok(totalHours);
         }
+
+
+        [HttpPut("EventId")]
+        public async Task<ActionResult> DeleteAllTaskByEventId(string eventId)
+        {
+            var task = await taskService.DeleteAllTaskByEventId(eventId);
+            return Ok(task);
+        }
     }
 }

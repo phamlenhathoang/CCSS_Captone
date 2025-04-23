@@ -2,6 +2,7 @@
 using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
 using CCSS_Service.Hubs;
+using CCSS_Service.Libraries;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using iText.Layout.Element;
@@ -14,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using static iText.Svg.SvgConstants;
@@ -43,6 +45,7 @@ namespace CCSS_Service.Services
         Task<bool> AddTaskContractByManager(List<AddTaskContractRequest> contractCharacters, string requestId);
         Task<bool> UpdateStatusTaskByContractId(string contractId);
         Task<bool> UpdateStatusTaskByTaskId(string taskId, string status);
+        Task<bool> DeleteAllTaskByEventId(string eventId);
     }
     public class TaskService : ITaskService
     {
@@ -749,6 +752,59 @@ namespace CCSS_Service.Services
                 return result;
             }
             catch(Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> DeleteAllTaskByEventId(string eventId)
+        {
+            try
+            {
+                Event e = await eventRepository.GetEventByEventId(eventId);
+
+                if (e == null)
+                {
+                    throw new Exception("Event does not exist");
+                }
+
+                if(e.EventCharacters == null)
+                {
+                    throw new Exception("EventCharacters does not exist");
+                }
+
+                foreach (EventCharacter item in e.EventCharacters)
+                {
+                    EventCharacter eventCharacter = await eventChacracterRepository.GetEventCharacterById(item.EventCharacterId);
+
+                    if (eventCharacter == null)
+                    {
+                        throw new Exception("EventCharacter does not exist");
+                    }
+
+                    if(eventCharacter.Task.Status != TaskStatus.Assignment)
+                    {
+                        throw new Exception("Can not update task becaue this task inprogressing");
+                    }
+
+                    eventCharacter.Task.IsActive = false;
+
+                    bool result = await taskRepository.UpdateTask(eventCharacter.Task);
+
+                    if (!result)
+                    {
+                        throw new Exception("Can not update task");
+                    }
+
+                    SendMail sendMail = new SendMail();
+
+                    await sendMail.SendPasswordChangePassword(eventCharacter.Task.Account.Email);
+                }
+
+
+                return true;
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

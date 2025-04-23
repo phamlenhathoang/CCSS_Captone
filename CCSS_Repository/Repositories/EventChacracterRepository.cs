@@ -22,7 +22,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<EventCharacter> GetEventCharacterById(string id)
         {
-            return await dbContext.EventCharacters.Include(e => e.Event).Include(e => e.Character).FirstOrDefaultAsync(e => e.EventCharacterId.Equals(id)); 
+            return await dbContext.EventCharacters.Include(e => e.Event).Include(e => e.Character).Include(e => e.Task).ThenInclude(e => e.Account).FirstOrDefaultAsync(e => e.EventCharacterId.Equals(id)); 
         }
     }
 }
