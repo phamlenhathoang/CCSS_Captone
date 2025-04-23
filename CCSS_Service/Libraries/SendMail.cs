@@ -383,7 +383,45 @@ namespace CCSS_Service.Libraries
             }
         }
 
+        public async Task<bool> SendCosplayerCancelTask(string toEmail)
+        {
+            try
+            {
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .Build();
 
+                string fromEmail = configuration["FromEmail:Email"];
+                string emailPassword = configuration["FromEmail:Password"];
+
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("CCSS", fromEmail));
+                message.To.Add(new MailboxAddress("", toEmail));
+                message.Subject = "📢 Phản hồi về task";
+
+                string emailBody = $@"
+        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+            <h2 style='color: #007bff;'>Task của bạn đã bị hủy! 🎉</h2>
+            <p>Vui lòng kiểm tra trên hệ thống để xem thông tin.</p>
+        </div>";
+
+                message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
+
+                using var smtp = new SmtpClient();
+                await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(fromEmail, emailPassword);
+                await smtp.SendAsync(message);
+                await smtp.DisconnectAsync(true);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi gửi email: {ex.Message}");
+                return false;
+            }
+        }
 
     }
 }
