@@ -383,7 +383,7 @@ namespace CCSS_Service.Libraries
             }
         }
 
-        public async Task<bool> SendCosplayerCancelTask(string toEmail)
+        public async Task<bool> SendCosplayerUpdateTask(string toEmail)
         {
             try
             {
@@ -402,7 +402,7 @@ namespace CCSS_Service.Libraries
 
                 string emailBody = $@"
         <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
-            <h2 style='color: #007bff;'>Task của bạn đã bị hủy! 🎉</h2>
+            <h2 style='color: #007bff;'>Task của bạn đã được cập nhật! 🎉</h2>
             <p>Vui lòng kiểm tra trên hệ thống để xem thông tin.</p>
         </div>";
 
