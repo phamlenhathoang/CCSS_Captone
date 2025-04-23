@@ -536,91 +536,6 @@ namespace CCSS_Service.Services
                             await transaction.RollbackAsync();
                             return "Cosplayer does not suitable.";
                         }
-                        if (requestExisting.ServiceId != "S001")
-                        {
-                            List<RequestDate> dateInRequest = new List<RequestDate>();
-                            if (r.ListUpdateRequestDates != null && r.ListUpdateRequestDates.Any())
-                            {
-                                foreach (var dateRange in r.ListUpdateRequestDates)
-                                {
-                                    DateTime StartTime = DateTime.Now;
-                                    DateTime EndTime = DateTime.Now;
-
-                                    if (!string.IsNullOrEmpty(dateRange.StartDate) || !string.IsNullOrEmpty(dateRange.EndDate))
-                                    {
-
-                                        string[] timeFormats = { "HH:mm dd/MM/yyyy", "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
-
-                                        bool isValidStartTime = DateTime.TryParseExact(dateRange.StartDate.Trim(), timeFormats,
-                                                                                  System.Globalization.CultureInfo.InvariantCulture,
-                                                                                  System.Globalization.DateTimeStyles.None, out StartTime);
-
-                                        bool isValidEndTime = DateTime.TryParseExact(dateRange.EndDate.Trim(), timeFormats,
-                                                                                     System.Globalization.CultureInfo.InvariantCulture,
-                                                                                     System.Globalization.DateTimeStyles.None, out EndTime);
-                                        if (!isValidStartTime && !isValidEndTime)
-                                        {
-                                            return "Valid Time is wrong";
-                                        }
-                                    }
-                                    if (StartTime >= EndTime)
-                                    {
-                                        await transaction.RollbackAsync();
-                                        return "End date must be greater than start date.";
-                                    }
-
-                                    // Kiểm tra thời gian nằm trong khoảng thời gian của Request
-                                    if (StartTime < StartDate && EndTime > EndDate)
-                                    {
-                                        await transaction.RollbackAsync();
-                                        return "Date range must be within the request date range.";
-                                    }
-
-                                    var requestCharacterInDate = await _requestCharacterRepository.GetRequestCharacter(requestExisting.RequestId, r.CharacterId);
-                                    if (requestCharacterInDate == null)
-                                    {
-                                        await transaction.RollbackAsync();
-                                        return "Request Character not found";
-                                    }
-                                    var requestDateExisting = await _requestDatesRepository.GetRequestDateById(dateRange.RequestDateId);
-                                    if (requestDateExisting != null)
-                                    {
-                                        requestDateExisting.StartDate = StartTime;
-                                        requestDateExisting.EndDate = EndTime;
-                                        requestDateExisting.Status = RequestDateStatus.Pending;
-                                        requestDateExisting.RequestCharacterId = requestCharacterInDate.RequestCharacterId;
-
-                                        var resultRequestDate = await _requestDatesRepository.UpdateRequestDate(requestDateExisting);
-                                        if (!resultRequestDate)
-                                        {
-                                            return "Can not update Request Date";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        RequestDate newRequestDate = new RequestDate
-                                        {
-                                            RequestDateId = Guid.NewGuid().ToString(),
-                                            RequestCharacterId = requestCharacterInDate.RequestCharacterId,
-                                            StartDate = StartTime,
-                                            EndDate = EndTime,
-                                            Status = RequestDateStatus.Pending,
-                                        };
-                                        dateInRequest.Add(newRequestDate);
-                                    }
-                                }
-                                if (dateInRequest.Any())
-                                {
-                                    var RequestDates = await _requestDatesRepository.AddListRequestDates(dateInRequest);
-                                    if (!RequestDates)
-                                    {
-                                        await transaction.RollbackAsync();
-                                        return "Failed to add request dates";
-                                    }
-                                }
-                            }
-                        }
-
                         bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
                         if (!checkTask)
                         {
@@ -634,44 +549,16 @@ namespace CCSS_Service.Services
                             return "This cosplayer not found";
                         }
                     }
-
-                    var requestCharacter = await _requestCharacterRepository.GetRequestCharacter(requestExisting.RequestId, r.CharacterId);
+                    var requestCharacter = await _requestCharacterRepository.GetRequestCharacterById(r.RequestCharacterId);
                     var character = await _characterRepository.GetCharacter(r.CharacterId);
                     if (requestCharacter == null)
                     {
-                        var totalPrice = character.Price * r.Quantity;
-                        RequestCharacter newRequestCharacter = new RequestCharacter()
-                        {
-                            RequestCharacterId = Guid.NewGuid().ToString(),
-                            RequestId = requestExisting.RequestId,
-                            Description = r.Description,
-                            CharacterId = r.CharacterId,
-                            CreateDate = requestExisting.StartDate,
-                            Status = RequestCharacterStatus.Pending,
-                            Quantity = 1,
-                            CosplayerId = r.CosplayerId,
-                            TotalPrice = totalPrice,
-                        };
-                        characterInRequest.Add(newRequestCharacter);
-
-                        if (characterInRequest.Any())
-                        {
-                            var newResult = await _requestCharacterRepository.AddListRequestCharacter(characterInRequest);
-                            if (!newResult)
-                            {
-                                await transaction.RollbackAsync();
-                                return "Cannot add new character in request";
-                            }
-                        }
-                        else
-                        {
                             await transaction.RollbackAsync();
-                            return "Can not find characterinRequest";
-                        }
+                            return $"Can not find character {character.CharacterName} in Request";
                     }
                     else
                     {
-                        int quantity = (requestExisting.ServiceId != "S001") ? 1 : (r.Quantity ?? 1);
+                        int quantity = (requestExisting.ServiceId == "S002") ? 1 : (r.Quantity ?? 1);
                         if (quantity > character.Quantity)
                         {
                             await transaction.RollbackAsync();
@@ -680,6 +567,7 @@ namespace CCSS_Service.Services
 
                         requestCharacter.CreateDate = StartDate;
                         requestCharacter.UpdateDate = DateTime.Now;
+                        requestCharacter.CharacterId = r.CharacterId;
                         requestCharacter.CosplayerId = r.CosplayerId;
                         requestCharacter.Description = r.Description;
                         requestCharacter.Quantity = quantity;
