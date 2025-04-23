@@ -32,17 +32,17 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Request>> GetAllRequest()
         {
-            return await _context.Requests.Include(sc => sc.RequestCharacters).ToListAsync();
+            return await _context.Requests.Include(sc => sc.RequestCharacters).OrderByDescending(c => c.CreatedDate).ToListAsync();
         }
 
         public async Task<List<Request>> GetAllRequestByServicesId(string servicesId)
         {
-            return await _context.Requests.Include(rc => rc.RequestCharacters).Include(sc => sc.Service).Where(sc => sc.ServiceId.Equals(servicesId)).ToListAsync();
+            return await _context.Requests.Include(rc => rc.RequestCharacters).Include(sc => sc.Service).Where(sc => sc.ServiceId.Equals(servicesId)).OrderByDescending(c => c.CreatedDate).ToListAsync();
         }
 
         public async Task<List<Request>> GetAllRequestByAccountId(string accountId)
         {
-            return await _context.Requests.Include(c => c.RequestCharacters).Where(sc => sc.AccountId.Equals(accountId)).ToListAsync();
+            return await _context.Requests.Include(c => c.RequestCharacters).Where(sc => sc.AccountId.Equals(accountId)).OrderByDescending(c => c.CreatedDate).ToListAsync();
         }
         public async Task<Request> GetRequestById(string id)
         {
