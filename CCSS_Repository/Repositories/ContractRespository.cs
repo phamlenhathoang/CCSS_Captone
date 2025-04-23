@@ -56,12 +56,12 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Contract>> GetContracts()
         {
-            return await _context.Contracts.Include(r => r.Request).ToListAsync();
+            return await _context.Contracts.Include(r => r.Request).OrderByDescending(c => c.CreateDate).ToListAsync();
         }
 
         public async Task<List<Contract>> GetAllContractByAccountId(string accountId)
         {
-            return await _context.Contracts.Include(rq => rq.Request).ThenInclude(rc => rc.RequestCharacters).Where(sc => sc.CreateBy.Equals(accountId)).ToListAsync();
+            return await _context.Contracts.Include(rq => rq.Request).ThenInclude(rc => rc.RequestCharacters).Where(sc => sc.CreateBy.Equals(accountId)).OrderByDescending(c => c.CreateDate).ToListAsync();
         }
         public async Task<Contract> GetContractByIdThenIncludeFeedback(string id)
         {
@@ -104,7 +104,7 @@ namespace CCSS_Repository.Repositories
                 query = query.Where(c => c.ContractId.Equals(contractId));
             }
 
-            return query.ToListAsync();
+            return query.OrderByDescending(c => c.CreateDate).ToListAsync();
         }
 
     }
