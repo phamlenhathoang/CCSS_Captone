@@ -68,6 +68,7 @@ namespace CCSS_Service.Services
                 {
                     RequestCharacterId = c.RequestCharacterId,
                     CharacterId = c.CharacterId,
+                    CharacterName = c.Character.CharacterName,
                     CosplayerId = c.CosplayerId,
                     Description = c.Description,
                     Quantity = c.Quantity,
@@ -133,6 +134,7 @@ namespace CCSS_Service.Services
             {
                 RequestCharacterId = c.RequestCharacterId,
                 CharacterId = c.CharacterId,
+                CharacterName = c.Character.CharacterName,
                 CosplayerId = c.CosplayerId,
                 Description = c.Description,
                 Quantity = c.Quantity,
@@ -188,7 +190,7 @@ namespace CCSS_Service.Services
         }
         #endregion
 
-        #region Get AllRequest By AccountId
+        #region Get All Request By AccountId
         public async Task<List<RequestResponse>> GetAllRequestByAccountId(string accountId)
         {
 
@@ -208,6 +210,7 @@ namespace CCSS_Service.Services
                 {
                     RequestCharacterId = c.RequestCharacterId,
                     CharacterId = c.CharacterId,
+                    CharacterName = c.Character.CharacterName,
                     CosplayerId = c.CosplayerId,
                     Description = c.Description,
                     Quantity = c.Quantity,
