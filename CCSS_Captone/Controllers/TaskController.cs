@@ -112,5 +112,12 @@ namespace CCSS_Captone.Controllers
             var task = await taskService.DeleteAllTaskByEventId(eventId);
             return Ok(task);
         }
+
+        [HttpGet("requestId")]
+        public async Task<ActionResult> GetAllTaskByRequestId(string requestId)
+        {
+            var task = await taskService.GetAllTaskByRequestId(requestId);
+            return Ok(task);
+        }
     }
 }

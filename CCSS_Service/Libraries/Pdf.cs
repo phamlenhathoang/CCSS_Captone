@@ -219,8 +219,6 @@ namespace CCSS_Service.Libraries
                         {
                             Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
 
-                            
-
                             if (count == 0)
                             {
                                 List<RequestDate> requestDates = await requestDatesRepository.GetListRequestDateByRequestCharacterId(requestCharacter.RequestCharacterId);
@@ -289,23 +287,26 @@ namespace CCSS_Service.Libraries
                         htmlContent += "</table>";
                     }
 
-                    htmlContent += "<p>Hợp đồng cho thuê vào các khung giờ.</p>";
-                    int c = 0;
-                    foreach (RequestCharacter requestCharacter in request.RequestCharacters)
+                    if(request.ServiceId != "S001")
                     {
-                        if(c == 0)
+                        htmlContent += "<p>Hợp đồng cho thuê vào các khung giờ.</p>";
+                        int c = 0;
+                        foreach (RequestCharacter requestCharacter in request.RequestCharacters)
                         {
-                            List<RequestDate> requestDates = await requestDatesRepository.GetListRequestDateByRequestCharacterId(requestCharacter.RequestCharacterId);
-                            foreach (RequestDate requestDate in requestDates)
+                            if (c == 0)
                             {
-                                string formattedStartDate = requestDate.StartDate.ToString("hh:mm tt dd 'tháng' MM 'năm' yyyy");
-                                string formattedEndDate = requestDate.EndDate.ToString("hh:mm tt dd 'tháng' MM 'năm' yyyy");
-                                htmlContent += $"<p>{formattedStartDate}<p>";
-                                htmlContent += $"<p>{formattedEndDate}<p>";
+                                List<RequestDate> requestDates = await requestDatesRepository.GetListRequestDateByRequestCharacterId(requestCharacter.RequestCharacterId);
+                                foreach (RequestDate requestDate in requestDates)
+                                {
+                                    string formattedStartDate = requestDate.StartDate.ToString("hh:mm tt dd 'tháng' MM 'năm' yyyy");
+                                    string formattedEndDate = requestDate.EndDate.ToString("hh:mm tt dd 'tháng' MM 'năm' yyyy");
+                                    htmlContent += $"<p>{formattedStartDate}<p>";
+                                    htmlContent += $"<p>{formattedEndDate}<p>";
+                                }
+                                c++;
                             }
-                            c++;
-                        }
 
+                        }
                     }
 
                     // Thông tin hợp đồng

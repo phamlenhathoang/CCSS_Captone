@@ -27,7 +27,7 @@ namespace CCSS_Repository.Repositories
 
         Task<bool> CheckTaskIsValid(Account account, DateTime startDate, DateTime endDate);
         Task<Task> GetTaskById(string id, string accountId);
-        Task<Task> GetTaskByContractCharacterId(string contractCharacterId);
+        Task<List<Task>> GetTaskByContractCharacterId(string contractCharacterId);
         Task<Task> GetTaskByTaskId(string id);
         Task<bool> UpdateTask(Task task);
         Task<List<Task>> GetTasksByAccountId(string accountId);
@@ -246,9 +246,9 @@ namespace CCSS_Repository.Repositories
             return await _dbContext.Tasks.Where(t => t.AccountId.Equals(accountId)).Include(t => t.ContractCharacter).Include(t => t.EventCharacter).OrderBy(t => t.StartDate).ToListAsync();
         }
 
-        public async Task<Task> GetTaskByContractCharacterId(string contractCharacterId)
+        public async Task<List<Task>> GetTaskByContractCharacterId(string contractCharacterId)
         {
-            return await _dbContext.Tasks.FirstOrDefaultAsync(c => c.ContractCharacterId.Equals(contractCharacterId));
+            return await _dbContext.Tasks.Where(c => c.ContractCharacterId.Equals(contractCharacterId)).ToListAsync();
         }
 
         //public async Task<bool> DeleteTask(CCSS_Repository.Entities.Task task)

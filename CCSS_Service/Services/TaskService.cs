@@ -46,6 +46,7 @@ namespace CCSS_Service.Services
         Task<bool> UpdateStatusTaskByContractId(string contractId);
         Task<bool> UpdateStatusTaskByTaskId(string taskId, string status);
         Task<bool> DeleteAllTaskByEventId(string eventId);
+        Task<List<TaskResponse>> GetAllTaskByRequestId(string requestId);
     }
     public class TaskService : ITaskService
     {
@@ -387,7 +388,7 @@ namespace CCSS_Service.Services
                             {
                                 RequestDate newRequestDate = new RequestDate()
                                 {
-                                    RequestCharacterId = taskRequest.RequestCharacterId,
+                                    RequestCharacterId = newRequestCharacter.RequestCharacterId,
                                     StartDate = requestDate.StartDate,
                                     EndDate = requestDate.EndDate,
                                     Status = RequestDateStatus.Accept,
@@ -411,6 +412,17 @@ namespace CCSS_Service.Services
                         }
                     }
                 }
+
+                double price = 0;
+
+                foreach(RequestCharacter requestCharacter1 in request.RequestCharacters)
+                {
+                    price += (double) requestCharacter1.TotalPrice;
+                }
+
+                request.Price = price + request.Package.Price - request.AccountCoupon.Coupon.Amount;
+
+                await requestRepository.UpdateRequest(request);
 
                 return true;
             }
@@ -751,14 +763,17 @@ namespace CCSS_Service.Services
                 {
                     foreach (var contractCharacter in contract.ContractCharacters)
                     {
-                        Task task = await taskRepository.GetTaskByContractCharacterId(contractCharacter.ContractCharacterId);
-                        if (task != null)
+                        var tasks = await taskRepository.GetTaskByContractCharacterId(contractCharacter.ContractCharacterId);
+                        if (tasks != null)
                         {
-                            task.Status = TaskStatus.Completed;
-                            bool result = await taskRepository.UpdateTask(task);
-                            if (!result)
+                            foreach (var task in tasks)
                             {
-                                throw new Exception("Can not update status task");
+                                task.Status = TaskStatus.Completed;
+                                bool result = await taskRepository.UpdateTask(task);
+                                if (!result)
+                                {
+                                    throw new Exception("Can not update status task");
+                                }
                             }
                         }
                     }
@@ -866,6 +881,72 @@ namespace CCSS_Service.Services
 
 
                 return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<TaskResponse>> GetAllTaskByRequestId(string requestId)
+        {
+            try
+            {
+                List<TaskResponse> taskResponses = new List<TaskResponse>();
+
+                Request request = await requestRepository.GetRequestById(requestId);
+                if (request == null)
+                {
+                    throw new Exception("Request does not exist");
+                }
+
+                if(request.ServiceId != "S003")
+                {
+                    throw new Exception("ServiceId of request must be S003");
+                }
+
+                if(request.Contract == null)
+                {
+                    throw new Exception("Request has not created contract yet");
+                }
+
+                if(request.Contract.ContractCharacters == null)
+                {
+                    throw new Exception("Request has created contract but no deposit yet");
+                }
+
+                foreach (ContractCharacter contractCharacter in request.Contract.ContractCharacters)
+                {
+                    var tasks = await taskRepository.GetTaskByContractCharacterId(contractCharacter.ContractCharacterId);
+
+                    foreach (var task in tasks)
+                    {
+                        Character character = await characterRepository.GetCharacter(task.TaskName);
+                        if (character == null)
+                        {
+                            throw new Exception("Character does not exist");
+                        }
+                        var taskResponse = new TaskResponse()
+                        {
+                            TaskName = character.CharacterName,
+                            AccountId = task.AccountId,
+                            CreateDate = task.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                            Description = task.Description,
+                            EndDate = task.EndDate?.ToString("HH:mm dd/MM/yyyy"),
+                            IsActive = task.IsActive,
+                            Location = task.Location,
+                            StartDate = task.StartDate?.ToString("HH:mm dd/MM/yyyy"),
+                            Status = task.Status.ToString(),
+                            TaskId = task.TaskId,
+                            UpdateDate = task.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                            ContractId = request.Contract.ContractId,
+                        };
+
+                        taskResponses.Add(taskResponse);
+                    }
+                }
+
+                return taskResponses;
             }
             catch (Exception ex)
             {
