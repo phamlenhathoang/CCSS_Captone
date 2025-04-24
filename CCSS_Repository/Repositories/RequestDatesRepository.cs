@@ -14,6 +14,7 @@ namespace CCSS_Repository.Repositories
         Task<List<RequestDate>> GetAllRequestDates();
         Task<RequestDate> GetRequestDateById(string id);
         Task<bool> AddListRequestDates(List<RequestDate> requestDate);
+        Task<bool> AddRequestDate(RequestDate requestDate);
         Task<bool> UpdateListRequestDates(List<RequestDate> requestDate);
         Task<List<RequestDate>> GetListRequestDateByRequestCharacterId(string requestCharacterId);    
         Task<bool> UpdateRequestDate(RequestDate requestDate);
@@ -85,6 +86,12 @@ namespace CCSS_Repository.Repositories
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<bool> AddRequestDate(RequestDate requestDate)
+        {
+            await _context.RequestDates.AddAsync(requestDate);
+            return await _context.SaveChangesAsync() > 0 ? true : false;
         }
     }
 }

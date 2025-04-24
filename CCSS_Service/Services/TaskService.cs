@@ -63,8 +63,9 @@ namespace CCSS_Service.Services
         private readonly IBeginTransactionRepository _beginTransactionRepository;
         private readonly IRequestCharacterRepository requestCharacterRepository;
         private readonly IEventCharacterRepository eventCharacterRepository;
+        private readonly IRequestDatesRepository requestDatesRepository;
 
-        public TaskService(IRequestRepository requestRepository, IContractCharacterRepository contractCharacterRepository, IEventChacracterRepository eventChacracterRepository, ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<NotificationHub> hubContext, INotificationRepository notificationRepository, IEventRepository eventRepository, IBeginTransactionRepository _beginTransactionRepository, IRequestCharacterRepository requestCharacterRepository, IEventCharacterRepository eventCharacterRepository)
+        public TaskService(IRequestRepository requestRepository, IContractCharacterRepository contractCharacterRepository, IEventChacracterRepository eventChacracterRepository, ITaskRepository taskRepository, IContractRespository contractRespository, IMapper mapper, IAccountRepository accountRepository, ICharacterRepository characterRepository, IHubContext<NotificationHub> hubContext, INotificationRepository notificationRepository, IEventRepository eventRepository, IBeginTransactionRepository _beginTransactionRepository, IRequestCharacterRepository requestCharacterRepository, IEventCharacterRepository eventCharacterRepository, IRequestDatesRepository requestDatesRepository)
         {
             this.taskRepository = taskRepository;
             this.contractRespository = contractRespository;
@@ -80,6 +81,7 @@ namespace CCSS_Service.Services
             this._beginTransactionRepository = _beginTransactionRepository;
             this.requestCharacterRepository = requestCharacterRepository;
             this.eventCharacterRepository = eventCharacterRepository;
+            this.requestDatesRepository = requestDatesRepository;
         }
 
         private async Task<bool> AddTaskEvent(List<AddTaskEventRequest> taskEventRequests)
@@ -291,15 +293,13 @@ namespace CCSS_Service.Services
                     }
                 }
 
+                int count = 0;
+                List<RequestDate> dates = new List<RequestDate>();
+
                 Request request = await requestRepository.GetRequestById(requestId);
                 if (request == null)
                 {
                     throw new Exception("Request does not exist");
-                }
-
-                if (request.Status != RequestStatus.Browsed)
-                {
-                    throw new Exception("Request must be browsed");
                 }
 
                 if(request.ServiceId != "S003")
@@ -307,7 +307,7 @@ namespace CCSS_Service.Services
                     throw new Exception($"Service in this request {request.RequestId} must be S003");
                 }
 
-                await requestCharacterRepository.DeleteListCharacterInRequest(await requestCharacterRepository.GetListCharacterByRequest(request.RequestId));
+                //await requestCharacterRepository.DeleteListCharacterInRequest(await requestCharacterRepository.GetListCharacterByRequest(request.RequestId));
 
                 foreach (var taskRequest in contractCharacters)
                 {
@@ -323,28 +323,91 @@ namespace CCSS_Service.Services
                             throw new Exception("Account must be cosplayer");
                         }
 
-                        Character character = await characterRepository.GetCharacter(taskRequest.CharacterId);
-                        if (character == null)
+                        RequestCharacter requestCharacter = await requestCharacterRepository.GetRequestCharacterById(taskRequest.RequestCharacterId);
+
+                        if (requestCharacter == null)
                         {
                             throw new Exception("Character does not exist");
                         }
 
-                        RequestCharacter newRequestCharacter = new RequestCharacter()
-                        {
-                            CosplayerId = taskRequest.CosplayerId,
-                            CharacterId = taskRequest.CharacterId,
-                            Description = null,
-                            CreateDate = DateTime.Now,
-                            Quantity = 1,
-                            RequestId = requestId,
-                            TotalPrice = character.Price * account.SalaryIndex,
-                            UpdateDate = null,
-                        };
+                        Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
+                        double totalDay = (request.EndDate - request.StartDate).TotalDays + 1;
+                        double totalHour = 0;
 
-                        bool result = await requestCharacterRepository.AddRequestCharacter(newRequestCharacter);
-                        if (!result)
+                        if (count == 0)
                         {
-                            throw new Exception("Can not add RequestCharacter");
+                            foreach (RequestDate requestDate in requestCharacter.RequestDates)
+                            {
+                                dates.Add(requestDate);
+                            }
+
+                            count++;
+                        }
+
+                        foreach (RequestDate requestDate in dates)
+                        {
+                            double hour = (requestDate.EndDate - requestDate.StartDate).TotalHours;
+                            totalHour += hour;
+                        }
+
+                        if (requestCharacter.Quantity == 1)
+                        {
+                            requestCharacter.CosplayerId = taskRequest.CosplayerId;
+                            requestCharacter.TotalPrice = (character.Price * totalDay * requestCharacter.Quantity) + (account.SalaryIndex * totalHour);
+
+                            bool checkUpdate = await requestCharacterRepository.UpdateRequestCharacter(requestCharacter);
+                            if (!checkUpdate)
+                            {
+                                throw new Exception("Can not update RequestCharacter");
+                            }
+                        }
+
+                        if (requestCharacter.Quantity > 1)
+                        {
+                            RequestCharacter newRequestCharacter = new RequestCharacter()
+                            {
+                                CosplayerId = taskRequest.CosplayerId,
+                                CharacterId = requestCharacter.CharacterId,
+                                Description = null,
+                                CreateDate = DateTime.Now,
+                                Quantity = 1,
+                                RequestId = requestId,
+                                UpdateDate = null,
+                                TotalPrice = (character.Price * totalDay) + (account.SalaryIndex * totalHour),
+                            };
+
+                            bool result = await requestCharacterRepository.AddRequestCharacter(newRequestCharacter);
+
+                            if (!result)
+                            {
+                                throw new Exception("Can not add RequestCharacter");
+                            }
+
+                            foreach (RequestDate requestDate in dates)
+                            {
+                                RequestDate newRequestDate = new RequestDate()
+                                {
+                                    RequestCharacterId = taskRequest.RequestCharacterId,
+                                    StartDate = requestDate.StartDate,
+                                    EndDate = requestDate.EndDate,
+                                    Status = RequestDateStatus.Accept,
+                                };
+
+                                bool checkAdd = await requestDatesRepository.AddRequestDate(newRequestDate);
+                                if (!checkAdd)
+                                {
+                                    throw new Exception("Can not add RequestDate");
+                                }
+                            }
+
+                            requestCharacter.Quantity -= 1;
+
+                            bool checkUpdate = await requestCharacterRepository.UpdateRequestCharacter(requestCharacter);
+                            if (!checkUpdate)
+                            {
+                                throw new Exception("Can not update RequestCharacter");
+                            }
+
                         }
                     }
                 }

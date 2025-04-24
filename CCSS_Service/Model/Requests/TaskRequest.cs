@@ -24,6 +24,6 @@ namespace CCSS_Service.Model.Requests
     public class AddTaskContractRequest
     {
         public string CosplayerId { get; set; }
-        public string CharacterId { get; set; }
+        public string RequestCharacterId { get; set; }
     }
 }
