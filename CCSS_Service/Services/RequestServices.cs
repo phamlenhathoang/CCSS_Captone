@@ -2,6 +2,7 @@
 using CCSS_Repository.Repositories;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -375,8 +376,9 @@ namespace CCSS_Service.Services
                             }
                             else
                             {
+                                double totalDate = (EndDate.Date - StartDate.Date).Days + 1;
                                 var Getcharacter = await _characterRepository.GetCharacter(r.CharacterId);
-                                var totalPrice = Getcharacter.Price * r.Quantity;
+                                var totalPrice = Getcharacter.Price * r.Quantity * totalDate;
                                 // Nếu CosplayerId hợp lệ, thêm vào danh sách
                                 characteInRequest.Add(new RequestCharacter
                                 {
@@ -553,8 +555,8 @@ namespace CCSS_Service.Services
                     var character = await _characterRepository.GetCharacter(r.CharacterId);
                     if (requestCharacter == null)
                     {
-                            await transaction.RollbackAsync();
-                            return $"Can not find character {character.CharacterName} in Request";
+                        await transaction.RollbackAsync();
+                        return $"Can not find character {character.CharacterName} in Request";
                     }
                     else
                     {
@@ -1012,7 +1014,8 @@ namespace CCSS_Service.Services
                                 }
                             }
                             var Getcharacter = await _characterRepository.GetCharacter(r.CharacterId);
-                            var totalPrice = Getcharacter.Price * 1;
+                            double totalDate = (EndDate.Date - StartDate.Date).Days + 1;
+                            var totalPrice = Getcharacter.Price * 1 * totalDate;
                             // Nếu CosplayerId hợp lệ, thêm vào danh sách
                             characteInRequest.Add(new RequestCharacter
                             {
@@ -1037,12 +1040,13 @@ namespace CCSS_Service.Services
                         {
                             if (requestDtos.CharactersRentCosplayers.Any(c => c.ListRequestDates != null && c.ListRequestDates.Any()))
                             {
-                                List<RequestDate> requestDates = new List<RequestDate>();
+                                double? totalHour = 0;
                                 foreach (var d in requestDtos.CharactersRentCosplayers)
                                 {
                                     var requestCharacter = await _requestCharacterRepository.GetRequestCharacterCosplayerId(newRequest.RequestId, d.CharacterId, d.CosplayerId);
                                     if (requestCharacter != null)
                                     {
+                                        List<RequestDate> requestDates = new List<RequestDate>();
 
                                         foreach (var dateDtos in d.ListRequestDates)
                                         {
@@ -1086,17 +1090,33 @@ namespace CCSS_Service.Services
                                                 StartDate = StartTime,
                                                 EndDate = EndTime
                                             });
-                                        }
-                                    }
-                                }
 
-                                if (requestDates.Any())
-                                {
-                                    var RequestDates = await _requestDatesRepository.AddListRequestDates(requestDates);
-                                    if (!RequestDates)
-                                    {
-                                        await transaction.RollbackAsync();
-                                        return "Failed to add request dates";
+                                            totalHour += (EndTime - StartTime).TotalHours;
+                                        }
+
+                                        if (requestDates.Any())
+                                        {
+                                            var RequestDates = await _requestDatesRepository.AddListRequestDates(requestDates);
+
+                                            if (!RequestDates)
+                                            {
+                                                await transaction.RollbackAsync();
+                                                return "Failed to add request dates";
+                                            }
+                                        }
+                                        var cosplayer = await _accountRepository.GetAccount(d.CosplayerId);
+                                        if (cosplayer == null)
+                                        {
+                                            await transaction.RollbackAsync();
+                                            return "Cosplayer is null here";
+                                        }
+                                        requestCharacter.TotalPrice += (totalHour * cosplayer.SalaryIndex);
+                                        var resultTotalPrice = await _requestCharacterRepository.UpdateRequestCharacter(requestCharacter);
+                                        if (!resultTotalPrice)
+                                        {
+                                            await transaction.RollbackAsync();
+                                            return "Can not update total price";
+                                        }
                                     }
                                 }
                             }
@@ -1221,8 +1241,9 @@ namespace CCSS_Service.Services
                             }
                             else
                             {
+                                double totalDate = (EndDate.Date - StartDate.Date).Days + 1;
                                 var Getcharacter = await _characterRepository.GetCharacter(r.CharacterId);
-                                var totalPrice = Getcharacter.Price * r.Quantity;
+                                var totalPrice = Getcharacter.Price * r.Quantity * (totalDate);
                                 // Nếu CosplayerId hợp lệ, thêm vào danh sách
                                 characteInRequest.Add(new RequestCharacter
                                 {
