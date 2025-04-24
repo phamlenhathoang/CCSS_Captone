@@ -621,11 +621,11 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Contract
             modelBuilder.Entity<Contract>().HasData(
-     new Contract { ContractId = "CT002", RequestId = "R002", Deposit = "100", TotalPrice = 500000, Amount = 0,CreateBy = "Admin", CreateDate = new DateTime(2025, 2, 1), ContractStatus = ContractStatus.Created, ContractName = "Character rental" },
-     new Contract { ContractId = "CT005", RequestId = "R005", Deposit = "50", TotalPrice = 700000, Amount = 350000, CreateBy = "Admin", CreateDate = new DateTime(2025, 5, 1), ContractStatus = ContractStatus.Created, ContractName = "Character rental" },
-     new Contract { ContractId = "CT008", RequestId = "R008", Deposit = "50", TotalPrice = 350000, Amount = 175000, CreateBy = "Admin", CreateDate = new DateTime(2025, 8, 10), ContractStatus = ContractStatus.Created, ContractName = "Character rental" },
-     new Contract { ContractId = "CT010", RequestId = "R010", Deposit = "50", TotalPrice = 200000, Amount = 100000, CreateBy = "Admin", CreateDate = new DateTime(2025, 10, 20), ContractStatus = ContractStatus.Completed, ContractName = "Character rental" },
-     new Contract { ContractId = "CT014", RequestId = "R014", Deposit = "100", TotalPrice = 600000, Amount = 0, CreateBy = "Admin", CreateDate = new DateTime(2025, 6, 25), ContractStatus = ContractStatus.Created, ContractName = "Character rental" }
+     new Contract { ContractId = "CT002", RequestId = "R002", Deposit = "100", TotalPrice = 500000, Amount = 0,CreateBy = "A002", CreateDate = new DateTime(2025, 2, 1), ContractStatus = ContractStatus.Created, ContractName = "Character rental" },
+     new Contract { ContractId = "CT005", RequestId = "R005", Deposit = "50", TotalPrice = 700000, Amount = 350000, CreateBy = "A005", CreateDate = new DateTime(2025, 5, 1), ContractStatus = ContractStatus.Created, ContractName = "Character rental" },
+     new Contract { ContractId = "CT008", RequestId = "R008", Deposit = "50", TotalPrice = 350000, Amount = 175000, CreateBy = "A008", CreateDate = new DateTime(2025, 8, 10), ContractStatus = ContractStatus.Created, ContractName = "Character rental" },
+     new Contract { ContractId = "CT010", RequestId = "R010", Deposit = "50", TotalPrice = 200000, Amount = 100000, CreateBy = "A010", CreateDate = new DateTime(2025, 10, 20), ContractStatus = ContractStatus.Completed, ContractName = "Character rental" },
+     new Contract { ContractId = "CT014", RequestId = "R014", Deposit = "100", TotalPrice = 600000, Amount = 0, CreateBy = "A014", CreateDate = new DateTime(2025, 6, 25), ContractStatus = ContractStatus.Created, ContractName = "Character rental" }
  );
             #endregion
 
@@ -1086,32 +1086,31 @@ new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015",
         RequestDateId = "RD02",
         RequestCharacterId = "RC01",
         Status = RequestDateStatus.Accept,
-        StartDate = DateTime.Parse("2025-01-11 14:30:00"),
+        StartDate = DateTime.Parse("2025-01-11 08:30:00"),
         EndDate = DateTime.Parse("2025-01-11 14:30:00"),
-    }, 
-    new RequestDate
+    }, new RequestDate
     {
         RequestDateId = "RD03",
         RequestCharacterId = "RC01",
         Status = RequestDateStatus.Accept,
-        StartDate = DateTime.Parse("2025-01-13 14:30:00"),
-        EndDate = DateTime.Parse("2025-01-13 14:30:00"),
+        StartDate = DateTime.Parse("2025-01-12 08:30:00"),
+        EndDate = DateTime.Parse("2025-01-12 14:30:00"),
     },
     new RequestDate
     {
         RequestDateId = "RD04",
         RequestCharacterId = "RC01",
         Status = RequestDateStatus.Accept,
-        StartDate = DateTime.Parse("2025-01-14 14:30:00"),
-        EndDate = DateTime.Parse("2025-01-14 14:30:00"),
+        StartDate = DateTime.Parse("2025-01-13 08:30:00"),
+        EndDate = DateTime.Parse("2025-01-13 14:30:00"),
     },
     new RequestDate
     {
         RequestDateId = "RD05",
         RequestCharacterId = "RC01",
         Status = RequestDateStatus.Accept,
-        StartDate = DateTime.Parse("2025-01-15 14:30:00"),
-        EndDate = DateTime.Parse("2025-01-15 14:30:00"),
+        StartDate = DateTime.Parse("2025-01-14 08:30:00"),
+        EndDate = DateTime.Parse("2025-01-14 14:30:00"),
     },
     new RequestDate
     {
