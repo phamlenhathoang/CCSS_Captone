@@ -1,6 +1,7 @@
 ﻿using CCSS_Repository.Entities;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Services;
+using Humanizer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -171,6 +172,21 @@ namespace CCSS_Captone.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
+
+        [HttpPatch("UpdateDepositRequest")]
+        public async Task<IActionResult> UpdateDeposit(string requestId,[FromBody] UpdateDepositDtos dtos)
+        {
+            if (string.IsNullOrEmpty(dtos.Deposit))
+            {
+                return BadRequest("Deposit value is required.");
+            }
+            if (ModelState.IsValid)
+            {
+                var result = await _services.UpdateDepositRequest(requestId, dtos);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
         }
     }
 }

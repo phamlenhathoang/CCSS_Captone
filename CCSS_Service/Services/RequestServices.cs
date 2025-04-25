@@ -26,6 +26,7 @@ namespace CCSS_Service.Services
         Task<string> UpdateStatusRequest(string requestId, RequestStatus requestStatus, string? reason);
         Task<double> TotalPriceRequest(double packagePrice, double accountCouponPrice, string startDate, string endDate, List<RequestTotalPrice> requestTotalPrices, string serviceId);
         Task<bool> CheckRequest(string requestId);
+        Task<string> UpdateDepositRequest(string requestId, UpdateDepositDtos depositDtos);
     }
     public class RequestServices : IRequestServices
     {
@@ -1275,5 +1276,24 @@ namespace CCSS_Service.Services
             }
         }
         #endregion
+
+        public async Task<string> UpdateDepositRequest(string requestId,  UpdateDepositDtos depositDtos)
+        {
+            var request = await _repository.GetRequestById(requestId);
+            if (request == null)
+            {
+                return $"Request {requestId} not found";
+            }
+            if (request.ServiceId != "S003")
+            {
+                var service = await _serviceRepository.GetService(request.ServiceId);
+                return $"This request is {service.ServiceName} not Create Event. Please try again";
+            }
+            request.Deposit = depositDtos.Deposit;
+            await _repository.UpdateRequest(request);
+            return "Update success";
+        }
     }
+
+
 }
