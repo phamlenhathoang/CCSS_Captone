@@ -491,7 +491,7 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
      new Character { CharacterId = "CH004", CharacterName = "Luffy", CategoryId = "C4", Description = "Pirate King", Price = 110000, IsActive = true, MaxHeight = 175, MinHeight = 155, MaxWeight = 70, MinWeight = 45, Quantity = 100, CreateDate = DateTime.UtcNow },
      new Character { CharacterId = "CH005", CharacterName = "Ichigo", CategoryId = "C4", Description = "Soul Reaper", Price = 130000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 100, CreateDate = DateTime.UtcNow },
 
-     new Character { CharacterId = "CH006", CharacterName = "Mario", CategoryId = "C14", Description = "Plumber hero", Price = 80000, IsActive = true, MaxHeight = 160, MinHeight = 140, MaxWeight = 70, MinWeight = 50, Quantity = 100, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH006", CharacterName = "Mario", CategoryId = "C14", Description = "Plumber hero", Price = 80000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 60, Quantity = 100, CreateDate = DateTime.UtcNow },
      new Character { CharacterId = "CH007", CharacterName = "Luigi", CategoryId = "C14", Description = "Mario’s brother", Price = 85000, IsActive = true, MaxHeight = 170, MinHeight = 150, MaxWeight = 75, MinWeight = 55, Quantity = 100, CreateDate = DateTime.UtcNow },
      new Character { CharacterId = "CH008", CharacterName = "Link", CategoryId = "C14", Description = "Hero of Hyrule", Price = 140000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 50, Quantity = 100, CreateDate = DateTime.UtcNow },
      new Character { CharacterId = "CH009", CharacterName = "Zelda", CategoryId = "C16", Description = "Hyrule princess", Price = 135000, IsActive = true, MaxHeight = 175, MinHeight = 155, MaxWeight = 70, MinWeight = 50, Quantity = 100, CreateDate = DateTime.UtcNow },
@@ -500,8 +500,8 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
      new Character { CharacterId = "CH011", CharacterName = "Cloud", CategoryId = "C13", Description = "Ex-SOLDIER", Price = 125000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 100, CreateDate = DateTime.UtcNow },
      new Character { CharacterId = "CH012", CharacterName = "Sephiroth", CategoryId = "C13", Description = "One-Winged Angel", Price = 155000, IsActive = true, MaxHeight = 190, MinHeight = 170, MaxWeight = 90, MinWeight = 60, Quantity = 100, CreateDate = DateTime.UtcNow },
      new Character { CharacterId = "CH013", CharacterName = "Kratos", CategoryId = "C8", Description = "God of War", Price = 160000, IsActive = true, MaxHeight = 195, MinHeight = 175, MaxWeight = 100, MinWeight = 70, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH014", CharacterName = "Pikachu", CategoryId = "C8", Description = "Electric Pokemon", Price = 90000, IsActive = true, MaxHeight = 50, MinHeight = 30, MaxWeight = 20, MinWeight = 10, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH015", CharacterName = "Kirby", CategoryId = "C8", Description = "Pink puffball", Price = 95000, IsActive = true, MaxHeight = 60, MinHeight = 40, MaxWeight = 25, MinWeight = 15, Quantity = 100, CreateDate = DateTime.UtcNow }
+     new Character { CharacterId = "CH014", CharacterName = "Pikachu", CategoryId = "C8", Description = "Electric Pokemon", Price = 90000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 60, Quantity = 100, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH015", CharacterName = "Kirby", CategoryId = "C8", Description = "Pink puffball", Price = 95000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 60, Quantity = 100, CreateDate = DateTime.UtcNow }
  );
             #endregion
 
