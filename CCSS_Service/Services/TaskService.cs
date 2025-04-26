@@ -354,7 +354,7 @@ namespace CCSS_Service.Services
                         if (requestCharacter.Quantity == 1)
                         {
                             requestCharacter.CosplayerId = taskRequest.CosplayerId;
-                            requestCharacter.TotalPrice = (character.Price * totalDay * requestCharacter.Quantity) + (account.SalaryIndex * totalHour);
+                            requestCharacter.TotalPrice = (character.Price * totalDay) + (account.SalaryIndex * totalHour);
 
                             bool checkUpdate = await requestCharacterRepository.UpdateRequestCharacter(requestCharacter);
                             if (!checkUpdate)
@@ -420,7 +420,7 @@ namespace CCSS_Service.Services
                     price += (double) requestCharacter1.TotalPrice;
                 }
 
-                request.Price = price + request.Package.Price - request.AccountCoupon.Coupon.Amount;
+                request.Price = price + request.Package.Price;
 
                 await requestRepository.UpdateRequest(request);
 
