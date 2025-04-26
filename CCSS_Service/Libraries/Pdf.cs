@@ -70,23 +70,24 @@ namespace CCSS_Service.Libraries
                 using (var document = new PdfDocument())
                 {
                     string htmlContent = "<style> h1, h2, h3 { text-align: center; } </style>";
-                    htmlContent += "<h2>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h2>";
-                    htmlContent += "<h3><u>Độc lập - Tự do - Hạnh phúc</u></h3>";
+                    htmlContent += "<h2>SOCIALIST REPUBLIC OF VIETNAM</h2>";
+                    htmlContent += "<h3><u>Independence - Freedom - Happiness</u></h3>";
                     DateTime now = DateTime.Now;
-                    string formattedDate = now.ToString("dd 'tháng' MM 'năm' yyyy");
-                    htmlContent += $"<p style='text-align: right; margin-right: 10px;'>TPHCM, ngày {formattedDate}</p>";
+                    string formattedDate = now.ToString("dd 'month' MM 'year' yyyy");
+                    htmlContent += $"<p style='text-align: right; margin-right: 10px;'>Ho Chi Minh City, {formattedDate}</p>";
                     htmlContent += $"<h1>{request.Service.ServiceName.ToUpper()}</h1>";
-                    htmlContent += "<p><b>BÊN A:</b> BÊN CHO THUÊ</p>";
-                    htmlContent += "<p>Tên cơ quan: Hệ thống cho thuê Cosplayer và tổ chức sự kiện</p>";
-                    htmlContent += "<p>Địa chỉ: TPHCM</p>";
-                    htmlContent += "<p>Ông (Bà): Trương Tuấn Anh</p>";
-                    htmlContent += "<p>Chức vụ: Giám đốc</p>";
-                    htmlContent += "<p><b>BÊN B:</b> BÊN THUÊ</p>";
-                    htmlContent += $"<p>Họ và tên: {request.Account.Name.ToUpper()}</p>";
-                    htmlContent += $"<p>Địa chỉ: {request.Location}</p>";
-                    htmlContent += $"<p>Số điện thoại: {request.Account.Phone}</p>";
+                    htmlContent += "<p><b>PARTY A:</b> THE LESSOR</p>";
+                    htmlContent += "<p>Organization name: Cosplayer Rental and Event Organization System</p>";
+                    htmlContent += "<p>Address: Ho Chi Minh City</p>";
+                    htmlContent += "<p>Representative: Truong Tuan Anh</p>";
+                    htmlContent += "<p>Position: Director</p>";
+                    htmlContent += "<p><b>PARTY B:</b> THE LESSEE</p>";
+                    htmlContent += $"<p>Full name: {request.Account.Name.ToUpper()}</p>";
+                    htmlContent += $"<p>Address: {request.Location}</p>";
+                    htmlContent += $"<p>Phone number: {request.Account.Phone}</p>";
 
-                    htmlContent += $"<p><i>Xét yêu cầu của bên B. Hai bên thỏa thuận ký hợp đồng {request.Service.ServiceName.ToLower()}. Hợp đồng thuê sẽ bao gồm các nội dung quan trọng sau:</i></p>";
+                    htmlContent += $"<p><i>Considering the request from Party B, both parties agree to sign the contract for {request.Service.ServiceName.ToLower()}. The rental agreement will include the following important contents:</i></p>";
+
 
                     // Thêm CSS để làm đẹp bảng
 
@@ -125,14 +126,14 @@ namespace CCSS_Service.Libraries
 
                         // Bắt đầu bảng
                         htmlContent += @"<table>
-            <tr>
-                <th>STT</th>
-                <th>Tên trang phục, cosplayer</th>
-                <th>Đơn vị tính</th>
-                <th>Số lượng</th>
-                <th>Đơn giá</th>
-                <th>Thành tiền</th>
-            </tr>";
+                <tr>
+                    <th>No.</th>
+                    <th>Costume/Cosplayer Name</th>
+                    <th>Unit</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total Price</th>
+                </tr>";
                         foreach (RequestCharacter requestCharacter in request.RequestCharacters)
                         {
                             Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
@@ -140,7 +141,7 @@ namespace CCSS_Service.Libraries
                             htmlContent += $@"<tr>
                         <td>{index}</td>
                         <td>{character.CharacterName}</td>
-                        <td>Bộ</td>
+                        <td>Set</td>
                         <td>{requestCharacter.Quantity}</td>
                         <td>{character.Price}</td>
                         <td>{(double)requestCharacter.Quantity * character.Price * 5}</td>
@@ -271,25 +272,21 @@ namespace CCSS_Service.Libraries
                         double amount = accountCoupon?.Coupon?.Amount ?? 0.0;
                         string formattedAmount = amount.ToString("0.##");
 
-                        htmlContent += $@"<tr>
-                    <td colspan='5' class='right-align'>Coupon</td>
-                    <td>{formattedAmount}</td>
-                </tr>";
-
                         // Tính tổng số tiền
                         double totalAmount = await CalculateTotalAmount(request, formattedAmount, packagePrice);
 
                         htmlContent += $@"<tr>
-                    <td colspan='5' class='right-align'>Tổng</td>
+                    <td colspan='5' class='right-align'>Total</td>
                     <td>{totalAmount}</td>
                 </tr>";
 
                         htmlContent += "</table>";
                     }
 
-                    if(request.ServiceId != "S001")
+                    if (request.ServiceId != "S001")
                     {
-                        htmlContent += "<p>Hợp đồng cho thuê vào các khung giờ.</p>";
+                        htmlContent += "<p>The rental contract is based on specific time slots.</p>";
+
                         int c = 0;
                         foreach (RequestCharacter requestCharacter in request.RequestCharacters)
                         {
@@ -298,8 +295,9 @@ namespace CCSS_Service.Libraries
                                 List<RequestDate> requestDates = await requestDatesRepository.GetListRequestDateByRequestCharacterId(requestCharacter.RequestCharacterId);
                                 foreach (RequestDate requestDate in requestDates)
                                 {
-                                    string formattedStartDate = requestDate.StartDate.ToString("hh:mm tt dd 'tháng' MM 'năm' yyyy");
-                                    string formattedEndDate = requestDate.EndDate.ToString("hh:mm tt dd 'tháng' MM 'năm' yyyy");
+                                    string formattedStartDate = requestDate.StartDate.ToString("hh:mm tt dd 'month' MM 'year' yyyy");
+                                    string formattedEndDate = requestDate.EndDate.ToString("hh:mm tt dd 'month' MM 'year' yyyy");
+
                                     htmlContent += $"<p>{formattedStartDate}<p>";
                                     htmlContent += $"<p>{formattedEndDate}<p>";
                                 }
@@ -309,28 +307,29 @@ namespace CCSS_Service.Libraries
                         }
                     }
 
-                    // Thông tin hợp đồng
-                    htmlContent += "<h3><strong>Điều khoản thuê Character.</strong></h3>";
-                    htmlContent += "<p>Bên thuê có quyền sử dụng trang phục, đạo cụ theo danh sách thỏa thuận trong hợp đồng.</p>";
-                    htmlContent += "<p>Không được sử dụng trang phục, đạo cụ vào mục đích trái pháp luật hoặc gây ảnh hưởng tiêu cực đến hình ảnh thương hiệu.</p>";
-                    htmlContent += "<p>Bên thuê có trách nhiệm giữ gìn trang phục, đạo cụ trong tình trạng tốt.</p>";
-                    htmlContent += "<p>Không được cắt, xé, làm bẩn hoặc sửa đổi kết cấu trang phục nếu không có sự đồng ý của bên cho thuê.</p>";
-                    htmlContent += "<p>Nếu trang phục, đạo cụ bị hư hỏng, mất mát, bên thuê phải bồi thường theo mức giá quy định trong hợp đồng.</p>";
-                    htmlContent += "<p>Trong trường hợp hư hỏng nhỏ, bên thuê phải chịu chi phí sửa chữa.</p>";
-                    htmlContent += "<p>Khách hàng phải đặt cọc trước một khoản tiền tương ứng với chi phí thiết kế của trang phục trước khi nhận hàng.</p>";
-                    htmlContent += "<p>Tiền thuê trang phục được tính theo số ngày thuê và được trừ vào tiền cọc khi khách hàng hoàn trả trang phục.</p>";
-                    htmlContent += "<p>Khi khách hàng hoàn trả trang phục, bên cho thuê sẽ kiểm tra tình trạng sản phẩm. Nếu trang phục không có hư hại, tiền cọc sẽ được hoàn lại sau khi trừ đi tiền thuê. Nếu trang phục bị hư hại, chi phí sửa chữa sẽ được trừ vào tiền cọc.</p>";
-                    htmlContent += "<p>Nếu tổng số tiền thuê và chi phí sửa chữa vượt quá số tiền cọc, khách hàng có trách nhiệm thanh toán phần chênh lệch trước khi hoàn tất hợp đồng thuê.</p>";
+                    // Contract Information
+                    htmlContent += "<h3><strong>Character Rental Terms</strong></h3>";
+                    htmlContent += "<p>The lessee has the right to use costumes and props as listed in the rental agreement.</p>";
+                    htmlContent += "<p>Costumes and props must not be used for illegal purposes or in any way that may negatively affect the brand image.</p>";
+                    htmlContent += "<p>The lessee is responsible for keeping the costumes and props in good condition.</p>";
+                    htmlContent += "<p>Costumes must not be cut, torn, stained, or altered without the consent of the lessor.</p>";
+                    htmlContent += "<p>If costumes or props are damaged or lost, the lessee must compensate according to the rates specified in the contract.</p>";
+                    htmlContent += "<p>For minor damages, the lessee is responsible for repair costs.</p>";
+                    htmlContent += "<p>The customer must place a deposit equivalent to the costume design cost before receiving the items.</p>";
+                    htmlContent += "<p>The rental fee is calculated based on the number of rental days and will be deducted from the deposit upon return.</p>";
+                    htmlContent += "<p>When the customer returns the costume, the lessor will inspect the condition. If there is no damage, the deposit will be refunded after deducting the rental fee. If there is damage, repair costs will be deducted from the deposit.</p>";
+                    htmlContent += "<p>If the total rental and repair costs exceed the deposit, the customer is responsible for paying the difference before the contract is concluded.</p>";
 
-                    htmlContent += "<h3><strong>Điều khoản thuê Cosplayer</strong></h3>";
-                    htmlContent += "<p>Cosplayer sẽ hóa thân vào nhân vật theo yêu cầu của bên thuê.</p>";
-                    htmlContent += "<p>Cosplayer sẽ tham gia sự kiện, trình diễn, giao lưu hoặc chụp ảnh theo lịch trình đã thỏa thuận.</p>";
-                    htmlContent += "<p>Cosplayer có quyền từ chối thực hiện các yêu cầu vi phạm đạo đức, pháp luật hoặc ảnh hưởng đến hình ảnh cá nhân.</p>";
-                    htmlContent += "<p>Cosplayer phải tuân thủ trang phục, phong cách biểu diễn đúng theo yêu cầu đã cam kết.</p>";
-                    htmlContent += "<p>Các chi phí phát sinh như đi lại, ăn uống, lưu trú (nếu có) sẽ do bên thuê chi trả.</p>";
-                    htmlContent += "<h3><strong>Điều khoản ký hợp đồng</strong></h3>";
-                    htmlContent += "<p>Thanh toán theo mức giá đã thỏa thuận trong hợp đồng.</p>";
-                    htmlContent += $"<p>Thanh toán trước tổng chi phí khi thỏa thuận. Thanh toán phần còn lại khi sự kiện kết thúc</p>";
+                    htmlContent += "<h3><strong>Cosplayer Rental Terms</strong></h3>";
+                    htmlContent += "<p>The cosplayer will portray the character as requested by the lessee.</p>";
+                    htmlContent += "<p>The cosplayer will participate in events, performances, meet-and-greet sessions, or photoshoots as per the agreed schedule.</p>";
+                    htmlContent += "<p>The cosplayer has the right to refuse any requests that violate ethics, laws, or personal image.</p>";
+                    htmlContent += "<p>The cosplayer must follow the costume and performance style as committed.</p>";
+                    htmlContent += "<p>Additional expenses such as transportation, meals, and accommodation (if any) shall be covered by the lessee.</p>";
+
+                    htmlContent += "<h3><strong>Contract Agreement Terms</strong></h3>";
+                    htmlContent += "<p>Payment shall be made according to the agreed rates in the contract.</p>";
+                    htmlContent += "<p>Full payment must be made before the event begins. The remaining balance shall be paid after the event concludes.</p>";
 
                     PdfGenerator.AddPdfPages(document, htmlContent, PageSize.A4);
 
