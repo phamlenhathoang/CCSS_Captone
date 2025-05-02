@@ -1,4 +1,5 @@
 ﻿using CCSS_Repository.Entities;
+using CCSS_Service.Model.Requests;
 using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +60,28 @@ namespace CCSS_Captone.Controllers
             }
             var result = await _characterServices.CheckRequestChracter(requestId);
             return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddRequestCharacter(AddCharacterInRequest characterInRequest)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _characterServices.AddCharacterInRequest(characterInRequest);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteRequestCharacter(string requestCharacterId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _characterServices.DeleteCharacterInRequest(requestCharacterId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
         }
     }
 }
