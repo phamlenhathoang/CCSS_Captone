@@ -107,18 +107,19 @@ namespace CCSS_Captone.Controllers
         [Authorize(Roles = "Manager")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("UpdateEvent/{eventId}")]
-        public async Task<IActionResult> UpdateEvent(string eventId, [FromBody] UpdateEventRequest eventRequest)
+        public async Task<IActionResult> UpdateEvent([FromBody] UpdateEventRequest ImageUrl)
         {
-            if (eventRequest == null)
-                return BadRequest("Invalid request: Event data is null");
+            //if (eventJson == null)
+            //    return BadRequest("Invalid request: Event data is null");
 
             try
             {
-                var result = await _eventService.UpdateEvent(eventId, eventRequest);
-                if (result.Contains("Success"))
-                    return Ok(result);
+                //var eventRequest = JsonConvert.DeserializeObject<UpdateEventRequest>(eventJson);
+                //var result = await _eventService.UpdateEvent(eventId, eventRequest, ImageUrl);
+                //if (result.Contains("Success"))
+                    return Ok("OK");
 
-                return NotFound(result);
+                return NotFound("ok");
             }
             catch (Exception ex)
             {
