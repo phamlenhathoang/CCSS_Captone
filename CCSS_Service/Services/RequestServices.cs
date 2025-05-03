@@ -638,7 +638,7 @@ namespace CCSS_Service.Services
                     if(r.Status != RequestCharacterStatus.Accept)
                     {
                         await transaction.RollbackAsync();
-                        return $"This people {string.Join(", ", pendingRequestCharacter.Select(r => r.CosplayerId.ToString()))} not accept.";
+                        return $"There are still people not accept.";
                     }
                 }
                 if (requestStatus == RequestStatus.Browsed)
