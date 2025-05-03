@@ -632,7 +632,15 @@ namespace CCSS_Service.Services
                     await transaction.RollbackAsync();
                     return "Request not found";
                 }
-
+                foreach(var r in listRequestCharacters)
+                {
+                    var pendingRequestCharacter = await _requestCharacterRepository.GetListRequestCharacterPending(requestId);
+                    if(r.Status != RequestCharacterStatus.Accept)
+                    {
+                        await transaction.RollbackAsync();
+                        return $"This people {string.Join(", ", pendingRequestCharacter.Select(r => r.CosplayerId.ToString()))} not accept.";
+                    }
+                }
                 if (requestStatus == RequestStatus.Browsed)
                 {
                     foreach (var c in listRequestCharacters)
@@ -662,7 +670,7 @@ namespace CCSS_Service.Services
                 await _repository.UpdateRequest(request);
 
                 await transaction.CommitAsync();
-                return "Status is update success";
+                return "Status request update success";
             }
         }
         #endregion

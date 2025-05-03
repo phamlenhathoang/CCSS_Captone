@@ -25,6 +25,7 @@ namespace CCSS_Repository.Repositories
         Task DeleteListCharacterInRequest(List<RequestCharacter> requestCharacterInRequest);
         Task<RequestCharacter> GetRequestCharacterCosplayerId(string requestId, string characterId, string cosplayerId);
         Task<List<RequestCharacter>> GetRequestCharacterByCosplayer(string cosplayerId);
+        Task<List<RequestCharacter>> GetListRequestCharacterPending(string requestId);
     }
 
 
@@ -65,6 +66,11 @@ namespace CCSS_Repository.Repositories
         public async Task<List<RequestCharacter>> GetListCharacterByRequest(string requestId)
         {
             return await _context.RequestsCharacters.Where(sc => sc.RequestId.Equals(requestId)).ToListAsync();
+        }
+
+        public async Task<List<RequestCharacter>> GetListRequestCharacterPending(string requestId)
+        {
+            return await _context.RequestsCharacters.Where(sc => sc.RequestId.Equals(requestId) && sc.Status == RequestCharacterStatus.Pending).ToListAsync();
         }
 
         public async Task<bool> AddListRequestCharacter(List<RequestCharacter> requestCharacters)
