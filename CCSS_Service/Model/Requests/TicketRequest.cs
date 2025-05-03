@@ -10,7 +10,7 @@ namespace CCSS_Service.Model.Requests
 {
     public class TicketRequest
     {
-        //public string TicketId { get; set; } = Guid.NewGuid().ToString();
+        public int TicketId { get; set; }
 
 
         public int? Quantity { get; set; }

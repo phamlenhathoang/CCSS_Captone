@@ -364,34 +364,55 @@ namespace CCSS_Service.Services
             }
             if (eventRequest.Ticket != null && eventRequest.Ticket.Any())
             {
-                await _repository.DeleteTicketsByEventId(existingEvent.EventId);
-
                 foreach (var ticketRequest in eventRequest.Ticket)
                 {
-                    if (ticketRequest.Quantity > 0 && ticketRequest.Price > 0)
+                    var existingTicket = existingEvent.Ticket.FirstOrDefault(t => t.TicketId == ticketRequest.TicketId);
+                    if (existingTicket != null)
                     {
-                        var newTicket = new Ticket
+                        // Update ticket cũ
+                        existingTicket.Quantity = ticketRequest.Quantity;
+                        existingTicket.Price = ticketRequest.Price;
+                        existingTicket.Description = ticketRequest.Description;
+                        existingTicket.ticketStatus = ticketStatus.valid;
+                    }
+                    else
+                    {
+                        // Add ticket mới nếu chưa có
+                        if (ticketRequest.Quantity > 0 && ticketRequest.Price > 0)
                         {
-                            EventId = existingEvent.EventId,
-                            Quantity = ticketRequest.Quantity,
-                            Price = ticketRequest.Price,
-                            Description = ticketRequest.Description,
-                            ticketStatus = ticketStatus.valid,
-                        };
-
-                        existingEvent.Ticket.Add(newTicket);
+                            var newTicket = new Ticket
+                            {
+                                EventId = existingEvent.EventId,
+                                Quantity = ticketRequest.Quantity,
+                                Price = ticketRequest.Price,
+                                Description = ticketRequest.Description,
+                                ticketStatus = ticketStatus.valid,
+                            };
+                            existingEvent.Ticket.Add(newTicket);
+                        }
                     }
                 }
             }
             bool isCharacterUpdated = eventRequest.EventCharacterRequests != null && eventRequest.EventCharacterRequests.Any();
 
-            // Nếu đổi ngày hoặc đổi EventCharacter thì xóa Task và EventCharacter cũ
+            // Nếu đổi ngày hoặc đổi EventCharacter thì xóa T~ask và EventCharacter cũ
             if ( isCharacterUpdated)
             {
                 // Xóa TaskEvent liên quan
                 await _taskService.DeleteAllTaskByEventId(existingEvent.EventId);
 
                 // Xóa EventCharacter liên quan
+                var oldEventCharacters = await _repository.GetEventCharactersByEventId(existingEvent.EventId);
+
+                foreach (var oldEC in oldEventCharacters)
+                {
+                    var character = await _characterRepository.GetCharacter(oldEC.CharacterId);
+                    if (character != null)
+                    {
+                        character.Quantity += 1;
+                        await _characterRepository.UpdateCharacter(character);
+                    }
+                }
                 await _repository.DeleteEventCharactersByEventId(existingEvent.EventId);
 
                 // Nếu có EventCharacter mới thì tạo lại
@@ -442,13 +463,13 @@ namespace CCSS_Service.Services
                     existingEvent.EventCharacters = eventCharacters;
 
                     // Tạo TaskEvent cho từng EventCharacter
-                    var taskRequests = eventRequest.EventCharacterRequests.Select((ec, index) => new AddTaskEventRequest
-                    {
-                        AccountId = ec.CosplayerId,
-                        EventCharacterId = eventCharacters[index].EventCharacterId
-                    }).ToList();
+                    //var taskRequests = eventRequest.EventCharacterRequests.Select((ec, index) => new AddTaskEventRequest
+                    //{
+                    //    AccountId = ec.CosplayerId,
+                    //    EventCharacterId = eventCharacters[index].EventCharacterId
+                    //}).ToList();
 
-                    await _taskService.AddTask(taskRequests, null);
+                    //await _taskService.AddTask(taskRequests, null);
                 }
             }
             if (eventRequest.EventActivityRequests != null)
@@ -512,7 +533,25 @@ namespace CCSS_Service.Services
             existingEvent.Description = eventRequest.Description;
             existingEvent.UpdateDate = DateTime.Now;
 
-            await _repository.UpdateEvent(existingEvent);
+            bool isUpdated = await _repository.UpdateEvent(existingEvent);
+            if (!isUpdated)
+            {
+                return "Failed to update event to database";
+            }
+            if (eventRequest.EventCharacterRequests != null && eventRequest.EventCharacterRequests.Any())
+            {
+
+                
+                var eventCharactersList = existingEvent.EventCharacters.ToList();
+                var taskEventRequests = eventRequest.EventCharacterRequests.Select((ec, index) => new AddTaskEventRequest
+                {
+                    AccountId = ec.CosplayerId,
+                    EventCharacterId = eventCharactersList[index].EventCharacterId
+                }).ToList();
+
+                await _taskService.AddTask(taskEventRequests, null);
+
+            }
 
             return "Cập nhật sự kiện thành công";
         }
