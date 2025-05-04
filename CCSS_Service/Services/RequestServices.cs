@@ -623,7 +623,6 @@ namespace CCSS_Service.Services
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-
                 var request = await _repository.GetRequestById(requestId);
                 var listRequestCharacters = await _requestCharacterRepository.GetListCharacterByRequest(requestId);
 
@@ -632,13 +631,19 @@ namespace CCSS_Service.Services
                     await transaction.RollbackAsync();
                     return "Request not found";
                 }
-                foreach(var r in listRequestCharacters)
+                if (request.ServiceId == "S002")
                 {
-                    var pendingRequestCharacter = await _requestCharacterRepository.GetListRequestCharacterPending(requestId);
-                    if(r.Status != RequestCharacterStatus.Accept)
+                    foreach (var r in listRequestCharacters)
                     {
-                        await transaction.RollbackAsync();
-                        return $"There are still people not accept.";
+                        if (r.CosplayerId != null)
+                        {
+                            var pendingRequestCharacter = await _requestCharacterRepository.GetListRequestCharacterPending(requestId);
+                            if (r.Status != RequestCharacterStatus.Accept)
+                            {
+                                await transaction.RollbackAsync();
+                                return $"There are still people not accept.";
+                            }
+                        }
                     }
                 }
                 if (requestStatus == RequestStatus.Browsed)
@@ -1285,7 +1290,7 @@ namespace CCSS_Service.Services
         }
         #endregion
 
-        public async Task<string> UpdateDepositRequest(string requestId,  UpdateDepositDtos depositDtos)
+        public async Task<string> UpdateDepositRequest(string requestId, UpdateDepositDtos depositDtos)
         {
             var request = await _repository.GetRequestById(requestId);
             if (request == null)
