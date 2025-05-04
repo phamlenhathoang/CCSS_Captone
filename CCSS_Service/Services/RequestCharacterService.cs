@@ -71,6 +71,10 @@ namespace CCSS_Service.Services
 
                     return "This request has a requestCharacter busy, need to wait customer change requestCharacter";
                 }
+                if(character.Status == RequestCharacterStatus.Pending)
+                {
+                    return "There are still people not accept. Please try again";
+                }
             }
             return "This request can change status";
 
