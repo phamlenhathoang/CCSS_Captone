@@ -631,20 +631,20 @@ namespace CCSS_Service.Services
                     await transaction.RollbackAsync();
                     return "Request not found";
                 }
-                if (request.ServiceId == "S002")
-                {
-                    foreach (var r in listRequestCharacters)
-                    {
-                        if (r.CosplayerId != null)
-                        {
-                            var pendingRequestCharacter = await _requestCharacterRepository.GetListRequestCharacterPending(requestId);
-                            if (r.Status != RequestCharacterStatus.Accept)
-                            {
-                                await transaction.RollbackAsync();
-                                return $"There are still people not accept.";
-                            }
-                        }
-                    }
+                //if (request.ServiceId == "S002")
+                //{
+                //    foreach (var r in listRequestCharacters)
+                //    {
+                //        if (r.CosplayerId != null)
+                //        {
+                //            var pendingRequestCharacter = await _requestCharacterRepository.GetListRequestCharacterPending(requestId);
+                //            if (r.Status != RequestCharacterStatus.Accept)
+                //            {
+                //                await transaction.RollbackAsync();
+                //                return $"There are still people not accept.";
+                //            }
+                //        }
+                //    }
                 }
                 if (requestStatus == RequestStatus.Browsed)
                 {
