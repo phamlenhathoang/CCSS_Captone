@@ -645,7 +645,7 @@ namespace CCSS_Service.Services
                 //            }
                 //        }
                 //    }
-                }
+                //}
                 if (requestStatus == RequestStatus.Browsed)
                 {
                     foreach (var c in listRequestCharacters)
