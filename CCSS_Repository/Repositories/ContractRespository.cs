@@ -34,7 +34,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Contract> GetContractById(string id)
         {
-            return await _context.Contracts.Include(c => c.ContractCharacters).Include(c => c.Request).ThenInclude(rc => rc.RequestCharacters).ThenInclude(rc => rc.RequestDates).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
+            return await _context.Contracts.Include(c => c.ContractCharacters).Include(c => c.Request).ThenInclude(rc => rc.RequestCharacters).ThenInclude(rc => rc.RequestDates).Include(c => c.ContractRefund).Include(c => c.ContractImages).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
         }
 
         public async Task<bool> AddContract(Contract contract)
@@ -56,7 +56,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Contract>> GetContracts()
         {
-            return await _context.Contracts.Include(r => r.Request).OrderByDescending(c => c.CreateDate).ToListAsync();
+            return await _context.Contracts.Include(r => r.Request).Include(c => c.ContractCharacters).Include(c => c.ContractRefund).OrderByDescending(c => c.CreateDate).ToListAsync();
         }
 
         public async Task<List<Contract>> GetAllContractByAccountId(string accountId)

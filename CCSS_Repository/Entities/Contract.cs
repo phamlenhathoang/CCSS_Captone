@@ -46,14 +46,15 @@ namespace CCSS_Repository.Entities
         Completed,
         Feedbacked,
         Expired,
+        RefundOverdue
     }
 
     public enum DeliveryStatus
     {
         Preparing,
         Delivering,
-        Delevered,
-        Completed,
+        Received,
+        Refund,
         Cancel,
     }
 }
