@@ -13,6 +13,7 @@ namespace CCSS_Repository.Entities
     {
         [Key]
         public string CouponId { get; set; } = Guid.NewGuid().ToString();
+        public string CouponName { get; set; }
         public string Condition { get; set; }
         public float Percent {  get; set; }
         public double Amount { get; set; }
