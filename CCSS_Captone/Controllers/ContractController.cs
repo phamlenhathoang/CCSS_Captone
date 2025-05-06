@@ -92,6 +92,17 @@ namespace CCSS_Captone.Controllers
             }
             return BadRequest(ModelState);
         }
+        
+        [HttpPut("UpdateDeliveryContract")]
+        public async Task<IActionResult> UpdateDeliveryContract(DeliveryContractRequest deliveryContractRequest)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.UpdateDeliveryContract(deliveryContractRequest);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
 
         //[HttpPut("Status")]
         //public async Task<IActionResult> UpdateStatusContract(string contractId, ContractStatus contractStatus)

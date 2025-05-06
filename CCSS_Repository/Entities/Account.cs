@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -30,6 +31,7 @@ namespace CCSS_Repository.Entities
         public double? AverageStar { get; set; }
         public double? SalaryIndex { get; set; }
         public string? GoogleId { get; set; }
+        public bool? IsLock {  get; set; }
 
         [ForeignKey("RoleId")]
         public string RoleId { get; set; }

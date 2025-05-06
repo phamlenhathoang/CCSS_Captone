@@ -98,6 +98,13 @@ namespace CCSS_Captone.Controllers
             var account = await accountService.GetAccountByCharacterAndDate(checkAccountRequest.CharacterId, checkAccountRequest.Dates, checkAccountRequest.AccountId);
             return Ok(account);
         }
+        
+        [HttpPost("GetAccountByCharacterAndDateForCreateEvent")]
+        public async Task<IActionResult> GetAccountByCharacterAndDateForCreateEvent(CheckAccountRequest checkAccountRequest)
+        {
+            var account = await accountService.GetAccountByCharacterAndDateForCreateEvent(checkAccountRequest.CharacterId, checkAccountRequest.Dates, checkAccountRequest.AccountId);
+            return Ok(account);
+        }
 
         [HttpGet("characterName/{characterName}")]
         public async Task<IActionResult> ViewAllAccountByCharacterName(string characterName, string? start, string? end)

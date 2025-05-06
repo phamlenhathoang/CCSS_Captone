@@ -308,8 +308,6 @@ namespace CCSS_Service.Services
                     throw new Exception($"Service in this request {request.RequestId} must be S003");
                 }
 
-                //await requestCharacterRepository.DeleteListCharacterInRequest(await requestCharacterRepository.GetListCharacterByRequest(request.RequestId));
-
                 foreach (var taskRequest in contractCharacters)
                 {
                     if (taskRequest.CosplayerId != null)
@@ -574,6 +572,7 @@ namespace CCSS_Service.Services
                     if (task.Status.ToString().ToLower().Equals(TaskStatus.Assignment.ToString().ToLower()))
                     {
                         task.Status = TaskStatus.Progressing;
+                        task.UpdateDate = DateTime.Now; 
                     }
                     else
                     {
@@ -585,6 +584,7 @@ namespace CCSS_Service.Services
                     if (task.Status.ToString().ToLower().Equals(TaskStatus.Progressing.ToString().ToLower()))
                     {
                         task.Status = TaskStatus.Completed;
+                        task.UpdateDate = DateTime.Now;
                     }
                     else
                     {
@@ -769,6 +769,7 @@ namespace CCSS_Service.Services
                             foreach (var task in tasks)
                             {
                                 task.Status = TaskStatus.Completed;
+                                task.UpdateDate = DateTime.Now;
                                 bool result = await taskRepository.UpdateTask(task);
                                 if (!result)
                                 {
@@ -802,6 +803,7 @@ namespace CCSS_Service.Services
                     if (task.Status.ToString().ToLower().Equals(TaskStatus.Assignment.ToString().ToLower()))
                     {
                         task.Status = TaskStatus.Progressing;
+                        task.UpdateDate = DateTime.Now;
                     }
                     else
                     {
@@ -813,6 +815,7 @@ namespace CCSS_Service.Services
                     if (task.Status.ToString().ToLower().Equals(TaskStatus.Progressing.ToString().ToLower()))
                     {
                         task.Status = TaskStatus.Completed;
+                        task.UpdateDate = DateTime.Now;
                     }
                     else
                     {

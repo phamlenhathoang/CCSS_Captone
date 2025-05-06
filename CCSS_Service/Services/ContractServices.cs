@@ -21,6 +21,7 @@ using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using Contract = CCSS_Repository.Entities.Contract;
 using Request = CCSS_Repository.Entities.Request;
 using Task = System.Threading.Tasks.Task;
+using Type = CCSS_Repository.Entities.Type;
 
 namespace CCSS_Service.Services
 {
@@ -41,7 +42,7 @@ namespace CCSS_Service.Services
         Task<ContractResponse> GetContractById(string contractId);
         Task<List<ContractResponse>> GetContractByAccountId(string accountId);
         Task<List<RequestInContractResponse>> GetRequestInContractByAccountId(string accountId);
-
+        Task<bool> UpdateDeliveryContract(DeliveryContractRequest deliveryContractRequest);
     }
     public class ContractServices : IContractServices
     {
@@ -63,8 +64,10 @@ namespace CCSS_Service.Services
         private readonly string _projectId = "miracles-ef238";
         private readonly string _bucketName = "miracles-ef238.appspot.com";
         private readonly ITaskService taskService;
-
-        public ContractServices(IMapper mapper, IPackageRepository packageRepository, IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository, IRequestCharacterRepository requestCharacterRepository, ITaskService taskService)
+        private readonly IContractImageRepository contractImageRepository;
+        private readonly IContractRefundRepository contractRefundRepository;
+        private readonly ITaskRepository taskRepository;
+        public ContractServices(IMapper mapper, IPackageRepository packageRepository, IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository, IRequestCharacterRepository requestCharacterRepository, ITaskService taskService, IContractImageRepository contractImageRepository, IContractRefundRepository contractRefundRepository, ITaskRepository taskRepository)
         {
             this._contractRespository = _contractRespository;
             _requestCharacterRepository = requestCharacterRepository;
@@ -82,7 +85,9 @@ namespace CCSS_Service.Services
             this.packageRepository = packageRepository;
             this.mapper = mapper;
             this.taskService = taskService;
-            //this.transactionRepository = transactionRepository; 
+            this.contractImageRepository = contractImageRepository;
+            this.contractRefundRepository = contractRefundRepository;
+            this.taskRepository = taskRepository;
         }
 
         public async Task<List<RequestInContractResponse>> GetRequestInContractByAccountId(string accountId)
@@ -168,7 +173,6 @@ namespace CCSS_Service.Services
                 {
                     Deposit = deposit.ToString(),
                     TotalPrice = request.Price,
-                    
                     RequestId = requestId,
                     CreateBy = request.AccountId,
                     ContractId = Guid.NewGuid().ToString(),
@@ -245,10 +249,10 @@ namespace CCSS_Service.Services
                 foreach (var contract in contracts)
                 {
                     Account customer = await _accountRepository.GetAccountByAccountId(contract.CreateBy);
-if(customer == null)
-{
-    throw new Exception("Account does not exist");
-}
+                    if (customer == null)
+                    {
+                        throw new Exception("Account does not exist");
+                    }
 
                     ContractResponse crsItem = new ContractResponse()
                     {
@@ -371,11 +375,11 @@ if(customer == null)
                 foreach (var contract in contracts)
                 {
                     Account customer = await _accountRepository.GetAccountByAccountId(contract.CreateBy);
-                    if(customer == null)
+                    if (customer == null)
                     {
                         throw new Exception("Account does not exist");
                     }
-                    
+
                     ContractResponse crsItem = new ContractResponse()
                     {
                         ContractId = contract.ContractId,
@@ -611,7 +615,7 @@ if(customer == null)
                     throw new Exception("Request does not exist");
                 }
 
-                if(contract.Request.RequestCharacters == null)
+                if (contract.Request.RequestCharacters == null)
                 {
                     throw new Exception("RequestCharacter does not exist");
                 }
@@ -638,8 +642,9 @@ if(customer == null)
                     if (contract.ContractStatus == ContractStatus.Created)
                     {
                         contract.ContractStatus = ContractStatus.Deposited;
+                        contract.DeliveryStatus = DeliveryStatus.Preparing;
 
-                        foreach(RequestCharacter requestCharacter in contract.Request.RequestCharacters)
+                        foreach (RequestCharacter requestCharacter in contract.Request.RequestCharacters)
                         {
                             Character character = await _characterRepository.GetCharacter(requestCharacter.CharacterId);
 
@@ -672,12 +677,12 @@ if(customer == null)
                             contract.ContractStatus = ContractStatus.FinalSettlement;
                             contract.Amount = (double)contract.Amount - (double)price;
 
-                            if(contract.ContractCharacters == null)
+                            if (contract.ContractCharacters == null)
                             {
                                 throw new Exception("ContractCharacter does not exist");
                             }
 
-                            foreach(ContractCharacter contractCharacter in contract.ContractCharacters)
+                            foreach (ContractCharacter contractCharacter in contract.ContractCharacters)
                             {
                                 Character character = await _characterRepository.GetCharacter(contractCharacter.CharacterId);
 
@@ -707,16 +712,62 @@ if(customer == null)
                         throw new Exception("Can not update contract status");
                     }
                 }
-                if (status.ToUpper() == ContractStatus.Completed.ToString().ToUpper())
+
+                if(status.ToUpper() == ContractStatus.Refund.ToString().ToUpper())
                 {
-                    if (contract.ContractStatus == ContractStatus.FinalSettlement)
+                    if (contract.Request.ServiceId == "S001")
                     {
-                        contract.ContractStatus = ContractStatus.Completed;
+                        if(contract.ContractStatus == ContractStatus.Deposited)
+                        {
+                            contract.ContractStatus = ContractStatus.Refund;
+                        }
+                        else
+                        {
+                            throw new Exception("Can not update contract status");
+                        }
                     }
                     else
                     {
-                        //await transaction.RollbackAsync();
-                        throw new Exception("Can not update contract status");
+                        throw new Exception("The service of this contract must be S001");
+                    }
+                }
+
+                if (status.ToUpper() == ContractStatus.Completed.ToString().ToUpper())
+                {
+                    if(contract.Request.ServiceId != "S001")
+                    {
+                        if (contract.ContractStatus == ContractStatus.FinalSettlement)
+                        {
+                            foreach (ContractCharacter contractCharacter in contract.ContractCharacters)
+                            {
+                                List<CCSS_Repository.Entities.Task> tasks = await taskRepository.GetTaskByContractCharacterId(contractCharacter.ContractCharacterId);
+                                foreach (CCSS_Repository.Entities.Task task in tasks)
+                                {
+                                    if (task.Status != CCSS_Repository.Entities.TaskStatus.Completed)
+                                    {
+                                        throw new Exception("Can not update status contract because status task of contract must be completed");
+                                    }
+                                }
+                            }
+                            contract.ContractStatus = ContractStatus.Completed;
+                        }
+                        else
+                        {
+                            //await transaction.RollbackAsync();
+                            throw new Exception("Can not update contract status");
+                        }
+                    }
+                    else
+                    {
+                        if (contract.ContractStatus == ContractStatus.Refund)
+                        {
+                            contract.ContractStatus = ContractStatus.Completed;
+                        }
+                        else
+                        {
+                            //await transaction.RollbackAsync();
+                            throw new Exception("Can not update contract status");
+                        }
                     }
                 }
                 bool result = await _contractRespository.UpdateContract(contract);
@@ -774,6 +825,191 @@ if(customer == null)
                 bool result = await notificationRepository.AddNotification(notification) ? true : false;
 
                 return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> UpdateDeliveryContract(DeliveryContractRequest deliveryContractRequest)
+        {
+            try
+            {
+                Contract contract = await _contractRespository.GetContractById(deliveryContractRequest.ContractId);
+                List<ContractImage> images = new List<ContractImage>();
+
+                if (contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
+
+                if (contract.Request.ServiceId != "S001")
+                {
+                    throw new Exception("Request of this contract must be SOO1");
+                }
+
+                if (contract.ContractStatus != ContractStatus.Deposited)
+                {
+                    throw new Exception("Status of contract must be deposited");
+                }
+
+                if (deliveryContractRequest.Status.ToLower().Equals(DeliveryStatus.Delivering.ToString().ToLower()))
+                {
+                    if (contract.DeliveryStatus == DeliveryStatus.Preparing)
+                    {
+                        if (deliveryContractRequest.Images != null)
+                        {
+                            contract.DeliveryStatus = DeliveryStatus.Delivering;
+
+                            foreach (var imageCharacter in deliveryContractRequest.Images)
+                            {
+                                ContractImage contractImage = new ContractImage()
+                                {
+                                    ContractId = contract.ContractId,
+                                    CreateDate = DateTime.Now,
+                                    Status = ContractImageStatus.Delivering,
+                                    UrlImage = await Image.UploadImageToFirebase(imageCharacter),
+                                };
+
+                                images.Add(contractImage);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Please enter image of character in contract");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update status contract");
+                    }
+                }
+
+                if (deliveryContractRequest.Status.ToLower().Equals(DeliveryStatus.Received.ToString().ToLower()))
+                {
+                    if (contract.DeliveryStatus == DeliveryStatus.Delivering)
+                    {
+                        if (deliveryContractRequest.Images != null)
+                        {
+                            contract.DeliveryStatus = DeliveryStatus.Received;
+
+                            foreach (var imageCharacter in deliveryContractRequest.Images)
+                            {
+                                ContractImage contractImage = new ContractImage()
+                                {
+                                    ContractId = contract.ContractId,
+                                    CreateDate = DateTime.Now,
+                                    Status = ContractImageStatus.Received,
+                                    UrlImage = await Image.UploadImageToFirebase(imageCharacter),
+                                };
+
+                                images.Add(contractImage);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Please enter image of character in contract");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update contract");
+                    }
+                }
+
+               
+
+                if (deliveryContractRequest.Status.ToLower().Equals(DeliveryStatus.Refund.ToString().ToLower()))
+                {
+                    if (contract.DeliveryStatus == DeliveryStatus.Received)
+                    {
+                        if (deliveryContractRequest.Images != null)
+                        {
+                            contract.DeliveryStatus = DeliveryStatus.Refund;
+
+                            foreach (var imageCharacter in deliveryContractRequest.Images)
+                            {
+                                ContractImage contractImage = new ContractImage()
+                                {
+                                    ContractId = contract.ContractId,
+                                    CreateDate = DateTime.Now,
+                                    Status = ContractImageStatus.Refund,
+                                    UrlImage = await Image.UploadImageToFirebase(imageCharacter),
+                                };
+
+                                images.Add(contractImage);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Please enter image of character in contract");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update status contract");
+                    }
+                }
+                
+                if (deliveryContractRequest.Status.ToLower().Equals(DeliveryStatus.Cancel.ToString().ToLower()))
+                {
+                    if (contract.DeliveryStatus == DeliveryStatus.Received || contract.DeliveryStatus == DeliveryStatus.Delivering)
+                    {
+                        if (contract.DeliveryStatus == DeliveryStatus.Delivering)
+                        {
+                            if (deliveryContractRequest.Reason != null)
+                            {
+                                contract.Amount = 0;
+                                contract.ContractStatus = ContractStatus.Cancel;
+                                contract.Reason = deliveryContractRequest.Reason;
+                                contract.DeliveryStatus = DeliveryStatus.Cancel;
+                            }
+                            else
+                            {
+                                throw new Exception("Please enter reason");
+                            }
+                            
+                        }
+                        else
+                        {
+                            if (deliveryContractRequest.Reason != null)
+                            {
+                                contract.DeliveryStatus = DeliveryStatus.Cancel;
+                                contract.Amount = contract.Amount / 2;
+                                contract.ContractStatus = ContractStatus.Cancel;
+                                contract.Reason = deliveryContractRequest.Reason;
+                            }
+                            else
+                            {
+                                throw new Exception("Please enter reason");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update status contract");
+                    }
+                }
+
+                bool checkUpdate = await _contractRespository.UpdateContract(contract);
+
+                if (!checkUpdate)
+                {
+                    throw new Exception("Can not update DeliveryContract");
+                }
+
+                if (images.Count > 0)
+                {
+                    bool checkAdd = await contractImageRepository.AddListContractImage(images);
+
+                    if (!checkAdd)
+                    {
+                        throw new Exception("Can not add ContractImage");
+                    }
+                }
+
+                return true;
             }
             catch (Exception ex)
             {

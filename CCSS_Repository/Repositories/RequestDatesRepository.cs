@@ -20,6 +20,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> UpdateRequestDate(RequestDate requestDate);
         Task<bool> DeleteListRequestDateByRequestCharacterId(string requestCharacterId);
         Task<List<RequestDate>> GetListRequestDateByRequestCharacter(string requestCharacterId);
+        Task<bool> CheckValidRequestDate(Account account, DateTime startDate, DateTime endDate);
     }
 
     public class RequestDatesRepository: IRequestDatesRepository
@@ -93,5 +94,92 @@ namespace CCSS_Repository.Repositories
             await _context.RequestDates.AddAsync(requestDate);
             return await _context.SaveChangesAsync() > 0 ? true : false;
         }
+
+        public async Task<bool> CheckValidRequestDate(Account account, DateTime startDate, DateTime endDate)
+        {
+            RequestCharacter requestCharacter = await _context.RequestsCharacters
+                .Include(rq => rq.RequestDates)
+                .Where(rq => rq.CosplayerId == account.AccountId)
+                .FirstOrDefaultAsync();
+
+            double totalHourTask = (endDate - startDate).TotalHours;
+
+            if (requestCharacter != null)
+            {
+                // Lọc những requestDate có cùng ngày với startDate để giảm số vòng lặp
+                var sameDayRequests = requestCharacter.RequestDates
+                    .Where(rd => rd.StartDate.Date == startDate.Date)
+                    .ToList();
+
+                for (int i = 0; i < sameDayRequests.Count; i++)
+                {
+                    var currentTask = sameDayRequests[i];
+
+                    if (currentTask.EndDate.Hour < startDate.Hour)
+                    {
+                        if(currentTask.EndDate.AddHours(2) > startDate)
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (endDate.Hour < currentTask.StartDate.Hour)
+                    {
+                        if (endDate.AddHours(2) > currentTask.StartDate)
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (i > 0)
+                    {
+                        var previousTask = sameDayRequests[i - 1];
+
+                        if(previousTask.EndDate.Hour < startDate.Hour)
+                        {
+                            if (previousTask.EndDate.AddHours(2) > startDate)
+                            {
+                                return false;
+                            }
+                        }
+
+                        if (endDate.Hour < previousTask.StartDate.Hour)
+                        {
+                            if (endDate.AddHours(2) > previousTask.EndDate)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+
+
+                    if (i < sameDayRequests.Count - 1)
+                    {
+                        var nextTask = sameDayRequests[i + 1];
+
+                        if (nextTask.StartDate.Hour < startDate.Hour)
+                        {
+                            if (nextTask.StartDate.AddHours(2) > endDate)
+                            {
+                                return false; // Task sau chưa chuẩn bị đủ 2 giờ
+                            }
+                        }
+
+                        if (endDate.Hour < nextTask.StartDate.Hour)
+                        {
+                            if (endDate.AddHours(2) > nextTask.StartDate)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+
+
+                }    
+            }
+
+            return true;
+        }
+
     }
 }

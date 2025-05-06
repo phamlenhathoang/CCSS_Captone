@@ -39,6 +39,7 @@ namespace CCSS_Service.Services
         Task<AccountResponse> GetAccountByAccountId(string accountId);
         Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest);
         Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, List<Date> dates, string accountId);
+        Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDateForCreateEvent(string characterId, List<Date> dates, string accountId);
         Task<List<AccountByCharacterAndDateResponse>> ViewAllAccountByCharacterName(string characterName, string? start, string? end);
         Task<List<AccountByCharacterAndDateResponse>> ViewAllCosplayerByContractId(string contractId);
         Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId);
@@ -63,8 +64,9 @@ namespace CCSS_Service.Services
         private readonly IBeginTransactionRepository _beginTransactionRepository;
         private readonly Image image;
         private readonly IAccountImageRepository accountImageRepository;
+        private readonly IRequestDatesRepository requestDatesRepository;
 
-        public AccountService(ICartRepository cartRepository, IBeginTransactionRepository beginTransactionRepository, ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService, Image image, IAccountImageRepository accountImageRepository)
+        public AccountService(ICartRepository cartRepository, IBeginTransactionRepository beginTransactionRepository, ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService, Image image, IAccountImageRepository accountImageRepository, IRequestDatesRepository requestDatesRepository)
         {
             this.taskRepository = taskRepository;
             _beginTransactionRepository = beginTransactionRepository;
@@ -79,6 +81,7 @@ namespace CCSS_Service.Services
             _emailService = emailService;
             this.image = image;
             this.accountImageRepository = accountImageRepository;
+            this.requestDatesRepository = requestDatesRepository;
         }
         public async Task<AccountResponse> GetAccountByEventCharacterId(string eventCharacterId)
         {
@@ -144,6 +147,11 @@ namespace CCSS_Service.Services
                 if ((bool)!account.IsActive)
                 {
                     throw new Exception("Account has not been activated");
+                }
+
+                if((bool)account.IsLock)
+                {
+                    throw new Exception("This account locked");
                 }
 
                 var jti = Guid.NewGuid().ToString();
@@ -367,7 +375,7 @@ namespace CCSS_Service.Services
                     account.Birthday = date;
                     account.Phone = accountRequest.Phone;
                     account.RoleId = "R005";
-
+                    account.IsLock = false;
 
                     bool result = await accountRepository.AddAccount(account);
                     if (!result)
@@ -821,6 +829,70 @@ namespace CCSS_Service.Services
                     return true;
                 }
                 return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDateForCreateEvent(string characterId, List<Date> dates, string accountId)
+        {
+            try
+            {
+                List<AccountByCharacterAndDateResponse> accountByCharacterAndDateResponses = new List<AccountByCharacterAndDateResponse>();
+
+                Character character = await characterRepository.GetCharacter(characterId);
+                if (character == null)
+                {
+                    throw new Exception("Character does not exist");
+                }
+
+                List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character, accountId);
+
+                string format = "HH:mm dd/MM/yyyy";
+                CultureInfo culture = CultureInfo.InvariantCulture;
+
+                foreach (var date in dates)
+                {
+                    DateTime start = DateTime.ParseExact(date.StartDate, format, culture);
+                    DateTime end = DateTime.ParseExact(date.EndDate, format, culture);
+
+                    if (start > end)
+                    {
+                        throw new Exception("Start can not greater than EndDate");
+                    }
+
+                    foreach (Account account in accounts)
+                    {
+                        bool result = await taskRepository.CheckTaskIsValid(account, start, end);
+                        bool resultRequetDate = await requestDatesRepository.CheckValidRequestDate(account, start, end);
+
+                        if (result && resultRequetDate)
+                        {
+                            AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                            accountRespose.Images ??= new List<AccountImageResponse>();
+
+                            if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                            {
+                                foreach (var image in account.AccountImages)
+                                {
+                                    accountRespose.Images.Add(new AccountImageResponse
+                                    {
+                                        AccountImageId = image.AccountImageId,
+                                        UrlImage = image.UrlImage,
+                                        CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                        UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                        IsAvatar = image.IsAvatar
+                                    });
+                                }
+                            }
+                            accountByCharacterAndDateResponses.Add(accountRespose);
+                        }
+                    }
+                }
+
+                return accountByCharacterAndDateResponses;
             }
             catch (Exception ex)
             {

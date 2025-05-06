@@ -153,11 +153,6 @@ namespace CCSS_Service.Libraries
                         double amount = accountCoupon?.Coupon?.Amount ?? 0.0;
                         string formattedAmount = amount.ToString("0.##");
 
-                        htmlContent += $@"<tr>
-                    <td colspan='5' class='right-align'>Coupon</td>
-                    <td>{formattedAmount}</td>
-                </tr>";
-
                         // Tính tổng số tiền
                         double totalAmount = await CalculateTotalAmount(request, formattedAmount, 0);
 
@@ -203,14 +198,14 @@ namespace CCSS_Service.Libraries
 
                         // Bắt đầu bảng
                         htmlContent += @"<table>
-            <tr>
-                <th>STT</th>
-                <th>Tên trang phục, cosplayer</th>
-                <th>Đơn vị tính</th>
-                <th>Số lượng</th>
-                <th>Đơn giá</th>
-                <th>Thành tiền</th>
-            </tr>";
+                <tr>
+                    <th>No.</th>
+                    <th>Costume/Cosplayer Name</th>
+                    <th>Unit</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total Price</th>
+                </tr>";
                         double totalHours = 0;
                         int day = 0;
                         int count = 0;
@@ -237,7 +232,7 @@ namespace CCSS_Service.Libraries
                             htmlContent += $@"<tr>
                         <td>{index}</td>
                         <td>{character.CharacterName}</td>
-                        <td>Bộ</td>
+                        <td>Set</td>
                         <td>{requestCharacter.Quantity}</td>
                         <td>{character.Price}</td>
                         <td>{day * character.Price}</td>

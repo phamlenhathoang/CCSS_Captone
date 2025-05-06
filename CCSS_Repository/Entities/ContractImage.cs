@@ -21,6 +21,14 @@ namespace CCSS_Repository.Entities
         public string UrlImage {  get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
+        public ContractImageStatus Status { get; set; }
 
+    }
+
+    public enum ContractImageStatus
+    {
+        Delivering,
+        Received,
+        Refund,
     }
 }
