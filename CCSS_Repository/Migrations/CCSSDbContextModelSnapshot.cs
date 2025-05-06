@@ -2697,7 +2697,7 @@ namespace CCSS_Repository.Migrations
                         new
                         {
                             EventId = "E008",
-                            CreateBy = "Manager"
+                            CreateBy = "Manager",
                             CreateDate = new DateTime(2025, 5, 6, 7, 23, 8, 677, DateTimeKind.Utc).AddTicks(7054),
 
                             Description = "A fun-filled summer celebration",
