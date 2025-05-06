@@ -67,6 +67,7 @@ builder.Services.AddScoped<IRequestDatesRepository, RequestDatesRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IContractImageRepository, ContractImageRepository>();
 builder.Services.AddScoped<IContractRefundRepository, ContractRefundRepository>();
+builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 
 //Service
 builder.Services.AddScoped<IPackageService, PackageService>();
@@ -99,6 +100,7 @@ builder.Services.AddScoped<IAccountImageService, AccountImageService>();
 builder.Services.AddScoped<IRequestDateServices, RequestDateServices>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IContractRefundService, ContractRefundService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
 
 
 

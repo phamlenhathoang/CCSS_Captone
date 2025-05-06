@@ -1297,11 +1297,6 @@ namespace CCSS_Service.Services
             {
                 return $"Request {requestId} not found";
             }
-            if (request.ServiceId != "S003")
-            {
-                var service = await _serviceRepository.GetService(request.ServiceId);
-                return $"This request is {service.ServiceName} not Create Event. Please try again";
-            }
             request.Deposit = depositDtos.Deposit;
             await _repository.UpdateRequest(request);
             return "Update success";
