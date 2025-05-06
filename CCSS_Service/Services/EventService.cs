@@ -19,7 +19,7 @@ namespace CCSS_Service.Services
         Task<List<EventResponse>> GetAllEvents(string searchTerm);
         Task<EventResponse> GetEvent(string id);
         Task<string> AddEvent(CreateEventRequest eventRequest, List<IFormFile> ImageUrl);
-        Task<string> UpdateEvent(string eventId, UpdateEventRequest eventRequest);
+        Task<string> UpdateEvent(string eventId, UpdateEventRequest eventRequest, List<IFormFile> ImageUrl);
         Task<bool> DeleteEvent(string id);
     }
 
@@ -228,36 +228,156 @@ namespace CCSS_Service.Services
 
 
 
-        public async Task<string> UpdateEvent(string eventId, UpdateEventRequest eventRequest)
+        //public async Task<string> UpdateEvent(string eventId, UpdateEventRequest eventRequest)
+        //{
+        //    if (eventRequest == null)
+        //    {
+        //        return "Invalid request: EventRequest is null";
+        //    }
+
+        //    try
+        //    {
+        //        var existingEvent = await _repository.GetEventById(eventId);
+        //        if (existingEvent == null)
+        //        {
+        //            return "Event not found";
+        //        }
+
+        //        existingEvent.EventName = eventRequest.EventName ?? existingEvent.EventName;
+        //        existingEvent.Description = eventRequest.Description ?? existingEvent.Description;
+        //        existingEvent.Location = eventRequest.Location ?? existingEvent.Location;
+        //        //existingEvent.IsActive = eventRequest.IsActive ?? existingEvent.IsActive;
+        //        existingEvent.StartDate = eventRequest.StartDate != default ? eventRequest.StartDate : existingEvent.StartDate;
+        //        existingEvent.EndDate = eventRequest.EndDate != default ? eventRequest.EndDate : existingEvent.EndDate;
+        //        existingEvent.UpdateDate = DateTime.Now;
+
+
+        //        if (eventRequest.Ticket != null && eventRequest.Ticket.Any())
+        //        {
+        //            await _repository.DeleteTicketsByEventId(existingEvent.EventId);
+
+        //            foreach (var ticketRequest in eventRequest.Ticket)
+        //            {
+        //                if (ticketRequest.Quantity > 0 && ticketRequest.Price > 0)
+        //                {
+        //                    var newTicket = new Ticket
+        //                    {
+        //                        EventId = existingEvent.EventId,
+        //                        Quantity = ticketRequest.Quantity,
+        //                        Price = ticketRequest.Price,
+        //                        Description = ticketRequest.Description,
+        //                        ticketStatus = ticketStatus.valid,
+        //                    };
+
+        //                    existingEvent.Ticket.Add(newTicket);
+        //                }
+        //            }
+        //        }
+
+
+
+        //        if (eventRequest.EventCharacterRequests != null)
+        //        {
+
+        //            await _repository.DeleteEventCharactersByEventId(existingEvent.EventId);
+
+
+        //            var newEventCharacters = eventRequest.EventCharacterRequests.Select(ec => new EventCharacter
+        //            {
+        //                EventCharacterId = Guid.NewGuid().ToString(),
+        //                EventId = existingEvent.EventId,
+        //                CharacterId = ec.CharacterId
+        //            }).ToList();
+
+        //            existingEvent.EventCharacters = newEventCharacters;
+        //        }
+        //        if (eventRequest.EventActivityRequests != null)
+        //        {
+        //            var createDate = existingEvent.EventActivities.FirstOrDefault()?.CreateDate;
+
+        //            await _repository.DeleteEventActivityByEventId(existingEvent.EventId);
+
+        //            var newEventActivity = eventRequest.EventActivityRequests.Select(ec => new EventActivity
+        //            {
+        //                EventActivityId = Guid.NewGuid().ToString(),
+        //                EventId = existingEvent.EventId, 
+        //                ActivityId = ec.ActivityId,
+        //                CreateDate = createDate,
+        //                UpdateDate = DateTime.UtcNow,
+        //                Description = ec.Description,
+        //                CreateBy = ec.CreateBy
+        //            }).ToList();
+
+        //            existingEvent.EventActivities = newEventActivity;
+        //        }
+
+        //        if (eventRequest.ImagesDeleted != null && eventRequest.ImagesDeleted.Any())
+        //        {
+        //            foreach (var imageDeletedId in eventRequest.ImagesDeleted)
+        //            {
+        //                var imageToDelete = existingEvent.EventImages.FirstOrDefault(i => i.ImageId == imageDeletedId.ImageId);
+        //                if (imageToDelete != null)
+        //                {
+        //                    _repository.DeleteEventImageById(imageToDelete.ImageId); 
+        //                }
+        //            }
+        //        }
+        //        if (eventRequest.Images != null && eventRequest.Images.Any())
+        //        {
+        //            var imageTasks = eventRequest.Images.Select(async I => new EventImage
+        //            {
+        //                ImageId = Guid.NewGuid().ToString(),
+        //                ImageUrl = await _image.UploadImageToFirebase(I.ImageUrl),
+        //                CreateDate = DateTime.Now,
+        //                EventId = existingEvent.EventId,
+
+        //            }).ToList();
+        //            var images = await System.Threading.Tasks.Task.WhenAll(imageTasks);
+        //            existingEvent.EventImages = images.ToList();
+        //        }
+
+
+
+        //        await _repository.UpdateEvent(existingEvent);
+        //        return "Update Success";
+        //    }
+        //    catch (DbUpdateException dbEx)
+        //    {
+        //        return $"Database error: {dbEx.Message}";
+        //    }
+        //    catch (ArgumentNullException argEx)
+        //    {
+        //        return $"Invalid input: {argEx.Message}";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return $"An unexpected error occurred: {ex.Message}";
+        //    }
+        //}
+
+        public async Task<string> UpdateEvent(string eventId, UpdateEventRequest eventRequest, List<IFormFile> ImageUrl)
         {
-            if (eventRequest == null)
+            var existingEvent = await _repository.GetEventById(eventId);
+            if (existingEvent == null)
             {
-                return "Invalid request: EventRequest is null";
+                return "Sự kiện không tồn tại";
             }
-
-            try
+            if (eventRequest.Ticket != null && eventRequest.Ticket.Any())
             {
-                var existingEvent = await _repository.GetEventById(eventId);
-                if (existingEvent == null)
+                foreach (var ticketRequest in eventRequest.Ticket)
                 {
-                    return "Event not found";
-                }
-
-                existingEvent.EventName = eventRequest.EventName ?? existingEvent.EventName;
-                existingEvent.Description = eventRequest.Description ?? existingEvent.Description;
-                existingEvent.Location = eventRequest.Location ?? existingEvent.Location;
-                //existingEvent.IsActive = eventRequest.IsActive ?? existingEvent.IsActive;
-                existingEvent.StartDate = eventRequest.StartDate != default ? eventRequest.StartDate : existingEvent.StartDate;
-                existingEvent.EndDate = eventRequest.EndDate != default ? eventRequest.EndDate : existingEvent.EndDate;
-                existingEvent.UpdateDate = DateTime.Now;
-
-                
-                if (eventRequest.Ticket != null && eventRequest.Ticket.Any())
-                {
-                    await _repository.DeleteTicketsByEventId(existingEvent.EventId);
-
-                    foreach (var ticketRequest in eventRequest.Ticket)
+                    var existingTicket = existingEvent.Ticket.FirstOrDefault(t => t.TicketId == ticketRequest.TicketId);
+                    if (existingTicket != null)
                     {
+                        // Update ticket cũ
+                        existingTicket.Quantity = ticketRequest.Quantity;
+                        existingTicket.Price = ticketRequest.Price;
+                        existingTicket.Description = ticketRequest.Description;
+                        existingTicket.ticketStatus = ticketStatus.valid;
+                    }
+                    else
+                    {
+                        // Add ticket mới nếu chưa có
                         if (ticketRequest.Quantity > 0 && ticketRequest.Price > 0)
                         {
                             var newTicket = new Ticket
@@ -268,93 +388,173 @@ namespace CCSS_Service.Services
                                 Description = ticketRequest.Description,
                                 ticketStatus = ticketStatus.valid,
                             };
-
                             existingEvent.Ticket.Add(newTicket);
                         }
                     }
                 }
+            }
+            bool isCharacterUpdated = eventRequest.EventCharacterRequests != null && eventRequest.EventCharacterRequests.Any();
 
+            // Nếu đổi ngày hoặc đổi EventCharacter thì xóa T~ask và EventCharacter cũ
+            if ( isCharacterUpdated)
+            {
+                // Xóa TaskEvent liên quan
+                await _taskService.DeleteAllTaskByEventId(existingEvent.EventId);
 
+                // Xóa EventCharacter liên quan
+                var oldEventCharacters = await _repository.GetEventCharactersByEventId(existingEvent.EventId);
 
-                if (eventRequest.EventCharacterRequests != null)
+                foreach (var oldEC in oldEventCharacters)
                 {
-                   
-                    await _repository.DeleteEventCharactersByEventId(existingEvent.EventId);
-
-                   
-                    var newEventCharacters = eventRequest.EventCharacterRequests.Select(ec => new EventCharacter
+                    var character = await _characterRepository.GetCharacter(oldEC.CharacterId);
+                    if (character != null)
                     {
-                        EventCharacterId = Guid.NewGuid().ToString(),
-                        EventId = existingEvent.EventId,
-                        CharacterId = ec.CharacterId
-                    }).ToList();
-
-                    existingEvent.EventCharacters = newEventCharacters;
-                }
-                if (eventRequest.EventActivityRequests != null)
-                {
-                    var createDate = existingEvent.EventActivities.FirstOrDefault()?.CreateDate;
-
-                    await _repository.DeleteEventActivityByEventId(existingEvent.EventId);
-
-                    var newEventActivity = eventRequest.EventActivityRequests.Select(ec => new EventActivity
-                    {
-                        EventActivityId = Guid.NewGuid().ToString(),
-                        EventId = existingEvent.EventId, 
-                        ActivityId = ec.ActivityId,
-                        CreateDate = createDate,
-                        UpdateDate = DateTime.UtcNow,
-                        Description = ec.Description,
-                        CreateBy = ec.CreateBy
-                    }).ToList();
-
-                    existingEvent.EventActivities = newEventActivity;
-                }
-
-                if (eventRequest.ImagesDeleted != null && eventRequest.ImagesDeleted.Any())
-                {
-                    foreach (var imageDeletedId in eventRequest.ImagesDeleted)
-                    {
-                        var imageToDelete = existingEvent.EventImages.FirstOrDefault(i => i.ImageId == imageDeletedId.ImageId);
-                        if (imageToDelete != null)
-                        {
-                            _repository.DeleteEventImageById(imageToDelete.ImageId); 
-                        }
+                        character.Quantity += 1;
+                        await _characterRepository.UpdateCharacter(character);
                     }
                 }
-                if (eventRequest.Images != null && eventRequest.Images.Any())
+                await _repository.DeleteEventCharactersByEventId(existingEvent.EventId);
+
+                // Nếu có EventCharacter mới thì tạo lại
+                if (isCharacterUpdated)
                 {
-                    var imageTasks = eventRequest.Images.Select(async I => new EventImage
+                    List<EventCharacter> eventCharacters = new List<EventCharacter>();
+
+                    foreach (var ec in eventRequest.EventCharacterRequests)
                     {
-                        ImageId = Guid.NewGuid().ToString(),
-                        ImageUrl = await _image.UploadImageToFirebase(I.ImageUrl),
-                        CreateDate = DateTime.Now,
-                        EventId = existingEvent.EventId,
+                        var cosplayer = await _accountRepository.GetAccountByAccountId(ec.CosplayerId);
+                        if (cosplayer == null) return "Cosplayer không tồn tại";
 
-                    }).ToList();
-                    var images = await System.Threading.Tasks.Task.WhenAll(imageTasks);
-                    existingEvent.EventImages = images.ToList();
+                        bool checkTaskIsValid = await _taskRepository.CheckTaskIsValid(cosplayer, existingEvent.StartDate, existingEvent.EndDate);
+                        if (!checkTaskIsValid)
+                        {
+                            return $"Cosplayer {cosplayer.Name} không phù hợp với thời gian sự kiện";
+                        }
+
+                        var character = await _characterRepository.GetCharacter(ec.CharacterId);
+                        if (character == null) return "Nhân vật không tồn tại";
+                        if (character.Quantity <= 0)
+                        {
+                            return $"Nhân vật {character.CharacterName} đã hết số lượng khả dụng";
+                        }
+                        if (cosplayer.Height < character.MinHeight || cosplayer.Height > character.MaxHeight || cosplayer.Weight < character.MinWeight || cosplayer.Weight > character.MaxWeight)
+                        {
+                            return $"Cosplayer {cosplayer.Name} không phù hợp với nhân vật {character.CharacterName}";
+                        }
+
+                        var eventCharacter = new EventCharacter
+                        {
+                            EventCharacterId = Guid.NewGuid().ToString(),
+                            EventId = existingEvent.EventId,
+                            CharacterId = ec.CharacterId,
+                            CreateDate = DateTime.Now,
+                            UpdateDate = null,
+                            Description = ec.Description,
+                            IsAssign = false
+                        };
+
+                        eventCharacters.Add(eventCharacter);
+
+                        // Giảm số lượng character
+                        character.Quantity -= 1;
+                        await _characterRepository.UpdateCharacter(character);
+                    }
+
+                    existingEvent.EventCharacters = eventCharacters;
+
+                    // Tạo TaskEvent cho từng EventCharacter
+                    //var taskRequests = eventRequest.EventCharacterRequests.Select((ec, index) => new AddTaskEventRequest
+                    //{
+                    //    AccountId = ec.CosplayerId,
+                    //    EventCharacterId = eventCharacters[index].EventCharacterId
+                    //}).ToList();
+
+                    //await _taskService.AddTask(taskRequests, null);
                 }
+            }
+            if (eventRequest.EventActivityRequests != null)
+            {
+                var createDate = existingEvent.EventActivities.FirstOrDefault()?.CreateDate;
+
+                await _repository.DeleteEventActivityByEventId(existingEvent.EventId);
+
+                var newEventActivity = eventRequest.EventActivityRequests.Select(ec => new EventActivity
+                {
+                    EventActivityId = Guid.NewGuid().ToString(),
+                    EventId = existingEvent.EventId,
+                    ActivityId = ec.ActivityId,
+                    CreateDate = createDate,
+                    UpdateDate = DateTime.UtcNow,
+                    Description = ec.Description,
+                    CreateBy = ec.CreateBy
+                }).ToList();
+
+                existingEvent.EventActivities = newEventActivity;
+            }
+
+            if (eventRequest.ImagesDeleted != null && eventRequest.ImagesDeleted.Any())
+            {
+                foreach (var imageDeletedId in eventRequest.ImagesDeleted)
+                {
+                    var imageToDelete = existingEvent.EventImages.FirstOrDefault(i => i.ImageId == imageDeletedId.ImageId);
+                    if (imageToDelete != null)
+                    {
+                        _repository.DeleteEventImageById(imageToDelete.ImageId);
+                    }
+                }
+            }
+            if (ImageUrl != null)
+            {
+                var imageTasks = ImageUrl.Select(async file => new EventImage
+                {
+                    ImageId = Guid.NewGuid().ToString(),
+                    ImageUrl = await _image.UploadImageToFirebase(file),
+                    CreateDate = DateTime.Now,
+                    EventId = existingEvent.EventId,
+                }).ToList();
+
+                var images = await System.Threading.Tasks.Task.WhenAll(imageTasks);
+
+                if (existingEvent.EventImages == null)
+                    existingEvent.EventImages = new List<EventImage>();
+
+                foreach (var image in images)
+                {
+                    existingEvent.EventImages.Add(image);
+                }
+            }
 
 
+            // Cập nhật thông tin event
+            existingEvent.EventName = eventRequest.EventName;
+            //existingEvent.StartDate = eventRequest.StartDate;
+            //existingEvent.EndDate = eventRequest.EndDate;
+            existingEvent.Location = eventRequest.Location;
+            existingEvent.Description = eventRequest.Description;
+            existingEvent.UpdateDate = DateTime.Now;
 
-                await _repository.UpdateEvent(existingEvent);
-                return "Update Success";
-            }
-            catch (DbUpdateException dbEx)
+            bool isUpdated = await _repository.UpdateEvent(existingEvent);
+            if (!isUpdated)
             {
-                return $"Database error: {dbEx.Message}";
+                return "Failed to update event to database";
             }
-            catch (ArgumentNullException argEx)
+            if (eventRequest.EventCharacterRequests != null && eventRequest.EventCharacterRequests.Any())
             {
-                return $"Invalid input: {argEx.Message}";
+
+                
+                var eventCharactersList = existingEvent.EventCharacters.ToList();
+                var taskEventRequests = eventRequest.EventCharacterRequests.Select((ec, index) => new AddTaskEventRequest
+                {
+                    AccountId = ec.CosplayerId,
+                    EventCharacterId = eventCharactersList[index].EventCharacterId
+                }).ToList();
+
+                await _taskService.AddTask(taskEventRequests, null);
+
             }
-            catch (Exception ex)
-            {
-                return $"An unexpected error occurred: {ex.Message}";
-            }
+
+            return "Cập nhật sự kiện thành công";
         }
-
 
 
 

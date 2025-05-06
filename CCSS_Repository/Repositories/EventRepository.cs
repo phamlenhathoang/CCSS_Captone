@@ -11,6 +11,8 @@ namespace CCSS_Repository.Repositories
     {
         Task<List<Event>> GetAllEvents(string searchTerm);
         Task<Event> GetEventById(string id);
+        Task<List<EventCharacter>> GetEventCharactersByEventId(string eventId);
+
         Task<Event> GetEventByEventId(string id);
         Task<Event> GetEventByTicketId(int? ticketId);
         Task<bool> AddEvent(Event eventObj);
@@ -44,6 +46,12 @@ namespace CCSS_Repository.Repositories
 
         //    return await query.ToListAsync();
         //}
+        public async Task<List<EventCharacter>> GetEventCharactersByEventId(string eventId)
+        {
+            return await _dbContext.EventCharacters
+                .Where(ec => ec.EventId == eventId)
+                .ToListAsync();
+        }
         public async Task<List<Event>> GetAllEvents(string searchTerm)
         {
             var query = _dbContext.Events

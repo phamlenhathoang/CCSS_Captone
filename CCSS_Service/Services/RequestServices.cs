@@ -623,7 +623,6 @@ namespace CCSS_Service.Services
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-
                 var request = await _repository.GetRequestById(requestId);
                 var listRequestCharacters = await _requestCharacterRepository.GetListCharacterByRequest(requestId);
 
@@ -632,7 +631,21 @@ namespace CCSS_Service.Services
                     await transaction.RollbackAsync();
                     return "Request not found";
                 }
-
+                //if (request.ServiceId == "S002")
+                //{
+                //    foreach (var r in listRequestCharacters)
+                //    {
+                //        if (r.CosplayerId != null)
+                //        {
+                //            var pendingRequestCharacter = await _requestCharacterRepository.GetListRequestCharacterPending(requestId);
+                //            if (r.Status != RequestCharacterStatus.Accept)
+                //            {
+                //                await transaction.RollbackAsync();
+                //                return $"There are still people not accept.";
+                //            }
+                //        }
+                //    }
+                //}
                 if (requestStatus == RequestStatus.Browsed)
                 {
                     foreach (var c in listRequestCharacters)
@@ -662,7 +675,7 @@ namespace CCSS_Service.Services
                 await _repository.UpdateRequest(request);
 
                 await transaction.CommitAsync();
-                return "Status is update success";
+                return "Status request update success";
             }
         }
         #endregion
@@ -1277,7 +1290,7 @@ namespace CCSS_Service.Services
         }
         #endregion
 
-        public async Task<string> UpdateDepositRequest(string requestId,  UpdateDepositDtos depositDtos)
+        public async Task<string> UpdateDepositRequest(string requestId, UpdateDepositDtos depositDtos)
         {
             var request = await _repository.GetRequestById(requestId);
             if (request == null)

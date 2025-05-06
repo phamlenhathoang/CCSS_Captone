@@ -103,20 +103,21 @@ namespace CCSS_Captone.Controllers
         /// <summary>
         /// Cập nhật thông tin sự kiện
         /// </summary>
-         [SwaggerOperation(Description = "role: Mamager")]
-        [Authorize(Roles = "Manager")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        // [SwaggerOperation(Description = "role: Mamager")]
+        //[Authorize(Roles = "Manager")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("UpdateEvent/{eventId}")]
-        public async Task<IActionResult> UpdateEvent(string eventId, [FromBody] UpdateEventRequest eventRequest)
+        public async Task<IActionResult> UpdateEvent(string eventId, string eventJson, List<IFormFile> ImageUrl)
         {
-            if (eventRequest == null)
+            if (eventJson == null)
                 return BadRequest("Invalid request: Event data is null");
 
             try
             {
-                var result = await _eventService.UpdateEvent(eventId, eventRequest);
-                if (result.Contains("Success"))
-                    return Ok(result);
+                var eventRequest = JsonConvert.DeserializeObject<UpdateEventRequest>(eventJson);
+                var result = await _eventService.UpdateEvent(eventId, eventRequest, ImageUrl);
+                if (result.Contains("Cập nhật sự kiện thành công"))
+                    return Ok("OK");
 
                 return NotFound(result);
             }

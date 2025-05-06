@@ -14,7 +14,7 @@ namespace CCSS_Service.Services
     {
         Task<RequestCharacterResponse> GetCharacterInRequestById(string Id);
         Task<List<RequestCharacter>> GetAllCharacterInRequest();
-        Task<string> AddCharacterInRequest(CharacterInRequest characterInRequest);
+        Task<string> AddCharacterInRequest(AddCharacterInRequest characterInRequest);
         Task<string> UpdateCharactetInRRequest(string requestCharacterId, CharacterInRequest characterInRequest);
         Task<string> DeleteCharacterInRequest(string requestCharacterId);
         Task<RequestCharacter> GetRequestCharacter(string requestId, string characterId);
@@ -29,13 +29,19 @@ namespace CCSS_Service.Services
         private readonly ICharacterRepository _characterRepository;
         private readonly IRequestDatesRepository _requestDatesRepository;
         private readonly IRequestRepository _requestRepository;
+        public readonly IBeginTransactionRepository _beginTransactionRepository;
+        public readonly IAccountRepository _accountRepository;
+        public readonly ITaskRepository _taskRepository;
 
-        public RequestCharacterService(IRequestCharacterRepository requestCharacterRepository, ICharacterRepository characterRepository, IRequestDatesRepository requestDatesRepository, IRequestRepository requestRepository)
+        public RequestCharacterService(IRequestCharacterRepository requestCharacterRepository, ICharacterRepository characterRepository, IRequestDatesRepository requestDatesRepository, IRequestRepository requestRepository, IBeginTransactionRepository beginTransactionRepository, IAccountRepository accountRepository, ITaskRepository taskRepository)
         {
             _requestCharacterRepository = requestCharacterRepository;
             _characterRepository = characterRepository;
             _requestDatesRepository = requestDatesRepository;
             _requestRepository = requestRepository;
+            _beginTransactionRepository = beginTransactionRepository;
+            _accountRepository = accountRepository;
+            _taskRepository = taskRepository;
         }
 
         public async Task<List<RequestCharacter>> GetAllCharacterInRequest()
@@ -64,6 +70,10 @@ namespace CCSS_Service.Services
                     await _requestRepository.UpdateRequest(request);
 
                     return "This request has a requestCharacter busy, need to wait customer change requestCharacter";
+                }
+                if(character.Status == RequestCharacterStatus.Pending)
+                {
+                    return "There are still people not accept. Please try again";
                 }
             }
             return "This request can change status";
@@ -174,34 +184,153 @@ namespace CCSS_Service.Services
             return result ? "Update Successfull" : "Update Failed";
         }
 
-        public async Task<string> AddCharacterInRequest(CharacterInRequest characterInRequest)
+        public async Task<string> AddCharacterInRequest(AddCharacterInRequest characterInRequest)
         {
-            if (characterInRequest == null)
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                return "Request Character is null here";
+                if (characterInRequest == null)
+                {
+                    return "Request Character is null here";
+                }
+                if (characterInRequest.CharacterId == null && characterInRequest.RequestId == null)
+                {
+                    return "This field is need to required";
+                }
+                var character = await _characterRepository.GetCharacter(characterInRequest.CharacterId);
+                if (character == null)
+                {
+                    await transaction.RollbackAsync();
+                    return "Character is not found";
+                }
+                var request = await _requestRepository.GetRequestById(characterInRequest.RequestId);
+                if (request == null)
+                {
+                    await transaction.RollbackAsync();
+                    return "Request is not found";
+                }
+                if (characterInRequest.CosplayerId != null)
+                {
+                    if (request.RequestCharacters.Any(c => c.CosplayerId == characterInRequest.CosplayerId && c.CharacterId == characterInRequest.CharacterId))
+                    {
+                        await transaction.RollbackAsync();
+                        return $"Cosplayer with ID {characterInRequest.CosplayerId} is already added in {characterInRequest.CharacterId}";
+                    }
+                    var account = await _accountRepository.GetAccount(characterInRequest.CosplayerId);
+                    bool checkAccount = await _characterRepository.CheckCharacterForAccount(account, character.CharacterId);
+                    if (!checkAccount)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Cosplayer does not suitable.";
+                    }
+                    bool checkTask = await _taskRepository.CheckTaskIsValid(account, request.StartDate, request.EndDate);
+                    if (!checkTask)
+                    {
+                        await transaction.RollbackAsync();
+                        return "This cosplayer is has another job. Please change datetime.";
+                    }
+                    if (account.RoleId != "R004" || account == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
+                    {
+                        await transaction.RollbackAsync();
+                        return "This cosplayer not found";
+                    }
+                }
+                double totalDate = (request.EndDate.Date - request.StartDate.Date).Days + 1;
+                var totalPrice = character.Price * characterInRequest.Quantity * totalDate;
+                var newCharacterInRequest = new RequestCharacter()
+                {
+                    RequestCharacterId = Guid.NewGuid().ToString(),
+                    CharacterId = character.CharacterId,
+                    RequestId = request.RequestId,
+                    Description = characterInRequest.Description,
+                    Quantity = characterInRequest.Quantity,
+                    Status = RequestCharacterStatus.Pending,
+                    TotalPrice = totalPrice,
+                    CreateDate = DateTime.Now,
+                    UpdateDate = null,
+                    CosplayerId = characterInRequest.CosplayerId,
+                };
+                var result = await _requestCharacterRepository.AddRequestCharacter(newCharacterInRequest);
+                if (!result)
+                {
+                    await transaction.RollbackAsync();
+                    return "Add Character in Request Failed";
+                }
+                else
+                {
+                    if (characterInRequest.AddRequestDates != null && characterInRequest.AddRequestDates.Any())
+                    {
+                        double? totalHour = 0;
+                        List<RequestDate> requestDates = new List<RequestDate>();
+                        foreach (var date in characterInRequest.AddRequestDates)
+                        {
+                            DateTime StartTime = DateTime.Now;
+                            DateTime EndTime = DateTime.Now;
+
+                            if (!string.IsNullOrEmpty(date.StartDate) || !string.IsNullOrEmpty(date.EndDate))
+                            {
+
+                                string[] timeFormats = { "HH:mm dd/MM/yyyy", "HH:mm d/MM/yyyy", "HH:mm dd/M/yyyy", "HH:mm d/M/yyyy" };
+
+                                bool isValidStartTime = DateTime.TryParseExact(date.StartDate.Trim(), timeFormats,
+                                                                          System.Globalization.CultureInfo.InvariantCulture,
+                                                                          System.Globalization.DateTimeStyles.None, out StartTime);
+
+                                bool isValidEndTime = DateTime.TryParseExact(date.EndDate.Trim(), timeFormats,
+                                                                             System.Globalization.CultureInfo.InvariantCulture,
+                                                                             System.Globalization.DateTimeStyles.None, out EndTime);
+                                if (!isValidStartTime && !isValidEndTime)
+                                {
+                                    return "Valid Time is wrong";
+                                }
+                                if (StartTime >= EndTime)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "End date must be greater than start date.";
+                                }
+                                if (StartTime < request.StartDate && EndTime > request.EndDate)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "Date range must be within the request date range.";
+                                }
+                                requestDates.Add(new RequestDate
+                                {
+                                    RequestDateId = Guid.NewGuid().ToString(),
+                                    RequestCharacterId = newCharacterInRequest.RequestCharacterId,
+                                    Status = RequestDateStatus.Pending,
+                                    StartDate = StartTime,
+                                    EndDate = EndTime,
+                                });
+
+                                totalHour += (EndTime - StartTime).TotalHours;
+                            }
+                        }
+                        if (requestDates.Any())
+                        {
+                            var RequestDates = await _requestDatesRepository.AddListRequestDates(requestDates);
+
+                            if (!RequestDates)
+                            {
+                                await transaction.RollbackAsync();
+                                return "Failed to add request dates";
+                            }
+                            if (characterInRequest.CosplayerId != null)
+                            {
+                                var cosplayer = await _accountRepository.GetAccount(characterInRequest.CosplayerId);
+                                var requestCharacter = await _requestCharacterRepository.GetRequestCharacterCosplayerId(request.RequestId, character.CharacterId, characterInRequest.CosplayerId);
+                                requestCharacter.TotalPrice += (totalHour * cosplayer.SalaryIndex);
+                                var resultTotalPrice = await _requestCharacterRepository.UpdateRequestCharacter(requestCharacter);
+                                if (!resultTotalPrice)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "Can not update total price";
+                                }
+                            }
+                        }
+                    }
+                    await transaction.CommitAsync();
+                    return "Add Request character Success";
+                }
             }
-            if (characterInRequest.CharacterId == null && characterInRequest.RequestId == null)
-            {
-                return "This field is need to required";
-            }
-            var character = await _characterRepository.GetCharacter(characterInRequest.CharacterId);
-            if (character == null)
-            {
-                return "Character is not found";
-            }
-            var newCharacterInRequest = new RequestCharacter()
-            {
-                RequestCharacterId = Guid.NewGuid().ToString(),
-                CharacterId = characterInRequest.CharacterId,
-                RequestId = characterInRequest.RequestId,
-                Quantity = characterInRequest.Quantity,
-                TotalPrice = characterInRequest.Quantity * character.Price,
-                CreateDate = DateTime.Now,
-                UpdateDate = null,
-                CosplayerId = null,
-            };
-            var result = await _requestCharacterRepository.AddRequestCharacter(newCharacterInRequest);
-            return result ? "Character In Request is Add Successfully" : "Add Character in Requst Failed";
         }
 
         public async Task<string> UpdateCharactetInRRequest(string requestCharacterId, CharacterInRequest characterInRequest)
@@ -226,13 +355,29 @@ namespace CCSS_Service.Services
 
         public async Task<string> DeleteCharacterInRequest(string requestCharacterId)
         {
-            var requestCharacter = await _requestCharacterRepository.GetRequestCharacterById(requestCharacterId);
-            if (requestCharacter == null)
+            using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                return "Character is not found in Request";
+                var requestCharacter = await _requestCharacterRepository.GetRequestCharacterById(requestCharacterId);
+                if (requestCharacter == null)
+                {
+                    await transaction.RollbackAsync();
+                    return "Character is not found in Request";
+                }
+                var result = await _requestDatesRepository.DeleteListRequestDateByRequestCharacterId(requestCharacterId);
+                if (!result)
+                {
+                    await transaction.RollbackAsync();
+                    return "Request Dates is delete failed";
+                }
+                var result1 = await _requestCharacterRepository.DeleteRequestCharacter(requestCharacter);
+                if (!result1)
+                {
+                    await transaction.RollbackAsync();
+                    return "Request Character is deleted failed";
+                }
+                await transaction.CommitAsync();
+                return "Delete Success";
             }
-            var result = await _requestCharacterRepository.DeleteRequestCharacter(requestCharacter);
-            return result ? "Delete Success" : "Delete Failed";
         }
 
         public async Task<RequestCharacter> GetRequestCharacter(string requestId, string characterId)

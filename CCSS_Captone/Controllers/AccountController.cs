@@ -4,6 +4,7 @@ using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace CCSS_Captone.Controllers
 {
@@ -36,16 +37,20 @@ namespace CCSS_Captone.Controllers
         //    return Ok(accounts);
         //}
 
-        //[HttpGet]
-        //public async Task<ActionResult> GetAccountsForTask(string taskId, string accountId)
-        //{
-        //    var accounts = await accountService.GetAccountsForTask(taskId, accountId);
-        //    if (accounts == null)
-        //    {
-        //        return NotFound(new { message = "Accounts not found." });
-        //    }
-        //    return Ok(accounts);
-        //}
+        [HttpGet("GetAllAccount")]
+        public async Task<ActionResult> GetAllAccount(string? searchterm, [Required] string roleId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await accountService.GetAllAccount(searchterm, roleId);
+                if (result == null)
+                {
+                    return NotFound(500 + "Value not found" );
+                }
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
 
         //[HttpPut]
         //public async Task<IActionResult> ChangeAccountForTask(string taskId, string accountId)
