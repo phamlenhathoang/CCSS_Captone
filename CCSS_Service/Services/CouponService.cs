@@ -117,7 +117,7 @@ namespace CCSS_Service.Services
                     CouponId = Guid.NewGuid().ToString(),
                     CouponName = couponRequest.CouponName,
                     Condition = couponRequest.Condition,
-                    Percent = couponRequest.Percent,
+                    Percent = couponRequest.Percent ,
                     Amount = couponRequest.Amount,
                     StartDate = StartDate,
                     EndDate = EndDate,
