@@ -15,6 +15,7 @@ namespace CCSS_Repository.Entities
         public string CouponId { get; set; } = Guid.NewGuid().ToString();
         public string? CouponName { get; set; }
         public string? Condition { get; set; }
+        public int? Quantity { get; set; }
         public float Percent {  get; set; }
         public double Amount { get; set; }
         public DateTime StartDate { get; set; }
