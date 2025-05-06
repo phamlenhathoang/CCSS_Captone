@@ -10,7 +10,7 @@ namespace CCSS_Repository.Repositories
 {
     public interface ICouponRepository
     {
-        Task<List<Coupon>> GetAllCoupon(string searchterm);
+        Task<List<Coupon>> GetAllCoupon(string? searchterm);
         Task<Coupon> GetCouponById(string couponId);
         Task<bool> AddCoupon(Coupon coupon);
         Task<bool> UpdateCoupon(Coupon coupon);
@@ -25,7 +25,7 @@ namespace CCSS_Repository.Repositories
             _context = context;
         }
 
-        public async Task<List<Coupon>> GetAllCoupon(string searchterm)
+        public async Task<List<Coupon>> GetAllCoupon(string? searchterm)
         {
             if (string.IsNullOrWhiteSpace(searchterm))
             {
