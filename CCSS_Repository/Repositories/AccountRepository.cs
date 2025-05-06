@@ -31,6 +31,7 @@ namespace CCSS_Repository.Repositories
         Task<Account> GetAccountByUsername(string username);
         Task<Account> GetAccountByGoogleId(string email, string googleId);
         Task AddAccountGoogle(Account account);
+        Task<List<Account>> GetAllAccount(string? searchterm, string roleId);
     }
     public class AccountRepository : IAccountRepository
     {
@@ -59,6 +60,14 @@ namespace CCSS_Repository.Repositories
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task<List<Account>> GetAllAccount(string? searchterm, string roleId)
+        {
+            if (string.IsNullOrEmpty(searchterm))
+            {
+                return await dbContext.Accounts.Include(ac => ac.AccountImages).Where(sc => sc.RoleId.Equals(roleId)).ToListAsync();
+            }
+            return await dbContext.Accounts.Include(ac => ac.AccountImages).Where(sc => sc.Name.Equals(searchterm) && sc.RoleId.Equals(roleId)).ToListAsync();
+        }
         public async Task<Account> GetAccountByGoogleId(string email, string googleId)
         {
             return await dbContext.Accounts.Include(sc => sc.Role).FirstOrDefaultAsync(sc => sc.Email.Equals(email) && sc.GoogleId.Equals(googleId));
