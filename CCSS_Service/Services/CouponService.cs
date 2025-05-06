@@ -12,15 +12,15 @@ namespace CCSS_Service.Services
 {
     public interface ICouponService
     {
-        Task<List<Coupon>> GetAllCoupon(string searchterm);
-        Task<Coupon> GetCouponById(string couponId);
+        Task<List<CouponResponse>> GetAllCoupon(string? searchterm);
+        Task<CouponResponse> GetCouponById(string couponId);
         Task<string> AddCoupon(CouponRequest couponRequest);
         Task<string> UpdateCoupon(string couponId, CouponRequest couponRequest);
         Task<string> DeleteCoupon(string couponId);
     }
 
 
-    public class CouponService
+    public class CouponService: ICouponService
     {
         private readonly ICouponRepository _couponRepository;
         private readonly IBeginTransactionRepository _transactionRepository;
@@ -31,7 +31,7 @@ namespace CCSS_Service.Services
             _transactionRepository = transactionRepository;
         }
 
-        public async Task<List<CouponResponse>> GetAllCoupon(string searchterm)
+        public async Task<List<CouponResponse>> GetAllCoupon(string? searchterm)
         {
             List<CouponResponse> Listcoupon = new List<CouponResponse>();
             var coupons = await _couponRepository.GetAllCoupon(searchterm);
@@ -44,8 +44,8 @@ namespace CCSS_Service.Services
                     Condition = item.Condition,
                     Percent = item.Percent,
                     Amount = item.Amount,
-                    StartDate = item.StartDate,
-                    EndDate = item.EndDate,
+                    StartDate = item.StartDate.ToString("HH:mm dd/MM/yyyy"),
+                    EndDate = item.EndDate.ToString("HH:mm dd/MM/yyyy"),
                     Type = item.Type,
                 };
                 Listcoupon.Add(couponResponse);
@@ -64,8 +64,8 @@ namespace CCSS_Service.Services
                 Condition = coupon.Condition,
                 Percent = coupon.Percent,
                 Amount = coupon.Amount,
-                StartDate = coupon.StartDate,
-                EndDate = coupon.EndDate,
+                StartDate = coupon.StartDate.ToString("HH:mm dd/MM/yyyy"),
+                EndDate = coupon.EndDate.ToString("HH:mm dd/MM/yyyy"),
                 Type = coupon.Type,
             };
 
