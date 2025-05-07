@@ -100,6 +100,7 @@ namespace CCSS_Api.Controllers
             var result = await _dashBoardService.Get5PopularCosplayers(filterType);
             return Ok(result);
         }
+
         [HttpGet("top5-Favorite-cosplayer")]
         [SwaggerOperation(Description = "filterType<br>" +
                                          "0 (Today)<br>" +
@@ -112,6 +113,8 @@ namespace CCSS_Api.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet("GetAllContractFilterService")]
         public async Task<IActionResult> GetAllContractFilterService(string serviceId)
         {
             if (ModelState.IsValid)
