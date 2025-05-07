@@ -18,6 +18,7 @@ namespace CCSS_Service
         //Task<double> GetAverageStarByContractDescriptionAsync();
         Task<List<AccountResponse>> Get5PopularCosplayers(DateFilterType filterType);
         Task<List<AccountResponse>> Get5FavoriteCosplayer(DateFilterType filterType);
+        Task<string> GetContractFilterSerivce(string serviceId);
 
     }
 
@@ -25,12 +26,14 @@ namespace CCSS_Service
     {
         private readonly IDashBoardRepository _dashBoardRepository;
         private readonly IMapper _mapper;
+        private readonly IServiceRepository _serviceRepository;
 
 
-        public DashBoardService(IDashBoardRepository dashBoardRepository, IMapper mapper)
+        public DashBoardService(IDashBoardRepository dashBoardRepository, IMapper mapper, IServiceRepository serviceRepository)
         {
             _dashBoardRepository = dashBoardRepository;
             _mapper = mapper;
+            _serviceRepository = serviceRepository;
         }
 
         public async Task<DashBoardRevenueResponse> GetRevenueAsync(DateFilterType filterType, RevenueSource revenueSource)
@@ -120,6 +123,47 @@ namespace CCSS_Service
         public async Task<List<Contract>> GetContractsByStatusAsync(ContractStatus? status, DateFilterType? filterType)
         {
             return await _dashBoardRepository.GetContractsByStatusAndDate(status, filterType);
+        }
+
+
+
+        public async Task<string> GetContractFilterSerivce(string serviceId)
+        {
+            // Lấy ngày đầu tiên của tháng hiện tại
+            var firstDayOfCurrentMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+            // Lấy ngày đầu tiên của tháng trước
+            var firstDayOfPreviousMonth = firstDayOfCurrentMonth.AddMonths(-1);
+
+            // Lấy ngày cuối cùng của tháng hiện tại
+            var lastDayOfCurrentMonth = firstDayOfCurrentMonth.AddMonths(1).AddDays(-1);
+
+            // Lấy ngày cuối cùng của tháng trước
+            var lastDayOfPreviousMonth = firstDayOfCurrentMonth.AddDays(-1);
+
+            // Lấy danh sách hợp đồng cho tháng hiện tại
+            var currentMonthContracts = await _dashBoardRepository.GetAllContractFilterServiceAndDate(
+                serviceId, firstDayOfCurrentMonth, lastDayOfCurrentMonth);
+
+            // Lấy danh sách hợp đồng cho tháng trước
+            var previousMonthContracts = await _dashBoardRepository.GetAllContractFilterServiceAndDate(
+                serviceId, firstDayOfPreviousMonth, lastDayOfPreviousMonth);
+
+            int currentCount = currentMonthContracts?.Count() ?? 0;
+            int previousCount = previousMonthContracts?.Count() ?? 0;
+
+            int difference = currentCount - previousCount;
+            string trend = difference > 0 ? "tăng" : (difference < 0 ? "giảm" : "không đổi");
+
+            double percentChange = 0;
+            if (previousCount > 0)
+            {
+                percentChange = Math.Abs((double)difference / previousCount * 100);
+            }
+
+            return $"Số hợp đồng với dịch vụ '{serviceId}': {currentCount} " +
+                   $"(tháng trước: {previousCount}, {trend} {Math.Abs(difference)} hợp đồng, " +
+                   $"{percentChange:F2}%)";
         }
     }
 }
