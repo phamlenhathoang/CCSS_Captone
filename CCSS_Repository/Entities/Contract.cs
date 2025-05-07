@@ -53,6 +53,7 @@ namespace CCSS_Repository.Entities
     {
         Preparing,
         Delivering,
+        UnReceived,
         Received,
         Refund,
         Cancel,
