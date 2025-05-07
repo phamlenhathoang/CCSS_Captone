@@ -50,6 +50,11 @@ namespace CCSS_Service.Services
                     throw new Exception("Request of this contract does not exist");
                 }
 
+                if (contract.ContractStatus != ContractStatus.Refund)
+                {
+                    throw new Exception("Status of contract must be refund");
+                }
+
                 if (contract.ContractRefund == null)
                 {
                     ContractRefund contractRefund = new ContractRefund()
@@ -57,13 +62,12 @@ namespace CCSS_Service.Services
                         ContractId = contractRefundRequest.ContractId,
                         CreateDate = DateTime.Now,
                         Description = contractRefundRequest.Description,
-                        Price = contractRefundRequest.Price,
+                        Price = contractRefundRequest.Price,   
                         Amount = contract.Amount - contractRefundRequest.Price,
                     };
 
                     if(contractRefund.Amount > 0)
                     {
-                        contractRefund.Description = contractRefundRequest.Description;
                         contractRefund.Type = Type.SystemRefund;
                         contractRefund.Status = ContractRefundStatus.Pending;
                         
@@ -71,14 +75,12 @@ namespace CCSS_Service.Services
 
                     if (contractRefund.Amount < 0)
                     {
-                        contractRefund.Description = contractRefundRequest.Description;
                         contractRefund.Type = Type.CustomerRefund;
                         contractRefund.Status = ContractRefundStatus.Pending;
                     }
 
                     if (contractRefund.Amount == 0)
                     {
-                        contractRefund.Description = contractRefundRequest.Description;
                         contractRefund.Type = Type.DepositRetained;
                         contractRefund.Status = ContractRefundStatus.Paid;
                     }
@@ -92,27 +94,24 @@ namespace CCSS_Service.Services
                 else
                 {
                     contract.ContractRefund.Price += contractRefundRequest.Price;
-                    contract.ContractRefund.Description = contractRefundRequest.Description;
+                    contract.ContractRefund.Description = contract.ContractRefund.Description + ", " + contractRefundRequest.Description;
                     contract.ContractRefund.UpdateDate = DateTime.Now;
-                    contract.ContractRefund.Amount = contract.Amount - contractRefundRequest.Price; 
+                    contract.ContractRefund.Amount -= contractRefundRequest.Price; 
 
                     if (contract.ContractRefund.Amount > 0)
                     {
-                        contract.ContractRefund.Description = contractRefundRequest.Description;
                         contract.ContractRefund.Type = Type.SystemRefund;
                         contract.ContractRefund.Status = ContractRefundStatus.Pending;
                     }
 
                     if (contract.ContractRefund.Amount < 0)
                     {
-                        contract.ContractRefund.Description = contractRefundRequest.Description;
                         contract.ContractRefund.Type = Type.CustomerRefund;
                         contract.ContractRefund.Status = ContractRefundStatus.Pending;
                     }
 
                     if (contract.ContractRefund.Amount == 0)
                     {
-                        contract.ContractRefund.Description = contractRefundRequest.Description;
                         contract.ContractRefund.Type = Type.DepositRetained;
                         contract.ContractRefund.Status = ContractRefundStatus.Paid;
 

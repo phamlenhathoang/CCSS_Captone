@@ -101,6 +101,7 @@ builder.Services.AddScoped<IRequestDateServices, RequestDateServices>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IContractRefundService, ContractRefundService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IContractImageService, ContractImageService>();
 
 
 
