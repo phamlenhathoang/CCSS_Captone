@@ -19,6 +19,8 @@ namespace CCSS_Repository.Repositories
         Task<List<Account>> Get5PopularCosplayers(DateFilterType filterType);
         Task<List<Account>> Get5FavoriteCosplayer(DateFilterType filterType);
         Task<List<Contract>> GetAllContractFilterServiceAndDate(string serviceId, DateTime startDate, DateTime endDate);
+        Task<List<Contract>> GetAllContractFilterContractStatus(ContractStatus contractStatus);
+        Task<List<Contract>> GetAllContractNotCompleted();
     }
 
         public class DashBoardRepository : IDashBoardRepository
@@ -130,6 +132,15 @@ namespace CCSS_Repository.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<Contract>> GetAllContractFilterContractStatus(ContractStatus contractStatus)
+        {
+            return await _context.Contracts.Where(c => c.ContractStatus.Equals(contractStatus)).ToListAsync();
+        }
+
+        public async Task<List<Contract>> GetAllContractNotCompleted()
+        {
+            return await _context.Contracts.Where(c => c.ContractStatus != ContractStatus.Completed).ToListAsync();
+        }
 
         public async Task<List<Account>> GetTop5AccountsWithMostPaymentsAsync()
         {
