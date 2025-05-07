@@ -21,6 +21,7 @@ namespace CCSS_Repository.Repositories
         Task<List<Contract>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId);
         Task<List<Contract>> GetAllContractByAccountId(string accountId);
         Task<Contract> GetContractByRequestId(string requestId);
+        Task<List<Contract>> GetAllContract(ContractStatus contractStatus);
     }
 
     public class ContractRespository: IContractRespository
@@ -30,6 +31,11 @@ namespace CCSS_Repository.Repositories
         public ContractRespository(CCSSDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<List<Contract>> GetAllContract(ContractStatus contractStatus)
+        {
+            return await _context.Contracts.Where(sc => sc.ContractStatus.Equals(contractStatus)).ToListAsync();
         }
 
         public async Task<Contract> GetContractById(string id)

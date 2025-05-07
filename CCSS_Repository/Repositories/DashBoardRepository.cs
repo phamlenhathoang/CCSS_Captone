@@ -13,7 +13,7 @@ namespace CCSS_Repository.Repositories
     public interface IDashBoardRepository
     {
         Task<List<Payment>> GetRevenue(DateFilterType filterType, RevenueSource revenueSource);
-        Task<List<Contract>> GetContractsByStatusAndDate(ContractStatus status, DateFilterType filterType);
+        Task<List<Contract>> GetContractsByStatusAndDate(ContractStatus? status, DateFilterType? filterType);
         Task<List<Account>> GetTop5AccountsWithMostPaymentsAsync();
         //Task<List<Feedback>> GetFeedbacksByContractDescriptionAsync();
         Task<List<Account>> Get5PopularCosplayers(DateFilterType filterType);
@@ -83,13 +83,16 @@ namespace CCSS_Repository.Repositories
         }
 
 
-        public async Task<List<Contract>> GetContractsByStatusAndDate(ContractStatus status, DateFilterType filterType)
+        public async Task<List<Contract>> GetContractsByStatusAndDate(ContractStatus? status, DateFilterType? filterType)
         {
             var now = DateTime.UtcNow;
-            var query = _context.Contracts
+            var query =  _context.Contracts
                 .Where(c => c.ContractStatus == status && c.Request != null) // Đảm bảo có Request
                 .AsQueryable();
-
+            if(status == null)
+            {
+                query = _context.Contracts.AsQueryable();   
+            }
             switch (filterType)
             {
                 case DateFilterType.Today:
@@ -110,11 +113,16 @@ namespace CCSS_Repository.Repositories
                 case DateFilterType.ThisYear:
                     query = query.Where(c => c.Request.StartDate.Year == now.Year);
                     break;
+                default:
+                    
+                    break;
             }
 
             return await query.ToListAsync();
         }
 
+
+        //public async Task<List<Contract>> GetAllContractStatus()
 
         public async Task<List<Account>> GetTop5AccountsWithMostPaymentsAsync()
         {
