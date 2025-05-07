@@ -20,6 +20,7 @@ namespace CCSS_Service
         Task<List<AccountResponse>> Get5FavoriteCosplayer(DateFilterType filterType);
         Task<string> GetContractFilterSerivce(string serviceId);
         Task<string> GetAllContractFilterContractStatus(ContractStatus contractStatus);
+        Task<string> GetAllContractFilterConplete();
 
     }
 
@@ -28,13 +29,15 @@ namespace CCSS_Service
         private readonly IDashBoardRepository _dashBoardRepository;
         private readonly IMapper _mapper;
         private readonly IServiceRepository _serviceRepository;
+        private readonly IContractRespository _contractRespository;
 
 
-        public DashBoardService(IDashBoardRepository dashBoardRepository, IMapper mapper, IServiceRepository serviceRepository)
+        public DashBoardService(IDashBoardRepository dashBoardRepository, IMapper mapper, IServiceRepository serviceRepository, IContractRespository contractRespository)
         {
             _dashBoardRepository = dashBoardRepository;
             _mapper = mapper;
             _serviceRepository = serviceRepository;
+            _contractRespository = contractRespository;
         }
 
         public async Task<DashBoardRevenueResponse> GetRevenueAsync(DateFilterType filterType, RevenueSource revenueSource)
@@ -62,7 +65,7 @@ namespace CCSS_Service
 
             var response = new DashBoardChartRevenueResponse();
             response.TotalRevenue = ticketAndPayment.Sum(p => (p.Amount ?? 0));
-                
+
             if (filterType == DateFilterType.ThisWeek || filterType == DateFilterType.ThisMonth)
             {
                 response.DailyRevenue = ticketAndPayment
@@ -128,8 +131,8 @@ namespace CCSS_Service
 
         public async Task<string> GetAllContractFilterContractStatus(ContractStatus contractStatus)
         {
-           var contracts = await _dashBoardRepository.GetAllContractFilterContractStatus(contractStatus);
-            if(contracts == null)
+            var contracts = await _dashBoardRepository.GetAllContractFilterContractStatus(contractStatus);
+            if (contracts == null)
             {
                 return "Contract not found";
             }
@@ -174,6 +177,26 @@ namespace CCSS_Service
             return $"Số hợp đồng với dịch vụ '{serviceId}': {currentCount} " +
                    $"(tháng trước: {previousCount}, {trend} {Math.Abs(difference)} hợp đồng, " +
                    $"{percentChange:F2}%)";
+        }
+
+        public async Task<string> GetAllContractFilterConplete()
+        {
+
+            var contract = await _contractRespository.GetContracts();
+            int countAllContract = contract.Count();
+
+            var contractCompleted = await _dashBoardRepository.GetAllContractFilterContractStatus(ContractStatus.Completed);
+            int countContractComplete = contractCompleted?.Count ?? 0;
+
+            var contractNotCompleted = await _dashBoardRepository.GetAllContractNotCompleted();
+            int countContractNotComplete = contractNotCompleted?.Count ?? 0;
+
+
+            double percentCompleted = (double)countContractComplete / countAllContract * 100;
+
+            return $"Number of Pending Contract: {countContractNotComplete}\n" 
+                + $"Number of Completed Contract: {countContractComplete}\n"
+                + $"Percent Completed: {percentCompleted:F2}%\n";
         }
     }
 }

@@ -136,6 +136,17 @@ namespace CCSS_Api.Controllers
             return BadRequest(ModelState);
         }
 
+        [HttpGet("GetAllContractCompleted")]
+        public async Task<IActionResult> GetAllContractCompleted()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _dashBoardService.GetAllContractFilterConplete();
+            return Ok(result);
+        }
+
         //[HttpGet("total-average-star")]
         //public async Task<IActionResult> GetAverageStarByContractDescription()
         //{
