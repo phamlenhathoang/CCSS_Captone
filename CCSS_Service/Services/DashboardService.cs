@@ -19,6 +19,7 @@ namespace CCSS_Service
         Task<List<AccountResponse>> Get5PopularCosplayers(DateFilterType filterType);
         Task<List<AccountResponse>> Get5FavoriteCosplayer(DateFilterType filterType);
         Task<string> GetContractFilterSerivce(string serviceId);
+        Task<string> GetAllContractFilterContractStatus(ContractStatus contractStatus);
 
     }
 
@@ -125,7 +126,16 @@ namespace CCSS_Service
             return await _dashBoardRepository.GetContractsByStatusAndDate(status, filterType);
         }
 
-
+        public async Task<string> GetAllContractFilterContractStatus(ContractStatus contractStatus)
+        {
+           var contracts = await _dashBoardRepository.GetAllContractFilterContractStatus(contractStatus);
+            if(contracts == null)
+            {
+                return "Contract not found";
+            }
+            int count = contracts.Count();
+            return $"Number of Contract {contractStatus} : {count} ";
+        }
 
         public async Task<string> GetContractFilterSerivce(string serviceId)
         {
