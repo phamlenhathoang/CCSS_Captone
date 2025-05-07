@@ -77,7 +77,7 @@ namespace CCSS_Api.Controllers
                                 "1 (This week)<br>" +
                                 "2 (This month)<br>" +
                                 "3 (This Year)")]
-        public async Task<ActionResult<List<Contract>>> GetContractsByStatus([FromQuery] ContractStatus status, [FromQuery] DateFilterType filterType)
+        public async Task<ActionResult<List<Contract>>> GetContractsByStatus([FromQuery] ContractStatus? status, [FromQuery] DateFilterType? filterType)
         {
             var result = await _dashBoardService.GetContractsByStatusAsync(status, filterType);
             return Ok(result);

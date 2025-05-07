@@ -24,11 +24,13 @@ namespace CCSS_Service.Services
     {
         private readonly ICouponRepository _couponRepository;
         private readonly IBeginTransactionRepository _transactionRepository;
+        private readonly IAccountCouponRepository _accountCouponRepository;
 
-        public CouponService(ICouponRepository couponRepository, IBeginTransactionRepository transactionRepository)
+        public CouponService(ICouponRepository couponRepository, IBeginTransactionRepository transactionRepository, IAccountCouponRepository accountCouponRepository)
         {
             _couponRepository = couponRepository;
             _transactionRepository = transactionRepository;
+            _accountCouponRepository = accountCouponRepository;
         }
 
         public async Task<List<CouponResponse>> GetAllCoupon(string? searchterm)
@@ -119,6 +121,7 @@ namespace CCSS_Service.Services
                     Condition = couponRequest.Condition,
                     Percent = couponRequest.Percent ,
                     Amount = couponRequest.Amount,
+                    Quantity = couponRequest.Quantity,
                     StartDate = StartDate,
                     EndDate = EndDate,
                     Type = CouponType.ForOrder,
@@ -180,6 +183,7 @@ namespace CCSS_Service.Services
                 couponExisting.Condition = couponRequest.Condition;
                 couponExisting.Percent = couponRequest.Percent;
                 couponExisting.Amount = couponRequest.Amount;
+                couponExisting.Quantity = couponRequest.Quantity;
                 couponExisting.StartDate = StartDate;
                 couponExisting.EndDate = EndDate;
 
@@ -197,14 +201,31 @@ namespace CCSS_Service.Services
 
         public async Task<string> DeleteCoupon(string couponId)
         {
-            var coupon = await _couponRepository.GetCouponById(couponId);
-            if (coupon == null)
+           using(var transaction = await _transactionRepository.BeginTransaction())
             {
-                return "Coupon not Found";
-            }
-            var result = await _couponRepository.RemoveCoupon(coupon);
+                var coupon = await _couponRepository.GetCouponById(couponId);
+                if (coupon == null)
+                {
+                    await transaction.RollbackAsync();
+                    return "Coupon not Found";
+                }
+                var listAccountCoupon = await _accountCouponRepository.GetAllAccountCouponByCoupon(couponId);
+                if(listAccountCoupon != null)
+                {
+                    await transaction.RollbackAsync();
+                    return "There are someone use this coupon. Can not Delete coupon";
+                }
+                var result = await _couponRepository.RemoveCoupon(coupon);
+                if (!result)
+                {
+                    await transaction.RollbackAsync();
+                    return "Can not delete coupon";
+                }
 
-            return result ? "Remove Success" : "Update Failed";
+                await transaction.CommitAsync();
+                return "Delete coupon success";
+                
+            }
         }
     }
 }
