@@ -13,7 +13,7 @@ namespace CCSS_Service
     {
         Task<DashBoardRevenueResponse> GetRevenueAsync(DateFilterType filterType, RevenueSource revenueSource);
         Task<DashBoardChartRevenueResponse> GetRevenueChartAsync(DateFilterType filterType, RevenueSource revenueSource);
-        Task<List<Contract>> GetContractsByStatusAsync(ContractStatus status, DateFilterType filterType);
+        Task<List<Contract>> GetContractsByStatusAsync(ContractStatus? status, DateFilterType? filterType);
         Task<List<AccountDashBoardResponse>> GetTop5AccountsWithMostPaymentsAsync();
         //Task<double> GetAverageStarByContractDescriptionAsync();
         Task<List<AccountResponse>> Get5PopularCosplayers(DateFilterType filterType);
@@ -117,7 +117,7 @@ namespace CCSS_Service
         {
             return _mapper.Map<List<AccountResponse>>(await _dashBoardRepository.Get5FavoriteCosplayer(filterType));
         }
-        public async Task<List<Contract>> GetContractsByStatusAsync(ContractStatus status, DateFilterType filterType)
+        public async Task<List<Contract>> GetContractsByStatusAsync(ContractStatus? status, DateFilterType? filterType)
         {
             return await _dashBoardRepository.GetContractsByStatusAndDate(status, filterType);
         }
