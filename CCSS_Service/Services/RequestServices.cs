@@ -391,7 +391,7 @@ namespace CCSS_Service.Services
                                     Description = r.Description,
                                     CharacterId = r.CharacterId,
                                     CreateDate = newRequest.StartDate,
-                                    Status = RequestCharacterStatus.Pending,
+                                    Status = RequestCharacterStatus.Accept,
                                     Quantity = r.Quantity,
                                     TotalPrice = totalPrice,
                                 });
@@ -631,42 +631,7 @@ namespace CCSS_Service.Services
                     await transaction.RollbackAsync();
                     return "Request not found";
                 }
-                //if (request.ServiceId == "S002")
-                //{
-                //    foreach (var r in listRequestCharacters)
-                //    {
-                //        if (r.CosplayerId != null)
-                //        {
-                //            var pendingRequestCharacter = await _requestCharacterRepository.GetListRequestCharacterPending(requestId);
-                //            if (r.Status != RequestCharacterStatus.Accept)
-                //            {
-                //                await transaction.RollbackAsync();
-                //                return $"There are still people not accept.";
-                //            }
-                //        }
-                //    }
-                //}
-                if (requestStatus == RequestStatus.Browsed)
-                {
-                    foreach (var c in listRequestCharacters)
-                    {
-                        var character = await _characterRepository.GetCharacter(c.CharacterId);
-                        if (character == null)
-                        {
-                            await transaction.RollbackAsync();
-                            return "Character is not found";
-                        }
-                        character.Quantity -= c.Quantity;
-                        character.UpdateDate = DateTime.Now;
-                        var result = await _characterRepository.UpdateCharacter(character);
-                        if (!result)
-                        {
-                            await transaction.RollbackAsync();
-                            return "Update Character failed";
-                        }
-                    }
-                }
-                else if (requestStatus == RequestStatus.Cancel)
+                if (requestStatus == RequestStatus.Cancel)
                 {
                     request.Reason = reason;
                 }
@@ -1041,7 +1006,7 @@ namespace CCSS_Service.Services
                                 Description = r.Description,
                                 CharacterId = r.CharacterId,
                                 CreateDate = newRequest.StartDate,
-                                Status = RequestCharacterStatus.Pending,
+                                Status = RequestCharacterStatus.Accept,
                                 Quantity = 1,
                                 CosplayerId = r.CosplayerId,
                                 TotalPrice = totalPrice,
