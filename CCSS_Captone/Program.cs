@@ -101,6 +101,12 @@ builder.Services.AddScoped<IRequestDateServices, RequestDateServices>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IContractRefundService, ContractRefundService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
+//builder.Services.AddHttpClient<IDeliveryService, DeliveryService>();
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+//builder.Services.AddSingleton<IDeliveryService, DeliveryService>();
+builder.Services.AddScoped<IDeliveryService, DeliveryService>();
+
+builder.Services.AddLogging();
 
 
 

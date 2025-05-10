@@ -43,8 +43,9 @@ namespace CCSS_Service.Services
         private readonly ICartRepository _cartRepository;
         private readonly ICartProductServices _cartProductServices;
         private readonly IMapper _mapper;
+        private readonly IDeliveryService _deliveryService;
 
-        public MomoService(IContractServices _contractServices, IOptions<MomoOptionModel> options, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IAccountRepository accountRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IContractRespository contractRespository, IOrderRepository orderRepository, ICartRepository cartRepository, ICartProductServices cartProductServices, IMapper mapper)
+        public MomoService(IContractServices _contractServices, IOptions<MomoOptionModel> options, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IAccountRepository accountRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IContractRespository contractRespository, IOrderRepository orderRepository, ICartRepository cartRepository, ICartProductServices cartProductServices, IMapper mapper, IDeliveryService deliveryService)
         {
             _options = options;
             _ticketAccountService = ticketAccountService;
@@ -58,6 +59,7 @@ namespace CCSS_Service.Services
             this._cartRepository = cartRepository;
             this._cartProductServices = cartProductServices;
             this._mapper = mapper;
+            _deliveryService = deliveryService;
         }
         public async Task<MomoCreatePaymentResponse> CreatePaymentAsync(OrderInfoModel model)
         {
@@ -330,6 +332,7 @@ namespace CCSS_Service.Services
                     await _cartProductServices.DeleteCartProductAfterPayment(cart.CartId, product);
                     await _orderRepository.UpdateProductQuantitiesAfterPayment(OrderPaymentId);
                     await _orderRepository.UpdateOrder(order);
+                    await _deliveryService.CreateDeliveryOrderAsync(order.OrderId);
 
                     return new MomoExecuteResult
                     {
