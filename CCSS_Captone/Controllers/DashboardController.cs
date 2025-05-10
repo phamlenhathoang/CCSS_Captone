@@ -77,7 +77,7 @@ namespace CCSS_Api.Controllers
                                 "1 (This week)<br>" +
                                 "2 (This month)<br>" +
                                 "3 (This Year)")]
-        public async Task<ActionResult<List<Contract>>> GetContractsByStatus([FromQuery] ContractStatus status, [FromQuery] DateFilterType filterType)
+        public async Task<ActionResult<List<Contract>>> GetContractsByStatus([FromQuery] ContractStatus? status, [FromQuery] DateFilterType? filterType)
         {
             var result = await _dashBoardService.GetContractsByStatusAsync(status, filterType);
             return Ok(result);
@@ -100,6 +100,7 @@ namespace CCSS_Api.Controllers
             var result = await _dashBoardService.Get5PopularCosplayers(filterType);
             return Ok(result);
         }
+
         [HttpGet("top5-Favorite-cosplayer")]
         [SwaggerOperation(Description = "filterType<br>" +
                                          "0 (Today)<br>" +
@@ -109,6 +110,40 @@ namespace CCSS_Api.Controllers
         public async Task<ActionResult<List<AccountResponse>>> Get5FavoriteCosplayer([FromQuery] DateFilterType filterType)
         {
             var result = await _dashBoardService.Get5FavoriteCosplayer(filterType);
+            return Ok(result);
+        }
+
+
+        [HttpGet("GetAllContractFilterService")]
+        public async Task<IActionResult> GetAllContractFilterService(string serviceId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _dashBoardService.GetContractFilterSerivce(serviceId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpGet("GetAllContractFilterContractStatus")]
+        public async Task<IActionResult> GetAllContractFilterContractStatus(ContractStatus contractStatus)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _dashBoardService.GetAllContractFilterContractStatus(contractStatus);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpGet("GetAllContractCompleted")]
+        public async Task<IActionResult> GetAllContractCompleted()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _dashBoardService.GetAllContractFilterConplete();
             return Ok(result);
         }
 

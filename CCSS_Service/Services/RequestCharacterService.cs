@@ -44,12 +44,15 @@ namespace CCSS_Service.Services
             _taskRepository = taskRepository;
         }
 
+        #region GetAllCharacterInRequest
         public async Task<List<RequestCharacter>> GetAllCharacterInRequest()
         {
             return await _requestCharacterRepository.GetAllRequestCharacter();
         }
 
+        #endregion
 
+        #region Check Cahracter In Request
         public async Task<string> CheckRequestChracter(string requestId)
         {
             var request = await _requestRepository.GetRequestById(requestId);
@@ -79,7 +82,9 @@ namespace CCSS_Service.Services
             return "This request can change status";
 
         }
+        #endregion
 
+        #region Get RequestCharacter By Id
         public async Task<RequestCharacterResponse> GetCharacterInRequestById(string Id)
         {
             var requestCharacter = await _requestCharacterRepository.GetRequestCharacterById(Id);
@@ -120,7 +125,9 @@ namespace CCSS_Service.Services
             };
             return requestCharacterResponse;
         }
+        #endregion
 
+        #region Get List Request Character By Cosplayer
         public async Task<List<RequestCharacterResponse>> GetRequestCharacterByCosplayer(string cosplayerId)
         {
             List<RequestCharacterResponse> requestCharacters = new List<RequestCharacterResponse>();
@@ -168,6 +175,9 @@ namespace CCSS_Service.Services
             }
             return requestCharacters;
         }
+        #endregion
+
+        #region Update Status
 
         public async Task<string> UpdateStatus(string requestcharacterId, RequestCharacterStatus status)
         {
@@ -183,7 +193,9 @@ namespace CCSS_Service.Services
             var result = await _requestCharacterRepository.UpdateRequestCharacter(requestCharacter);
             return result ? "Update Successfull" : "Update Failed";
         }
+        #endregion
 
+        #region Add Character In Request
         public async Task<string> AddCharacterInRequest(AddCharacterInRequest characterInRequest)
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
@@ -243,7 +255,7 @@ namespace CCSS_Service.Services
                     RequestId = request.RequestId,
                     Description = characterInRequest.Description,
                     Quantity = characterInRequest.Quantity,
-                    Status = RequestCharacterStatus.Pending,
+                    Status = RequestCharacterStatus.Accept,
                     TotalPrice = totalPrice,
                     CreateDate = DateTime.Now,
                     UpdateDate = null,
@@ -332,7 +344,9 @@ namespace CCSS_Service.Services
                 }
             }
         }
+        #endregion
 
+        #region Update Character in Request
         public async Task<string> UpdateCharactetInRRequest(string requestCharacterId, CharacterInRequest characterInRequest)
         {
             var requestCharacter = await _requestCharacterRepository.GetRequestCharacterById(requestCharacterId);
@@ -352,7 +366,10 @@ namespace CCSS_Service.Services
             return result ? "Update Success" : "Update Failed";
 
         }
+        #endregion
 
+
+        #region Delete Character in Request
         public async Task<string> DeleteCharacterInRequest(string requestCharacterId)
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
@@ -379,10 +396,14 @@ namespace CCSS_Service.Services
                 return "Delete Success";
             }
         }
+        #endregion
 
+
+        #region Get Request Character by requestid and characterid
         public async Task<RequestCharacter> GetRequestCharacter(string requestId, string characterId)
         {
             return await _requestCharacterRepository.GetRequestCharacter(requestId, characterId);
         }
+        #endregion
     }
 }

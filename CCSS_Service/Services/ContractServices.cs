@@ -856,7 +856,7 @@ namespace CCSS_Service.Services
 
                 if (deliveryContractRequest.Status.ToLower().Equals(DeliveryStatus.Delivering.ToString().ToLower()))
                 {
-                    if (contract.DeliveryStatus == DeliveryStatus.Preparing)
+                    if (contract.DeliveryStatus == DeliveryStatus.Preparing || contract.DeliveryStatus == DeliveryStatus.UnReceived)
                     {
                         if (deliveryContractRequest.Images != null)
                         {
@@ -879,6 +879,18 @@ namespace CCSS_Service.Services
                         {
                             throw new Exception("Please enter image of character in contract");
                         }
+                    }
+                    else
+                    {
+                        throw new Exception("Can not update status contract");
+                    }
+                }
+
+                if (deliveryContractRequest.Status.ToLower().Equals(DeliveryStatus.UnReceived.ToString().ToLower()))
+                {
+                    if (contract.DeliveryStatus == DeliveryStatus.Delivering)
+                    {
+                        contract.DeliveryStatus = DeliveryStatus.UnReceived;
                     }
                     else
                     {
@@ -927,6 +939,7 @@ namespace CCSS_Service.Services
                         if (deliveryContractRequest.Images != null)
                         {
                             contract.DeliveryStatus = DeliveryStatus.Refund;
+                            contract.ContractStatus = ContractStatus.Refund;
 
                             foreach (var imageCharacter in deliveryContractRequest.Images)
                             {

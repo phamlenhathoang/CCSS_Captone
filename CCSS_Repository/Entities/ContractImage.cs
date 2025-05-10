@@ -30,5 +30,6 @@ namespace CCSS_Repository.Entities
         Delivering,
         Received,
         Refund,
+        Check,
     }
 }

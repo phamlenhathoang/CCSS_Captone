@@ -1,7 +1,9 @@
 ﻿using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Libraries;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
+using Humanizer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -24,17 +26,20 @@ namespace CCSS_Service.Services
     {
         private readonly IContractRefundRepository contractRefundRepository;
         private readonly IContractRespository contractRepository;
+        private readonly IContractImageRepository contractImageRepository;
 
-        public ContractRefundService(IContractRefundRepository contractRefundRepository, IContractRespository contractRespository)
+        public ContractRefundService(IContractRefundRepository contractRefundRepository, IContractRespository contractRepository, IContractImageRepository contractImageRepository)
         {
             this.contractRefundRepository = contractRefundRepository;
-            this.contractRepository = contractRespository;
+            this.contractRepository = contractRepository;
+            this.contractImageRepository = contractImageRepository;
         }
         public async Task<bool> AddContractRefund(ContractRefundRequest contractRefundRequest)
         {
             try
             {
                 Contract contract = await contractRepository.GetContractById(contractRefundRequest.ContractId);
+                Image image = new Image();
                 if (contract == null)
                 {
                     throw new Exception("Contract doest not exist");
@@ -45,6 +50,11 @@ namespace CCSS_Service.Services
                     throw new Exception("Request of this contract does not exist");
                 }
 
+                if (contract.ContractStatus != ContractStatus.Refund)
+                {
+                    throw new Exception("Status of contract must be refund");
+                }
+
                 if (contract.ContractRefund == null)
                 {
                     ContractRefund contractRefund = new ContractRefund()
@@ -52,34 +62,27 @@ namespace CCSS_Service.Services
                         ContractId = contractRefundRequest.ContractId,
                         CreateDate = DateTime.Now,
                         Description = contractRefundRequest.Description,
-                        Price = contractRefundRequest.Price,
+                        Price = contractRefundRequest.Price,   
+                        Amount = contract.Amount - contractRefundRequest.Price,
                     };
 
-                    if(contract.Amount > contractRefundRequest.Price)
+                    if(contractRefund.Amount > 0)
                     {
-                        contractRefund.Description = contractRefundRequest.Description;
                         contractRefund.Type = Type.SystemRefund;
                         contractRefund.Status = ContractRefundStatus.Pending;
-
-                        contract.Amount = contract.Amount - contractRefundRequest.Price;
+                        
                     }
 
-                    if (contract.Amount < contractRefundRequest.Price)
+                    if (contractRefund.Amount < 0)
                     {
-                        contractRefund.Description = contractRefundRequest.Description;
                         contractRefund.Type = Type.CustomerRefund;
                         contractRefund.Status = ContractRefundStatus.Pending;
-
-                        contract.Amount = contractRefundRequest.Price - contract.Amount;
                     }
 
-                    if (contract.Amount == contractRefundRequest.Price)
+                    if (contractRefund.Amount == 0)
                     {
-                        contractRefund.Description = contractRefundRequest.Description;
                         contractRefund.Type = Type.DepositRetained;
                         contractRefund.Status = ContractRefundStatus.Paid;
-
-                        contract.Amount = contractRefundRequest.Price - contract.Amount;
                     }
 
                     bool checkAdd = await contractRefundRepository.AddContractRefund(contractRefund);
@@ -91,34 +94,27 @@ namespace CCSS_Service.Services
                 else
                 {
                     contract.ContractRefund.Price += contractRefundRequest.Price;
-                    contract.ContractRefund.Description = contractRefundRequest.Description;
+                    contract.ContractRefund.Description = contract.ContractRefund.Description + ", " + contractRefundRequest.Description;
                     contract.ContractRefund.UpdateDate = DateTime.Now;
+                    contract.ContractRefund.Amount -= contractRefundRequest.Price; 
 
-                    if (contract.Amount > contractRefundRequest.Price)
+                    if (contract.ContractRefund.Amount > 0)
                     {
-                        contract.ContractRefund.Description = contractRefundRequest.Description;
                         contract.ContractRefund.Type = Type.SystemRefund;
                         contract.ContractRefund.Status = ContractRefundStatus.Pending;
-
-                        contract.Amount = contract.Amount - contractRefundRequest.Price;
                     }
 
-                    if (contract.Amount < contractRefundRequest.Price)
+                    if (contract.ContractRefund.Amount < 0)
                     {
-                        contract.ContractRefund.Description = contractRefundRequest.Description;
                         contract.ContractRefund.Type = Type.CustomerRefund;
                         contract.ContractRefund.Status = ContractRefundStatus.Pending;
-
-                        contract.Amount = contractRefundRequest.Price - contract.Amount;
                     }
 
-                    if (contract.Amount == contractRefundRequest.Price)
+                    if (contract.ContractRefund.Amount == 0)
                     {
-                        contract.ContractRefund.Description = contractRefundRequest.Description;
                         contract.ContractRefund.Type = Type.DepositRetained;
                         contract.ContractRefund.Status = ContractRefundStatus.Paid;
 
-                        contract.Amount = contractRefundRequest.Price - contract.Amount;
                     }
 
                     bool check = await contractRefundRepository.UpdateContractRefund(contract.ContractRefund);
@@ -133,6 +129,30 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("Can not update contract");
                 }
+
+                if (contractRefundRequest.Images.Count > 0)
+                {
+                    List<ContractImage> contractImages = new List<ContractImage>();
+                    foreach (var contractImageRequest in contractRefundRequest.Images)
+                    {
+                        var contractImage = new ContractImage()
+                        {
+                            ContractId = contract.ContractId,
+                            CreateDate = DateTime.Now,
+                            Status = ContractImageStatus.Check,
+                            UrlImage = await image.UploadImageToFirebase(contractImageRequest),
+                        };
+                        contractImages.Add(contractImage);
+                    }
+
+                    bool checkAddImage = await contractImageRepository.AddListContractImage(contractImages);
+                    if (!checkAddImage)
+                    {
+                        throw new Exception("Can not add ContractImage");
+                    }
+                }
+
+                
 
                 return true;
             }
