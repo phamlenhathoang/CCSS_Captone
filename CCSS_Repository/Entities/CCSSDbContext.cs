@@ -516,22 +516,23 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Product
             modelBuilder.Entity<Product>().HasData(
-    new Product { ProductId = "P001", ProductName = "Naruto Wig", Description = "A wig for Naruto cosplay", Price = 30000, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P002", ProductName = "Mario Hat", Description = "A hat for Mario cosplay", Price = 20000, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P003", ProductName = "Sasuke Costume", Description = "Complete costume for Sasuke cosplay", Price = 80000, Quantity = 5, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P004", ProductName = "Zelda Sword", Description = "Replica sword from The Legend of Zelda", Price = 100000, Quantity = 7, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P005", ProductName = "One Piece Straw Hat", Description = "Iconic straw hat from One Piece", Price = 25000, Quantity = 20, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P006", ProductName = "Miku Wig", Description = "Hatsune Miku blue twin-tail wig", Price = 40000, Quantity = 12, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P007", ProductName = "Demon Slayer Earrings", Description = "Tanjiro's iconic hanafuda earrings", Price = 15000, Quantity = 30, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P008", ProductName = "Attack on Titan Jacket", Description = "Survey Corps uniform jacket", Price = 50000, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P009", ProductName = "Pikachu Onesie", Description = "Cozy Pikachu-themed onesie", Price = 60000, Quantity = 8, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P010", ProductName = "Cloud's Buster Sword", Description = "Final Fantasy VII replica sword", Price = 120000, Quantity = 4, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P011", ProductName = "Genshin Impact Vision", Description = "LED Vision accessory from Genshin Impact", Price = 35000, Quantity = 25, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P012", ProductName = "Jinx Wig", Description = "Jinx cosplay wig from Arcane", Price = 45000, Quantity = 6, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P013", ProductName = "Sailor Moon Tiara", Description = "Golden tiara from Sailor Moon", Price = 18000, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P014", ProductName = "Spider-Man Suit", Description = "High-quality Spider-Man suit", Price = 90000, Quantity = 3, CreateDate = DateTime.UtcNow, IsActive = true },
-    new Product { ProductId = "P015", ProductName = "Harry Potter Wand", Description = "Replica wand from Harry Potter series", Price = 22000, Quantity = 50, CreateDate = DateTime.UtcNow, IsActive = true }
-);
+     new Product { ProductId = "P001", ProductName = "Naruto Wig", Description = "A wig for Naruto cosplay", Price = 30000, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true, weight = 200, length = 30, width = 20, height = 10 },
+     new Product { ProductId = "P002", ProductName = "Mario Hat", Description = "A hat for Mario cosplay", Price = 20000, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true, weight = 100, length = 25, width = 25, height = 15 },
+     new Product { ProductId = "P003", ProductName = "Sasuke Costume", Description = "Complete costume for Sasuke cosplay", Price = 80000, Quantity = 5, CreateDate = DateTime.UtcNow, IsActive = true, weight = 800, length = 50, width = 40, height = 15 },
+     new Product { ProductId = "P004", ProductName = "Zelda Sword", Description = "Replica sword from The Legend of Zelda", Price = 100000, Quantity = 7, CreateDate = DateTime.UtcNow, IsActive = true, weight = 1500, length = 120, width = 15, height = 5 },
+     new Product { ProductId = "P005", ProductName = "One Piece Straw Hat", Description = "Iconic straw hat from One Piece", Price = 25000, Quantity = 20, CreateDate = DateTime.UtcNow, IsActive = true, weight = 300, length = 35, width = 35, height = 10 },
+     new Product { ProductId = "P006", ProductName = "Miku Wig", Description = "Hatsune Miku blue twin-tail wig", Price = 40000, Quantity = 12, CreateDate = DateTime.UtcNow, IsActive = true, weight = 150, length = 40, width = 25, height = 5 },
+     new Product { ProductId = "P007", ProductName = "Demon Slayer Earrings", Description = "Tanjiro's iconic hanafuda earrings", Price = 15000, Quantity = 30, CreateDate = DateTime.UtcNow, IsActive = true, weight = 50, length = 5, width = 5, height = 3 },
+     new Product { ProductId = "P008", ProductName = "Attack on Titan Jacket", Description = "Survey Corps uniform jacket", Price = 50000, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true, weight = 800, length = 50, width = 40, height = 5 },
+     new Product { ProductId = "P009", ProductName = "Pikachu Onesie", Description = "Cozy Pikachu-themed onesie", Price = 60000, Quantity = 8, CreateDate = DateTime.UtcNow, IsActive = true, weight = 700, length = 60, width = 50, height = 10 },
+     new Product { ProductId = "P010", ProductName = "Cloud's Buster Sword", Description = "Final Fantasy VII replica sword", Price = 120000, Quantity = 4, CreateDate = DateTime.UtcNow, IsActive = true, weight = 2000, length = 160, width = 25, height = 10 },
+     new Product { ProductId = "P011", ProductName = "Genshin Impact Vision", Description = "LED Vision accessory from Genshin Impact", Price = 35000, Quantity = 25, CreateDate = DateTime.UtcNow, IsActive = true, weight = 100, length = 10, width = 10, height = 5 },
+     new Product { ProductId = "P012", ProductName = "Jinx Wig", Description = "Jinx cosplay wig from Arcane", Price = 45000, Quantity = 6, CreateDate = DateTime.UtcNow, IsActive = true, weight = 250, length = 40, width = 25, height = 10 },
+     new Product { ProductId = "P013", ProductName = "Sailor Moon Tiara", Description = "Golden tiara from Sailor Moon", Price = 18000, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true, weight = 50, length = 15, width = 15, height = 5 },
+     new Product { ProductId = "P014", ProductName = "Spider-Man Suit", Description = "High-quality Spider-Man suit", Price = 90000, Quantity = 3, CreateDate = DateTime.UtcNow, IsActive = true, weight = 1500, length = 70, width = 40, height = 5 },
+     new Product { ProductId = "P015", ProductName = "Harry Potter Wand", Description = "Replica wand from Harry Potter series", Price = 22000, Quantity = 50, CreateDate = DateTime.UtcNow, IsActive = true, weight = 200, length = 35, width = 5, height = 5 }
+ );
+
             #endregion
 
 
@@ -554,22 +555,23 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Order
             modelBuilder.Entity<Order>().HasData(
-               new Order { OrderId = "O001", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-01"), TotalPrice = 250000.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O002", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-05"), TotalPrice = 150000.5, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O003", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-10"), TotalPrice = 300000.0, OrderStatus = OrderStatus.Cancel },
-               new Order { OrderId = "O004", AccountId = "A014", OrderDate = DateTime.Parse("2024-03-12"), TotalPrice = 400000.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O005", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-15"), TotalPrice = 175000.0, OrderStatus = OrderStatus.Cancel },
-               new Order { OrderId = "O006", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-18"), TotalPrice = 225000.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O007", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-20"), TotalPrice = 350000.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O008", AccountId = "A014", OrderDate = DateTime.Parse("2024-03-22"), TotalPrice = 275000.0, OrderStatus = OrderStatus.Cancel },
-               new Order { OrderId = "O009", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-25"), TotalPrice = 500000.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O010", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-28"), TotalPrice = 125000.0, OrderStatus = OrderStatus.Cancel },
-               new Order { OrderId = "O011", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-30"), TotalPrice = 325000.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O012", AccountId = "A014", OrderDate = DateTime.Parse("2024-04-02"), TotalPrice = 410000.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O013", AccountId = "A003", OrderDate = DateTime.Parse("2024-04-05"), TotalPrice = 280000.0, OrderStatus = OrderStatus.Cancel },
-               new Order { OrderId = "O014", AccountId = "A006", OrderDate = DateTime.Parse("2024-04-07"), TotalPrice = 350000.0, OrderStatus = OrderStatus.Completed },
-               new Order { OrderId = "O015", AccountId = "A011", OrderDate = DateTime.Parse("2024-04-10"), TotalPrice = 200000.0, OrderStatus = OrderStatus.Completed }
-            );
+   new Order { OrderId = "O001", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-01"), TotalPrice = 250000.0, OrderStatus = OrderStatus.Completed, Address = "123 Main St", Phone = "0901234567", ShipStatus = "Shipped", ShipCode = "S001", to_ward_code = "Ward1", to_district_id = "District1", CancelDate = null },
+   new Order { OrderId = "O002", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-05"), TotalPrice = 150000.5, OrderStatus = OrderStatus.Completed, Address = "456 Elm St", Phone = "0902345678", ShipStatus = "Shipped", ShipCode = "S002", to_ward_code = "Ward2", to_district_id = "District2", CancelDate = null },
+   new Order { OrderId = "O003", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-10"), TotalPrice = 300000.0, OrderStatus = OrderStatus.Cancel, Address = "789 Pine St", Phone = "0903456789", ShipStatus = "Canceled", ShipCode = "S003", to_ward_code = "Ward3", to_district_id = "District3", CancelDate = DateTime.Parse("2024-03-10") },
+   new Order { OrderId = "O004", AccountId = "A014", OrderDate = DateTime.Parse("2024-03-12"), TotalPrice = 400000.0, OrderStatus = OrderStatus.Completed, Address = "101 Oak St", Phone = "0904567890", ShipStatus = "Shipped", ShipCode = "S004", to_ward_code = "Ward4", to_district_id = "District4", CancelDate = null },
+   new Order { OrderId = "O005", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-15"), TotalPrice = 175000.0, OrderStatus = OrderStatus.Cancel, Address = "123 Main St", Phone = "0901234567", ShipStatus = "Canceled", ShipCode = "S005", to_ward_code = "Ward1", to_district_id = "District1", CancelDate = DateTime.Parse("2024-03-15") },
+   new Order { OrderId = "O006", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-18"), TotalPrice = 225000.0, OrderStatus = OrderStatus.Completed, Address = "456 Elm St", Phone = "0902345678", ShipStatus = "Shipped", ShipCode = "S006", to_ward_code = "Ward2", to_district_id = "District2", CancelDate = null },
+   new Order { OrderId = "O007", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-20"), TotalPrice = 350000.0, OrderStatus = OrderStatus.Completed, Address = "789 Pine St", Phone = "0903456789", ShipStatus = "Shipped", ShipCode = "S007", to_ward_code = "Ward3", to_district_id = "District3", CancelDate = null },
+   new Order { OrderId = "O008", AccountId = "A014", OrderDate = DateTime.Parse("2024-03-22"), TotalPrice = 275000.0, OrderStatus = OrderStatus.Cancel, Address = "101 Oak St", Phone = "0904567890", ShipStatus = "Canceled", ShipCode = "S008", to_ward_code = "Ward4", to_district_id = "District4", CancelDate = DateTime.Parse("2024-03-22") },
+   new Order { OrderId = "O009", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-25"), TotalPrice = 500000.0, OrderStatus = OrderStatus.Completed, Address = "123 Main St", Phone = "0901234567", ShipStatus = "Shipped", ShipCode = "S009", to_ward_code = "Ward1", to_district_id = "District1", CancelDate = null },
+   new Order { OrderId = "O010", AccountId = "A006", OrderDate = DateTime.Parse("2024-03-28"), TotalPrice = 125000.0, OrderStatus = OrderStatus.Cancel, Address = "456 Elm St", Phone = "0902345678", ShipStatus = "Canceled", ShipCode = "S010", to_ward_code = "Ward2", to_district_id = "District2", CancelDate = DateTime.Parse("2024-03-28") },
+   new Order { OrderId = "O011", AccountId = "A011", OrderDate = DateTime.Parse("2024-03-30"), TotalPrice = 325000.0, OrderStatus = OrderStatus.Completed, Address = "789 Pine St", Phone = "0903456789", ShipStatus = "Shipped", ShipCode = "S011", to_ward_code = "Ward3", to_district_id = "District3", CancelDate = null },
+   new Order { OrderId = "O012", AccountId = "A014", OrderDate = DateTime.Parse("2024-04-02"), TotalPrice = 410000.0, OrderStatus = OrderStatus.Completed, Address = "101 Oak St", Phone = "0904567890", ShipStatus = "Shipped", ShipCode = "S012", to_ward_code = "Ward4", to_district_id = "District4", CancelDate = null },
+   new Order { OrderId = "O013", AccountId = "A003", OrderDate = DateTime.Parse("2024-04-05"), TotalPrice = 280000.0, OrderStatus = OrderStatus.Cancel, Address = "123 Main St", Phone = "0901234567", ShipStatus = "Canceled", ShipCode = "S013", to_ward_code = "Ward1", to_district_id = "District1", CancelDate = DateTime.Parse("2024-04-05") },
+   new Order { OrderId = "O014", AccountId = "A006", OrderDate = DateTime.Parse("2024-04-07"), TotalPrice = 350000.0, OrderStatus = OrderStatus.Completed, Address = "456 Elm St", Phone = "0902345678", ShipStatus = "Shipped", ShipCode = "S014", to_ward_code = "Ward2", to_district_id = "District2", CancelDate = null },
+   new Order { OrderId = "O015", AccountId = "A011", OrderDate = DateTime.Parse("2024-04-10"), TotalPrice = 200000.0, OrderStatus = OrderStatus.Completed, Address = "789 Pine St", Phone = "0903456789", ShipStatus = "Shipped", ShipCode = "S015", to_ward_code = "Ward3", to_district_id = "District3", CancelDate = null }
+);
+
             #endregion
 
             #region Coupon

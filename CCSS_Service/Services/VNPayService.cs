@@ -43,9 +43,10 @@ namespace CCSS_Service.Services
         private readonly IMapper _mapper;
         private readonly IContractServices _contractServices;
         private readonly IContractRespository contractRespository;
+        private readonly IDeliveryService _deliveryService;
 
 
-        public VNPayService(IConfiguration configuration, IAccountRepository accountRepository, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IOrderRepository orderRepository, ICartRepository cartRepository, ICartProductServices cartProductServices, IMapper mapper, IContractServices contractServices, IContractRespository contractRespository)
+        public VNPayService(IConfiguration configuration, IAccountRepository accountRepository, ITicketAccountService ticketAccountService, IPaymentRepository paymentRepository, IEventRepository eventrepository, IAccountCouponRepository accountCouponRepository, IOrderRepository orderRepository, ICartRepository cartRepository, ICartProductServices cartProductServices, IMapper mapper, IContractServices contractServices, IContractRespository contractRespository, IDeliveryService deliveryService)
         {
             _configuration = configuration;
             _accountRepository = accountRepository;
@@ -59,6 +60,7 @@ namespace CCSS_Service.Services
             _mapper = mapper;
             _contractServices = contractServices;
             this.contractRespository = contractRespository;
+            _deliveryService = deliveryService;
         }
 
 
@@ -299,7 +301,7 @@ namespace CCSS_Service.Services
                     await _orderRepository.UpdateProductQuantitiesAfterPayment(existingPayment.OrderId);
 
                     await _orderRepository.UpdateOrder(order);
-
+                    await _deliveryService.CreateDeliveryOrderAsync(order.OrderId);
                     return "mua hàng thành công";
 
 

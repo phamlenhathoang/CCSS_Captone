@@ -16,6 +16,10 @@ namespace CCSS_Service.Model.Responses
 
         public ICollection<OrderProductResponse> OrderProducts { get; set; } = new List<OrderProductResponse>();
 
+        public string Address { get; set; }
+        public string Phone { get; set; }
+        public string ShipStatus { get; set; }
+        public DateTime? CancelDate { get; set; }
         public DateTime? OrderDate { get; set; }
         public double? TotalPrice { get; set; }
         public OrderStatus OrderStatus { get; set; }
