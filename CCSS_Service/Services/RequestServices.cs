@@ -391,7 +391,7 @@ namespace CCSS_Service.Services
                                     Description = r.Description,
                                     CharacterId = r.CharacterId,
                                     CreateDate = newRequest.StartDate,
-                                    Status = RequestCharacterStatus.Accept,
+                                    Status = RequestCharacterStatus.Pending,
                                     Quantity = r.Quantity,
                                     TotalPrice = totalPrice,
                                 });
@@ -1006,7 +1006,7 @@ namespace CCSS_Service.Services
                                 Description = r.Description,
                                 CharacterId = r.CharacterId,
                                 CreateDate = newRequest.StartDate,
-                                Status = RequestCharacterStatus.Accept,
+                                Status = RequestCharacterStatus.Pending,
                                 Quantity = 1,
                                 CosplayerId = r.CosplayerId,
                                 TotalPrice = totalPrice,
