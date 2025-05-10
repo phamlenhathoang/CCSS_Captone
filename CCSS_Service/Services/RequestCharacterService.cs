@@ -178,7 +178,6 @@ namespace CCSS_Service.Services
         #endregion
 
         #region Update Status
-
         public async Task<string> UpdateStatus(string requestcharacterId, RequestCharacterStatus status)
         {
             var requestCharacter = await _requestCharacterRepository.GetRequestCharacterById(requestcharacterId);
@@ -255,7 +254,7 @@ namespace CCSS_Service.Services
                     RequestId = request.RequestId,
                     Description = characterInRequest.Description,
                     Quantity = characterInRequest.Quantity,
-                    Status = RequestCharacterStatus.Accept,
+                    Status = RequestCharacterStatus.Pending,
                     TotalPrice = totalPrice,
                     CreateDate = DateTime.Now,
                     UpdateDate = null,
@@ -368,7 +367,6 @@ namespace CCSS_Service.Services
         }
         #endregion
 
-
         #region Delete Character in Request
         public async Task<string> DeleteCharacterInRequest(string requestCharacterId)
         {
@@ -397,7 +395,6 @@ namespace CCSS_Service.Services
             }
         }
         #endregion
-
 
         #region Get Request Character by requestid and characterid
         public async Task<RequestCharacter> GetRequestCharacter(string requestId, string characterId)
