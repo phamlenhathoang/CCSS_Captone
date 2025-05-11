@@ -74,7 +74,7 @@ namespace CCSS_Service.Services
 
                     return "This request has a requestCharacter busy, need to wait customer change requestCharacter";
                 }
-                if(character.Status == RequestCharacterStatus.Pending)
+                if (character.Status == RequestCharacterStatus.Pending)
                 {
                     return "There are still people not accept. Please try again";
                 }
@@ -378,11 +378,15 @@ namespace CCSS_Service.Services
                     await transaction.RollbackAsync();
                     return "Character is not found in Request";
                 }
-                var result = await _requestDatesRepository.DeleteListRequestDateByRequestCharacterId(requestCharacterId);
-                if (!result)
+                var requestDate = await _requestDatesRepository.GetListRequestDateByRequestCharacterId(requestCharacterId);
+                if (requestDate != null)
                 {
-                    await transaction.RollbackAsync();
-                    return "Request Dates is delete failed";
+                    var result = await _requestDatesRepository.DeleteListRequestDateByRequestCharacterId(requestCharacterId);
+                    if (!result)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Request Dates is delete failed";
+                    }
                 }
                 var result1 = await _requestCharacterRepository.DeleteRequestCharacter(requestCharacter);
                 if (!result1)
