@@ -74,7 +74,7 @@ namespace CCSS_Repository.Repositories
         {
             try
             {
-                List<RequestDate> requestDates = await _context.RequestDates.Where(rd => rd.RequestCharacterId.Equals(requestCharacterId)).ToListAsync();
+                var requestDates = await _context.RequestDates.Where(rd => rd.RequestCharacterId.Equals(requestCharacterId)).ToListAsync();
                 if (requestDates == null)
                 {
                     throw new Exception("RequestCharacterId does not exist");

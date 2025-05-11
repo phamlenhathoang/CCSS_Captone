@@ -379,7 +379,7 @@ namespace CCSS_Service.Services
                     return "Character is not found in Request";
                 }
                 var requestDate = await _requestDatesRepository.GetListRequestDateByRequestCharacterId(requestCharacterId);
-                if (requestDate != null)
+                if (requestDate != null && requestDate.Any())
                 {
                     var result = await _requestDatesRepository.DeleteListRequestDateByRequestCharacterId(requestCharacterId);
                     if (!result)
