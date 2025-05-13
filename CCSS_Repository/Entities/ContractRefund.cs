@@ -32,12 +32,10 @@ namespace CCSS_Repository.Entities
     {
         Pending,
         Paid,
-        Default
     }
 
     public enum Type
     {
-        CustomerRefund, 
         SystemRefund,
         DepositRetained
     }
