@@ -28,6 +28,7 @@ namespace CCSS_Repository.Entities
         public string? Location { get; set; }
         public DateTime? CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdateDate { get; set; }
+        public string? Range { get; set; }
         public string? Deposit { get; set; }
         public string? Reason { get; set; }
 

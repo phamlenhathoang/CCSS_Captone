@@ -16,7 +16,6 @@ namespace CCSS_Service.Model.Requests
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string? Location { get; set; }
-        public string? AccountCouponId { get; set; }
         public string? Deposit { get; set; }
         public List<CharacterListRentCosplayer> CharactersRentCosplayers { get; set; }
     }

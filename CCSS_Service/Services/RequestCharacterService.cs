@@ -52,7 +52,7 @@ namespace CCSS_Service.Services
 
         #endregion
 
-        #region Check Cahracter In Request
+        #region Check Character In Request
         public async Task<string> CheckRequestChracter(string requestId)
         {
             var request = await _requestRepository.GetRequestById(requestId);
@@ -254,7 +254,7 @@ namespace CCSS_Service.Services
                     RequestId = request.RequestId,
                     Description = characterInRequest.Description,
                     Quantity = characterInRequest.Quantity,
-                    Status = RequestCharacterStatus.Pending,
+                    Status = RequestCharacterStatus.Accept,
                     TotalPrice = totalPrice,
                     CreateDate = DateTime.Now,
                     UpdateDate = null,

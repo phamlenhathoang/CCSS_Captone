@@ -37,8 +37,7 @@ namespace CCSS_Repository.Entities
     }
 
     public enum RequestCharacterStatus
-    {
-        None = 0,
+    {     
         Pending = 1,
         Accept = 2,
         Busy = 3,

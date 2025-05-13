@@ -1,5 +1,6 @@
 ﻿using CCSS_Repository.Entities;
 using CCSS_Repository.Repositories;
+using CCSS_Service.Libraries;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using Microsoft.AspNetCore.Hosting;
@@ -322,23 +323,7 @@ namespace CCSS_Service.Services
                 if (customer.Role.RoleName != RoleName.Customer)
                 {
                     return "Account must be customer";
-                }
-                if (!string.IsNullOrEmpty(requestDtos.AccountCouponId))
-                {
-                    var accountCoupon = await _accountCouponRepository.GetAccountCouponById(requestDtos.AccountCouponId);
-                    if (accountCoupon == null)
-                    {
-                        return "This AccountCoupon is not found";
-                    }
-                    if (accountCoupon.Coupon.Type != CouponType.ForContract)
-                    {
-                        return "This coupon not use for contract";
-                    }
-                    if (accountCoupon.IsActive == true)
-                    {
-                        return "This coupon be used";
-                    }
-                }
+                }              
                 var newRequest = new Request()
                 {
                     RequestId = Guid.NewGuid().ToString(),
@@ -353,7 +338,6 @@ namespace CCSS_Service.Services
                     Location = requestDtos.Location,
                     Deposit = requestDtos.Deposit,
                     PackageId = requestDtos.PackageId,
-                    AccountCouponId = requestDtos.AccountCouponId ?? null,
                 };
                 var result = await _repository.AddRequest(newRequest);
                 if (!result)
@@ -391,7 +375,7 @@ namespace CCSS_Service.Services
                                     Description = r.Description,
                                     CharacterId = r.CharacterId,
                                     CreateDate = newRequest.StartDate,
-                                    Status = RequestCharacterStatus.Pending,
+                                    Status = RequestCharacterStatus.Accept,
                                     Quantity = r.Quantity,
                                     TotalPrice = totalPrice,
                                 });
@@ -472,6 +456,14 @@ namespace CCSS_Service.Services
                             }
                         }
                     }
+
+                    var accounts = await _accountRepository.GetAllAccount(null, "R002");
+                    foreach (var account in accounts)
+                    {
+                        SendMail sendMail = new SendMail();
+                        await sendMail.SendEmailRequestForManager(account.Email);
+                    }
+
                     await transaction.CommitAsync();
                     return "Add Request Success";
                 }
@@ -913,23 +905,7 @@ namespace CCSS_Service.Services
                 if (customer.Role.RoleName != RoleName.Customer)
                 {
                     return "Account must be customer";
-                }
-                if (!string.IsNullOrEmpty(requestDtos.AccountCouponId))
-                {
-                    var accountCoupon = await _accountCouponRepository.GetAccountCouponById(requestDtos.AccountCouponId);
-                    if (accountCoupon == null)
-                    {
-                        return "This AccountCoupon is not found";
-                    }
-                    if (accountCoupon.Coupon.Type != CouponType.ForContract)
-                    {
-                        return "This coupon not use for contract";
-                    }
-                    if (accountCoupon.IsActive == true)
-                    {
-                        return "This coupon be used";
-                    }
-                }
+                }               
                 var newRequest = new Request()
                 {
                     RequestId = Guid.NewGuid().ToString(),
@@ -942,8 +918,7 @@ namespace CCSS_Service.Services
                     StartDate = StartDate,
                     EndDate = EndDate,
                     Location = requestDtos.Location,
-                    Deposit = requestDtos.Deposit,
-                    AccountCouponId = requestDtos.AccountCouponId ?? null,
+                    Deposit = requestDtos.Deposit,                   
                 };
                 var result = await _repository.AddRequest(newRequest);
                 if (!result)
@@ -1006,7 +981,7 @@ namespace CCSS_Service.Services
                                 Description = r.Description,
                                 CharacterId = r.CharacterId,
                                 CreateDate = newRequest.StartDate,
-                                Status = RequestCharacterStatus.Pending,
+                                Status = RequestCharacterStatus.Accept,
                                 Quantity = 1,
                                 CosplayerId = r.CosplayerId,
                                 TotalPrice = totalPrice,
@@ -1104,6 +1079,14 @@ namespace CCSS_Service.Services
                             }
                         }
                     }
+
+                    var accounts = await _accountRepository.GetAllAccount(null, "R002");
+                    foreach (var account in accounts)
+                    {
+                        SendMail sendMail = new SendMail();
+                        await sendMail.SendEmailRequestForManager(account.Email);
+                    }
+
                     await transaction.CommitAsync();
                     return "Add Request Success";
                 }
@@ -1166,23 +1149,7 @@ namespace CCSS_Service.Services
                 if (customer.Role.RoleName != RoleName.Customer)
                 {
                     return "Account must be customer";
-                }
-                if (!string.IsNullOrEmpty(requestDtos.AccountCouponId))
-                {
-                    var accountCoupon = await _accountCouponRepository.GetAccountCouponById(requestDtos.AccountCouponId);
-                    if (accountCoupon == null)
-                    {
-                        return "This AccountCoupon is not found";
-                    }
-                    if (accountCoupon.Coupon.Type != CouponType.ForContract)
-                    {
-                        return "This coupon not use for contract";
-                    }
-                    if (accountCoupon.IsActive == true)
-                    {
-                        return "This coupon be used";
-                    }
-                }
+                }             
                 var newRequest = new Request()
                 {
                     RequestId = Guid.NewGuid().ToString(),
@@ -1196,7 +1163,6 @@ namespace CCSS_Service.Services
                     EndDate = EndDate,
                     Location = requestDtos.Location,
                     Deposit = requestDtos.Deposit,
-                    AccountCouponId = requestDtos.AccountCouponId ?? null,
                 };
                 var result = await _repository.AddRequest(newRequest);
                 if (!result)
@@ -1234,7 +1200,7 @@ namespace CCSS_Service.Services
                                     Description = r.Description,
                                     CharacterId = r.CharacterId,
                                     CreateDate = newRequest.StartDate,
-                                    Status = RequestCharacterStatus.Pending,
+                                    Status = RequestCharacterStatus.Accept,
                                     Quantity = r.Quantity,
                                     CosplayerId = null,
                                     TotalPrice = totalPrice,
@@ -1248,7 +1214,15 @@ namespace CCSS_Service.Services
                             return "Failed to add characters in Request";
                         }
                     }
-                    await transaction.CommitAsync();
+
+                    var accounts = await _accountRepository.GetAllAccount(null, "R002");
+                    foreach (var account in accounts)
+                    {
+                        SendMail sendMail = new SendMail();
+                        await sendMail.SendEmailRequestForManager(account.Email);
+                    }
+
+                    await transaction.CommitAsync();                   
                     return "Add Request Success";
                 }
             }

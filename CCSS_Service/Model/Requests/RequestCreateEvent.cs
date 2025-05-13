@@ -17,7 +17,7 @@ namespace CCSS_Service.Model.Requests
         public string? Location { get; set; }
         public string? Deposit { get; set; }
         public string? PackageId { get; set; }
-        public string? AccountCouponId { get; set; }
+        public string? Range { get; set; }
         public List<CharacterRequestListCreateEvent> ListRequestCharactersCreateEvent { get; set; }
 
     }
