@@ -213,16 +213,20 @@ namespace CCSS_Service.Services
                 contractRefund.ContractId = contract.ContractId;
                 contractRefund.AccountBankName = contractRefundRequest.AccountBankName;
                 contractRefund.BankName = contractRefundRequest.BankName;
-                contractRefund.Price = contractRefundRequest.Price;
-                contractRefund.Amount = contract.Amount - contractRefundRequest.Price;
-                if (contractRefund.Amount > 0)
-                {
-                    contractRefund.Type = Type.SystemRefund;
-                }
 
-                if (contractRefund.Amount == 0)
+                if (contractRefundRequest.Price != null)
                 {
-                    contractRefund.Type = Type.DepositRetained;
+                    contractRefund.Price = contractRefundRequest.Price;
+                    contractRefund.Amount = contract.Amount - contractRefundRequest.Price;
+                    if (contractRefund.Amount > 0)
+                    {
+                        contractRefund.Type = Type.SystemRefund;
+                    }
+
+                    if (contractRefund.Amount == 0)
+                    {
+                        contractRefund.Type = Type.DepositRetained;
+                    }
                 }
 
                 bool result = await contractRefundRepository.UpdateContractRefund(contractRefund);
