@@ -18,7 +18,6 @@ namespace CCSS_Service.Model.Requests
         public string EndDate { get; set; }
         public string? Location { get; set; }
         public string? Deposit { get; set; }
-        public string? AccountCouponId { get; set; }
         public List<CharacterList> ListRequestCharacters { get; set; }
 
     }

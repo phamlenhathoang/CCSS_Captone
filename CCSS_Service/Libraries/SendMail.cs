@@ -14,7 +14,7 @@ namespace CCSS_Service.Libraries
 {
     public class SendMail
     {
-        public async Task<bool> SendEmailNotification(PaymentPurpose? purpose, string toEmail, string ticketCode, string eventOrContractName, string location, DateTime Date, int? quantity, double? price, string? accountname )
+        public async Task<bool> SendEmailNotification(PaymentPurpose? purpose, string toEmail, string ticketCode, string eventOrContractName, string location, DateTime Date, int? quantity, double? price, string? accountname)
         {
             try
             {
@@ -284,6 +284,51 @@ namespace CCSS_Service.Libraries
             <h2 style='color: #007bff;'>Bạn có task mới! 🎉</h2>
             <p>Vui lòng kiểm tra trên hệ thống để xem thông tin.</p>
         </div>";
+
+                message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
+
+                using var smtp = new SmtpClient();
+                await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(fromEmail, emailPassword);
+                await smtp.SendAsync(message);
+                await smtp.DisconnectAsync(true);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi gửi email: {ex.Message}");
+                return false;
+            }
+        }
+
+
+        public async Task<bool> SendEmailRequestForManager(string email)
+        {
+            try
+            {
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .Build();
+
+                string fromEmail = configuration["FromEmail:Email"];
+                string emailPassword = configuration["FromEmail:Password"];
+
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("CCSS", fromEmail));
+                message.To.Add(new MailboxAddress("", email));
+                message.Subject = "📢 Request was assigned";
+
+                string emailBody = $@"
+<div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+    <h2 style='color: #007bff;'>📌 New Request Requires Your Attention</h2>
+    <p>A new request has been submitted and is awaiting your review.</p>
+    <p>Please check the system to view the request details and update its status accordingly.</p>
+    <p style='margin-top: 20px;'>
+        <a href='https://fe-ccss-capstone.vercel.app/' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;'>View Request</a>
+    </p>
+</div>";
 
                 message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
 
