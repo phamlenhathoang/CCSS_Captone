@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Scaffolding;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,7 @@ namespace CCSS_Service.Services
         Task<string> UpdateCharacter(string id, CharacterRequest newCharacter, List<CharacterImageRequest>? characterImageRequests);
         Task<string> DeleteCharacter(string id);
         Task<List<CharacterResponse>> GetCharactersByCategoryId(string categoryId);
+        Task<List<CharacterResponse>> GetCharactersByDate(string startDate, string endDate);
     }
     public class CharacterService : ICharacterService
     {
@@ -36,7 +38,12 @@ namespace CCSS_Service.Services
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICharacterImageRepository _imageRepository;
         private readonly IBeginTransactionRepository _beginTransactionRepository;
-        public CharacterService(Image image, IBeginTransactionRepository beginTransactionRepository, ICategoryRepository _categoryRepository, ICharacterRepository characterRepository, IMapper mapper, ICharacterImageRepository _imageRepository)
+        private readonly IRequestCharacterRepository requestCharacterRepository;
+        private readonly IRequestDatesRepository requestDatesRepository;
+        private readonly IRequestRepository requestRepository;
+        private readonly IEventCharacterRepository eventCharacterRepository;
+        private readonly IEventRepository eventRepository;
+        public CharacterService(Image image, IBeginTransactionRepository beginTransactionRepository, ICategoryRepository _categoryRepository, ICharacterRepository characterRepository, IMapper mapper, ICharacterImageRepository _imageRepository, IRequestCharacterRepository requestCharacterRepository, IRequestDatesRepository requestDatesRepository, IRequestRepository requestRepository, IEventCharacterRepository eventCharacterRepository, IEventRepository eventRepository)
         {
             _characterRepository = characterRepository;
             this.mapper = mapper;
@@ -44,6 +51,11 @@ namespace CCSS_Service.Services
             this._imageRepository = _imageRepository;
             this.image = image;
             _beginTransactionRepository = beginTransactionRepository;
+            this.requestCharacterRepository = requestCharacterRepository;
+            this.requestDatesRepository = requestDatesRepository;
+            this.requestRepository = requestRepository;
+            this.eventCharacterRepository = eventCharacterRepository;
+            this.eventRepository = eventRepository;
         }
         public async Task<List<CharacterResponse>> GetAllCharacters()
         {
@@ -339,6 +351,109 @@ namespace CCSS_Service.Services
                 }
 
                 return mapper.Map<List<CharacterResponse>>(category.Characters);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<CharacterResponse>> GetCharactersByDate(string startDate, string endDate)
+        {
+            try
+            {
+                string format = "dd/MM/yyyy";
+                CultureInfo culture = CultureInfo.InvariantCulture;
+                DateTime start = DateTime.ParseExact(startDate, format, culture);
+                DateTime end = DateTime.ParseExact(endDate, format, culture);
+
+                List<CharacterResponse> characterResponses = new List<CharacterResponse>();
+                List<Character> characters = await _characterRepository.GetAll();
+
+                foreach (var character in characters)
+                {
+                    int quantity = (int)character.Quantity;
+                    List<RequestCharacter> requestCharacters = await requestCharacterRepository.GetListRequestCharacterByCharacterId(character.CharacterId);
+                    if (requestCharacters.Count > 0)
+                    {
+                        foreach (RequestCharacter requestCharacter in requestCharacters)
+                        {
+                            if (requestCharacter.RequestDates.Count > 0)
+                            {
+                                bool result = await requestDatesRepository.CheckValidCharacterRequestDate(requestCharacter.RequestCharacterId, start, end);
+
+                                if (!result)
+                                {
+                                    quantity -= 1;
+                                }
+                            }
+
+                            if (requestCharacter.RequestDates.Count == 0)
+                            {
+
+                                bool result = await requestRepository.CheckRequestValid(requestCharacter.Request.RequestId, start, end);
+
+                                if (!result)
+                                {
+                                    quantity -= 1;
+                                }
+                            }
+                        }
+                    }
+
+                    List<EventCharacter> eventCharacters = await eventCharacterRepository.GetEventCharacterByCharacterId(character.CharacterId);
+                    if (eventCharacters.Count > 0)
+                    {
+                        foreach (EventCharacter eventCharacter in eventCharacters)
+                        {
+                            bool result = await eventRepository.CheckEventValid(eventCharacter.Event.EventId, start, end);
+                            if (!result)
+                            {
+                                quantity -= 1;
+                            }
+                        }
+                    }
+
+                    if (quantity > 0)
+                    {
+                        List<CharacterImageResponse> characterImageResponses = new List<CharacterImageResponse>();
+                        List<CharacterImage> images = await _imageRepository.GetListImageCharacter(character.CharacterId);
+                        foreach (CharacterImage image in images)
+                        {
+                            var characterImage = new CharacterImageResponse()
+                            {
+                                CharacterImageId = image.CharacterImageId,
+                                CreateDate = image.CreateDate,
+                                IsAvatar = image.IsAvatar,
+                                UpdateDate = image.UpdateDate,
+                                UrlImage = image.UrlImage,
+                            };
+                            characterImageResponses.Add(characterImage);
+                        }
+
+                        var characterResponse = new CharacterResponse()
+                        {
+                            Quantity = quantity,
+                            CategoryId = character.CategoryId,
+                            CharacterId = character.CharacterId,
+                            CharacterName = character.CharacterName,
+                            CreateDate = character.CreateDate.ToString("dd/MM/yyyy"),
+                            Description = character.Description,
+                            IsActive = character.IsActive,
+                            MaxHeight = character.MaxHeight,
+                            MaxWeight = character.MaxWeight,
+                            MinHeight = character.MinHeight,
+                            MinWeight = character.MinWeight,
+                            Price = character.Price,
+                            UpdateDate = character.UpdateDate?.ToString("dd/MM/yyyy"),
+                            Images = characterImageResponses
+                        };
+
+                        characterResponses.Add(characterResponse);
+                    }
+                }
+                return characterResponses;
+
             }
             catch (Exception ex)
             {

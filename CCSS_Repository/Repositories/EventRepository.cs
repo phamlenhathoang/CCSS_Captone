@@ -23,6 +23,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> DeleteTicketByEventId(string id);
         Task<bool> DeleteEventImageById(string id);
         Task<bool> DeleteTicketsByEventId(string eventId);
+        Task<bool> CheckEventValid(string eventId, DateTime start, DateTime end);
     }
 
     public class EventRepository : IEventRepository
@@ -196,6 +197,23 @@ namespace CCSS_Repository.Repositories
 
             _dbContext.EventImages.Remove(image);
             await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> CheckEventValid(string eventId, DateTime start, DateTime end)
+        {
+            Event e = await _dbContext.Events.FirstOrDefaultAsync(r => r.EventId.Equals(eventId));
+
+            if (start.Date <= e.StartDate.Date && e.StartDate.Date <= end.Date)
+            {
+                return false;
+            }
+
+            if (start.Date <= e.EndDate.Date && e.EndDate.Date <= end.Date)
+            {
+                return false;
+            }
 
             return true;
         }

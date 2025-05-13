@@ -30,6 +30,13 @@ namespace CCSS_Captone.Controllers
             return Ok(character);
         }
 
+        [HttpGet("GetCharactersByDate")]
+        public async Task<ActionResult<CharacterResponse>> GetCharactersByDate(string startDate, string endDate)
+        {
+            var character = await _characterService.GetCharactersByDate(startDate, endDate);
+            return Ok(character);
+        }
+
         //[HttpGet("categoryId/{categoryId}")]
         //public async Task<ActionResult<CategoryResponse>> GetCharactersByCategoryId(string categoryId)
         //{
