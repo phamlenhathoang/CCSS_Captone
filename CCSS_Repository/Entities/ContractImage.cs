@@ -19,6 +19,7 @@ namespace CCSS_Repository.Entities
         public Contract Contract { get; set; }
 
         public string UrlImage {  get; set; }
+        public string Reason {  get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public ContractImageStatus Status { get; set; }
@@ -31,5 +32,6 @@ namespace CCSS_Repository.Entities
         Received,
         Refund,
         Check,
+        Cancel
     }
 }

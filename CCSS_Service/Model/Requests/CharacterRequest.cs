@@ -18,5 +18,11 @@ namespace CCSS_Service.Model.Requests
         public float? MaxWeight { get; set; }
         public float? MinHeight { get; set; }
         public float? MinWeight { get; set; }
-    }   
+    }
+
+    public class DateCharacterRequest
+    {
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+    }
 }

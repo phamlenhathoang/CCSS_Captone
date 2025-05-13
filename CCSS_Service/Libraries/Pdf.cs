@@ -2,6 +2,7 @@
 using CCSS_Repository.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
 using PdfSharpCore;
 using PdfSharpCore.Pdf;
 using System;
@@ -90,9 +91,12 @@ namespace CCSS_Service.Libraries
 
 
                     // Thêm CSS để làm đẹp bảng
+                    double totalDay = (request.EndDate - request.StartDate).TotalDays + 1;
 
                     if (request.Service.ServiceId.Equals("S001"))
                     {
+                        
+
                         int index = 1;
                         htmlContent += @"<style>
             table {
@@ -144,7 +148,7 @@ namespace CCSS_Service.Libraries
                         <td>Set</td>
                         <td>{requestCharacter.Quantity}</td>
                         <td>{character.Price}</td>
-                        <td>{(double)requestCharacter.Quantity * character.Price * 5}</td>
+                        <td>{(double)requestCharacter.Quantity * (character.Price * 5 + character.Price * totalDay)}</td>
                     </tr>";
                             index++;
                         }
@@ -359,6 +363,7 @@ namespace CCSS_Service.Libraries
             double totalHours = 0;
             int day = 0;
             int count = 0;
+            double totalDay = (request.EndDate - request.StartDate).TotalDays + 1;
 
             foreach (RequestCharacter requestCharacter in request.RequestCharacters)
             {
@@ -391,7 +396,7 @@ namespace CCSS_Service.Libraries
                 }
                 else
                 {
-                    totalAmount += (double)requestCharacter.Quantity * (double)character.Price * 5;
+                    totalAmount += (double)requestCharacter.Quantity * ((double)character.Price * totalDay + (double)character.Price * 5);
                 }
             }
             double parsedAmount;

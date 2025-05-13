@@ -21,6 +21,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> DeleteListRequestDateByRequestCharacterId(string requestCharacterId);
         Task<List<RequestDate>> GetListRequestDateByRequestCharacter(string requestCharacterId);
         Task<bool> CheckValidRequestDate(Account account, DateTime startDate, DateTime endDate);
+        Task<bool> CheckValidCharacterRequestDate(string requestCharacterId, DateTime startDate, DateTime endDate);
     }
 
     public class RequestDatesRepository: IRequestDatesRepository
@@ -181,5 +182,18 @@ namespace CCSS_Repository.Repositories
             return true;
         }
 
+        public async Task<bool> CheckValidCharacterRequestDate(string requestCharacterId, DateTime startDate, DateTime endDate)
+        {
+            List<RequestDate> requestDates = await _context.RequestDates.Where(rd => rd.RequestCharacterId.Equals(requestCharacterId)).ToListAsync();
+            foreach (RequestDate requestDate in requestDates)
+            {
+                if (startDate.Date <= requestDate.StartDate.Date && requestDate.EndDate.Date <= endDate.Date)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

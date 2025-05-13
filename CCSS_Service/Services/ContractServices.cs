@@ -998,6 +998,16 @@ namespace CCSS_Service.Services
                                 throw new Exception("Please enter reason");
                             }
                         }
+
+                        ContractImage contractImage = new ContractImage()
+                        {
+                            ContractId = contract.ContractId,
+                            CreateDate = DateTime.Now,
+                            Reason = deliveryContractRequest.Reason,
+                            Status = ContractImageStatus.Cancel,
+                        };
+
+                        images.Add(contractImage);
                     }
                     else
                     {

@@ -14,6 +14,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> AddEventCharacter(EventCharacter eventCharacter);
         Task<bool> UpdateEventCharacter(EventCharacter eventCharacter);
         Task<bool> DeleteEventCharacter(string id);
+        Task<List<EventCharacter>> GetEventCharacterByCharacterId(string characterId);
     }
 
     public class EventCharacterRepository : IEventCharacterRepository
@@ -86,6 +87,11 @@ namespace CCSS_Repository.Repositories
             _dbContext.EventCharacters.Remove(eventCharacter);
             int result = await _dbContext.SaveChangesAsync();
             return result > 0;
+        }
+
+        public async Task<List<EventCharacter>> GetEventCharacterByCharacterId(string characterId)
+        {
+            return await _dbContext.EventCharacters.Include(ec => ec.Event).Where(ec => ec.CharacterId.Equals(characterId) && ec.Event.IsActive == false).ToListAsync();
         }
     }
 }
