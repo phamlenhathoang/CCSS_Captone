@@ -412,7 +412,7 @@ namespace CCSS_Service.Services
                             else
                             {
                                 string message = "There are some request you need to review.";
-                                await _notificationService.SendNotification(accountCosplayer.Email, message);
+                                await _notificationService.SendNotification(accountCosplayer.AccountId, message);
                             }
                             //
 
