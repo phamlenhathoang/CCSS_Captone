@@ -52,6 +52,7 @@ namespace CCSS_Service.Services
                                 UpdateDate = contractImage.UpdateDate?.ToString("dd/MM/yyyy"),
                                 Status = contractImage.Status.ToString(),
                                 UrlImage = contractImage.UrlImage,
+                                Reason = contractImage.Reason,
                             };
 
                             contractImgeResponses.Add(contractImageResponse);
@@ -83,7 +84,8 @@ namespace CCSS_Service.Services
                     CreateDate = contractImage.CreateDate.ToString("dd/MM/yyyy"),
                     UpdateDate = contractImage.UpdateDate?.ToString("dd/MM/yyyy"),
                     Status = contractImage.Status.ToString(),
-                    UrlImage = contractImage.UrlImage
+                    UrlImage = contractImage.UrlImage,
+                    Reason = contractImage.Reason,
                 };
 
                 return contractImgeResponse;
