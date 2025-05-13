@@ -653,8 +653,6 @@ namespace CCSS_Service.Services
                                 throw new Exception("Character does not exist");
                             }
 
-                            character.Quantity -= requestCharacter.Quantity;
-
                             bool checkUpdate = await _characterRepository.UpdateCharacter(character);
 
                             if (!checkUpdate)

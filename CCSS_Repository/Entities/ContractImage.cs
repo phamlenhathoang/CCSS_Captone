@@ -17,7 +17,7 @@ namespace CCSS_Repository.Entities
         [ForeignKey("Contract")]
         public string ContractId { get; set; }
         public Contract Contract { get; set; }
-        public string Reason { get; set; }
+        public string? Reason { get; set; }
         public string UrlImage {  get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
