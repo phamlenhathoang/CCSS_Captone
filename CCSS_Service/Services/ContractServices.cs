@@ -996,6 +996,7 @@ namespace CCSS_Service.Services
                                 throw new Exception("Please enter reason");
                             }
                         }
+
                         ContractImage contractImage = new ContractImage()
                         {
                             ContractId = contract.ContractId,

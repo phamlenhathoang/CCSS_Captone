@@ -17,5 +17,6 @@ namespace CCSS_Service.Model.Responses
         public string CreateDate { get; set; }
         public string? UpdateDate { get; set; }
         public string Status { get; set; }
+        public string Reason { get; set; }
     }
 }
