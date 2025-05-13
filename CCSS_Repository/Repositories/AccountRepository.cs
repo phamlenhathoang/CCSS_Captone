@@ -150,7 +150,7 @@ namespace CCSS_Repository.Repositories
             IQueryable<Account> query = dbContext.Accounts
                 .Include(r => r.Role)
                 .Include(a => a.AccountImages)
-                .Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight && a.Role.RoleName == RoleName.Cosplayer);
+                .Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight && a.Role.RoleName == RoleName.Cosplayer && a.IsLock == false && a.IsActive == true);
             if (!string.IsNullOrEmpty(accountId))
             {
                 query = query.Where(a => !a.AccountId.Equals(accountId));
