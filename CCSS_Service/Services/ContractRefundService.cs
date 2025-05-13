@@ -4,6 +4,7 @@ using CCSS_Service.Libraries;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using Humanizer;
+using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -76,6 +77,28 @@ namespace CCSS_Service.Services
                     contractRefund.Type = Type.DepositRetained;
                 }
 
+                if (contractRefundRequest.Images.Count > 0)
+                {
+                    List<ContractImage> images = new List<ContractImage>();
+                    foreach (var imageContract in contractRefundRequest.Images)
+                    {
+                        var contractImage = new ContractImage()
+                        {
+                            ContractId = contractRefundRequest.ContractId,
+                            CreateDate = DateTime.Now,
+                            Status = ContractImageStatus.Check,
+                            UrlImage = await image.UploadImageToFirebase(imageContract),
+
+                        };
+                        images.Add(contractImage);
+                    }
+
+                    bool checkAdd = await contractImageRepository.AddListContractImage(images);
+                    if (!checkAdd)
+                    {
+                        throw new Exception("Can not add ContractImage");
+                    }
+                }
 
                 bool result = await contractRefundRepository.AddContractRefund(contractRefund);
                 if (!result)
