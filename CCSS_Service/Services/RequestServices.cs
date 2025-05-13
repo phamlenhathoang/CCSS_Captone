@@ -41,9 +41,10 @@ namespace CCSS_Service.Services
         private readonly IBeginTransactionRepository _beginTransactionRepository;
         private readonly IContractRespository _contractRepository;
         private readonly IRequestDatesRepository _requestDatesRepository;
+        private readonly INotificationService _notificationService;
 
 
-        public RequestServices(ITaskRepository taskRepository, IRequestRepository repository, IRequestCharacterRepository requestCharacterRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, IServiceRepository serviceRepository, IAccountCouponRepository accountCouponRepository, IBeginTransactionRepository beginTransactionRepository, IContractRespository contractRepository, IRequestDatesRepository requestDatesRepository)
+        public RequestServices(ITaskRepository taskRepository, IRequestRepository repository, IRequestCharacterRepository requestCharacterRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, IServiceRepository serviceRepository, IAccountCouponRepository accountCouponRepository, IBeginTransactionRepository beginTransactionRepository, IContractRespository contractRepository, IRequestDatesRepository requestDatesRepository, INotificationService notificationService)
         {
             _repository = repository;
             _requestDatesRepository = requestDatesRepository;
@@ -55,6 +56,7 @@ namespace CCSS_Service.Services
             _accountCouponRepository = accountCouponRepository;
             _beginTransactionRepository = beginTransactionRepository;
             _contractRepository = contractRepository;
+            _notificationService = notificationService;
         }
         #region GetAll Request
         public async Task<List<RequestResponse>> GetAllRequest()
@@ -323,7 +325,7 @@ namespace CCSS_Service.Services
                 if (customer.Role.RoleName != RoleName.Customer)
                 {
                     return "Account must be customer";
-                }              
+                }
                 var newRequest = new Request()
                 {
                     RequestId = Guid.NewGuid().ToString(),
@@ -461,7 +463,17 @@ namespace CCSS_Service.Services
                     foreach (var account in accounts)
                     {
                         SendMail sendMail = new SendMail();
-                        await sendMail.SendEmailRequestForManager(account.Email);
+                        var resultSendMail = await sendMail.SendEmailRequestForManager(account.Email);
+                        if (!resultSendMail)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Can not Send Mail to manager";
+                        }
+                        else
+                        {
+                            string message = "There are some request was assigned, you need to review.";
+                            await _notificationService.SendNotification(account.Email, message);
+                        }
                     }
 
                     await transaction.CommitAsync();
@@ -905,7 +917,7 @@ namespace CCSS_Service.Services
                 if (customer.Role.RoleName != RoleName.Customer)
                 {
                     return "Account must be customer";
-                }               
+                }
                 var newRequest = new Request()
                 {
                     RequestId = Guid.NewGuid().ToString(),
@@ -918,7 +930,7 @@ namespace CCSS_Service.Services
                     StartDate = StartDate,
                     EndDate = EndDate,
                     Location = requestDtos.Location,
-                    Deposit = requestDtos.Deposit,                   
+                    Deposit = requestDtos.Deposit,
                 };
                 var result = await _repository.AddRequest(newRequest);
                 if (!result)
@@ -1067,6 +1079,21 @@ namespace CCSS_Service.Services
                                             await transaction.RollbackAsync();
                                             return "Cosplayer is null here";
                                         }
+
+                                        SendMail sendMail = new SendMail();
+                                        var accountCosplayer = await _accountRepository.GetAccount(d.CosplayerId);
+                                        var resultSendMail = await sendMail.SendEmailRequestForCosplayer(accountCosplayer.Email);
+                                        if (!resultSendMail)
+                                        {
+                                            await transaction.RollbackAsync();
+                                            return "Can not Send Mail to Cosplayer";
+                                        }
+                                        else
+                                        {
+                                            string message = "There are some request you need to review.";
+                                            await _notificationService.SendNotification(accountCosplayer.Email, message);
+                                        }
+
                                         requestCharacter.TotalPrice += (totalHour * cosplayer.SalaryIndex);
                                         var resultTotalPrice = await _requestCharacterRepository.UpdateRequestCharacter(requestCharacter);
                                         if (!resultTotalPrice)
@@ -1081,10 +1108,21 @@ namespace CCSS_Service.Services
                     }
 
                     var accounts = await _accountRepository.GetAllAccount(null, "R002");
+
                     foreach (var account in accounts)
                     {
                         SendMail sendMail = new SendMail();
-                        await sendMail.SendEmailRequestForManager(account.Email);
+                        var resultSendMail = await sendMail.SendEmailRequestForManager(account.Email);
+                        if (!resultSendMail)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Can not Send Mail to manager";
+                        }
+                        else
+                        {
+                            string message = "There are some request you need to review.";
+                            await _notificationService.SendNotification(account.Email, message);
+                        }
                     }
 
                     await transaction.CommitAsync();
@@ -1149,7 +1187,7 @@ namespace CCSS_Service.Services
                 if (customer.Role.RoleName != RoleName.Customer)
                 {
                     return "Account must be customer";
-                }             
+                }
                 var newRequest = new Request()
                 {
                     RequestId = Guid.NewGuid().ToString(),
@@ -1219,16 +1257,27 @@ namespace CCSS_Service.Services
                     foreach (var account in accounts)
                     {
                         SendMail sendMail = new SendMail();
-                        await sendMail.SendEmailRequestForManager(account.Email);
+                        var resultSendMail = await sendMail.SendEmailRequestForManager(account.Email);
+                        if (!resultSendMail)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Can not Send Mail to manager";
+                        }
+                        else
+                        {
+                            string message = "There are some request you need to review.";
+                            await _notificationService.SendNotification(account.Email, message);
+                        }
                     }
 
-                    await transaction.CommitAsync();                   
+                    await transaction.CommitAsync();
                     return "Add Request Success";
                 }
             }
         }
         #endregion
 
+        #region Update Deposit Request
         public async Task<string> UpdateDepositRequest(string requestId, UpdateDepositDtos depositDtos)
         {
             var request = await _repository.GetRequestById(requestId);
@@ -1240,6 +1289,7 @@ namespace CCSS_Service.Services
             await _repository.UpdateRequest(request);
             return "Update success";
         }
+        #endregion
     }
 
 
