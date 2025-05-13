@@ -20,6 +20,7 @@ namespace CCSS_Service.Services
         Task<bool> AddContractRefund(ContractRefundRequest contractRefundRequest);
         Task<bool> UpdateContractRefund(string contractRefundId, UpdateContractRefundRequest contractRefundRequest);
         Task<ContractRefundResponse> GetContractRefundByContractId(string contractId);
+        Task<ContractRefundResponse> GetContractRefundByContractRefundId(string contractRefundId);
         Task<List<ContractRefundResponse>> GetAllContractRefund();
     }
     public class ContractRefundService : IContractRefundService
@@ -152,6 +153,39 @@ namespace CCSS_Service.Services
                 };
 
                 return contractRefund;  
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<ContractRefundResponse> GetContractRefundByContractRefundId(string contractRefundId)
+        {
+            try
+            {
+                ContractRefund contractRefund = await contractRefundRepository.GetContractRefundByContractRefundId(contractRefundId);
+                if (contractRefund == null)
+                {
+                    throw new Exception("ContractRefund does not exist");
+                }
+
+                var contractRefundResponse = new ContractRefundResponse()
+                {
+                    AccountBankName = contractRefund.AccountBankName,
+                    BankName = contractRefund.BankName,
+                    ContractId = contractRefund.ContractId,
+                    ContractRefundId = contractRefund.ContractRefundId,
+                    CreateDate = contractRefund.CreateDate?.ToString("dd/MM/YYYY") ?? null,
+                    UpdateDate = contractRefund.UpdateDate?.ToString("dd/MM/YYYY") ?? null,
+                    Description = contractRefund.Description,
+                    NumberBank = contractRefund.NumberBank,
+                    Type = contractRefund.Type.ToString(),
+                    Status = contractRefund.Status.ToString(),
+                    Price = contractRefund.Price,
+                };
+
+                return contractRefundResponse;
             }
             catch (Exception ex)
             {

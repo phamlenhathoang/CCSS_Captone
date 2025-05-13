@@ -22,5 +22,33 @@ namespace CCSS_Captone.Controllers
             var result = await _contractRefundService.AddContractRefund(contractRefundRequest);
             return Ok(result);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateContractRefund(string contractRefundId, UpdateContractRefundRequest contractRefundRequest)
+        {
+            var result = await _contractRefundService.UpdateContractRefund(contractRefundId, contractRefundRequest);
+            return Ok(result);
+        }
+
+        [HttpGet("{contractId}")]
+        public async Task<IActionResult> GetContractRefundByContractId(string contractId)
+        {
+            var result = await _contractRefundService.GetContractRefundByContractId(contractId);
+            return Ok(result);
+        }
+
+        [HttpGet("{contractRefundId}")]
+        public async Task<IActionResult> GetContractRefundByContractRefundId(string contractRefundId)
+        {
+            var result = await _contractRefundService.GetContractRefundByContractRefundId(contractRefundId);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllContractRefund()
+        {
+            var result = await _contractRefundService.GetAllContractRefund();
+            return Ok(result);
+        }
     }
 }
