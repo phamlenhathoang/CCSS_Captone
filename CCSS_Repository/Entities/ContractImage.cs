@@ -28,6 +28,7 @@ namespace CCSS_Repository.Entities
     {
         Delivering,
         Received,
+        Unreceived,
         Refund,
         Check,
         Cancel
