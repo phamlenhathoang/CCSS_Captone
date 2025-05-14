@@ -612,6 +612,7 @@ namespace CCSS_Service.Services
                 requestExisting.Location = UpdateRequestDtos.Location;
                 requestExisting.ServiceId = UpdateRequestDtos.ServiceId;
                 requestExisting.PackageId = requestExisting.ServiceId == "S003" ? UpdateRequestDtos.PackageId : null;
+                requestExisting.Range = requestExisting.ServiceId == "S003" ? UpdateRequestDtos.Range : null;
                 requestExisting.Price = UpdateRequestDtos.Price;
                 requestExisting.UpdateDate = DateTime.Now;
 

@@ -16,6 +16,7 @@ namespace CCSS_Service.Model.Requests
         public string? Location { get; set; }
         public string? ServiceId { get; set; }
         public string? PackageId { get; set; }
+        public string? Range { get; set; }
         public List<UpdateCharacterList> ListUpdateRequestCharacters { get; set; }
 
     }
