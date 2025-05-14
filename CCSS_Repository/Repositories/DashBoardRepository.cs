@@ -26,6 +26,7 @@ namespace CCSS_Repository.Repositories
         Task<List<ContractCount>> GetContractByDayInMonthAsync();
         Task<List<ContractCount>> GetContractByMonthInYearAsync();
         Task<List<Contract>> GetAllContractByService(string serviceId);
+        Task<List<ContractCount>> GetAllContractFilterServiceAndDateTime(string serviceId, DateFilterType dateFilterType);
     }
 
     public class DashBoardRepository : IDashBoardRepository
@@ -431,10 +432,11 @@ namespace CCSS_Repository.Repositories
         #region GetAllContractByService
         public async Task<List<Contract>> GetAllContractByService(string serviceId)
         {
-            return await _context.Contracts.Where(rc => rc.Request.ServiceId.Equals(serviceId)&& rc.ContractStatus !=ContractStatus.Cancel).ToListAsync();
+            return await _context.Contracts.Where(rc => rc.Request.ServiceId.Equals(serviceId) && rc.ContractStatus != ContractStatus.Cancel).ToListAsync();
         }
         #endregion
 
+        #region GetAllContractFilterServiceAndDateTime
         public async Task<List<ContractCount>> GetAllContractFilterServiceAndDateTime(string serviceId, DateFilterType dateFilterType)
         {
             switch (dateFilterType)
@@ -467,8 +469,62 @@ namespace CCSS_Repository.Repositories
                         .ToList();
 
                     return fullResult;
+                case DateFilterType.ThisMonth:
+                    var nowWeek = DateTime.UtcNow;
+                    var startOfYear = new DateTime(nowWeek.Year, 1, 1);
+                    var startOfNextYear = startOfYear.AddYears(1);
+
+                    var result1 = await _context.Contracts
+                        .Where(c => c.CreateDate.HasValue &&
+                                    c.CreateDate.Value >= startOfYear &&
+                                    c.CreateDate.Value < startOfNextYear && c.Request.ServiceId.Equals(serviceId))
+                        .GroupBy(c => c.CreateDate.Value.Month)
+                        .Select(g => new ContractCount
+                        {
+                            Month = g.Key,
+                            Count = g.Count()
+                        })
+                        .ToListAsync();
+
+                    var fullResult1 = Enumerable.Range(1, 12)
+                        .Select(month => new ContractCount
+                        {
+                            Month = month,
+                            Count = result1.FirstOrDefault(x => x.Month == month)?.Count ?? 0
+                        })
+                        .ToList();
+
+                    return fullResult1;
+                case DateFilterType.ThisYear:
+                    var nowYear = DateTime.UtcNow;
+                    var startOfYear1 = new DateTime(nowYear.Year, 1, 1);
+                    var startOfNextYear1 = startOfYear1.AddYears(1);
+
+                    var result2 = await _context.Contracts
+                        .Where(c => c.CreateDate.HasValue &&
+                                    c.CreateDate.Value >= startOfYear1 &&
+                                    c.CreateDate.Value < startOfNextYear1 && c.Request.ServiceId.Equals(serviceId))
+                        .GroupBy(c => c.CreateDate.Value.Month)
+                        .Select(g => new ContractCount
+                        {
+                            Month = g.Key,
+                            Count = g.Count()
+                        })
+                        .ToListAsync();
+
+                    var fullResult2 = Enumerable.Range(1, 12)
+                        .Select(month => new ContractCount
+                        {
+                            Month = month,
+                            Count = result2.FirstOrDefault(x => x.Month == month)?.Count ?? 0
+                        })
+                        .ToList();
+
+                    return fullResult2;
+                default:
+                    return null;
             }
-            return null;
         }
+        #endregion
     }
 }
