@@ -18,15 +18,23 @@ namespace CCSS_Captone.Controllers
         [HttpGet("accountId")]
         public async Task<IActionResult> GetNotificationByAccountId(string accountId)
         {
-            var notifications = await notificationService.GetAllNotificationsByAccountId(accountId);
-            return Ok(notifications);
+            if (ModelState.IsValid)
+            {
+                var notifications = await notificationService.GetAllNotificationsByAccountId(accountId);
+                return Ok(notifications);
+            }
+            return BadRequest(ModelState);
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateNotification(string notificationId)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var result = await notificationService.UpdateNotification(notificationId);
-            return Ok(result);  
+            return Ok(result);
         }
     }
 }

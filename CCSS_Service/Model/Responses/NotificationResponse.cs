@@ -13,7 +13,8 @@ namespace CCSS_Service.Model.Responses
         public string Id { get; set; } 
         public string AccountId { get; set; }
         public string Message { get; set; }
-        public bool IsRead { get; set; } = false;
-        public DateTime CreatedAt { get; set; }
+        public bool IsRead { get; set; }
+        public bool IsSentMail { get; set; }
+        public string CreatedAt { get; set; }
     }
 }
