@@ -315,6 +315,10 @@ namespace CCSS_Service.Services
                     {
                         return "End date must be greater than event date.";
                     }
+                    if(StartDate - DateTime.Now > TimeSpan.FromDays(5))
+                    {
+                        return "Start Date must be 3 days from today";
+                    }
                 }
                 if (requestDtos == null)
                 {
@@ -524,6 +528,10 @@ namespace CCSS_Service.Services
                     if (StartDate > EndDate)
                     {
                         return ("End date must be greater than event date.");
+                    }
+                    if (StartDate - DateTime.Now > TimeSpan.FromDays(3))
+                    {
+                        return "Start Date must be 3 days from today";
                     }
                 }
                 var requestExisting = await _repository.GetRequestById(requestId);
@@ -909,6 +917,10 @@ namespace CCSS_Service.Services
                     {
                         return "End date must be greater than event date.";
                     }
+                    if (StartDate - DateTime.Now > TimeSpan.FromDays(3))
+                    {
+                        return "Start Date must be 3 days from today";
+                    }
                 }
                 if (requestDtos == null)
                 {
@@ -1178,6 +1190,10 @@ namespace CCSS_Service.Services
                     if (StartDate > EndDate)
                     {
                         return "End date must be greater than event date.";
+                    }
+                    if (StartDate - DateTime.Now > TimeSpan.FromDays(3))
+                    {
+                        return "Start Date must be 3 days from today";
                     }
                 }
                 if (requestDtos == null)

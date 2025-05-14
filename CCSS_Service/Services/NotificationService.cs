@@ -15,7 +15,7 @@ namespace CCSS_Service.Services
 {
     public interface INotificationService
     {
-        Task<bool> UpdateNotification(string notificationId);
+        Task<string> UpdateNotification(string notificationId);
         Task<List<NotificationResponse>> GetAllNotificationsByAccountId(string accountId);
         Task<string> SendNotification(string accountId, string message);
     }
@@ -23,7 +23,7 @@ namespace CCSS_Service.Services
     {
         private readonly INotificationRepository notificationRepository;
         private readonly IMapper mapper;
-        public NotificationService(INotificationRepository notificationRepository, IMapper mapper) 
+        public NotificationService(INotificationRepository notificationRepository, IMapper mapper)
         {
             this.notificationRepository = notificationRepository;
             this.mapper = mapper;
@@ -31,8 +31,22 @@ namespace CCSS_Service.Services
 
         public async Task<List<NotificationResponse>> GetAllNotificationsByAccountId(string accountId)
         {
-            List<Notification> notifications = await notificationRepository.GetAllNotificationsByAccountId(accountId);
-            return mapper.Map<List<NotificationResponse>>(notifications);
+            List<NotificationResponse> notifications = new List<NotificationResponse>();
+            var ListNotification = await notificationRepository.GetAllNotificationsByAccountId(accountId);
+            foreach (var notification in ListNotification)
+            {
+                NotificationResponse notificationResponse = new NotificationResponse()
+                {
+                    Id = notification.Id,
+                    AccountId = notification.AccountId,
+                    Message = notification.Message,
+                    IsRead = notification.IsRead,
+                    IsSentMail = notification.IsSentMail,
+                    CreatedAt = notification.CreatedAt.ToString("HH:mm dd/MM/yyyy")
+                };
+                notifications.Add(notificationResponse);
+            }
+            return notifications;
         }
 
         public async Task<string> SendNotification(string accountId, string message)
@@ -51,22 +65,20 @@ namespace CCSS_Service.Services
             return result ? "Create Success" : "Create Failed";
         }
 
-        public async Task<bool> UpdateNotification(string notificationId)
+        public async Task<string> UpdateNotification(string notificationId)
         {
-            if(string.IsNullOrEmpty(notificationId))
+            if (string.IsNullOrEmpty(notificationId))
             {
-                return false;
+                return "Need entry the notificationId";
             }
-            
             Notification notification = await notificationRepository.GetNotification(notificationId);
             if (notification == null)
             {
-                return false;    
+                return "This notification is not found";
             }
-
-            notification.IsRead = true; 
+            notification.IsRead = true;
             bool result = await notificationRepository.UpdateNotification(notification);
-            return result;
+            return result ? "Update Success" : "Update Fail";
         }
     }
 }
