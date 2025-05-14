@@ -18,4 +18,11 @@ namespace CCSS_Service.Model.Requests
         public string StartDate { get; set; }
         public string EndDate { get; set; }
     }
+
+    public class CheckAccountRequestForRange
+    {
+        public string CharacterId { get; set; }
+        public List<Date> Dates { get; set; }
+        public string RequestId { get; set; }
+    }
 }

@@ -48,6 +48,7 @@ namespace CCSS_Service.Services
         Task<AccountResponse> GetAccountByEventCharacterId(string eventCharacterId);
         Task<bool> ChangePassword(string email);
         Task<List<AccountResponse>> GetAllAccount(string searchterm, string role);
+        Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDateAndRange(string characterId, List<Date> dates, string requestId);
     }
     public class AccountService : IAccountService
     {
@@ -65,8 +66,9 @@ namespace CCSS_Service.Services
         private readonly Image image;
         private readonly IAccountImageRepository accountImageRepository;
         private readonly IRequestDatesRepository requestDatesRepository;
+        private readonly IRequestRepository requestRepository;
 
-        public AccountService(ICartRepository cartRepository, IBeginTransactionRepository beginTransactionRepository, ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService, Image image, IAccountImageRepository accountImageRepository, IRequestDatesRepository requestDatesRepository)
+        public AccountService(ICartRepository cartRepository, IBeginTransactionRepository beginTransactionRepository, ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService, Image image, IAccountImageRepository accountImageRepository, IRequestDatesRepository requestDatesRepository, IRequestRepository requestRepository)
         {
             this.taskRepository = taskRepository;
             _beginTransactionRepository = beginTransactionRepository;
@@ -82,6 +84,7 @@ namespace CCSS_Service.Services
             this.image = image;
             this.accountImageRepository = accountImageRepository;
             this.requestDatesRepository = requestDatesRepository;
+            this.requestRepository = requestRepository;
         }
         public async Task<AccountResponse> GetAccountByEventCharacterId(string eventCharacterId)
         {
@@ -849,6 +852,89 @@ namespace CCSS_Service.Services
                 }
 
                 List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character, accountId);
+
+                string format = "HH:mm dd/MM/yyyy";
+                CultureInfo culture = CultureInfo.InvariantCulture;
+
+                foreach (var date in dates)
+                {
+                    DateTime start = DateTime.ParseExact(date.StartDate, format, culture);
+                    DateTime end = DateTime.ParseExact(date.EndDate, format, culture);
+
+                    if (start > end)
+                    {
+                        throw new Exception("Start can not greater than EndDate");
+                    }
+
+                    foreach (Account account in accounts)
+                    {
+                        bool result = await taskRepository.CheckTaskIsValid(account, start, end);
+                        bool resultRequetDate = await requestDatesRepository.CheckValidRequestDate(account, start, end);
+
+                        if (result && resultRequetDate)
+                        {
+                            AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                            accountRespose.Images ??= new List<AccountImageResponse>();
+
+                            if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                            {
+                                foreach (var image in account.AccountImages)
+                                {
+                                    accountRespose.Images.Add(new AccountImageResponse
+                                    {
+                                        AccountImageId = image.AccountImageId,
+                                        UrlImage = image.UrlImage,
+                                        CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                        UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                        IsAvatar = image.IsAvatar
+                                    });
+                                }
+                            }
+                            accountByCharacterAndDateResponses.Add(accountRespose);
+                        }
+                    }
+                }
+
+                return accountByCharacterAndDateResponses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDateAndRange(string characterId, List<Date> dates, string requestId)
+        {
+            try
+            {
+                List<AccountByCharacterAndDateResponse> accountByCharacterAndDateResponses = new List<AccountByCharacterAndDateResponse>();
+                Request request = await requestRepository.GetRequestById(requestId);
+
+                if(request == null)
+                {
+                    throw new Exception("Request does not exist");
+                }
+                if(request.ServiceId != "S003")
+                {
+                    throw new Exception("Service of this request must be S003");
+                }
+                if (request.Range == null)
+                {
+                    throw new Exception("Range of this request can not null");
+                }
+
+                string[] parts = request.Range.Split(' ')[0].Split('-');
+
+                int minSalary = int.Parse(parts[0]); // 15000
+                int maxSalary = int.Parse(parts[1]);
+
+                Character character = await characterRepository.GetCharacter(characterId);
+                if (character == null)
+                {
+                    throw new Exception("Character does not exist");
+                }
+
+                List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character, minSalary, maxSalary);
 
                 string format = "HH:mm dd/MM/yyyy";
                 CultureInfo culture = CultureInfo.InvariantCulture;

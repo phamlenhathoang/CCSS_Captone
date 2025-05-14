@@ -29,6 +29,7 @@ namespace CCSS_Service.Services
         Task<string> DeleteCharacter(string id);
         Task<List<CharacterResponse>> GetCharactersByCategoryId(string categoryId);
         Task<List<CharacterResponse>> GetCharactersByDate(string startDate, string endDate);
+        Task<CharacterResponse> GetCharactersByDateAndCharacterId(string startDate, string endDate, string characterId);
     }
     public class CharacterService : ICharacterService
     {
@@ -460,5 +461,102 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<CharacterResponse> GetCharactersByDateAndCharacterId(string startDate, string endDate, string characterId)
+        {
+            try
+            {
+                string format = "dd/MM/yyyy";
+                CultureInfo culture = CultureInfo.InvariantCulture;
+                DateTime start = DateTime.ParseExact(startDate, format, culture);
+                DateTime end = DateTime.ParseExact(endDate, format, culture);
+
+                CharacterResponse? characterResponse = null;
+
+                Character character = await _characterRepository.GetCharacter(characterId);
+                if (character == null)
+                {
+                    return null; // hoặc throw nếu không tìm thấy
+                }
+
+                int quantity = (int)character.Quantity;
+
+                // Kiểm tra RequestCharacter
+                List<RequestCharacter> requestCharacters = await requestCharacterRepository.GetListRequestCharacterByCharacterId(character.CharacterId);
+                foreach (var requestCharacter in requestCharacters)
+                {
+                    if (requestCharacter.RequestDates != null && requestCharacter.RequestDates.Count > 0)
+                    {
+                        bool isValid = await requestDatesRepository.CheckValidCharacterRequestDate(requestCharacter.RequestCharacterId, start, end);
+                        if (!isValid)
+                        {
+                            quantity -= 1;
+                        }
+                    }
+                    else
+                    {
+                        bool isValid = await requestRepository.CheckRequestValid(requestCharacter.Request.RequestId, start, end);
+                        if (!isValid)
+                        {
+                            quantity -= 1;
+                        }
+                    }
+                }
+
+                // Kiểm tra EventCharacter
+                List<EventCharacter> eventCharacters = await eventCharacterRepository.GetEventCharacterByCharacterId(character.CharacterId);
+                foreach (var eventCharacter in eventCharacters)
+                {
+                    bool isValid = await eventRepository.CheckEventValid(eventCharacter.Event.EventId, start, end);
+                    if (!isValid)
+                    {
+                        quantity -= 1;
+                    }
+                }
+
+                if (quantity > 0)
+                {
+                    var characterImageResponses = new List<CharacterImageResponse>();
+                    var images = await _imageRepository.GetListImageCharacter(character.CharacterId);
+                    foreach (var image in images)
+                    {
+                        characterImageResponses.Add(new CharacterImageResponse
+                        {
+                            CharacterImageId = image.CharacterImageId,
+                            CreateDate = image.CreateDate,
+                            IsAvatar = image.IsAvatar,
+                            UpdateDate = image.UpdateDate,
+                            UrlImage = image.UrlImage
+                        });
+                    }
+
+                    characterResponse = new CharacterResponse
+                    {
+                        Quantity = quantity,
+                        CategoryId = character.CategoryId,
+                        CharacterId = character.CharacterId,
+                        CharacterName = character.CharacterName,
+                        CreateDate = character.CreateDate.ToString("dd/MM/yyyy"),
+                        Description = character.Description,
+                        IsActive = character.IsActive,
+                        MaxHeight = character.MaxHeight,
+                        MaxWeight = character.MaxWeight,
+                        MinHeight = character.MinHeight,
+                        MinWeight = character.MinWeight,
+                        Price = character.Price,
+                        UpdateDate = character.UpdateDate?.ToString("dd/MM/yyyy"),
+                        Images = characterImageResponses
+                    };
+                }
+
+                return characterResponse;
+            }
+            catch (Exception ex)
+            {
+                // Tránh throw Exception mới mà làm mất stacktrace
+                throw;
+            }
+        }
+
     }
 }

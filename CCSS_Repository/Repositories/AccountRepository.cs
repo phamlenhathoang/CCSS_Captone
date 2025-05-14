@@ -1,5 +1,6 @@
 ﻿using CCSS_Repository.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> AddAccount(Account account);
         Task<bool> UpdateAccount(Account account);
         Task<List<Account>> GetAllAccountsByCharacter(Character character, string? accountId);
+        Task<List<Account>> GetAllAccountsByCharacter(Character character, int minSalary, int maxSalary);
         Task<List<Account>> GetAccountsByCharacter(Character character, List<Account> accounts);
         Task<List<Account>> GetAllAccountsByRoleId(string roleId);
         Task<List<Account>> GetAllAccountRoleManager();
@@ -199,6 +201,14 @@ namespace CCSS_Repository.Repositories
             }
 
             return await query.ToListAsync();
+        }
+
+        public Task<List<Account>> GetAllAccountsByCharacter(Character character, int minSalary, int maxSalary)
+        {
+            return dbContext.Accounts
+                .Include(r => r.Role)
+                .Include(a => a.AccountImages)
+                .Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight && a.Role.RoleName == RoleName.Cosplayer && a.IsLock == false && a.IsActive == true).OrderBy(a => a.SalaryIndex).ToListAsync();
         }
     }
 }
