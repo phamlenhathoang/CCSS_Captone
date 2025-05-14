@@ -39,6 +39,8 @@ namespace CCSS_Service.Services
 
         }
 
+
+        #region AddCartProduct
         public async Task<string> AddCartProduct(string cartId, List<CartProductRequest> cartProductRequests)
         {
             if (cartProductRequests == null || !cartProductRequests.Any())
@@ -115,8 +117,9 @@ namespace CCSS_Service.Services
                 return "Add Success";
             }
         }
+        #endregion
 
-
+        #region DeleteCartProduct
         public async Task<string> DeleteCartProduct(string cartId, List<CartPorductRequestDtos> cartProductRequests)
         {
             if (cartId == null)
@@ -163,7 +166,9 @@ namespace CCSS_Service.Services
                 return "Delete Success";
             }
         }
+        #endregion
 
+        #region UpdateCartProduct
         public async Task<string> UpdateCartProduct(string cartId, List<UpdateCartProductRequest> updateCartProductRequests)
         {
             if (cartId == null)
@@ -233,8 +238,9 @@ namespace CCSS_Service.Services
                 return "Update Success";
             }
         }
+        #endregion
 
-
+        #region DeleteCartProductAfterPayment
         public async Task<string> DeleteCartProductAfterPayment(string cartId, List<CartProductRequestDTO> cartProductRequests)
         {
             if (cartId == null)
@@ -281,26 +287,35 @@ namespace CCSS_Service.Services
                 return "Delete Success";
             }
         }
+        #endregion
 
+        #region GetAllCartProduct
         public async Task<List<CartProduct>> GetAllCartProduct()
         {
             return await _repository.GetAllCartProduct();
         }
+        #endregion
 
+        #region GetCartProduct
         public async Task<CartProduct> GetCartProduct(string productId, string cartId)
         {
             return await _repository.GetCartProduct(productId, cartId);
         }
+        #endregion
 
+        #region GetCartProductById
         public async Task<CartProduct> GetCartProductById(string id)
         {
             return await _repository.GetCartProductById(id);
         }
+        #endregion
 
+        #region GetListProductInCart
         public async Task<List<CartProduct>> GetListProductInCart(string cartId)
         {
             return await _repository.GetListProductInCart(cartId);
         }
+        #endregion
 
     }
 }
