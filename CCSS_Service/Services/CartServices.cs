@@ -36,6 +36,7 @@ namespace CCSS_Service.Services
             _beginTransactionRepository = beginTransactionRepository;
         }
 
+        #region GetCartById
         public async Task<CartResponse> GetCartById(string id)
         {
             var cart = await _cartRepository.GetCartById(id);
@@ -60,7 +61,9 @@ namespace CCSS_Service.Services
             return cartResponse;
 
         }
+        #endregion
 
+        #region GetCartByAccount
         public async Task<CartResponse> GetCartByAccount(string accountId)
         {
             try
@@ -95,7 +98,9 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
 
+        #region AddCart
         public async Task<string> AddCart(CartRequest cartRequest)
         {
             
@@ -143,5 +148,6 @@ namespace CCSS_Service.Services
                
             }
         }
+        #endregion
     }
 }
