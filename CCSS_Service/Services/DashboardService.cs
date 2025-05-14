@@ -22,6 +22,7 @@ namespace CCSS_Service
         Task<string> GetAllContractFilterContractStatus(ContractStatus contractStatus);
         Task<string> GetAllContractFilterConplete();
         Task<List<ContractCount>> GetAllContractFilterByDateTime(DateFilterType dateFilterType);
+        Task<List<Contract>> GetAllContractByServiceId(string serviceId);
 
     }
 
@@ -100,8 +101,8 @@ namespace CCSS_Service
             }
 
             return response;
-            #endregion
         }
+            #endregion
 
 
         public async Task<List<AccountDashBoardResponse>> GetTop5AccountsWithMostPaymentsAsync()
@@ -214,6 +215,7 @@ namespace CCSS_Service
         }
         #endregion
 
+        #region GetAllContractFilterByDateTime
         public async Task<List<ContractCount>> GetAllContractFilterByDateTime(DateFilterType dateFilterType)
         {
             switch (dateFilterType)
@@ -230,7 +232,13 @@ namespace CCSS_Service
                     return null;
             }
         }
+        #endregion
 
-
+        #region GetAllContractByServiceId
+        public async Task<List<Contract>> GetAllContractByServiceId(string serviceId)
+        {
+            return await _dashBoardRepository.GetAllContractByService(serviceId);
+        }
+        #endregion
     }
 }

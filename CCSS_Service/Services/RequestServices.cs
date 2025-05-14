@@ -315,7 +315,7 @@ namespace CCSS_Service.Services
                     {
                         return "End date must be greater than event date.";
                     }
-                    if(StartDate - DateTime.Now > TimeSpan.FromDays(5))
+                    if ((StartDate - DateTime.Now).TotalDays < 3)
                     {
                         return "Start Date must be 3 days from today";
                     }
@@ -529,7 +529,7 @@ namespace CCSS_Service.Services
                     {
                         return ("End date must be greater than event date.");
                     }
-                    if (StartDate - DateTime.Now > TimeSpan.FromDays(3))
+                    if ((StartDate - DateTime.Now).TotalDays < 3)
                     {
                         return "Start Date must be 3 days from today";
                     }
@@ -917,7 +917,7 @@ namespace CCSS_Service.Services
                     {
                         return "End date must be greater than event date.";
                     }
-                    if (StartDate - DateTime.Now > TimeSpan.FromDays(3))
+                    if ((StartDate - DateTime.Now).TotalDays < 3)
                     {
                         return "Start Date must be 3 days from today";
                     }
@@ -1191,7 +1191,7 @@ namespace CCSS_Service.Services
                     {
                         return "End date must be greater than event date.";
                     }
-                    if (StartDate - DateTime.Now > TimeSpan.FromDays(3))
+                    if ((StartDate - DateTime.Now).TotalDays < 3)
                     {
                         return "Start Date must be 3 days from today";
                     }

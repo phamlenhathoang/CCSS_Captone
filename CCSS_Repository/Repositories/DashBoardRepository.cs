@@ -25,6 +25,7 @@ namespace CCSS_Repository.Repositories
         Task<List<ContractCount>> GetTodayContractByHourAsync();
         Task<List<ContractCount>> GetContractByDayInMonthAsync();
         Task<List<ContractCount>> GetContractByMonthInYearAsync();
+        Task<List<Contract>> GetAllContractByService(string serviceId);
     }
 
     public class DashBoardRepository : IDashBoardRepository
@@ -34,6 +35,8 @@ namespace CCSS_Repository.Repositories
         {
             _context = cCSSDbContext;
         }
+
+        #region GetRevenue
         public async Task<List<Payment>> GetRevenue(DateFilterType filterType, RevenueSource revenueSource)
         {
             var now = DateTime.UtcNow;
@@ -88,8 +91,9 @@ namespace CCSS_Repository.Repositories
 
             return await query.ToListAsync();
         }
+        #endregion
 
-
+        #region GetContractsByStatusAndDate
         public async Task<List<Contract>> GetContractsByStatusAndDate(ContractStatus? status, DateFilterType? filterType)
         {
             var now = DateTime.UtcNow;
@@ -127,25 +131,32 @@ namespace CCSS_Repository.Repositories
 
             return await query.ToListAsync();
         }
+        #endregion
 
-
+        #region GetAllContractFilterServiceAndDate
         public async Task<List<Contract>> GetAllContractFilterServiceAndDate(string serviceId, DateTime startDate, DateTime endDate)
         {
             return await _context.Contracts.Include(r => r.Request)
                 .Where(c => c.Request.ServiceId.Equals(serviceId) && c.CreateDate >= startDate && c.CreateDate <= endDate)
                 .ToListAsync();
         }
+        #endregion
 
+        #region GetAllContractFilterContractStatus
         public async Task<List<Contract>> GetAllContractFilterContractStatus(ContractStatus contractStatus)
         {
             return await _context.Contracts.Where(c => c.ContractStatus.Equals(contractStatus)).ToListAsync();
         }
+        #endregion
 
+        #region GetAllContractNotCompleted
         public async Task<List<Contract>> GetAllContractNotCompleted()
         {
             return await _context.Contracts.Where(c => c.ContractStatus != ContractStatus.Completed).ToListAsync();
         }
+        #endregion
 
+        #region GetTop5AccountsWithMostPaymentsAsync
         public async Task<List<Account>> GetTop5AccountsWithMostPaymentsAsync()
         {
             int currentYear = DateTime.UtcNow.Year;
@@ -169,8 +180,7 @@ namespace CCSS_Repository.Repositories
                 .Include(a => a.AccountImages) // Nạp thêm hình ảnh của Account
                 .ToListAsync();
         }
-
-
+        #endregion
 
         //public async Task<List<Feedback>> GetFeedbacksByContractDescriptionAsync()
         //{
@@ -205,6 +215,8 @@ namespace CCSS_Repository.Repositories
         //        .Take(5)
         //        .ToListAsync();
         //}
+
+        #region Get5PopularCosplayers
         public async Task<List<Account>> Get5PopularCosplayers(DateFilterType filterType)
         {
             var now = DateTime.UtcNow;
@@ -266,6 +278,9 @@ namespace CCSS_Repository.Repositories
 
             return sortedCosplayers;
         }
+        #endregion
+
+        #region Get5FavoriteCosplayer
         public async Task<List<Account>> Get5FavoriteCosplayer(DateFilterType filterType)
         {
             var now = DateTime.UtcNow;
@@ -315,7 +330,9 @@ namespace CCSS_Repository.Repositories
                 .OrderByDescending(a => a.AverageStar) // Đảm bảo sắp xếp lại
                 .ToList();
         }
+        #endregion
 
+        #region GetTodayContractByHourAsync
         public async Task<List<ContractCount>> GetTodayContractByHourAsync()
         {
             var now = DateTime.UtcNow; // Hoặc UtcNow tùy theo cách lưu
@@ -346,7 +363,9 @@ namespace CCSS_Repository.Repositories
 
             return fullResult;
         }
+        #endregion
 
+        #region GetContractByDayInMonthAsync
         public async Task<List<ContractCount>> GetContractByDayInMonthAsync()
         {
             var now = DateTime.UtcNow;
@@ -376,7 +395,9 @@ namespace CCSS_Repository.Repositories
 
             return fullResult;
         }
+        #endregion
 
+        #region GetContractByMonthInYearAsync
         public async Task<List<ContractCount>> GetContractByMonthInYearAsync()
         {
             var now = DateTime.UtcNow;
@@ -405,6 +426,49 @@ namespace CCSS_Repository.Repositories
 
             return fullResult;
         }
+        #endregion
 
+        #region GetAllContractByService
+        public async Task<List<Contract>> GetAllContractByService(string serviceId)
+        {
+            return await _context.Contracts.Where(rc => rc.Request.ServiceId.Equals(serviceId)&& rc.ContractStatus !=ContractStatus.Cancel).ToListAsync();
+        }
+        #endregion
+
+        public async Task<List<ContractCount>> GetAllContractFilterServiceAndDateTime(string serviceId, DateFilterType dateFilterType)
+        {
+            switch (dateFilterType)
+            {
+                case DateFilterType.Today:
+                    var now = DateTime.UtcNow; // Hoặc UtcNow tùy theo cách lưu
+                    var startOfDay = now.Date;
+                    var endOfDay = startOfDay.AddDays(1);
+
+                    var result = await _context.Contracts
+                        .Where(c => c.CreateDate.HasValue &&
+                                    c.CreateDate.Value >= startOfDay &&
+                                    c.CreateDate.Value < endOfDay && c.Request.ServiceId.Equals(serviceId))
+                        .GroupBy(c => c.CreateDate.Value.Hour)
+                        .Select(g => new ContractCount
+                        {
+                            Hour = g.Key,
+                            Count = g.Count()
+                        })
+                        .OrderBy(x => x.Hour)
+                        .ToListAsync();
+
+                    // Đảm bảo đủ 24 giờ (0 - 23) kể cả khi không có data ở 1 số giờ
+                    var fullResult = Enumerable.Range(0, 24)
+                        .Select(h => new ContractCount
+                        {
+                            Hour = h,
+                            Count = result.FirstOrDefault(x => x.Hour == h)?.Count ?? 0
+                        })
+                        .ToList();
+
+                    return fullResult;
+            }
+            return null;
+        }
     }
 }
