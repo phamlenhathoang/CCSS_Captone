@@ -37,16 +37,13 @@ namespace CCSS_Captone.Controllers
             return Ok(character);
         }
 
-        //[HttpGet("categoryId/{categoryId}")]
-        //public async Task<ActionResult<CategoryResponse>> GetCharactersByCategoryId(string categoryId)
-        //{
-        //    var characters = await _characterService.GetCharactersByCategoryId(categoryId);
-        //    if (characters == null)
-        //    {
-        //        return NotFound(new { message = "Category not found." });
-        //    }
-        //    return Ok(characters);
-        //}
+        [HttpGet("GetCharactersByDateAndCharacterId")]
+        public async Task<ActionResult<CharacterResponse>> GetCharactersByDateAndCharacterId(string startDate, string endDate, string characterId)
+        {
+            var character = await _characterService.GetCharactersByDateAndCharacterId(startDate, endDate, characterId);
+            return Ok(character);
+        }
+
         [HttpGet("all")]
         public async Task<ActionResult<CharacterResponse>> GetAll()
         {

@@ -207,7 +207,7 @@ namespace CCSS_Repository.Repositories
 
             if (request.StartDate.Date < start.Date)
             {
-                if (request.EndDate.Date < end.Date)
+                if (start.Date < request.EndDate.Date && request.EndDate.Date < end.Date)
                 {
                     return false;
                 }

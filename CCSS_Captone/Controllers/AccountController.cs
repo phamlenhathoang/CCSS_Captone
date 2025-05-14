@@ -19,24 +19,6 @@ namespace CCSS_Captone.Controllers
             this.accountService = accountService;
         }
 
-        //[HttpGet("contractId")]
-        //public async Task<ActionResult<AccountResponse>> GetListAccountToContactByContractId(string contractId)
-        //{
-        //    var accounts = await accountService.GetListAccountToContactByContractId(contractId);
-        //    if (accounts == null)
-        //    {
-        //        return NotFound(new { message = "Accounts not found." });
-        //    }
-        //    return Ok(accounts);
-        //}
-
-        //[HttpPost]
-        //public async Task<ActionResult> CheckForCharactersWithDuplicateCosplayers(string accountId, List<string> chacracters)
-        //{
-        //    var accounts = await accountService.CheckForCharactersWithDuplicateCosplayers(accountId, chacracters);
-        //    return Ok(accounts);
-        //}
-
         [HttpGet("GetAllAccount")]
         public async Task<ActionResult> GetAllAccount(string? searchterm, [Required] string roleId)
         {
@@ -51,13 +33,6 @@ namespace CCSS_Captone.Controllers
             }
             return BadRequest(ModelState);
         }
-
-        //[HttpPut]
-        //public async Task<IActionResult> ChangeAccountForTask(string taskId, string accountId)
-        //{
-        //    var result = await accountService.ChangeAccountForTask(taskId, accountId);
-        //    return Ok(result);
-        //}
 
         [HttpGet("GetAccountByEventCharacterId/{eventCharacterId}")]
         public async Task<ActionResult<AccountResponse>> GetAccountByEventCharacterId(string eventCharacterId)
@@ -106,10 +81,10 @@ namespace CCSS_Captone.Controllers
             return Ok(account);
         }
 
-        [HttpGet("characterName/{characterName}")]
-        public async Task<IActionResult> ViewAllAccountByCharacterName(string characterName, string? start, string? end)
+        [HttpPost("GetAccountByCharacterAndDateAndRange")]
+        public async Task<IActionResult> GetAccountByCharacterAndDateAndRange(CheckAccountRequestForRange checkAccountRequestForRange)
         {
-            var account = await accountService.ViewAllAccountByCharacterName(characterName.ToLower(),start, end);
+            var account = await accountService.GetAccountByCharacterAndDateAndRange(checkAccountRequestForRange.CharacterId, checkAccountRequestForRange.Dates, checkAccountRequestForRange.RequestId);
             return Ok(account);
         }
 
