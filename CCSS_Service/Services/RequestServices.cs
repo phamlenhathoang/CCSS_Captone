@@ -342,6 +342,7 @@ namespace CCSS_Service.Services
                     EndDate = EndDate,
                     Location = requestDtos.Location,
                     Deposit = requestDtos.Deposit,
+                    Range = requestDtos.Range,
                     PackageId = requestDtos.PackageId,
                 };
                 var result = await _repository.AddRequest(newRequest);
