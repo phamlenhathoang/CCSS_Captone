@@ -23,6 +23,7 @@ namespace CCSS_Service
         Task<string> GetAllContractFilterConplete();
         Task<List<ContractCount>> GetAllContractFilterByDateTime(DateFilterType dateFilterType);
         Task<List<Contract>> GetAllContractByServiceId(string serviceId);
+        Task<List<ContractCount>> GetAllContractFilterServiceAndDateTime(string serviceId, DateFilterType dateFilterType);
 
     }
 
@@ -240,5 +241,10 @@ namespace CCSS_Service
             return await _dashBoardRepository.GetAllContractByService(serviceId);
         }
         #endregion
+
+        public async Task<List<ContractCount>> GetAllContractFilterServiceAndDateTime(string serviceId, DateFilterType dateFilterType)
+        {
+            return await _dashBoardRepository.GetAllContractFilterServiceAndDateTime(serviceId, dateFilterType);
+        }
     }
 }
