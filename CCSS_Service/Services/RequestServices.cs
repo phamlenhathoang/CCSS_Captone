@@ -117,6 +117,7 @@ namespace CCSS_Service.Services
                     ServiceId = item.ServiceId,
                     PackageId = item.PackageId,
                     Deposit = item.Deposit,
+                    Range = item.Range,
                     Reason = item.Reason,
                     TotalDate = totalDate,
                     CharactersListResponse = characterResponses
@@ -184,6 +185,7 @@ namespace CCSS_Service.Services
                 ServiceId = request.ServiceId,
                 PackageId = request.PackageId,
                 Deposit = request.Deposit,
+                Range = request.Range,
                 Reason = request.Reason,
                 TotalDate = totalDate,
 
@@ -260,6 +262,7 @@ namespace CCSS_Service.Services
                     ServiceId = item.ServiceId,
                     PackageId = item.PackageId,
                     Deposit = item.Deposit,
+                    Range = item.Range,
                     TotalDate = totalDate,
                     Reason = item.Reason,
                     CharactersListResponse = characterResponses

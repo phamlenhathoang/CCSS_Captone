@@ -22,9 +22,9 @@ namespace CCSS_Service.Model.Responses
         public string? ServiceId { get; set; }
         public string? PackageId { get; set; }
         public string? Deposit { get; set; }
+        public string? Range { get; set; }
         public string? Reason { get; set; }
         public int? TotalDate { get; set; }
-        public string? AccountCouponId { get; set; }
         public List<CharacterRequestResponse> CharactersListResponse { get; set; } 
     }
 
