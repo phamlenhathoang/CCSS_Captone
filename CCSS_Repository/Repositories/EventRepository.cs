@@ -203,14 +203,45 @@ namespace CCSS_Repository.Repositories
 
         public async Task<bool> CheckEventValid(string eventId, DateTime start, DateTime end)
         {
-            Event e = await _dbContext.Events.FirstOrDefaultAsync(r => r.EventId.Equals(eventId));
+            Event request = await _dbContext.Events.FirstOrDefaultAsync(r => r.EventId.Equals(eventId));
 
-            if (start.Date <= e.StartDate.Date && e.StartDate.Date <= end.Date)
+            if (request.StartDate.Date < start.Date)
             {
-                return false;
+                if (request.EndDate.Date < end.Date)
+                {
+                    return false;
+                }
+
+                if (request.EndDate.Date == end.Date)
+                {
+                    return false;
+                }
+
+                if (request.EndDate.Date > end.Date)
+                {
+                    return false;
+                }
+
+                if (request.EndDate.Date == start.Date)
+                {
+                    return false;
+                }
             }
 
-            if (start.Date <= e.EndDate.Date && e.EndDate.Date <= end.Date)
+            if (start.Date < request.StartDate.Date)
+            {
+                if (request.StartDate.Date < end.Date)
+                {
+                    return false;
+                }
+
+                if (request.StartDate.Date == end.Date)
+                {
+                    return false;
+                }
+            }
+
+            if (start.Date == request.StartDate.Date)
             {
                 return false;
             }

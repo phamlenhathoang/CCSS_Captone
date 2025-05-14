@@ -187,7 +187,17 @@ namespace CCSS_Repository.Repositories
             List<RequestDate> requestDates = await _context.RequestDates.Where(rd => rd.RequestCharacterId.Equals(requestCharacterId)).ToListAsync();
             foreach (RequestDate requestDate in requestDates)
             {
-                if (startDate.Date <= requestDate.StartDate.Date && requestDate.EndDate.Date <= endDate.Date)
+                if(startDate.Date == requestDate.StartDate.Date)
+                {
+                    return false;
+                }
+
+                if(startDate.Date < requestDate.StartDate.Date && requestDate.StartDate.Date < endDate.Date)
+                {
+                    return false;
+                }
+
+                if(requestDate.StartDate.Date == endDate.Date)
                 {
                     return false;
                 }

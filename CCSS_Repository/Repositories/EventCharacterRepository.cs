@@ -91,7 +91,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<EventCharacter>> GetEventCharacterByCharacterId(string characterId)
         {
-            return await _dbContext.EventCharacters.Include(ec => ec.Event).Where(ec => ec.CharacterId.Equals(characterId) && ec.Event.IsActive == false).ToListAsync();
+            return await _dbContext.EventCharacters.Include(ec => ec.Event).Where(ec => ec.CharacterId.Equals(characterId) && ec.Event.IsActive == true).ToListAsync();
         }
     }
 }
