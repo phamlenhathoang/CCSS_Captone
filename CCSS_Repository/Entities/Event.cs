@@ -23,7 +23,6 @@ namespace CCSS_Repository.Entities
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public string? CreateBy { get; set; }
-        public string? CreateBy { get; set; }
         public EventStatus? Status { get; set; }
 
         public ICollection<Ticket> Ticket { get; set; } 
