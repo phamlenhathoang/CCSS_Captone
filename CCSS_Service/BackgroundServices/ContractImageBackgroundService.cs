@@ -14,12 +14,12 @@ using Task = System.Threading.Tasks.Task;
 
 namespace CCSS_Service.BackgroundServices
 {
-    public class ContractRefundBackgroundService : BackgroundService
+    public class ContractImageBackgroundService : BackgroundService
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<ContractBackgroudService> _logger;
 
-        public ContractRefundBackgroundService(IServiceProvider serviceProvider, ILogger<ContractBackgroudService> logger)
+        public ContractImageBackgroundService(IServiceProvider serviceProvider, ILogger<ContractBackgroudService> logger)
         {
             this._serviceProvider = serviceProvider;
             this._logger = logger;
@@ -35,40 +35,26 @@ namespace CCSS_Service.BackgroundServices
                 {
                     using (var scope = _serviceProvider.CreateScope())
                     {
+                        var _contractService = scope.ServiceProvider.GetRequiredService<IContractServices>();
+                        var _contractImageRepository = scope.ServiceProvider.GetRequiredService<IContractImageRepository>();
                         var _contractRepository = scope.ServiceProvider.GetRequiredService<IContractRespository>();
-                        var _accountRepository = scope.ServiceProvider.GetService<IAccountRepository>();
-                        var _sendMail = scope.ServiceProvider.GetService<SendMail>();
 
-                        List<Contract> contracts = await _contractRepository.GetContracts();
+                        List<ContractImage> contractImages = await _contractImageRepository.GetListContractImageByStatusRefundMoney();
 
-                        if (contracts.Any())
+                        if (contractImages.Any())
                         {
-                            foreach (var contract in contracts)
+                            foreach (var contractImage in contractImages)
                             {
-                                if (contract.DeliveryStatus == DeliveryStatus.Received)
+                                if (contractImage.CreateDate.AddDays(1) == DateTime.Now)
                                 {
-                                    if (DateTime.Now.Date == contract.Request.EndDate.Date.AddDays(1))
-                                    {
-                                        contract.ContractStatus = ContractStatus.RefundOverdue;
-                                        contract.Amount = 0;
+                                    Contract contract = await _contractRepository.GetContractById(contractImage.ContractId);
 
-                                        bool result = await _contractRepository.UpdateContract(contract);
+                                    if(contract.ContractStatus != ContractStatus.Completed)
+                                    {
+                                        bool result = await _contractService.UpdateStatusContract(contract.ContractId, ContractStatus.Completed.ToString(), null);
                                         if (!result)
                                         {
                                             _logger.LogInformation("Can not update contract");
-                                        }
-
-                                        Account account = await _accountRepository.GetAccount(contract.Request.AccountId);
-                                        if (account == null) 
-                                        {
-                                            _logger.LogInformation("Account does not exist");
-                                        }
-
-                                        bool checkMail = await _sendMail.SendCustomerRefundOverdueContract(account.Email, contract.Request.EndDate.ToString("dd/MM/yyyy"));
-
-                                        if (!checkMail)
-                                        {
-                                            _logger.LogInformation($"Can not send mail for {account.AccountId}");
                                         }
                                     }
                                 }
