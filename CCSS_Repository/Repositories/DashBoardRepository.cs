@@ -3,6 +3,7 @@ using CCSS_Repository.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,15 +22,22 @@ namespace CCSS_Repository.Repositories
         Task<List<Contract>> GetAllContractFilterServiceAndDate(string serviceId, DateTime startDate, DateTime endDate);
         Task<List<Contract>> GetAllContractFilterContractStatus(ContractStatus contractStatus);
         Task<List<Contract>> GetAllContractNotCompleted();
+        Task<List<ContractCount>> GetTodayContractByHourAsync();
+        Task<List<ContractCount>> GetContractByDayInMonthAsync();
+        Task<List<ContractCount>> GetContractByMonthInYearAsync();
+        Task<List<Contract>> GetAllContractByService(string serviceId);
+        Task<List<ContractCount>> GetAllContractFilterServiceAndDateTime(string serviceId, DateFilterType dateFilterType);
     }
 
-        public class DashBoardRepository : IDashBoardRepository
+    public class DashBoardRepository : IDashBoardRepository
     {
         private readonly CCSSDbContext _context;
         public DashBoardRepository(CCSSDbContext cCSSDbContext)
         {
             _context = cCSSDbContext;
         }
+
+        #region GetRevenue
         public async Task<List<Payment>> GetRevenue(DateFilterType filterType, RevenueSource revenueSource)
         {
             var now = DateTime.UtcNow;
@@ -84,17 +92,18 @@ namespace CCSS_Repository.Repositories
 
             return await query.ToListAsync();
         }
+        #endregion
 
-
+        #region GetContractsByStatusAndDate
         public async Task<List<Contract>> GetContractsByStatusAndDate(ContractStatus? status, DateFilterType? filterType)
         {
             var now = DateTime.UtcNow;
-            var query =  _context.Contracts
+            var query = _context.Contracts
                 .Where(c => c.ContractStatus == status && c.Request != null) // Đảm bảo có Request
                 .AsQueryable();
-            if(status == null)
+            if (status == null)
             {
-                query = _context.Contracts.AsQueryable();   
+                query = _context.Contracts.AsQueryable();
             }
             switch (filterType)
             {
@@ -117,31 +126,38 @@ namespace CCSS_Repository.Repositories
                     query = query.Where(c => c.Request.StartDate.Year == now.Year);
                     break;
                 default:
-                    
+
                     break;
             }
 
             return await query.ToListAsync();
         }
+        #endregion
 
-
+        #region GetAllContractFilterServiceAndDate
         public async Task<List<Contract>> GetAllContractFilterServiceAndDate(string serviceId, DateTime startDate, DateTime endDate)
         {
             return await _context.Contracts.Include(r => r.Request)
                 .Where(c => c.Request.ServiceId.Equals(serviceId) && c.CreateDate >= startDate && c.CreateDate <= endDate)
                 .ToListAsync();
         }
+        #endregion
 
+        #region GetAllContractFilterContractStatus
         public async Task<List<Contract>> GetAllContractFilterContractStatus(ContractStatus contractStatus)
         {
             return await _context.Contracts.Where(c => c.ContractStatus.Equals(contractStatus)).ToListAsync();
         }
+        #endregion
 
+        #region GetAllContractNotCompleted
         public async Task<List<Contract>> GetAllContractNotCompleted()
         {
             return await _context.Contracts.Where(c => c.ContractStatus != ContractStatus.Completed).ToListAsync();
         }
+        #endregion
 
+        #region GetTop5AccountsWithMostPaymentsAsync
         public async Task<List<Account>> GetTop5AccountsWithMostPaymentsAsync()
         {
             int currentYear = DateTime.UtcNow.Year;
@@ -165,8 +181,7 @@ namespace CCSS_Repository.Repositories
                 .Include(a => a.AccountImages) // Nạp thêm hình ảnh của Account
                 .ToListAsync();
         }
-
-
+        #endregion
 
         //public async Task<List<Feedback>> GetFeedbacksByContractDescriptionAsync()
         //{
@@ -201,6 +216,8 @@ namespace CCSS_Repository.Repositories
         //        .Take(5)
         //        .ToListAsync();
         //}
+
+        #region Get5PopularCosplayers
         public async Task<List<Account>> Get5PopularCosplayers(DateFilterType filterType)
         {
             var now = DateTime.UtcNow;
@@ -262,6 +279,9 @@ namespace CCSS_Repository.Repositories
 
             return sortedCosplayers;
         }
+        #endregion
+
+        #region Get5FavoriteCosplayer
         public async Task<List<Account>> Get5FavoriteCosplayer(DateFilterType filterType)
         {
             var now = DateTime.UtcNow;
@@ -311,17 +331,200 @@ namespace CCSS_Repository.Repositories
                 .OrderByDescending(a => a.AverageStar) // Đảm bảo sắp xếp lại
                 .ToList();
         }
+        #endregion
 
+        #region GetTodayContractByHourAsync
+        public async Task<List<ContractCount>> GetTodayContractByHourAsync()
+        {
+            var now = DateTime.UtcNow; // Hoặc UtcNow tùy theo cách lưu
+            var startOfDay = now.Date;
+            var endOfDay = startOfDay.AddDays(1);
 
+            var result = await _context.Contracts
+                .Where(c => c.CreateDate.HasValue &&
+                            c.CreateDate.Value >= startOfDay &&
+                            c.CreateDate.Value < endOfDay)
+                .GroupBy(c => c.CreateDate.Value.Hour)
+                .Select(g => new ContractCount
+                {
+                    Hour = g.Key,
+                    Count = g.Count()
+                })
+                .OrderBy(x => x.Hour)
+                .ToListAsync();
 
+            // Đảm bảo đủ 24 giờ (0 - 23) kể cả khi không có data ở 1 số giờ
+            var fullResult = Enumerable.Range(0, 24)
+                .Select(h => new ContractCount
+                {
+                    Hour = h,
+                    Count = result.FirstOrDefault(x => x.Hour == h)?.Count ?? 0
+                })
+                .ToList();
 
+            return fullResult;
+        }
+        #endregion
 
+        #region GetContractByDayInMonthAsync
+        public async Task<List<ContractCount>> GetContractByDayInMonthAsync()
+        {
+            var now = DateTime.UtcNow;
+            var startOfMonth = new DateTime(now.Year, now.Month, 1);
+            var startOfNextMonth = startOfMonth.AddMonths(1);
 
+            var result = await _context.Contracts
+                .Where(c => c.CreateDate.HasValue &&
+                            c.CreateDate.Value >= startOfMonth &&
+                            c.CreateDate.Value < startOfNextMonth)
+                .GroupBy(c => c.CreateDate.Value.Day)
+                .Select(g => new ContractCount
+                {
+                    Day = g.Key,
+                    Count = g.Count()
+                })
+                .ToListAsync();
 
+            int daysInMonth = DateTime.DaysInMonth(now.Year, now.Month);
+            var fullResult = Enumerable.Range(1, daysInMonth)
+                .Select(day => new ContractCount
+                {
+                    Day = day,
+                    Count = result.FirstOrDefault(x => x.Day == day)?.Count ?? 0
+                })
+                .ToList();
 
+            return fullResult;
+        }
+        #endregion
 
+        #region GetContractByMonthInYearAsync
+        public async Task<List<ContractCount>> GetContractByMonthInYearAsync()
+        {
+            var now = DateTime.UtcNow;
+            var startOfYear = new DateTime(now.Year, 1, 1);
+            var startOfNextYear = startOfYear.AddYears(1);
 
+            var result = await _context.Contracts
+                .Where(c => c.CreateDate.HasValue &&
+                            c.CreateDate.Value >= startOfYear &&
+                            c.CreateDate.Value < startOfNextYear)
+                .GroupBy(c => c.CreateDate.Value.Month)
+                .Select(g => new ContractCount
+                {
+                    Month = g.Key,
+                    Count = g.Count()
+                })
+                .ToListAsync();
 
+            var fullResult = Enumerable.Range(1, 12)
+                .Select(month => new ContractCount
+                {
+                    Month = month,
+                    Count = result.FirstOrDefault(x => x.Month == month)?.Count ?? 0
+                })
+                .ToList();
 
+            return fullResult;
+        }
+        #endregion
+
+        #region GetAllContractByService
+        public async Task<List<Contract>> GetAllContractByService(string serviceId)
+        {
+            return await _context.Contracts.Where(rc => rc.Request.ServiceId.Equals(serviceId) && rc.ContractStatus != ContractStatus.Cancel).ToListAsync();
+        }
+        #endregion
+
+        #region GetAllContractFilterServiceAndDateTime
+        public async Task<List<ContractCount>> GetAllContractFilterServiceAndDateTime(string serviceId, DateFilterType dateFilterType)
+        {
+            switch (dateFilterType)
+            {
+                case DateFilterType.Today:
+                    var now = DateTime.UtcNow; // Hoặc UtcNow tùy theo cách lưu
+                    var startOfDay = now.Date;
+                    var endOfDay = startOfDay.AddDays(1);
+
+                    var result = await _context.Contracts
+                        .Where(c => c.CreateDate.HasValue &&
+                                    c.CreateDate.Value >= startOfDay &&
+                                    c.CreateDate.Value < endOfDay && c.Request.ServiceId.Equals(serviceId))
+                        .GroupBy(c => c.CreateDate.Value.Hour)
+                        .Select(g => new ContractCount
+                        {
+                            Hour = g.Key,
+                            Count = g.Count()
+                        })
+                        .OrderBy(x => x.Hour)
+                        .ToListAsync();
+
+                    // Đảm bảo đủ 24 giờ (0 - 23) kể cả khi không có data ở 1 số giờ
+                    var fullResult = Enumerable.Range(0, 24)
+                        .Select(h => new ContractCount
+                        {
+                            Hour = h,
+                            Count = result.FirstOrDefault(x => x.Hour == h)?.Count ?? 0
+                        })
+                        .ToList();
+
+                    return fullResult;
+                case DateFilterType.ThisMonth:
+                    var nowWeek = DateTime.UtcNow;
+                    var startOfYear = new DateTime(nowWeek.Year, 1, 1);
+                    var startOfNextYear = startOfYear.AddYears(1);
+
+                    var result1 = await _context.Contracts
+                        .Where(c => c.CreateDate.HasValue &&
+                                    c.CreateDate.Value >= startOfYear &&
+                                    c.CreateDate.Value < startOfNextYear && c.Request.ServiceId.Equals(serviceId))
+                        .GroupBy(c => c.CreateDate.Value.Month)
+                        .Select(g => new ContractCount
+                        {
+                            Month = g.Key,
+                            Count = g.Count()
+                        })
+                        .ToListAsync();
+
+                    var fullResult1 = Enumerable.Range(1, 12)
+                        .Select(month => new ContractCount
+                        {
+                            Month = month,
+                            Count = result1.FirstOrDefault(x => x.Month == month)?.Count ?? 0
+                        })
+                        .ToList();
+
+                    return fullResult1;
+                case DateFilterType.ThisYear:
+                    var nowYear = DateTime.UtcNow;
+                    var startOfYear1 = new DateTime(nowYear.Year, 1, 1);
+                    var startOfNextYear1 = startOfYear1.AddYears(1);
+
+                    var result2 = await _context.Contracts
+                        .Where(c => c.CreateDate.HasValue &&
+                                    c.CreateDate.Value >= startOfYear1 &&
+                                    c.CreateDate.Value < startOfNextYear1 && c.Request.ServiceId.Equals(serviceId))
+                        .GroupBy(c => c.CreateDate.Value.Month)
+                        .Select(g => new ContractCount
+                        {
+                            Month = g.Key,
+                            Count = g.Count()
+                        })
+                        .ToListAsync();
+
+                    var fullResult2 = Enumerable.Range(1, 12)
+                        .Select(month => new ContractCount
+                        {
+                            Month = month,
+                            Count = result2.FirstOrDefault(x => x.Month == month)?.Count ?? 0
+                        })
+                        .ToList();
+
+                    return fullResult2;
+                default:
+                    return null;
+            }
+        }
+        #endregion
     }
 }

@@ -936,7 +936,24 @@ namespace CCSS_Service.Services
                 {
                     if (contract.DeliveryStatus == DeliveryStatus.Delivering)
                     {
-                        contract.DeliveryStatus = DeliveryStatus.UnReceived;
+                        if (deliveryContractRequest.Reason != null)
+                        {
+                            contract.DeliveryStatus = DeliveryStatus.UnReceived;
+
+                            ContractImage contractImage = new ContractImage()
+                            {
+                                ContractId = contract.ContractId,
+                                CreateDate = DateTime.Now,
+                                Reason = deliveryContractRequest.Reason,
+                                Status = ContractImageStatus.Unreceived,
+                            };
+
+                            images.Add(contractImage);
+                        }
+                        else
+                        {
+                            throw new Exception("Please enter reason");
+                        }
                     }
                     else
                     {

@@ -810,7 +810,7 @@ namespace CCSS_Service.Services
             try
             {
                 Task task = await taskRepository.GetTaskByTaskId(taskId);
-                if (task != null)
+                if (task == null)
                 {
                     throw new Exception("Task does not exist");
                 }

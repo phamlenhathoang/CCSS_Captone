@@ -147,6 +147,49 @@ namespace CCSS_Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetAllContractFilterDateTime")]
+        [SwaggerOperation(Description = "filterType<br>" +
+                                         "0 (Today)<br>" +
+                                         "1 (This week)<br>" +
+                                         "2 (This month)<br>" +
+                                         "3 (This Year)")]
+        public async Task<IActionResult> GetAllContractFilterDateTime(DateFilterType dateFilterType)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _dashBoardService.GetAllContractFilterByDateTime(dateFilterType);
+            return Ok(result);
+        }
+
+        [HttpGet("GetAllContractFilterByService")]    
+        public async Task<IActionResult> GetAllContractByServiceId(string serviceId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _dashBoardService.GetAllContractByServiceId(serviceId);
+            return Ok(result);
+        }
+
+        [HttpGet("GetAllContractFilterServiceAndDateTime")]
+        [SwaggerOperation(Description = "filterType<br>" +
+                                         "0 (Today)<br>" +
+                                         "1 (This week)<br>" +
+                                         "2 (This month)<br>" +
+                                         "3 (This Year)")]
+        public async Task<IActionResult> GetAllContractFilterServiceAndDateTime(string serviceId,DateFilterType dateFilterType)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _dashBoardService.GetAllContractFilterServiceAndDateTime(serviceId,dateFilterType);
+            return Ok(result);
+        }
+
         //[HttpGet("total-average-star")]
         //public async Task<IActionResult> GetAverageStarByContractDescription()
         //{

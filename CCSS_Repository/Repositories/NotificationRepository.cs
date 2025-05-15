@@ -45,9 +45,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Notification>> GetAllNotificationsByAccountId(string accountId)
         {
-            return await _context.Notifications.Include(n => n.Account)
-                                .Where(n => n.Account.AccountId == accountId && !n.IsRead)
-                                .ToListAsync();
+            return await _context.Notifications.Include(n => n.Account).Where(n => n.Account.AccountId.Equals(accountId) && !n.IsRead).OrderByDescending(sc => sc.CreatedAt).ToListAsync();
         }
 
         public async Task<Notification> GetNotification(string notificationId)

@@ -86,6 +86,8 @@ namespace CCSS_Service.Services
             this.requestDatesRepository = requestDatesRepository;
             this.requestRepository = requestRepository;
         }
+
+        #region GetAccountByEventCharacterId
         public async Task<AccountResponse> GetAccountByEventCharacterId(string eventCharacterId)
         {
             try
@@ -98,7 +100,9 @@ namespace CCSS_Service.Services
                 throw new Exception($"Error retrieving account: {ex.Message}");
             }
         }
+        #endregion
 
+        #region GetAllAccount
         public async Task<List<AccountResponse>> GetAllAccount(string? searchterm, string role)
         {
             List<AccountResponse> listAccount = new List<AccountResponse>();
@@ -137,6 +141,9 @@ namespace CCSS_Service.Services
             return listAccount;
         }
 
+        #endregion
+
+        #region Login
         public async Task<AccountLoginResponse> Login(string email, string password)
         {
             try
@@ -152,7 +159,7 @@ namespace CCSS_Service.Services
                     throw new Exception("Account has not been activated");
                 }
 
-                if((bool)account.IsLock)
+                if ((bool)account.IsLock)
                 {
                     throw new Exception("This account locked");
                 }
@@ -215,8 +222,9 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
 
-
+        #region LoginByGoogle
         public async Task<AccountLoginResponse> LoginByGoogle(string email, string googleId)
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
@@ -315,8 +323,9 @@ namespace CCSS_Service.Services
                 }
             }
         }
+        #endregion
 
-
+        #region GenerateRefreshToken and GenerateCode
         private string GenerateRefreshToken()
         {
             var random = new byte[32];
@@ -337,7 +346,9 @@ namespace CCSS_Service.Services
 
             return code;
         }
+        #endregion
 
+        #region Register
         public async Task<string> Register(AccountRequest accountRequest)
         {
             if (string.IsNullOrEmpty(accountRequest.Email) || string.IsNullOrEmpty(accountRequest.Password))
@@ -411,7 +422,9 @@ namespace CCSS_Service.Services
                 }
             }
         }
+        #endregion
 
+        #region CodeValidation
         public async Task<string> CodeValidation(string email, string code)
         {
             var checkAccount = await accountRepository.GetAccountByEmailAndCode(email, code);
@@ -431,6 +444,9 @@ namespace CCSS_Service.Services
             }
         }
 
+        #endregion
+
+        #region GetAccountByAccountId
         public async Task<AccountResponse> GetAccountByAccountId(string accountId)
         {
             Account account = await accountRepository.GetAccountByAccountId(accountId);
@@ -462,7 +478,9 @@ namespace CCSS_Service.Services
             return accountResponse;
         }
 
+        #endregion
 
+        #region UpdateAccountByAccountId
         public async Task<bool> UpdateAccountByAccountId(string accountId, UpdateAccountRequest updateAccountRequest)
         {
             try
@@ -544,7 +562,9 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
 
+        #region GetAccountByCharacterAndDate
         public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDate(string characterId, List<Date> dates, string accountId)
         {
             try
@@ -606,7 +626,9 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
 
+        #region ViewAllAccountByCharacterName
         public async Task<List<AccountByCharacterAndDateResponse>> ViewAllAccountByCharacterName(string characterName, string? start, string? end)
         {
             List<AccountByCharacterAndDateResponse> accountByCharacterAndDateResponses = new List<AccountByCharacterAndDateResponse>();
@@ -693,7 +715,9 @@ namespace CCSS_Service.Services
 
             return accountByCharacterAndDateResponses;
         }
+        #endregion
 
+        #region ViewAllCosplayerByContractId
         public async Task<List<AccountByCharacterAndDateResponse>> ViewAllCosplayerByContractId(string contractId)
         {
             try
@@ -752,7 +776,9 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
 
+        #region GetAllAccountByRoleId
         public async Task<List<AccountResponse>> GetAllAccountByRoleId(string roleId)
         {
             List<AccountResponse> accountResponses = new List<AccountResponse>();
@@ -780,7 +806,9 @@ namespace CCSS_Service.Services
             }
             return accountResponses;
         }
+        #endregion
 
+        #region AddCosplayer
         public async Task<bool> AddCosplayer(string userName, string password)
         {
             try
@@ -812,7 +840,9 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
 
+        #region ChangePassword
         public async Task<bool> ChangePassword(string email)
         {
             try
@@ -838,7 +868,9 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
 
+        #region GetAccountByCharacterAndDateForCreateEvent
         public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDateForCreateEvent(string characterId, List<Date> dates, string accountId)
         {
             try
@@ -902,7 +934,9 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
 
+        #region GetAccountByCharacterAndDateAndRange
         public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDateAndRange(string characterId, List<Date> dates, string requestId)
         {
             try
@@ -910,11 +944,11 @@ namespace CCSS_Service.Services
                 List<AccountByCharacterAndDateResponse> accountByCharacterAndDateResponses = new List<AccountByCharacterAndDateResponse>();
                 Request request = await requestRepository.GetRequestById(requestId);
 
-                if(request == null)
+                if (request == null)
                 {
                     throw new Exception("Request does not exist");
                 }
-                if(request.ServiceId != "S003")
+                if (request.ServiceId != "S003")
                 {
                     throw new Exception("Service of this request must be S003");
                 }
@@ -985,5 +1019,6 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
     }
 }
