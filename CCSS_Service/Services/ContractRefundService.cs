@@ -29,12 +29,14 @@ namespace CCSS_Service.Services
         private readonly IContractRefundRepository contractRefundRepository;
         private readonly IContractRespository contractRepository;
         private readonly IContractImageRepository contractImageRepository;
+        private readonly ICharacterRepository characterRepository;
 
-        public ContractRefundService(IContractRefundRepository contractRefundRepository, IContractRespository contractRepository, IContractImageRepository contractImageRepository)
+        public ContractRefundService(IContractRefundRepository contractRefundRepository, IContractRespository contractRepository, IContractImageRepository contractImageRepository, ICharacterRepository characterRepository)
         {
             this.contractRefundRepository = contractRefundRepository;
             this.contractRepository = contractRepository;
             this.contractImageRepository = contractImageRepository;
+            this.characterRepository = characterRepository;
         }
         public async Task<bool> AddContractRefund(ContractRefundRequest contractRefundRequest)
         {
@@ -104,6 +106,25 @@ namespace CCSS_Service.Services
                 if (!result)
                 {
                     throw new Exception("Can not add ContractRefund");
+                }
+
+                foreach (ContractCharacter contractCharacter in contract.ContractCharacters)
+                {
+                    Character character = await characterRepository.GetCharacter(contractCharacter.CharacterId);
+                    if(character != null)
+                    {
+                        character.Quantity += contractCharacter.Quantity;
+
+                        bool checkUpdate = await characterRepository.UpdateCharacter(character);
+                        if (!checkUpdate)
+                        {
+                            throw new Exception("Can not update character");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Character does not exist");
+                    }
                 }
 
                 return true;
@@ -249,6 +270,24 @@ namespace CCSS_Service.Services
                     if (contractRefund.Amount == 0)
                     {
                         contractRefund.Type = Type.DepositRetained;
+                    }
+                }
+
+                if (contractRefundRequest.Image != null)
+                {
+                    Image image = new Image();
+                    ContractImage contractImage = new ContractImage()
+                    {
+                        ContractId = contract.ContractId,
+                        CreateDate = DateTime.Now,
+                        Status = ContractImageStatus.RefundMoney,
+                        UrlImage = await image.UploadImageToFirebase(contractRefundRequest.Image)
+                    };
+
+                    bool addContractImage = await contractImageRepository.AddContractImage(contractImage);
+                    if (!addContractImage)
+                    {
+                        throw new Exception("Can not add ContractImage");
                     }
                 }
 

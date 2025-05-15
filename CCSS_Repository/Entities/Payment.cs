@@ -49,6 +49,7 @@ namespace CCSS_Repository.Entities
         BuyTicket,
         ContractDeposit,
         contractSettlement,
-        Order
+        Order,
+        Refund
     }
 }
