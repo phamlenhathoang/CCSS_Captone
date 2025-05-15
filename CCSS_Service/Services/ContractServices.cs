@@ -67,8 +67,7 @@ namespace CCSS_Service.Services
         private readonly IContractImageRepository contractImageRepository;
         private readonly IContractRefundRepository contractRefundRepository;
         private readonly ITaskRepository taskRepository;
-        private readonly IPaymentRepository paymentRepository;
-        public ContractServices(IMapper mapper, IPackageRepository packageRepository, IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository, IRequestCharacterRepository requestCharacterRepository, ITaskService taskService, IContractImageRepository contractImageRepository, IContractRefundRepository contractRefundRepository, ITaskRepository taskRepository, IPaymentRepository paymentRepository)
+        public ContractServices(IMapper mapper, IPackageRepository packageRepository, IContractCharacterService contractCharacterService, INotificationRepository notificationRepository, IHubContext<NotificationHub> hubContext, IAccountRepository _accountRepository, IServiceRepository _serviceRepository, Image Image, IPdfService pdfService, IAccountCouponRepository accountCouponRepository, IRequestRepository _requestRepository, IContractRespository _contractRespository, IContractCharacterRepository contractCharacterRepository, ICharacterRepository characterRepository, IRequestCharacterRepository requestCharacterRepository, ITaskService taskService, IContractImageRepository contractImageRepository, IContractRefundRepository contractRefundRepository, ITaskRepository taskRepository)
         {
             this._contractRespository = _contractRespository;
             _requestCharacterRepository = requestCharacterRepository;
@@ -89,7 +88,6 @@ namespace CCSS_Service.Services
             this.contractImageRepository = contractImageRepository;
             this.contractRefundRepository = contractRefundRepository;
             this.taskRepository = taskRepository;
-            this.paymentRepository = paymentRepository;
         }
 
         public async Task<List<RequestInContractResponse>> GetRequestInContractByAccountId(string accountId)
@@ -646,7 +644,6 @@ namespace CCSS_Service.Services
                         contract.ContractStatus = ContractStatus.Deposited;
                         contract.DeliveryStatus = DeliveryStatus.Preparing;
 
-
                         foreach (RequestCharacter requestCharacter in contract.Request.RequestCharacters)
                         {
                             Character character = await _characterRepository.GetCharacter(requestCharacter.CharacterId);
@@ -655,8 +652,6 @@ namespace CCSS_Service.Services
                             {
                                 throw new Exception("Character does not exist");
                             }
-
-                            character.Quantity -= requestCharacter.Quantity;
 
                             bool checkUpdate = await _characterRepository.UpdateCharacter(character);
 
@@ -770,49 +765,6 @@ namespace CCSS_Service.Services
                         {
                             //await transaction.RollbackAsync();
                             throw new Exception("Can not update contract status");
-                        }
-
-                        contract.ContractRefund.Status = ContractRefundStatus.Paid;
-
-                        bool updateContractRefund = await contractRefundRepository.UpdateContractRefund(contract.ContractRefund);
-                        if (!updateContractRefund)
-                        {
-                            throw new Exception("Can not update ContractRefund");
-                        }
-
-                        Payment payment = new Payment()
-                        {
-                            ContractId = contract.ContractId,
-                            Purpose = PaymentPurpose.Refund,
-                            CreatAt = DateTime.UtcNow,
-                            Status = PaymentStatus.Complete,
-                            Amount = contract.ContractRefund.Amount,
-                            Type = "Online",
-                        };
-
-                        bool addPayment = await paymentRepository.AddPayment(payment);
-                        if (!addPayment)
-                        {
-                            throw new Exception("Can not add payment");
-                        }
-                    }
-
-                    foreach (ContractCharacter contractCharacter in contract.ContractCharacters)
-                    {
-                        Character character = await _characterRepository.GetCharacter(contractCharacter.CharacterId);
-                        if (character != null)
-                        {
-                            character.Quantity += contractCharacter.Quantity;
-
-                            bool checkUpdate = await _characterRepository.UpdateCharacter(character);
-                            if (!checkUpdate)
-                            {
-                                throw new Exception("Can not update character");
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("Character does not exist");
                         }
                     }
                 }
@@ -1030,18 +982,36 @@ namespace CCSS_Service.Services
                 
                 if (deliveryContractRequest.Status.ToLower().Equals(DeliveryStatus.Cancel.ToString().ToLower()))
                 {
-                    if (contract.DeliveryStatus == DeliveryStatus.Received || contract.DeliveryStatus == DeliveryStatus.Delivering || contract.DeliveryStatus == DeliveryStatus.UnReceived)
+                    if (contract.DeliveryStatus == DeliveryStatus.Received || contract.DeliveryStatus == DeliveryStatus.Delivering)
                     {
-                        if (deliveryContractRequest.Reason != null)
+                        if (contract.DeliveryStatus == DeliveryStatus.Delivering)
                         {
-                            contract.Amount = 0;
-                            contract.ContractStatus = ContractStatus.Cancel;
-                            contract.Reason = deliveryContractRequest.Reason;
-                            contract.DeliveryStatus = DeliveryStatus.Cancel;
+                            if (deliveryContractRequest.Reason != null)
+                            {
+                                contract.Amount = 0;
+                                contract.ContractStatus = ContractStatus.Cancel;
+                                contract.Reason = deliveryContractRequest.Reason;
+                                contract.DeliveryStatus = DeliveryStatus.Cancel;
+                            }
+                            else
+                            {
+                                throw new Exception("Please enter reason");
+                            }
+                            
                         }
                         else
                         {
-                            throw new Exception("Please enter reason");
+                            if (deliveryContractRequest.Reason != null)
+                            {
+                                contract.DeliveryStatus = DeliveryStatus.Cancel;
+                                contract.Amount = contract.Amount / 2;
+                                contract.ContractStatus = ContractStatus.Cancel;
+                                contract.Reason = deliveryContractRequest.Reason;
+                            }
+                            else
+                            {
+                                throw new Exception("Please enter reason");
+                            }
                         }
 
                         ContractImage contractImage = new ContractImage()

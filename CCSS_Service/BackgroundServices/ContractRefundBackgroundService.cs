@@ -36,6 +36,8 @@ namespace CCSS_Service.BackgroundServices
                     using (var scope = _serviceProvider.CreateScope())
                     {
                         var _contractRepository = scope.ServiceProvider.GetRequiredService<IContractRespository>();
+                        var _contractRefundRepository = scope.ServiceProvider.GetRequiredService<IContractRefundRepository>();
+                        var _characterRepository = scope.ServiceProvider.GetRequiredService<ICharacterRepository>();
                         var _accountRepository = scope.ServiceProvider.GetService<IAccountRepository>();
                         var _sendMail = scope.ServiceProvider.GetService<SendMail>();
 
@@ -47,28 +49,89 @@ namespace CCSS_Service.BackgroundServices
                             {
                                 if (contract.DeliveryStatus == DeliveryStatus.Received)
                                 {
-                                    if (DateTime.Now.Date == contract.Request.EndDate.Date.AddDays(1))
+                                    if (DateTime.Now.Date >= contract.Request.EndDate.Date.AddDays(1) && DateTime.Now.Date < contract.Request.EndDate.Date.AddDays(9))
                                     {
+                                        double totalDay = (DateTime.Now - contract.Request.EndDate.AddDays(1)).TotalDays;
+                                        double totalPrice = 0;
+
+                                        foreach (ContractCharacter contractCharacter in contract.ContractCharacters)
+                                        {
+                                            Character character = await _characterRepository.GetCharacter(contractCharacter.CharacterId);
+                                            if (character != null)
+                                            {
+                                                _logger.LogInformation("Character does not exist");
+                                            }
+                                            totalPrice += (double) character.Price;
+
+                                        }
+
+                                        if (contract.ContractRefund == null)
+                                        {
+                                            ContractRefund contractRefund = new ContractRefund
+                                            {
+                                                ContractId = contract.ContractId,
+                                                CreateDate = DateTime.Now,
+                                                Price = totalPrice * totalDay,
+                                                Description = $"It's overdue {totalDay}",
+                                            };
+
+                                            bool checkAdd = await _contractRefundRepository.AddContractRefund(contractRefund);
+
+                                            if (!checkAdd)
+                                            {
+                                                throw new Exception("Can not add ContractRefund");
+                                            }
+                                        }
+
+                                        if(contract.ContractRefund != null)
+                                        {
+                                            contract.ContractRefund.Price = totalPrice * totalDay;
+                                            contract.ContractRefund.UpdateDate = DateTime.Now;
+                                            contract.ContractRefund.Description = $"It's overdue {totalDay}";
+
+                                            bool checkUpdate = await _contractRefundRepository.UpdateContractRefund(contract.ContractRefund);
+
+                                            if (!checkUpdate)
+                                            {
+                                                throw new Exception("Can not add ContractRefund");
+                                            }
+                                        }
+                                    }
+
+                                    if(DateTime.Now.Date == contract.Request.EndDate.Date.AddDays(9))
+                                    {
+                                        contract.ContractRefund.UpdateDate = DateTime.Now;
+                                        contract.ContractRefund.Description = "Lock Account";
+
+                                        bool checkUpdate = await _contractRefundRepository.UpdateContractRefund(contract.ContractRefund);
+
+                                        if (!checkUpdate)
+                                        {
+                                            throw new Exception("Can not add ContractRefund");
+                                        }
+
                                         contract.ContractStatus = ContractStatus.RefundOverdue;
-                                        contract.Amount = 0;
 
-                                        bool result = await _contractRepository.UpdateContract(contract);
-                                        if (!result)
+                                        bool checkUpdateContract = await _contractRepository.UpdateContract(contract);
+
+                                        if (!checkUpdateContract)
                                         {
-                                            _logger.LogInformation("Can not update contract");
+                                            throw new Exception("Can not update Contract");
                                         }
 
-                                        Account account = await _accountRepository.GetAccount(contract.Request.AccountId);
-                                        if (account == null) 
+                                        Account account = await _accountRepository.GetAccount(contract.CreateBy);
+                                        if (account != null)
                                         {
-                                            _logger.LogInformation("Account does not exist");
+                                            throw new Exception("Account does not exist");
                                         }
 
-                                        bool checkMail = await _sendMail.SendCustomerRefundOverdueContract(account.Email, contract.Request.EndDate.ToString("dd/MM/yyyy"));
+                                        account.IsLock = true;
 
-                                        if (!checkMail)
+                                        bool checkUpdateAccount = await _accountRepository.UpdateAccount(account);
+
+                                        if (!checkUpdateAccount)
                                         {
-                                            _logger.LogInformation($"Can not send mail for {account.AccountId}");
+                                            throw new Exception("Can not update Account");
                                         }
                                     }
                                 }

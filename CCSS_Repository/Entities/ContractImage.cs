@@ -31,7 +31,6 @@ namespace CCSS_Repository.Entities
         Unreceived,
         Refund,
         Check,
-        RefundMoney,
         Cancel
     }
 }

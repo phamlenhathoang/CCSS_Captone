@@ -157,7 +157,7 @@ namespace CCSS_Service.Libraries
                         double totalAmount = await CalculateTotalAmount(request, formattedAmount, 0);
 
                         htmlContent += $@"<tr>
-                    <td colspan='5' class='right-align'>Total deposit</td>
+                    <td colspan='5' class='right-align'>Tổng</td>
                     <td>{totalAmount}</td>
                 </tr>";
 
@@ -271,7 +271,7 @@ namespace CCSS_Service.Libraries
                         double totalAmount = await CalculateTotalAmount(request, formattedAmount, packagePrice);
 
                         htmlContent += $@"<tr>
-                    <td colspan='5' class='right-align'>Total deposit</td>
+                    <td colspan='5' class='right-align'>Total</td>
                     <td>{totalAmount}</td>
                 </tr>";
 
@@ -314,16 +314,8 @@ namespace CCSS_Service.Libraries
                     htmlContent += "<p>The rental fee is calculated based on the number of rental days and will be deducted from the deposit upon return.</p>";
                     htmlContent += "<p>When the customer returns the costume, the lessor will inspect the condition. If there is no damage, the deposit will be refunded after deducting the rental fee. If there is damage, repair costs will be deducted from the deposit.</p>";
                     htmlContent += "<p>If the total rental and repair costs exceed the deposit, the customer is responsible for paying the difference before the contract is concluded.</p>";
-                    
-                    if (request.ServiceId != "S001")
-                    {
-                        string formattedEndDate = request.EndDate.ToString("dd 'month' MM 'year' yyyy");
 
-                        htmlContent += "<p>In any case, if Party B unilaterally terminates the contract, whether intentionally or unintentionally, Party B will lose the entire deposit paid to Party A.</p>";
-                        htmlContent += $"<p>After {formattedEndDate} if Party B does not update the return process to Party A, Party B will lose the entire deposit.</p>";
-                    }
-
-                        htmlContent += "<h3><strong>Cosplayer Rental Terms</strong></h3>";
+                    htmlContent += "<h3><strong>Cosplayer Rental Terms</strong></h3>";
                     htmlContent += "<p>The cosplayer will portray the character as requested by the lessee.</p>";
                     htmlContent += "<p>The cosplayer will participate in events, performances, meet-and-greet sessions, or photoshoots as per the agreed schedule.</p>";
                     htmlContent += "<p>The cosplayer has the right to refuse any requests that violate ethics, laws, or personal image.</p>";
@@ -333,8 +325,6 @@ namespace CCSS_Service.Libraries
                     htmlContent += "<h3><strong>Contract Agreement Terms</strong></h3>";
                     htmlContent += "<p>Payment shall be made according to the agreed rates in the contract.</p>";
                     htmlContent += "<p>Full payment must be made before the event begins. The remaining balance shall be paid after the event concludes.</p>";
-
-                    htmlContent += "<p>In any case, if Party B unilaterally terminates the contract, whether intentionally or unintentionally, Party B will lose the entire deposit paid to Party A.</p>";
 
                     PdfGenerator.AddPdfPages(document, htmlContent, PageSize.A4);
 
