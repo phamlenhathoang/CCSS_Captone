@@ -37,7 +37,7 @@ namespace CCSS_Captone.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{contractRefundId}")]
+        [HttpGet("GetContractRefundByContractRefundId")]
         public async Task<IActionResult> GetContractRefundByContractRefundId(string contractRefundId)
         {
             var result = await _contractRefundService.GetContractRefundByContractRefundId(contractRefundId);
