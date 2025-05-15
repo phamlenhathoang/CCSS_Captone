@@ -30,6 +30,7 @@ namespace CCSS_Repository.Entities
         Received,
         Refund,
         Check,
+        RefundMoney,
         Cancel
     }
 }
