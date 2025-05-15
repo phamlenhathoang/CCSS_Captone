@@ -16,8 +16,6 @@ namespace CCSS_Repository.Repositories
         Task<ContractImage> GetContractImageByContractImageId(string contractImageId);
         Task<bool> UpdateContractImage(ContractImage contractImage);
         Task<bool> DeleteContractImage(ContractImage contractImage);
-        Task<bool> AddContractImage(ContractImage contractImage);
-        Task<List<ContractImage>> GetListContractImageByStatusRefundMoney();
     }
     public class ContractImageRepository : IContractImageRepository
     {
@@ -27,13 +25,6 @@ namespace CCSS_Repository.Repositories
         {
             _dbContext = dbContext;
         }
-
-        public async Task<bool> AddContractImage(ContractImage contractImage)
-        {
-            await _dbContext.AddAsync(contractImage);
-            return await _dbContext.SaveChangesAsync() > 0 ? true : false;
-        }
-
         public async Task<bool> AddListContractImage(List<ContractImage> contractImages)
         {
             await _dbContext.AddRangeAsync(contractImages);
@@ -54,11 +45,6 @@ namespace CCSS_Repository.Repositories
         public async Task<ContractImage> GetContractImageByContractImageId(string contractImageId)
         {
             return await _dbContext.ContractImages.FirstOrDefaultAsync(ci => ci.ContractImageId.Equals(contractImageId));
-        }
-
-        public async Task<List<ContractImage>> GetListContractImageByStatusRefundMoney()
-        {
-            return await _dbContext.ContractImages.Include(c => c.Contract).Where(c => c.Status.Equals(ContractImageStatus.RefundMoney)).ToListAsync();
         }
 
         public async Task<bool> UpdateContractImage(ContractImage contractImage)

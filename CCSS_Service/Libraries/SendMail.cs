@@ -555,45 +555,5 @@ namespace CCSS_Service.Libraries
             }
         }
 
-        public async Task<bool> SendCustomerRefundOverdueContract(string toEmail, string day)
-        {
-            try
-            {
-                var configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .Build();
-
-                string fromEmail = configuration["FromEmail:Email"];
-                string emailPassword = configuration["FromEmail:Password"];
-
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("CCSS", fromEmail));
-                message.To.Add(new MailboxAddress("", toEmail));
-                message.Subject = "📢 Feedback on contract";
-
-                string emailBody = $@"
-        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
-            <h2 style='color: #007bff;'>Your contract has expired! 🎉</h2>
-            $<p>According to the terms of the contract, you have violated the contract. After {day}, if you still have not returned the item to the system, the system will record that you have lost the entire contract deposit.</p>
-        </div>";
-
-                message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
-
-                using var smtp = new SmtpClient();
-                await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-                await smtp.AuthenticateAsync(fromEmail, emailPassword);
-                await smtp.SendAsync(message);
-                await smtp.DisconnectAsync(true);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Lỗi gửi email: {ex.Message}");
-                return false;
-            }
-        }
-
     }
 }
