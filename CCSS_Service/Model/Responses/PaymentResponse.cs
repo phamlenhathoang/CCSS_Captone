@@ -12,11 +12,11 @@ namespace CCSS_Service.Model.Responses
     {
         public string PaymentId { get; set; } 
         public string? Type { get; set; }
-        public PaymentStatus? Status { get; set; }
-        public PaymentPurpose Purpose { get; set; }
+        public string? Status { get; set; }
+        public string? Purpose { get; set; }
         public double? Amount { get; set; }
         public string? TransactionId { get; set; }
-        public DateTime? CreatAt { get; set; }
+        public string? CreatAt { get; set; }
 
         
         //public string? OrderId { get; set; }

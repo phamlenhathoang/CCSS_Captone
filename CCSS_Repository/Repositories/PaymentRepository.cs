@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,9 @@ namespace CCSS_Repository.Repositories
         Task<bool> AddPayment(Payment payment);
         Task<bool> UpdatePayment(Payment payment);
         Task<bool> DeletePayment(Payment payment);
+        Task<List<Payment>> GetAllPayment();
+        Task<List<Payment>> GetAllPaymentByContractId(string contracId);
+        Task<List<Payment>> GetAllPaymentByAccountIdAndPurpose(string contracId, string? purpose);
     }
 
     public class PaymentRepository : IPaymentRepository
@@ -58,5 +62,30 @@ namespace CCSS_Repository.Repositories
             _context.Payments.Remove(payment);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<List<Payment>> GetAllPayment()
+        {
+            return await _context.Payments.ToListAsync();
+        }
+
+        public async Task<List<Payment>> GetAllPaymentByContractId(string contracId)
+        {
+            return await _context.Payments.Where(c => c.ContractId.Equals(contracId)).ToListAsync();
+        }
+
+        public async Task<List<Payment>> GetAllPaymentByAccountIdAndPurpose(string contractId, string? purpose)
+        {
+            IQueryable<Payment> query = _context.Payments
+                .Where(p => p.ContractId == contractId);
+
+            if (!string.IsNullOrWhiteSpace(purpose) &&
+                Enum.TryParse<PaymentPurpose>(purpose, true, out var parsedPurpose))
+            {
+                query = query.Where(p => p.Purpose == parsedPurpose);
+            }
+
+            return await query.OrderByDescending(p => p.CreatAt).ToListAsync();
+        }
+
     }
 }

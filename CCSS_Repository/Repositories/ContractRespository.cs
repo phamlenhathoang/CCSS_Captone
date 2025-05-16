@@ -68,7 +68,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Contract>> GetAllContractByAccountId(string accountId)
         {
-            return await _context.Contracts.Include(rq => rq.ContractRefund).Include(rq => rq.Request).ThenInclude(rc => rc.RequestCharacters).Where(sc => sc.CreateBy.Equals(accountId)).OrderByDescending(c => c.CreateDate).ToListAsync();
+            return await _context.Contracts.Include(c => c.Payments).Include(rq => rq.ContractRefund).Include(rq => rq.Request).ThenInclude(rc => rc.RequestCharacters).Where(sc => sc.CreateBy.Equals(accountId)).OrderByDescending(c => c.CreateDate).ToListAsync();
         }
         public async Task<Contract> GetContractByIdThenIncludeFeedback(string id)
         {

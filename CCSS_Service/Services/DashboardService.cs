@@ -55,9 +55,9 @@ namespace CCSS_Service
                 {
                     PaymentId = p.PaymentId,
                     Amount = p.Amount,
-                    Status = p.Status,
-                    Purpose = p.Purpose,
-                    CreatAt = p.CreatAt
+                    Status = p.Status.ToString(),
+                    Purpose = p.Purpose.ToString(),
+                    CreatAt = p.CreatAt?.ToString("dd/MM/yyyy")
                 }).ToList()
             };
 
