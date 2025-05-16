@@ -68,6 +68,7 @@ builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IContractImageRepository, ContractImageRepository>();
 builder.Services.AddScoped<IContractRefundRepository, ContractRefundRepository>();
 builder.Services.AddScoped<ICouponRepository, CouponRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
 //Service
 builder.Services.AddScoped<IPackageService, PackageService>();
@@ -100,7 +101,8 @@ builder.Services.AddScoped<IAccountImageService, AccountImageService>();
 builder.Services.AddScoped<IRequestDateServices, RequestDateServices>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IContractRefundService, ContractRefundService>();
-builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
