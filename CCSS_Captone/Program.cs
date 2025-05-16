@@ -141,12 +141,16 @@ builder.Services.AddSignalR();
 builder.Services.AddDbContext<CCSSDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddHostedService<NotificationBackgroundService>();
+////builder.Services.AddHostedService<NotificationBackgroundService>();
 builder.Services.AddHostedService<ContractBackgroudService>();
+builder.Services.AddHostedService<ContractImageBackgroundService>();
+builder.Services.AddHostedService<ContractRefundBackgroundService>();
+builder.Services.AddHostedService<EventBackgroundService>();
 builder.Services.AddHostedService<OrderBackgroundService>();
 builder.Services.AddHostedService<RequestBackgroundService>();
 builder.Services.AddHostedService<PaymentBackgroundService>();
 builder.Services.AddHostedService<ContractRefundBackgroundService>();
+builder.Services.AddHostedService<RequestCharacterBackgroundService>();
 
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];
