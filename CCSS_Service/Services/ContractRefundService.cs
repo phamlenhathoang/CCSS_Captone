@@ -160,6 +160,7 @@ namespace CCSS_Service.Services
                         Type = contractRefund.Type.ToString(),
                         Status = contractRefund.Status.ToString(),
                         Price = contractRefund.Price,
+                        Amount = contractRefund.Amount,
                     };
                     contractRefundResponses.Add(contractRefundResponse);
                 }
@@ -193,6 +194,7 @@ namespace CCSS_Service.Services
                                 Type = contract.ContractRefund.Type.ToString(),
                                 Status = contract.ContractRefund.Status.ToString(),
                                 Price = contract.ContractRefund.Price,
+                                Amount = contract.ContractRefund.Amount,
                             };
                             contractRefundResponses.Add(contractRefundResponse);
                         }
@@ -235,6 +237,7 @@ namespace CCSS_Service.Services
                     Type = contract.ContractRefund.Type.ToString(),
                     Status = contract.ContractRefund.Status.ToString(),
                     Price = contract.ContractRefund.Price,
+                    Amount = contract.ContractRefund.Amount,
                 };
 
                 return contractRefundResponse;
@@ -273,6 +276,7 @@ namespace CCSS_Service.Services
                     Type = contract.ContractRefund.Type.ToString(),
                     Status = contract.ContractRefund.Status.ToString(),
                     Price = contract.ContractRefund.Price,
+                    Amount = contract.ContractRefund.Amount,
                 };
 
                 return contractRefund;  
@@ -306,6 +310,7 @@ namespace CCSS_Service.Services
                     Type = contractRefund.Type.ToString(),
                     Status = contractRefund.Status.ToString(),
                     Price = contractRefund.Price,
+                    Amount = contractRefund.Amount,
                 };
 
                 return contractRefundResponse;
@@ -336,6 +341,7 @@ namespace CCSS_Service.Services
                 contractRefund.ContractId = contract.ContractId;
                 contractRefund.AccountBankName = contractRefundRequest.AccountBankName;
                 contractRefund.BankName = contractRefundRequest.BankName;
+                contractRefund.NumberBank = contractRefundRequest.NumberBank;
 
                 if (contractRefundRequest.Price != null)
                 {
