@@ -21,6 +21,7 @@ namespace CCSS_Repository.Repositories
         Task<List<Contract>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId);
         Task<List<Contract>> GetAllContractByAccountId(string accountId);
         Task<Contract> GetContractByRequestId(string requestId);
+        Task<Contract> GetContractByAccountIdAndContractId(string accountId, string contractid);
         Task<List<Contract>> GetAllContract(ContractStatus contractStatus);
     }
 
@@ -67,7 +68,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Contract>> GetAllContractByAccountId(string accountId)
         {
-            return await _context.Contracts.Include(rq => rq.Request).ThenInclude(rc => rc.RequestCharacters).Where(sc => sc.CreateBy.Equals(accountId)).OrderByDescending(c => c.CreateDate).ToListAsync();
+            return await _context.Contracts.Include(rq => rq.ContractRefund).Include(rq => rq.Request).ThenInclude(rc => rc.RequestCharacters).Where(sc => sc.CreateBy.Equals(accountId)).OrderByDescending(c => c.CreateDate).ToListAsync();
         }
         public async Task<Contract> GetContractByIdThenIncludeFeedback(string id)
         {
@@ -113,5 +114,9 @@ namespace CCSS_Repository.Repositories
             return query.OrderByDescending(c => c.CreateDate).ToListAsync();
         }
 
+        public Task<Contract> GetContractByAccountIdAndContractId(string accountId, string contractid)
+        {
+            return _context.Contracts.Include(c => c.ContractRefund).FirstOrDefaultAsync(c => c.ContractId.Equals(contractid) && c.CreateBy.Equals(accountId));
+        }
     }
 }

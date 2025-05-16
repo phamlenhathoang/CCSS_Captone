@@ -23,6 +23,8 @@ namespace CCSS_Service.Services
         Task<ContractRefundResponse> GetContractRefundByContractId(string contractId);
         Task<ContractRefundResponse> GetContractRefundByContractRefundId(string contractRefundId);
         Task<List<ContractRefundResponse>> GetAllContractRefund();
+        Task<List<ContractRefundResponse>> GetAllContractRefundByAccountId(string accountId);
+        Task<ContractRefundResponse> GetContractRefundByAccountIdAndContractId(string accountId, string contractId);
     }
     public class ContractRefundService : IContractRefundService
     {
@@ -164,6 +166,83 @@ namespace CCSS_Service.Services
             }
 
             return contractRefundResponses;
+        }
+
+        public async Task<List<ContractRefundResponse>> GetAllContractRefundByAccountId(string accountId)
+        {
+            try
+            {
+                List<ContractRefundResponse> contractRefundResponses = new List<ContractRefundResponse>();
+                List<Contract> contracts = await contractRepository.GetAllContractByAccountId(accountId);
+                if (contracts.Count > 0)
+                {
+                    foreach (Contract contract in contracts)
+                    {
+                        if(contract.ContractRefund != null)
+                        {
+                            ContractRefundResponse contractRefundResponse = new ContractRefundResponse()
+                            {
+                                AccountBankName = contract.ContractRefund.AccountBankName,
+                                BankName = contract.ContractRefund.BankName,
+                                ContractId = contract.ContractRefund.ContractId,
+                                ContractRefundId = contract.ContractRefund.ContractRefundId,
+                                CreateDate = contract.ContractRefund.CreateDate?.ToString("dd/MM/yyyy") ?? null,
+                                UpdateDate = contract.ContractRefund.UpdateDate?.ToString("dd/MM/yyyy") ?? null,
+                                Description = contract.ContractRefund.Description,
+                                NumberBank = contract.ContractRefund.NumberBank,
+                                Type = contract.ContractRefund.Type.ToString(),
+                                Status = contract.ContractRefund.Status.ToString(),
+                                Price = contract.ContractRefund.Price,
+                            };
+                            contractRefundResponses.Add(contractRefundResponse);
+                        }
+                    }
+                }
+
+                return contractRefundResponses; 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<ContractRefundResponse> GetContractRefundByAccountIdAndContractId(string accountId, string contractId)
+        {
+            try
+            {
+                Contract contract = await contractRepository.GetContractByAccountIdAndContractId(accountId, contractId);
+                if (contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
+
+                if(contract.ContractRefund == null)
+                {
+                    throw new Exception("ContractRefund does not exist");
+                }
+
+                ContractRefundResponse contractRefundResponse = new ContractRefundResponse()
+                {
+                    AccountBankName = contract.ContractRefund.AccountBankName,
+                    BankName = contract.ContractRefund.BankName,
+                    ContractId = contract.ContractRefund.ContractId,
+                    ContractRefundId = contract.ContractRefund.ContractRefundId,
+                    CreateDate = contract.ContractRefund.CreateDate?.ToString("dd/MM/yyyy") ?? null,
+                    UpdateDate = contract.ContractRefund.UpdateDate?.ToString("dd/MM/yyyy") ?? null,
+                    Description = contract.ContractRefund.Description,
+                    NumberBank = contract.ContractRefund.NumberBank,
+                    Type = contract.ContractRefund.Type.ToString(),
+                    Status = contract.ContractRefund.Status.ToString(),
+                    Price = contract.ContractRefund.Price,
+                };
+
+                return contractRefundResponse;
+            }
+            catch (Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<ContractRefundResponse> GetContractRefundByContractId(string contractId)
