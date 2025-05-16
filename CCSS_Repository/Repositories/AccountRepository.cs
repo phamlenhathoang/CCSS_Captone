@@ -208,7 +208,7 @@ namespace CCSS_Repository.Repositories
             return dbContext.Accounts
                 .Include(r => r.Role)
                 .Include(a => a.AccountImages)
-                .Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight && a.Role.RoleName == RoleName.Cosplayer && a.IsLock == false && a.IsActive == true).OrderBy(a => a.SalaryIndex).ToListAsync();
+                .Where(a => character.MinHeight <= a.Height && a.Height <= character.MaxHeight && character.MinWeight <= a.Weight && a.Weight <= character.MaxHeight && a.Role.RoleName == RoleName.Cosplayer && a.IsLock == false && a.IsActive == true && minSalary <= a.SalaryIndex && a.SalaryIndex <= maxSalary).OrderBy(a => a.SalaryIndex).ToListAsync();
         }
     }
 }
