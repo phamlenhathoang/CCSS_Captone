@@ -44,6 +44,20 @@ namespace CCSS_Captone.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetContractRefundByAccountIdAndContractId")]
+        public async Task<IActionResult> GetContractRefundByAccountIdAndContractId(string accountId, string contractId)
+        {
+            var result = await _contractRefundService.GetContractRefundByAccountIdAndContractId(accountId, contractId);
+            return Ok(result);
+        }
+
+        [HttpGet("GetAllContractRefundByAccountId")]
+        public async Task<IActionResult> GetAllContractRefundByAccountId(string accountId)
+        {
+            var result = await _contractRefundService.GetAllContractRefundByAccountId(accountId);
+            return Ok(result);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAllContractRefund()
         {
