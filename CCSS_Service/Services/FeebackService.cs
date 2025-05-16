@@ -17,7 +17,7 @@ namespace CCSS_Service.Services
         Task<bool> UpdateFeedback(UpdateFeedbackRequest feedbackRequest, string accountId);
         Task<List<FeedbackResponse>> GetFeedbackByContractId(string contractId);
         Task<List<FeedbackResponse>> GetAllFeedback();
-        Task<List<FeedbackResponse>> GetFeedbackByCosplayerId(string cosplayerId);
+        Task<List<FeedbackResponseByCosplayerId>> GetFeedbackByCosplayerId(string cosplayerId);
         Task<FeedbackResponse> GetFeedbackByFeedbackId(string feedbackId);
         
     }
@@ -293,9 +293,42 @@ namespace CCSS_Service.Services
             }
         }
 
-        public async Task<List<FeedbackResponse>> GetFeedbackByCosplayerId(string cosplayerId)
+        public async Task<List<FeedbackResponseByCosplayerId>> GetFeedbackByCosplayerId(string cosplayerId)
         {
-            return mapper.Map<List<FeedbackResponse>>(await _feedbackRepository.GetAllFeedbacksByCosplayerId(cosplayerId));
+            try
+            {
+                List<FeedbackResponseByCosplayerId> feedbackResponses = new List<FeedbackResponseByCosplayerId>();
+                List<Feedback> feedbacks = await _feedbackRepository.GetAllFeedbacksByCosplayerId(cosplayerId);
+
+                if (feedbacks.Count > 0)
+                {
+                    foreach (Feedback feedback in feedbacks)
+                    {
+                        ContractCharacter contractCharacter = await _contractCharacterRepository.GetContractCharacterById(feedback.ContractCharacterId);
+
+                        if(contractCharacter == null)
+                        {
+                            throw new Exception("ContractCharacter does not exist");
+                        }
+
+                        FeedbackResponseByCosplayerId feedbackResponseByCosplayerId = new FeedbackResponseByCosplayerId()
+                        {
+                            AccountName = feedback.Account.Name,
+                            CharacterName = contractCharacter.Character.CharacterName,
+                            Description = feedback.Description,
+                            Star = feedback.Star,
+                        };
+
+                        feedbackResponses.Add(feedbackResponseByCosplayerId);
+                    }
+                }
+
+                return feedbackResponses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<FeedbackResponse> GetFeedbackByFeedbackId(string feedbackId)

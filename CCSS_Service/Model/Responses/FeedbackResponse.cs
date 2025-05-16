@@ -14,4 +14,12 @@ namespace CCSS_Service.Model.Responses
         public string? Description { get; set; }
         public string? AccountId { get; set; }
     }
+
+    public class FeedbackResponseByCosplayerId
+    {
+        public int? Star { get; set; }
+        public string? Description { get; set; }
+        public string? AccountName { get; set; }
+        public string? CharacterName {  get; set; }
+    }
 }
