@@ -342,6 +342,7 @@ namespace CCSS_Service.Services
                 contractRefund.AccountBankName = contractRefundRequest.AccountBankName;
                 contractRefund.BankName = contractRefundRequest.BankName;
                 contractRefund.NumberBank = contractRefundRequest.NumberBank;
+                contractRefund.Status = ContractRefundStatus.Pending;
 
                 if (contractRefundRequest.Price != null)
                 {
