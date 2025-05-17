@@ -49,6 +49,7 @@ namespace CCSS_Service.Services
         Task<bool> ChangePassword(string email);
         Task<List<AccountResponse>> GetAllAccount(string searchterm, string role);
         Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDateAndRange(string characterId, List<Date> dates, string requestId);
+        Task<string> UpdateStatusAccount(string accountId, bool IsActive);
     }
     public class AccountService : IAccountService
     {
@@ -1018,6 +1019,21 @@ namespace CCSS_Service.Services
             {
                 throw new Exception(ex.Message);
             }
+        }
+        #endregion
+
+        #region UpdateStatusAccount
+        public async Task<string> UpdateStatusAccount(string accountId, bool IsActive)
+        {
+            var account = await accountRepository.GetAccountByAccountIdNotActive(accountId);
+            if (account == null)
+            {
+                return "Account not found";
+            }
+            account.IsActive = IsActive;
+
+            var result = await accountRepository.UpdateAccount(account);
+            return result ? "Update Success" : "Update Failed";
         }
         #endregion
     }

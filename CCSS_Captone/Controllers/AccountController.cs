@@ -108,5 +108,16 @@ namespace CCSS_Captone.Controllers
             var account = await accountService.AddCosplayer(username, password);
             return Ok(account);
         }
+
+        [HttpPut("UpdateStatusAccount")]
+        public async Task<IActionResult> UpdateStatusAccount(string accountId, bool IsActive)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await accountService.UpdateStatusAccount(accountId, IsActive);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }   
     }
 }

@@ -34,6 +34,7 @@ namespace CCSS_Repository.Repositories
         Task<Account> GetAccountByGoogleId(string email, string googleId);
         Task AddAccountGoogle(Account account);
         Task<List<Account>> GetAllAccount(string? searchterm, string roleId);
+        Task<Account> GetAccountByAccountIdNotActive(string accountId);
     }
     public class AccountRepository : IAccountRepository
     {
@@ -55,7 +56,7 @@ namespace CCSS_Repository.Repositories
                 throw new Exception(ex.Message);
             }
         }
-
+     
         public async Task AddAccountGoogle(Account account)
         {
             dbContext.Accounts.Add(account);
@@ -91,6 +92,11 @@ namespace CCSS_Repository.Repositories
         public async Task<Account> GetAccountByAccountId(string accountId)
         {
             return await dbContext.Accounts.Include(a => a.AccountImages).FirstOrDefaultAsync(a => a.AccountId == accountId && a.IsActive == true);
+        }
+
+        public async Task<Account> GetAccountByAccountIdNotActive(string accountId)
+        {
+            return await dbContext.Accounts.Include(a => a.AccountImages).FirstOrDefaultAsync(a => a.AccountId == accountId);
         }
 
         //public async Task<Account> GetAccountByAccountIdIncludeTask(string acountId, string? taskId)
