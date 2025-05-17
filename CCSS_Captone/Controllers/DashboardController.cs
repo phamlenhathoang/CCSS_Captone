@@ -190,6 +190,61 @@ namespace CCSS_Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("GetAllOrder")]
+        public async Task<IActionResult> GetAllOrder()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _dashBoardService.GetAllOrder();
+            return Ok(result);
+        }
+
+        [HttpGet("GetAllOrderFilterDateTime")]
+        [SwaggerOperation(Description = "filterType<br>" +
+                                        "0 (Today)<br>" +
+                                        "1 (This week)<br>" +
+                                        "2 (This month)<br>" +
+                                        "3 (This Year)")]
+        public async Task<IActionResult> GetAllOrderFilterDateTime(DateFilterType dateFilterType)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _dashBoardService.GetAllOrderFilterDateTime(dateFilterType);
+            return Ok(result);
+        }
+
+        [HttpGet("GetAllPaymentForTicket")]
+        public async Task<IActionResult> GetAllPaymentForTicket()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _dashBoardService.GetAllPaymentForTicket();
+            return Ok(result);
+        }
+
+        [HttpGet("GetAllTicketAccountFilterDateTime")]
+        [SwaggerOperation(Description = "filterType<br>" +
+                                        "0 (Today)<br>" +
+                                        "1 (This week)<br>" +
+                                        "2 (This month)<br>" +
+                                        "3 (This Year)")]
+        public async Task<IActionResult> GetAllTicketAccountFilterDateTime(DateFilterType dateFilterType)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _dashBoardService.GetAllTicketAccountFilterDateTime(dateFilterType);
+            return Ok(result);
+        }
+
+
         //[HttpGet("total-average-star")]
         //public async Task<IActionResult> GetAverageStarByContractDescription()
         //{

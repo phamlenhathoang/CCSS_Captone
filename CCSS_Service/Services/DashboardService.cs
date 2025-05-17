@@ -24,6 +24,10 @@ namespace CCSS_Service
         Task<List<ContractCount>> GetAllContractFilterByDateTime(DateFilterType dateFilterType);
         Task<List<Contract>> GetAllContractByServiceId(string serviceId);
         Task<List<ContractCount>> GetAllContractFilterServiceAndDateTime(string serviceId, DateFilterType dateFilterType);
+        Task<List<ContractCount>> GetAllOrderFilterDateTime(DateFilterType dateFilterType);
+        Task<List<Order>> GetAllOrder();
+        Task<List<Payment>> GetAllPaymentForTicket();
+        Task<List<ContractCount>> GetAllTicketAccountFilterDateTime(DateFilterType dateFilterType);
 
     }
 
@@ -103,7 +107,7 @@ namespace CCSS_Service
 
             return response;
         }
-            #endregion
+        #endregion
 
 
         public async Task<List<AccountDashBoardResponse>> GetTop5AccountsWithMostPaymentsAsync()
@@ -245,6 +249,26 @@ namespace CCSS_Service
         public async Task<List<ContractCount>> GetAllContractFilterServiceAndDateTime(string serviceId, DateFilterType dateFilterType)
         {
             return await _dashBoardRepository.GetAllContractFilterServiceAndDateTime(serviceId, dateFilterType);
+        }
+
+        public async Task<List<ContractCount>> GetAllOrderFilterDateTime(DateFilterType dateFilterType)
+        {
+            return await _dashBoardRepository.GetAllOrderFilterDateTime(dateFilterType);
+        }
+
+        public async Task<List<Order>> GetAllOrder()
+        {
+            return await _dashBoardRepository.GetAllOrder();
+        }
+
+        public async Task<List<Payment>> GetAllPaymentForTicket()
+        {
+           return await _dashBoardRepository.GetAllPaymentForTicket();
+        }
+
+        public async Task<List<ContractCount>> GetAllTicketAccountFilterDateTime(DateFilterType dateFilterType)
+        {
+            return await _dashBoardRepository.GetAllTicketAccountFilterDateTime(dateFilterType);
         }
     }
 }
