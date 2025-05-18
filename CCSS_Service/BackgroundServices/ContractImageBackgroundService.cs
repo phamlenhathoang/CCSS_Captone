@@ -51,7 +51,7 @@ namespace CCSS_Service.BackgroundServices
 
                                     if(contract.ContractStatus != ContractStatus.Completed)
                                     {
-                                        bool result = await _contractService.UpdateStatusContract(contract.ContractId, ContractStatus.Completed.ToString(), null);
+                                        bool result = await _contractService.UpdateStatusContract(contract.ContractId, ContractStatus.Completed.ToString(), null, null);
                                         if (!result)
                                         {
                                             _logger.LogInformation("Can not update contract");
