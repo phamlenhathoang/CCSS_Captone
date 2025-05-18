@@ -83,11 +83,11 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateStatusContract(string contracId, string status)
+        public async Task<IActionResult> UpdateStatusContract(string contracId, string status, string? reason)
         {
             if (ModelState.IsValid)
             {
-                var result = await _services.UpdateStatusContract(contracId, status, null);
+                var result = await _services.UpdateStatusContract(contracId, status, null, reason);
                 return Ok(result);
             }
             return BadRequest(ModelState);
