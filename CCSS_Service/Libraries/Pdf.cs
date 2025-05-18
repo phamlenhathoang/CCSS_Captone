@@ -73,7 +73,7 @@ namespace CCSS_Service.Libraries
                     htmlContent += "<h2>SOCIALIST REPUBLIC OF VIETNAM</h2>";
                     htmlContent += "<h3><u>Independence - Freedom - Happiness</u></h3>";
                     DateTime now = DateTime.Now;
-                    string formattedDate = now.ToString("dd 'month' MM 'year' yyyy");
+                    string formattedDate = now.ToString("dd/MM/yyyy");
                     htmlContent += $"<p style='text-align: right; margin-right: 10px;'>Ho Chi Minh City, {formattedDate}</p>";
                     htmlContent += $"<h1>{request.Service.ServiceName.ToUpper()}</h1>";
                     htmlContent += "<p><b>PARTY A:</b> THE LESSOR</p>";
@@ -258,10 +258,13 @@ namespace CCSS_Service.Libraries
 
                         double packagePrice = (package?.Price ?? 0);
 
-                        htmlContent += $@"<tr>
-                    <td colspan='5' class='right-align'>Package</td>
-                    <td>{packagePrice}</td>
-                </tr>";
+                        if (request.Service.ServiceId.Equals("S003"))
+                        {
+                            htmlContent += $@"<tr>
+                            <td colspan='5' class='right-align'>Package</td>
+                            <td>{packagePrice}</td>
+                            </tr>";
+                        }
 
                         // Xử lý coupon
                         double amount = accountCoupon?.Coupon?.Amount ?? 0.0;
@@ -280,6 +283,10 @@ namespace CCSS_Service.Libraries
 
                     if (request.ServiceId != "S001")
                     {
+                        htmlContent += $"<p>Deposited: {request.Deposit}%</p>";
+                        htmlContent += $"<p>Prepaid customer: {(request.Price * deposit) / 100}</p>";
+                        htmlContent += $"<p>The remaining amount to be paid at the end of the contrac: {request.Price - ((request.Price * deposit) / 100)}</p>";
+
                         htmlContent += "<p>The rental contract is based on specific time slots.</p>";
 
                         int c = 0;
@@ -290,8 +297,8 @@ namespace CCSS_Service.Libraries
                                 List<RequestDate> requestDates = await requestDatesRepository.GetListRequestDateByRequestCharacterId(requestCharacter.RequestCharacterId);
                                 foreach (RequestDate requestDate in requestDates)
                                 {
-                                    string formattedStartDate = requestDate.StartDate.ToString("hh:mm tt dd 'month' MM 'year' yyyy");
-                                    string formattedEndDate = requestDate.EndDate.ToString("hh:mm tt dd 'month' MM 'year' yyyy");
+                                    string formattedStartDate = requestDate.StartDate.ToString("hh:mm dd/MM/yyyy");
+                                    string formattedEndDate = requestDate.EndDate.ToString("hh:mm dd/MM/yyyy");
 
                                     htmlContent += $"<p>{formattedStartDate}<p>";
                                     htmlContent += $"<p>{formattedEndDate}<p>";
@@ -300,6 +307,13 @@ namespace CCSS_Service.Libraries
                             }
 
                         }
+                    }
+                    else
+                    {
+                        htmlContent += $"<p>Deposited: {request.Deposit}</p>";
+                        htmlContent += $"<p>Prepaid customer: {(request.Price * deposit) / 100}</p>";
+                        htmlContent += $"<p>Rental fee: {request.Price}</p>";
+                        htmlContent += $"<p>The remaining amount will depend on the extent of damage to the item.</p>";
                     }
 
                     // Contract Information
@@ -314,16 +328,16 @@ namespace CCSS_Service.Libraries
                     htmlContent += "<p>The rental fee is calculated based on the number of rental days and will be deducted from the deposit upon return.</p>";
                     htmlContent += "<p>When the customer returns the costume, the lessor will inspect the condition. If there is no damage, the deposit will be refunded after deducting the rental fee. If there is damage, repair costs will be deducted from the deposit.</p>";
                     htmlContent += "<p>If the total rental and repair costs exceed the deposit, the customer is responsible for paying the difference before the contract is concluded.</p>";
-                    
+
                     if (request.ServiceId != "S001")
                     {
-                        string formattedEndDate = request.EndDate.ToString("dd 'month' MM 'year' yyyy");
+                        string formattedEndDate = request.EndDate.ToString("dd/MM/yyyy");
 
                         htmlContent += "<p>In any case, if Party B unilaterally terminates the contract, whether intentionally or unintentionally, Party B will lose the entire deposit paid to Party A.</p>";
                         htmlContent += $"<p>After {formattedEndDate} if Party B does not update the return process to Party A, Party B will lose the entire deposit.</p>";
                     }
 
-                        htmlContent += "<h3><strong>Cosplayer Rental Terms</strong></h3>";
+                    htmlContent += "<h3><strong>Cosplayer Rental Terms</strong></h3>";
                     htmlContent += "<p>The cosplayer will portray the character as requested by the lessee.</p>";
                     htmlContent += "<p>The cosplayer will participate in events, performances, meet-and-greet sessions, or photoshoots as per the agreed schedule.</p>";
                     htmlContent += "<p>The cosplayer has the right to refuse any requests that violate ethics, laws, or personal image.</p>";
