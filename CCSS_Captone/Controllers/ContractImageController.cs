@@ -38,9 +38,9 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddContractImage(string contractId, List<IFormFile>? UrlImages)
+        public async Task<IActionResult> AddContractImage(string contractId, List<IFormFile>? UrlImages, string status)
         {
-            var account = await _contractImageService.AddContractImage(contractId, UrlImages);
+            var account = await _contractImageService.AddContractImage(contractId, UrlImages, status);
             return Ok(account);
         }
     }

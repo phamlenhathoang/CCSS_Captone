@@ -17,7 +17,7 @@ namespace CCSS_Service.Services
         Task<List<ContractImgeResponse>>  GetContractImageByContractIdAndStatus(string contractId, string status);
         Task<ContractImgeResponse>  GetContractImageByContractImageId(string contractImageId);
         Task<bool>  UpdateContractImage(string contractImageId, ContractImageRequest contractImageRequest);
-        Task<bool>  AddContractImage(string contractImageId, List<IFormFile>? UrlImage);
+        Task<bool>  AddContractImage(string contractImageId, List<IFormFile>? UrlImage, string status);
     }
     public class ContractImageService : IContractImageService
     {
@@ -30,7 +30,7 @@ namespace CCSS_Service.Services
             this.contractRespository = contractRespository;
         }
 
-        public async Task<bool> AddContractImage(string contractId, List<IFormFile>? UrlImages)
+        public async Task<bool> AddContractImage(string contractId, List<IFormFile>? UrlImages, string status)
         {
             try
             {
@@ -61,9 +61,17 @@ namespace CCSS_Service.Services
                         {
                             ContractId = contractId,
                             CreateDate = DateTime.Now,
-                            Status = ContractImageStatus.Check,
                             UrlImage = await image.UploadImageToFirebase(file),
                         };
+
+                        if (status.ToLower().ToLower().Equals(ContractImageStatus.Check))
+                        {
+                            contractImage.Status = ContractImageStatus.Check;
+                        }
+                        else
+                        {
+                            contractImage.Status = ContractImageStatus.RefundMoney;
+                        }
                         contractImages.Add(contractImage);
                     }
                 }
