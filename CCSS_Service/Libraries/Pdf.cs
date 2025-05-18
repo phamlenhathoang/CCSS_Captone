@@ -284,8 +284,8 @@ namespace CCSS_Service.Libraries
                     if (request.ServiceId != "S001")
                     {
                         htmlContent += $"<p>Deposited: {request.Deposit}%</p>";
-                        htmlContent += $"<p>Prepaid customer: {(request.Price * deposit) / 100}</p>";
-                        htmlContent += $"<p>The remaining amount to be paid at the end of the contrac: {request.Price - ((request.Price * deposit) / 100)}</p>";
+                        htmlContent += $"<p>Prepaid customer: {(request.Price * deposit) / 100} VND</p>";
+                        htmlContent += $"<p>The remaining amount to be paid at the end of the contrac: {request.Price - ((request.Price * deposit) / 100)} VND</p>";
 
                         htmlContent += "<p>The rental contract is based on specific time slots.</p>";
 
@@ -310,9 +310,9 @@ namespace CCSS_Service.Libraries
                     }
                     else
                     {
-                        htmlContent += $"<p>Deposited: {request.Deposit}</p>";
-                        htmlContent += $"<p>Prepaid customer: {request.Deposit}</p>";
-                        htmlContent += $"<p>Rental fee: {request.Price}</p>";
+                        htmlContent += $"<p>Deposited: {request.Deposit} VND</p>";
+                        htmlContent += $"<p>Prepaid customer: {request.Deposit} VND</p>";
+                        htmlContent += $"<p>Rental fee: {request.Price} VND</p>";
                         htmlContent += $"<p>The remaining amount will depend on the extent of damage to the item.</p>"; 
 
                         htmlContent += $"<p>Start date: {request.StartDate.ToString("dd/MM/yyyy")}<p>";
