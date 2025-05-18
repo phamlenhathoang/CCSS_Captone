@@ -311,9 +311,13 @@ namespace CCSS_Service.Libraries
                     else
                     {
                         htmlContent += $"<p>Deposited: {request.Deposit}</p>";
-                        htmlContent += $"<p>Prepaid customer: {(request.Price * deposit) / 100}</p>";
+                        htmlContent += $"<p>Prepaid customer: {request.Deposit}</p>";
                         htmlContent += $"<p>Rental fee: {request.Price}</p>";
-                        htmlContent += $"<p>The remaining amount will depend on the extent of damage to the item.</p>";
+                        htmlContent += $"<p>The remaining amount will depend on the extent of damage to the item.</p>"; 
+
+                        htmlContent += $"<p>Start date: {request.StartDate.ToString("dd/MM/yyyy")}<p>";
+                        htmlContent += $"<p>End date: {request.EndDate.ToString("dd/MM/yyyy")}<p>";
+
                     }
 
                     // Contract Information
