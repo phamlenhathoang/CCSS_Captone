@@ -3,6 +3,7 @@ using CCSS_Repository.Repositories;
 using CCSS_Service.Libraries;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace CCSS_Service.Services
         Task<List<ContractImgeResponse>>  GetContractImageByContractIdAndStatus(string contractId, string status);
         Task<ContractImgeResponse>  GetContractImageByContractImageId(string contractImageId);
         Task<bool>  UpdateContractImage(string contractImageId, ContractImageRequest contractImageRequest);
+        Task<bool>  AddContractImage(string contractImageId, List<IFormFile>? UrlImage);
     }
     public class ContractImageService : IContractImageService
     {
@@ -27,6 +29,60 @@ namespace CCSS_Service.Services
             this.contractImageRepository = contractImageRepository;
             this.contractRespository = contractRespository;
         }
+
+        public async Task<bool> AddContractImage(string contractId, List<IFormFile>? UrlImages)
+        {
+            try
+            {
+                Contract contract = await contractRespository.GetContractById(contractId);
+                List<ContractImage> contractImages = new List<ContractImage>();
+                Image image = new Image();
+                if (contract == null)
+                {
+                    throw new Exception("ContractImage does not exist");
+                }
+
+                if (UrlImages.Count == 0)
+                {
+                    ContractImage contractImage = new ContractImage()
+                    {
+                        ContractId = contractId,
+                        CreateDate = DateTime.Now,
+                        Status = ContractImageStatus.Check,
+                    };
+                    
+                    contractImages.Add(contractImage);
+                }
+                else
+                {
+                    foreach (IFormFile file in UrlImages)
+                    {
+                        ContractImage contractImage = new ContractImage()
+                        {
+                            ContractId = contractId,
+                            CreateDate = DateTime.Now,
+                            Status = ContractImageStatus.Check,
+                            UrlImage = await image.UploadImageToFirebase(file),
+                        };
+                        contractImages.Add(contractImage);
+                    }
+                }
+
+                bool result = await contractImageRepository.AddListContractImage(contractImages);
+
+                if (!result)
+                {
+                    throw new Exception("Can not add contractImage");
+                }
+
+                return result;
+            }
+            catch (Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<List<ContractImgeResponse>> GetContractImageByContractIdAndStatus(string contractId, string status)
         {
             try

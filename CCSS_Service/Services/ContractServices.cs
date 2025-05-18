@@ -671,50 +671,7 @@ namespace CCSS_Service.Services
                         throw new Exception("Can not update contract status");
                     }
                 }
-                if (status.ToUpper() == ContractStatus.FinalSettlement.ToString().ToUpper())
-                {
-                    if (contract.ContractStatus == ContractStatus.Deposited)
-                    {
-                        if (price != null)
-                        {
-                            contract.ContractStatus = ContractStatus.FinalSettlement;
-                            contract.Amount = (double)contract.Amount - (double)price;
-
-                            if (contract.ContractCharacters == null)
-                            {
-                                throw new Exception("ContractCharacter does not exist");
-                            }
-
-                            foreach (ContractCharacter contractCharacter in contract.ContractCharacters)
-                            {
-                                Character character = await _characterRepository.GetCharacter(contractCharacter.CharacterId);
-
-                                if (character == null)
-                                {
-                                    throw new Exception("Character does not exist");
-                                }
-
-                                character.Quantity += contractCharacter.Quantity;
-
-                                bool checkUpdate = await _characterRepository.UpdateCharacter(character);
-
-                                if (!checkUpdate)
-                                {
-                                    throw new Exception("Can not update Character");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("Please enter price");
-                        }
-                    }
-                    else
-                    {
-                        //await transaction.RollbackAsync();
-                        throw new Exception("Can not update contract status");
-                    }
-                }
+                
 
                 if(status.ToUpper() == ContractStatus.Refund.ToString().ToUpper())
                 {
@@ -739,7 +696,7 @@ namespace CCSS_Service.Services
                 {
                     if(contract.Request.ServiceId != "S001")
                     {
-                        if (contract.ContractStatus == ContractStatus.FinalSettlement)
+                        if (contract.ContractStatus == ContractStatus.Deposited)
                         {
                             foreach (ContractCharacter contractCharacter in contract.ContractCharacters)
                             {
@@ -753,6 +710,7 @@ namespace CCSS_Service.Services
                                 }
                             }
                             contract.ContractStatus = ContractStatus.Completed;
+                            contract.Amount = (double)contract.Amount - (double)price;
                         }
                         else
                         {

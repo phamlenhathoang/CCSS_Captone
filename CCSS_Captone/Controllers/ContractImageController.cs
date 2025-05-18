@@ -36,5 +36,12 @@ namespace CCSS_Captone.Controllers
             var account = await _contractImageService.UpdateContractImage(contractImageId, contractImageRequest);
             return Ok(account);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddContractImage(string contractId, List<IFormFile>? UrlImages)
+        {
+            var account = await _contractImageService.AddContractImage(contractId, UrlImages);
+            return Ok(account);
+        }
     }
 }
