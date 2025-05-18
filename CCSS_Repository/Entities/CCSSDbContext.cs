@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,6 +8,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace CCSS_Repository.Entities
 {
@@ -460,6 +462,181 @@ new Account { AccountId = "A042", Name = "Consultant", Email = "consultant@examp
 
             #endregion
 
+            #region AccountImage
+
+            modelBuilder.Entity<AccountImage>().HasData(
+                new AccountImage { AccountImageId = "AI01", AccountId = "A001", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://tftravel.com.vn/wp-content/uploads/2021/02/team-1.jpg" },
+                new AccountImage { AccountImageId = "AI02", AccountId = "A001", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/originals/a6/bc/25/a6bc259bd4209b1f9dddf93607f68644.jpg" },
+                new AccountImage { AccountImageId = "AI03", AccountId = "A001", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/a9/2a/9e/a92a9ed46b8cc1067dc20840d3c4fee5.jpg" },
+                new AccountImage { AccountImageId = "AI04", AccountId = "A001", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/4e/86/e2/4e86e2cfd4b1b45e5faa6cf872b1a905.jpg" },
+
+                new AccountImage { AccountImageId = "AI05", AccountId = "A002", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/f1/82/ce/f182ce676795a62d00036da861a90c33.jpg" },
+                new AccountImage { AccountImageId = "AI06", AccountId = "A002", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/aa/95/35/aa953549f4b2bb159d9e726e3ff3a2ed.jpg" },
+                new AccountImage { AccountImageId = "AI07", AccountId = "A002", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/3b/d8/1b/3bd81b616374e74b3fa33dbc916dbfcc.jpg" },
+                new AccountImage { AccountImageId = "AI08", AccountId = "A002", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/93/f9/d8/93f9d842e536468ff7503d6ceda91dca.jpg" },
+
+                new AccountImage { AccountImageId = "AI09", AccountId = "A005", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/15/f5/46/15f546b7df5498113d23bb5b02497548.jpg" },
+                new AccountImage { AccountImageId = "AI10", AccountId = "A005", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/b0/8c/a9/b08ca9db4b5c47fe25428da2823c9a41.jpg" },
+                new AccountImage { AccountImageId = "AI11", AccountId = "A005", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/fb/ec/67/fbec67d903362ff4ffd6bc4489f4910d.jpg" },
+                new AccountImage { AccountImageId = "AI12", AccountId = "A005", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/6f/86/0a/6f860aa99e78fdd33ad516dfb84fb13f.jpg" },
+
+                new AccountImage { AccountImageId = "AI13", AccountId = "A007", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/ca/42/d9/ca42d9541580d5542fa29a568a68a714.jpg" },
+                new AccountImage { AccountImageId = "AI14", AccountId = "A007", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/3e/ba/30/3eba305131695dd20a6a1203fe955c04.jpg" },
+                new AccountImage { AccountImageId = "AI15", AccountId = "A007", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/15/0c/3c/150c3c6df16d0f3b976f07529801a8e5.jpg" },
+                new AccountImage { AccountImageId = "AI16", AccountId = "A007", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/04/56/a8/0456a8ccfe96917fdc56703d2e3cca17.jpg" },
+
+                new AccountImage { AccountImageId = "AI17", AccountId = "A008", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/4a/1d/4d/4a1d4d05f09b833adb9a78af8be2137f.jpg" },
+                new AccountImage { AccountImageId = "AI18", AccountId = "A008", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/2b/80/60/2b8060ca82bfb42642f1ec4aefe39428.jpg" },
+                new AccountImage { AccountImageId = "AI19", AccountId = "A008", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/81/6b/79/816b79ab93e73d6240177d7da8e345a8.jpg" },
+                new AccountImage { AccountImageId = "AI20", AccountId = "A008", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/da/69/57/da695796f69212dfb2440d2b2e3f6800.jpg" },
+
+                new AccountImage { AccountImageId = "AI21", AccountId = "A010", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/a5/67/52/a56752ef994d5c6cf6499b4cef52e2f7.jpg" },
+                new AccountImage { AccountImageId = "AI22", AccountId = "A010", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/e8/79/74/e87974221b2c629e6b8652d69e8d137d.jpg" },
+                new AccountImage { AccountImageId = "AI23", AccountId = "A010", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/99/84/d9/9984d9e425ac3663fe5d24e49cb38eed.jpg" },
+                new AccountImage { AccountImageId = "AI24", AccountId = "A010", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/47/ec/be/47ecbea5cfac28fafe8e19faaa355342.jpg" },
+
+                new AccountImage { AccountImageId = "AI25", AccountId = "A012", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/ef/ba/25/efba25ef9c63e7294340de6f14048795.jpg" },
+                new AccountImage { AccountImageId = "AI26", AccountId = "A012", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/93/d2/55/93d2552c5c6a0f90d867c4617f33d0d1.jpg" },
+                new AccountImage { AccountImageId = "AI27", AccountId = "A012", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/7e/62/d7/7e62d70e323b92b166026ab145e1703e.jpg" },
+                new AccountImage { AccountImageId = "AI28", AccountId = "A012", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/42/de/11/42de11b557fe83b3040178671db20b73.jpg" },        
+                new AccountImage { AccountImageId = "AI29", AccountId = "A016", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/c6/49/e8/c649e8f88170ebf177e6910bfc518696.jpg" },
+                new AccountImage { AccountImageId = "AI30", AccountId = "A016", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/77/3d/e8/773de85e694e8f88ed08ff5509ae4355.jpg" },
+                new AccountImage { AccountImageId = "AI31", AccountId = "A016", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/26/94/bd/2694bd3519bcfd0cdf518d6b5ead8684.jpg" },
+                new AccountImage { AccountImageId = "AI32", AccountId = "A016", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/83/67/8f/83678f4941b8d106136201deebb26bc7.jpg" },
+
+                new AccountImage { AccountImageId = "AI33", AccountId = "A017", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/95/57/ce/9557ce89bef894c11242f90d0e11ed88.jpg" },
+                new AccountImage { AccountImageId = "AI34", AccountId = "A017", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/6c/3d/32/6c3d329db2a87ce681754b0a70040d07.jpg" },
+                new AccountImage { AccountImageId = "AI35", AccountId = "A017", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/04/5b/91/045b9179ebdede69c3aba42195fd47b2.jpg" },
+                new AccountImage { AccountImageId = "AI36", AccountId = "A017", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/05/7c/0a/057c0a4c922c6f98b8d9715bb537ab83.jpg" },
+
+                new AccountImage { AccountImageId = "AI37", AccountId = "A018", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/8a/ef/b2/8aefb28db28939806440e3de90c5b029.jpg" },
+                new AccountImage { AccountImageId = "AI38", AccountId = "A018", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/53/75/08/537508f69d893602a3cbb031ae699ba5.jpg" },
+                new AccountImage { AccountImageId = "AI39", AccountId = "A018", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/0f/f2/67/0ff26774a0f4fd7745a77d92dc1a3443.jpg" },
+                new AccountImage { AccountImageId = "AI40", AccountId = "A018", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/dd/a5/9b/dda59b436bb82a60da6910e9b556b932.jpg" },
+
+                new AccountImage { AccountImageId = "AI41", AccountId = "A019", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/6b/c9/c4/6bc9c4075b37202e3bdaa445e0337b13.jpg" },
+                new AccountImage { AccountImageId = "AI42", AccountId = "A019", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/14/a7/87/14a7874490c3b61fab4651ae5ff4112f.jpg" },
+                new AccountImage { AccountImageId = "AI43", AccountId = "A019", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/20/54/f4/2054f48bdc17b91f279938674cbd33ad.jpg" },
+                new AccountImage { AccountImageId = "AI44", AccountId = "A019", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/60/9c/43/609c434fb92fa95266c7be06fe96efbc.jpg" },
+
+                new AccountImage { AccountImageId = "AI45", AccountId = "A020", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/b8/27/d8/b827d8c8a295985347865df94088c597.jpg" },
+                new AccountImage { AccountImageId = "AI46", AccountId = "A020", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/7b/34/c1/7b34c1cd28ce80067fa749c5009ac7c7.jpg" },
+                new AccountImage { AccountImageId = "AI47", AccountId = "A020", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/95/88/d1/9588d11d286959114820ba9db75495dd.jpg" },
+                new AccountImage { AccountImageId = "AI48", AccountId = "A020", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/6e/2d/24/6e2d2433a754c2c40da9b43a8f8ddeb5.jpg" },
+
+                new AccountImage { AccountImageId = "AI49", AccountId = "A021", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/5e/42/2d/5e422d974040651b04ed142b92b458dc.jpg" },
+                new AccountImage { AccountImageId = "AI50", AccountId = "A021", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/38/9f/7b/389f7b75e44c3ac7b6a88822fc750a07.jpg" },
+                new AccountImage { AccountImageId = "AI51", AccountId = "A021", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/20/47/c7/2047c724f925d1245fa8fe16d2358e34.jpg" },
+                new AccountImage { AccountImageId = "AI52", AccountId = "A021", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/81/99/9a/81999a3e8311019965629487ead07a76.jpg" },
+
+                new AccountImage { AccountImageId = "AI53", AccountId = "A022", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/cd/87/ed/cd87ed57b54707beda273ab7859e0aa2.jpg" },
+                new AccountImage { AccountImageId = "AI54", AccountId = "A022", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/9a/38/21/9a3821d24193b383790a027b4010a90e.jpg" },
+                new AccountImage { AccountImageId = "AI55", AccountId = "A022", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/e8/29/e0/e829e0a56266a7ad2e1cb246d3ae8485.jpg" },
+                new AccountImage { AccountImageId = "AI56", AccountId = "A022", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/62/b2/41/62b241944f967787d4f42e1bb8f39150.jpg" },
+
+                new AccountImage { AccountImageId = "AI57", AccountId = "A023", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/06/fc/aa/06fcaa6e24a14618e2b311626f0e1731.jpg" },
+                new AccountImage { AccountImageId = "AI58", AccountId = "A023", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/c9/1b/40/c91b40ea5039f9ba77c6818c562c5e03.jpg" },
+                new AccountImage { AccountImageId = "AI59", AccountId = "A023", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/12/bc/af/12bcaf16db2536b5efcd0151e4b3961f.jpg" },
+                new AccountImage { AccountImageId = "AI60", AccountId = "A023", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/da/0e/62/da0e62808a44ae34ea64fbed4d53d985.jpg" },
+
+                new AccountImage { AccountImageId = "AI61", AccountId = "A024", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/62/28/d6/6228d67af0d1ec8fb29c6c2a4caab140.jpg" },
+                new AccountImage { AccountImageId = "AI62", AccountId = "A024", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/16/f2/ed/16f2ed550316d9b9e6b711bf5db48199.jpg" },
+                new AccountImage { AccountImageId = "AI63", AccountId = "A024", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/24/0c/a6/240ca6f928fd4a14f5d374587a79ca15.jpg" },
+                new AccountImage { AccountImageId = "AI64", AccountId = "A024", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/08/5b/6f/085b6fea8dec2b94ae9f61b7371bd673.jpg" },
+
+                new AccountImage { AccountImageId = "AI65", AccountId = "A026", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/29/27/31/29273169c4efa0a8e6046a12f2da2acc.jpg" },
+                new AccountImage { AccountImageId = "AI66", AccountId = "A026", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/ac/88/35/ac88358182a19358f733c55167609eca.jpg" },
+                new AccountImage { AccountImageId = "AI67", AccountId = "A026", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/77/62/ab/7762abfda62f20753c0178876c1d2502.jpg" },
+                new AccountImage { AccountImageId = "AI68", AccountId = "A026", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/04/12/23/041223a462f501f104f50ff14db702f6.jpg" },
+
+                new AccountImage { AccountImageId = "AI69", AccountId = "A027", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/1f/ab/c6/1fabc6a5b521f216a23f342e4a0d6693.jpg" },
+                new AccountImage { AccountImageId = "AI70", AccountId = "A027", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/16/8b/93/168b93c1d23074062772105e918cc6fb.jpg" },
+                new AccountImage { AccountImageId = "AI71", AccountId = "A027", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/5d/b4/0f/5db40fd8b35c811b26766a82b7bdc3fe.jpg" },
+                new AccountImage { AccountImageId = "AI72", AccountId = "A027", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/db/7c/11/db7c11ca40d3a7a298b5883f59212e6f.jpg" },
+
+                new AccountImage { AccountImageId = "AI73", AccountId = "A030", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/4c/4d/f1/4c4df13ca300caf1b6b44e04d7bc850b.jpg" },
+                new AccountImage { AccountImageId = "AI74", AccountId = "A030", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/01/3b/f2/013bf2519246b18ad649a2b46fb555fb.jpg" },
+                new AccountImage { AccountImageId = "AI75", AccountId = "A030", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/92/c0/94/92c094471ff7fd4f62c5ffb60ecbb631.jpg" },
+                new AccountImage { AccountImageId = "AI76", AccountId = "A030", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/8b/5f/c4/8b5fc4a0731c8f1b2e0a260990f4a652.jpg" },
+
+                new AccountImage { AccountImageId = "AI77", AccountId = "A031", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/fa/11/d0/fa11d0ff1344020f8836c36a65750588.jpg" },
+                new AccountImage { AccountImageId = "AI78", AccountId = "A031", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/32/2e/c3/322ec31c264453cb1cefe341c33bab47.jpg" },
+                new AccountImage { AccountImageId = "AI79", AccountId = "A031", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/a9/76/07/a97607d31abf66ac67fe1e98cca5b1d5.jpg" },
+                new AccountImage { AccountImageId = "AI80", AccountId = "A031", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/b0/45/2d/b0452d15257ce22d4c714cb3256f5223.jpg" },
+
+                new AccountImage { AccountImageId = "AI81", AccountId = "A032", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/b9/ba/fd/b9bafd46360e4fe812a98b64959eacaf.jpg" },
+                new AccountImage { AccountImageId = "AI82", AccountId = "A032", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/b8/e6/76/b8e67682a4b3d90285c1c703b1ab09eb.jpg" },
+                new AccountImage { AccountImageId = "AI83", AccountId = "A032", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/b3/74/c4/b374c47dd21214efb855a4f4549c41c4.jpg" },
+                new AccountImage { AccountImageId = "AI84", AccountId = "A032", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/5b/7c/54/5b7c54189d8ce4d3bf9b2cc01eeef1fc.jpg" },
+
+                new AccountImage { AccountImageId = "AI85", AccountId = "A033", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/34/18/22/34182254b22d2132d36b4d78a6b263e5.jpg" },
+                new AccountImage { AccountImageId = "AI86", AccountId = "A033", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/d2/37/86/d237864b3e34810b5433b9526ae4ad0b.jpg" },
+                new AccountImage { AccountImageId = "AI87", AccountId = "A033", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/54/cd/6c/54cd6c312e0dc5066d2c9fbdf6f43868.jpg" },
+                new AccountImage { AccountImageId = "AI88", AccountId = "A033", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/63/71/9c/63719c13e8f733cdd977a4b53aaba0b3.jpg" },
+
+                new AccountImage { AccountImageId = "AI89", AccountId = "A034", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/eb/a4/99/eba4995776296a9e7976cfd8910fe89d.jpg" },
+                new AccountImage { AccountImageId = "AI90", AccountId = "A034", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/56/07/bf/5607bf1c6dccf0b3ebc2c4c6d7a52acf.jpg" },
+                new AccountImage { AccountImageId = "AI91", AccountId = "A034", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/2e/e6/50/2ee650a3044c4874fdc1179c25f4fa6c.jpg" },
+                new AccountImage { AccountImageId = "AI92", AccountId = "A034", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/9f/86/9a/9f869a68e316f2ee6e38fe0f0e8526d4.jpg" },
+
+                new AccountImage { AccountImageId = "AI93", AccountId = "A035", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/c0/95/f2/c095f2e3430c2558ad3c8df49c97637b.jpg" },
+                new AccountImage { AccountImageId = "AI94", AccountId = "A035", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/c6/43/a4/c643a40e94d0a38453ea5de5fd25258d.jpg" },
+                new AccountImage { AccountImageId = "AI95", AccountId = "A035", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/84/d2/49/84d249395f122117ecebd58329c4f6fa.jpg" },
+                new AccountImage { AccountImageId = "AI96", AccountId = "A035", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/3b/e4/2f/3be42fafce1256eb99727fcb3b6ef6c9.jpg" },
+
+                new AccountImage { AccountImageId = "AI97", AccountId = "A036", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/9b/00/c0/9b00c0393fa9b8b34fc0646984c0cd28.jpg" },
+                new AccountImage { AccountImageId = "AI98", AccountId = "A036", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/c4/ef/c4/c4efc41aa1272888f3900a4e84c11050.jpg" },
+                new AccountImage { AccountImageId = "AI99", AccountId = "A036", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/2e/aa/04/2eaa0421302548f3844c2cb37f0c8d26.jpg" },
+                new AccountImage { AccountImageId = "AI100", AccountId = "A036", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/af/be/4f/afbe4f62dff502301f9548ac69878f58.jpg" },
+
+                new AccountImage { AccountImageId = "AI101", AccountId = "A037", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/74/2b/1e/742b1ee0648e30cf46515a001b69e950.jpg" },
+                new AccountImage { AccountImageId = "AI102", AccountId = "A037", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/43/25/52/432552136be3eec79b86c1612918718d.jpg" },
+                new AccountImage { AccountImageId = "AI103", AccountId = "A037", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/66/da/19/66da19604347b4eb703df694703dbafe.jpg" },
+                new AccountImage { AccountImageId = "AI104", AccountId = "A037", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/09/85/bd/0985bdb9abb1ba2006ea5bbaa0156216.jpg" },
+
+                new AccountImage { AccountImageId = "AI105", AccountId = "A038", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/32/af/33/32af3330425fb3506f3dc3b26f42977d.jpg" },
+                new AccountImage { AccountImageId = "AI106", AccountId = "A038", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/51/f6/0f/51f60f776fd573c1a5c0e0c40dea6ce4.jpg" },
+                new AccountImage { AccountImageId = "AI107", AccountId = "A038", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/bc/01/96/bc019677d32019f157b65a1b52cf8525.jpg" },
+                new AccountImage { AccountImageId = "AI108", AccountId = "A038", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/21/ab/2e/21ab2ea44c87f1ccb5a045fbc108fd5b.jpg" },
+
+                new AccountImage { AccountImageId = "AI109", AccountId = "A039", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/ea/0d/7d/ea0d7d7bea568bb90db6249962a47e44.jpg" },
+                new AccountImage { AccountImageId = "AI110", AccountId = "A039", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/83/ee/3f/83ee3fabf7711cf45ffe138f56e721cb.jpg" },
+                new AccountImage { AccountImageId = "AI111", AccountId = "A039", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/7d/e4/20/7de420bbb605367225dcf49c8bc1dfc5.jpg" },
+                new AccountImage { AccountImageId = "AI112", AccountId = "A039", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/cd/1e/69/cd1e695a7a4975899d35355af795a1b4.jpg" },
+
+                new AccountImage { AccountImageId = "AI113", AccountId = "A040", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/96/5f/0d/965f0d17bb49f04319ff92d8386f376b.jpg" },
+                new AccountImage { AccountImageId = "AI114", AccountId = "A040", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/44/87/2d/44872d8ee209e36937d28ce37d9185b2.jpg" },
+                new AccountImage { AccountImageId = "AI115", AccountId = "A040", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/2c/a9/7f/2ca97f876142eb705b5e7b4f2575921f.jpg" },
+                new AccountImage { AccountImageId = "AI116", AccountId = "A040", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/28/3a/6f/283a6fe7b75a8fac14f39e455c5ddf3e.jpg" },
+
+                new AccountImage { AccountImageId = "AI117", AccountId = "A013", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/61/d6/b1/61d6b1e5b709639b723bb5089152d6d3.jpg" },
+                new AccountImage { AccountImageId = "AI118", AccountId = "A013", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/50/ae/27/50ae27b2034b85d2a7bf4d034d5e572a.jpg" },
+                new AccountImage { AccountImageId = "AI119", AccountId = "A013", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/39/16/78/391678508450a4ee33776c39fdf2c1ef.jpg" },
+                new AccountImage { AccountImageId = "AI120", AccountId = "A013", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/69/15/b9/6915b9ffa19b89e6f1543e05b5b26f70.jpg" },
+
+                new AccountImage { AccountImageId = "AI121", AccountId = "A028", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/14/ca/61/14ca61522c3d813c3ea62c4710828ce2.jpg" },
+                new AccountImage { AccountImageId = "AI122", AccountId = "A028", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/4e/97/cc/4e97ccc8f6959a693ac2ad75c13604c7.jpg" },
+                new AccountImage { AccountImageId = "AI123", AccountId = "A028", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/474x/d0/47/cb/d047cbd5b9af39284b7196b273d133a3.jpg" },
+                new AccountImage { AccountImageId = "AI124", AccountId = "A028", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/dc/61/5d/dc615d9f585f76243510fb7e8c7af1d8.jpg" },
+
+                new AccountImage { AccountImageId = "AI125", AccountId = "A029", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/16/d8/88/16d8888fe52fedf56766a7511c42be69.jpg" },
+                new AccountImage { AccountImageId = "AI126", AccountId = "A029", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/e0/e1/0a/e0e10ace79a99cc678fe9aedfbfdfa83.jpg" },
+                new AccountImage { AccountImageId = "AI127", AccountId = "A029", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/3e/6c/cd/3e6ccdb41eed4ac91ac04b39a4b15694.jpg" },
+                new AccountImage { AccountImageId = "AI128", AccountId = "A029", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/eb/58/42/eb58427dffb8c0c20637df1713a583a8.jpg" },
+
+                new AccountImage { AccountImageId = "AI129", AccountId = "A025", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/cd/ab/48/cdab4817b7b49287dc3a9531ac99dfae.jpg" },
+                new AccountImage { AccountImageId = "AI130", AccountId = "A025", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/30/34/ea/3034ea8302054e693520957c194decae.jpg" },
+                new AccountImage { AccountImageId = "AI131", AccountId = "A025", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/f4/4b/de/f44bdec05cf7826b67c2030613374ecb.jpg" },
+                new AccountImage { AccountImageId = "AI132", AccountId = "A025", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/fa/c1/ef/fac1efe39388d64003b1ec4c7d2d05e8.jpg" },
+
+                new AccountImage { AccountImageId = "AI133", AccountId = "A015", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/94/c2/69/94c269ee90d0d8a5584a7a48207f50ca.jpg" },
+                new AccountImage { AccountImageId = "AI134", AccountId = "A015", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/2d/96/29/2d96299467843d2876516493ade1eea3.jpg" },
+                new AccountImage { AccountImageId = "AI135", AccountId = "A015", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/e4/df/f6/e4dff6f0e30260a73019f5d1a44cd8ec.jpg" },
+                new AccountImage { AccountImageId = "AI136", AccountId = "A015", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/9e/4f/2a/9e4f2ab84f5d8e3c4e36ad2c5c3962e2.jpg" }
+                );
+
+            #endregion
+
             #region Category
 
             modelBuilder.Entity<Category>().HasData(
@@ -827,29 +1004,6 @@ new EventCharacter { EventCharacterId = "EC012", EventId = "E012", CharacterId =
     new AccountCoupon { AccountCouponId = "AC014", AccountId = "A009", CouponId = "CP014", IsActive = false, StartDate = new DateTime(2024, 11, 26), EndDate = new DateTime(2024, 11, 27) },
     new AccountCoupon { AccountCouponId = "AC015", AccountId = "A010", CouponId = "CP015", IsActive = true, StartDate = new DateTime(2024, 3, 1), EndDate = new DateTime(2024, 12, 31) }
 );
-            #endregion
-
-
-            #region AccountImage
-            modelBuilder.Entity<AccountImage>().HasData(
-     new AccountImage { AccountImageId = "AI1", AccountId = "A001", UrlImage = "https://example.com/admin.jpg", CreateDate = DateTime.UtcNow },
-     new AccountImage { AccountImageId = "AI2", AccountId = "A002", UrlImage = "https://example.com/manager.jpg", CreateDate = DateTime.UtcNow },
-     new AccountImage { AccountImageId = "AI3", AccountId = "A003", UrlImage = "https://example.com/user1.jpg", CreateDate = DateTime.UtcNow },
-     new AccountImage { AccountImageId = "AI4", AccountId = "A004", UrlImage = "https://example.com/user2.jpg", CreateDate = DateTime.UtcNow },
-     new AccountImage { AccountImageId = "AI5", AccountId = "A005", UrlImage = "https://example.com/user3.jpg", CreateDate = DateTime.UtcNow },
-
-     new AccountImage { AccountImageId = "AI6", AccountId = "A006", UrlImage = "https://example.com/user4.jpg", CreateDate = DateTime.UtcNow },
-     new AccountImage { AccountImageId = "AI7", AccountId = "A007", UrlImage = "https://example.com/user5.jpg", CreateDate = DateTime.UtcNow },
-     new AccountImage { AccountImageId = "AI8", AccountId = "A008", UrlImage = "https://example.com/user6.jpg", CreateDate = DateTime.UtcNow },
-     new AccountImage { AccountImageId = "AI9", AccountId = "A009", UrlImage = "https://example.com/user7.jpg", CreateDate = DateTime.UtcNow },
-     new AccountImage { AccountImageId = "AI10", AccountId = "A010", UrlImage = "https://example.com/user8.jpg", CreateDate = DateTime.UtcNow },
-
-     new AccountImage { AccountImageId = "AI11", AccountId = "A011", UrlImage = "https://example.com/user9.jpg", CreateDate = DateTime.UtcNow },
-     new AccountImage { AccountImageId = "AI12", AccountId = "A012", UrlImage = "https://example.com/user10.jpg", CreateDate = DateTime.UtcNow },
-     new AccountImage { AccountImageId = "AI13", AccountId = "A013", UrlImage = "https://example.com/user11.jpg", CreateDate = DateTime.UtcNow },
-     new AccountImage { AccountImageId = "AI14", AccountId = "A014", UrlImage = "https://example.com/user12.jpg", CreateDate = DateTime.UtcNow },
-     new AccountImage { AccountImageId = "AI15", AccountId = "A015", UrlImage = "https://example.com/user13.jpg", CreateDate = DateTime.UtcNow }
- );
             #endregion
 
 
