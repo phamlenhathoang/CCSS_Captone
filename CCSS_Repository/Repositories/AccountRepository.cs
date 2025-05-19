@@ -140,7 +140,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Account> GetAccountByEmailAndPassword(string email, string password)
         {
-            return await dbContext.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email && a.Password == password);
+            return await dbContext.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email && a.Password == password && a.IsActive == true);
         }
 
         public async Task<Account> GetAccountByUsername(string username)
@@ -150,7 +150,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Account>> GetAllAccountRoleManager()
         {
-            return await dbContext.Accounts.Include(r => r.Role).Where(a => a.Role.RoleName == RoleName.Manager).ToListAsync();
+            return await dbContext.Accounts.Include(r => r.Role).Where(a => a.Role.RoleName == RoleName.Manager && a.IsActive == true).ToListAsync();
         }
 
         public async Task<List<Account>> GetAllAccountsByCharacter(Character character, string? accountId)
@@ -169,7 +169,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Account>> GetAllAccountsByRoleId(string roleId)
         {
-            return await dbContext.Accounts.Include(r => r.Role).Include(ai => ai.AccountImages).Where(a => a.RoleId.Equals(roleId)).ToListAsync();
+            return await dbContext.Accounts.Include(r => r.Role).Include(ai => ai.AccountImages).Where(a => a.RoleId.Equals(roleId) && a.IsActive == true).ToListAsync();
         }
 
         //public async Task<Account> GetAccountIncludeAccountCategory(string accountId)
@@ -202,7 +202,7 @@ namespace CCSS_Repository.Repositories
             {
                 foreach (Account account in accounts)
                 {
-                    query = query.Where(a => !a.AccountId.Equals(account.AccountId));
+                    query = query.Where(a => !a.AccountId.Equals(account.AccountId) && a.IsActive == true);
                 }
             }
 

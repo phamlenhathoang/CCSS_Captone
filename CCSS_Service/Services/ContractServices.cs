@@ -36,7 +36,7 @@ namespace CCSS_Service.Services
         //Task<string> UploadImageToFirebase(IFormFile file);
 
         Task<string> AddContract(string requestId, int deposit);
-        Task<bool> UpdateStatusContract(string contractId, string status, double? price);
+        Task<bool> UpdateStatusContract(string contractId, string status, double? price, string? reason);
         Task<bool> DeleteContract(string contractId, string reason);
         Task<List<ContractResponse>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId);
         Task<ContractResponse> GetContractById(string contractId);
@@ -605,7 +605,7 @@ namespace CCSS_Service.Services
         }
 
 
-        public async Task<bool> UpdateStatusContract(string contractId, string status, double? price)
+        public async Task<bool> UpdateStatusContract(string contractId, string status, double? price, string? reason)
         {
             //using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             try
@@ -632,7 +632,15 @@ namespace CCSS_Service.Services
                 {
                     if (contract.ContractStatus == ContractStatus.Created)
                     {
-                        contract.ContractStatus = ContractStatus.Cancel;
+                        if(reason != null)
+                        {
+                            contract.ContractStatus = ContractStatus.Cancel;
+                            contract.Reason = reason;
+                        }
+                        else
+                        {
+                            throw new Exception("Please enter your reason");
+                        }
                     }
                     else
                     {

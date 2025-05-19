@@ -281,7 +281,7 @@ namespace CCSS_Service.Services
                     existingPayment.ContractId = contractId;
                     await _paymentRepository.UpdatePayment(existingPayment);
 
-                    bool result = await _contractServices.UpdateStatusContract(contractId, "Deposited", null);
+                    bool result = await _contractServices.UpdateStatusContract(contractId, "Deposited", null, null);
                     if (!result)
                     {
                         throw new Exception("Can not update status contract");
@@ -300,7 +300,7 @@ namespace CCSS_Service.Services
                     
                     existingPayment.ContractId = contractId;
                     await _paymentRepository.UpdatePayment(existingPayment);
-                    bool rs = await _contractServices.UpdateStatusContract(contractId, "FinalSettlement", amount);
+                    bool rs = await _contractServices.UpdateStatusContract(contractId, "FinalSettlement", amount, null);
                     if (!rs)
                     {
                         throw new Exception("Can not update status contract");
@@ -324,6 +324,7 @@ namespace CCSS_Service.Services
                     }
                     var order = await _orderRepository.GetOrderById(OrderPaymentId);
                     order.OrderStatus= OrderStatus.Completed;
+                    order.ShipStatus= ShipStatus.WaitConfirm;
 
                     var products = await _orderRepository.GetProductByOrderId(OrderPaymentId);
                     var cart = await _cartRepository.GetcartByAccount(accountId);
@@ -332,7 +333,7 @@ namespace CCSS_Service.Services
                     await _cartProductServices.DeleteCartProductAfterPayment(cart.CartId, product);
                     await _orderRepository.UpdateProductQuantitiesAfterPayment(OrderPaymentId);
                     await _orderRepository.UpdateOrder(order);
-                    await _deliveryService.CreateDeliveryOrderAsync(order.OrderId);
+                    //await _deliveryService.CreateDeliveryOrderAsync(order.OrderId);
 
                     return new MomoExecuteResult
                     {

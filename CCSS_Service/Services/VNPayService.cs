@@ -261,7 +261,7 @@ namespace CCSS_Service.Services
 
                     Contract contract = await contractRespository.GetContractById(existingPayment.ContractId);
                     var customer = await _accountRepository.GetAccountByAccountId(response.AccountId);
-                    bool result = await _contractServices.UpdateStatusContract(contract.ContractId, "Deposited", null);
+                    bool result = await _contractServices.UpdateStatusContract(contract.ContractId, "Deposited", null, null);
                     if (!result)
                     {
                         throw new Exception("Can not update status contract");
@@ -274,7 +274,7 @@ namespace CCSS_Service.Services
 
                     Contract contract1 = await contractRespository.GetContractById(existingPayment.ContractId);
                     var customer1 = await _accountRepository.GetAccountByAccountId(response.AccountId);
-                    bool rs = await _contractServices.UpdateStatusContract(contract1.ContractId, "Completed", response.Amount);
+                    bool rs = await _contractServices.UpdateStatusContract(contract1.ContractId, "Completed", response.Amount, null);
                     if (!rs)
                     {
                         throw new Exception("Can not update status contract");
@@ -292,6 +292,7 @@ namespace CCSS_Service.Services
                     }
                     var order = await _orderRepository.GetOrderById(existingPayment.OrderId);
                     order.OrderStatus = OrderStatus.Completed;
+                    order.ShipStatus = ShipStatus.WaitConfirm;
 
                     var products = await _orderRepository.GetProductByOrderId(existingPayment.OrderId);
                     var cart = await _cartRepository.GetcartByAccount(response.AccountId);
@@ -301,7 +302,7 @@ namespace CCSS_Service.Services
                     await _orderRepository.UpdateProductQuantitiesAfterPayment(existingPayment.OrderId);
 
                     await _orderRepository.UpdateOrder(order);
-                    await _deliveryService.CreateDeliveryOrderAsync(order.OrderId);
+                    //await _deliveryService.CreateDeliveryOrderAsync(order.OrderId);
                     return "mua hàng thành công";
 
 
