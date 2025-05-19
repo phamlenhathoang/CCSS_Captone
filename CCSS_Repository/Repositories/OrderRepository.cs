@@ -9,6 +9,7 @@ namespace CCSS_Repository.Repositories
         Task<Order> GetOrderById(string id);
         Task<bool> AddOrder(Order order);
         Task<bool> UpdateOrder(Order order);
+        Task<bool> UpdateOrderShipStatus(string orderId, ShipStatus newShipStatus);
         Task<bool> DeleteOrder(string id);
         Task<List<Order>> GetAllOrdersByAccountId(string accountId);
         Task<List<Product>> GetProductByOrderId(string id);
@@ -104,6 +105,17 @@ namespace CCSS_Repository.Repositories
             int result = await _dbContext.SaveChangesAsync();
             return result > 0;
         }
+        public async Task<bool> UpdateOrderShipStatus(string orderId, ShipStatus newShipStatus)
+        {
+            var existingOrder = await _dbContext.Orders.FindAsync(orderId);
+            if (existingOrder == null)
+                return false;
+
+            existingOrder.ShipStatus = newShipStatus;
+            int result = await _dbContext.SaveChangesAsync();
+            return result > 0;
+        }
+
         public async Task<bool> UpdateProductQuantitiesAfterPayment(string orderId)
         {
             // Lấy tất cả OrderProduct theo OrderId

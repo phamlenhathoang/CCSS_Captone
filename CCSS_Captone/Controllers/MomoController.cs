@@ -48,13 +48,15 @@ namespace CCSS_Captone.Controllers
             if (response.IsWeb && response.Message.Equals("Thanh toán thất bại"))
             {
 
-                return Redirect("http://localhost:3000/fail-payment");
+                return Redirect("https://fe-ccss-capstone.vercel.app/fail-payment");
+                //return Redirect("http://localhost:3000/fail-payment");
 
             } 
             else if (response.IsWeb)
             {
 
-                return Redirect("http://localhost:3000/success-payment");
+                return Redirect("https://fe-ccss-capstone.vercel.app/success-payment");
+                //return Redirect("http://localhost:3000/success-payment");
             }
             if (response.Message.Equals("Thanh toán thất bại"))
             {

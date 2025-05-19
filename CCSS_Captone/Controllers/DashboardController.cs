@@ -84,7 +84,7 @@ namespace CCSS_Api.Controllers
         }
 
         [HttpGet("top-accounts")]
-        public async Task<ActionResult<List<AccountResponse>>> GetTopAccounts()
+        public async Task<ActionResult<List<top5AccountDashboardResponse>>> GetTopAccounts()
         {
             var result = await _dashBoardService.GetTop5AccountsWithMostPaymentsAsync();
             return Ok(result);

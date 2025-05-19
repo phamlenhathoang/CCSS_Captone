@@ -25,11 +25,12 @@ namespace CCSS_Repository.Entities
         public double? TotalPrice { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public string Address { get; set; }
+        public string? Description { get; set; }
         public string Phone { get; set; }   
-        public string? ShipStatus { get; set; }   
+        public ShipStatus? ShipStatus { get; set; }   
         public string? ShipCode { get; set; }   
         public string? to_ward_code { get; set; }   
-        public string? to_district_id { get; set; }   
+        public int? to_district_id { get; set; }   
         public DateTime? CancelDate { get; set; }
     }
 
@@ -38,5 +39,14 @@ namespace CCSS_Repository.Entities
         Pending,
         Completed, 
         Cancel
+    }
+    public enum ShipStatus
+    {
+        WaitConfirm,
+        WaitToPick, 
+        InTransit,
+        Received,
+        Cancel, 
+        Refund
     }
 }

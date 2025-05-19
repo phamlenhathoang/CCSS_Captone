@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CCSS_Repository.Entities;
+using CCSS_Repository.Model;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using System;
@@ -29,6 +30,10 @@ namespace CCSS_Service.Profiles
             CreateMap<Account, AccountByCharacterAndDateResponse>()
                     .ReverseMap();
             CreateMap<Account, AccountDashBoardResponse>()
+                    .ReverseMap();
+            CreateMap<AccountDashboard, top5AccountDashboardResponse>()
+                    .ReverseMap();
+            CreateMap<CosplayerPopular, CosplayerPopularResponse>()
                     .ReverseMap();
 
 

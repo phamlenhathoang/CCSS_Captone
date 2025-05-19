@@ -16,6 +16,7 @@ namespace CCSS_Service.Services
     public interface IDeliveryService
     {
         Task<string> CreateDeliveryOrderAsync(string orderId);
+        Task<string> CalculateDeliveryFeeAsync(string orderId);
         Task<ApiProvinceResponse> GetProvincesAsync();
         Task<ApiDistrictResponse> GetDistrictsAsync(int provinceId);
         Task<ApiWardResponse> GetWardsAsync(int districtId);
@@ -129,9 +130,70 @@ namespace CCSS_Service.Services
             ord.ShipCode = orderCode;
             var status = await ViewDeliveryStatuslAsync(orderId);
             ord.ShipCode = orderCode;
-            ord.ShipStatus = status ;
+            ord.ShipStatus = ShipStatus.WaitConfirm ;
             await _orderRepository.UpdateOrder(ord);
             return result;
+        }
+        public async Task<string> CalculateDeliveryFeeAsync(string orderId)
+        {
+            var senderConfig = _config.GetSection("GhnConfig:Sender").Get<SenderConfig>();
+            var orderResult = await _orderRepository.GetProductsByOrderId(orderId);
+            var ord = await _orderRepository.GetOrderById(orderId);
+
+            var items = orderResult.Select(op => new
+            {
+                name = op.ProductName,
+                quantity = op.Quantity ?? 0,
+                height = op.height,
+                weight = op.weight,
+                length = op.length,
+                width = op.width
+            }).ToList();
+
+            var totalWeight = items.Sum(i => i.weight);
+            var averageLength = items.Any() ? (int)Math.Ceiling(items.Average(i => i.length)) : 0;
+            var totalWidth = items.Sum(i => i.width);
+            var maxHeight = items.Any() ? items.Max(i => i.height) : 0;
+            var insuranceValue = Math.Min(orderResult.Sum(op => (int)Math.Ceiling(op.Price ?? 0)), 5000000);
+
+            var feeRequest = new
+            {
+                from_district_id = senderConfig.from_district_id,   
+                from_ward_code = senderConfig.from_ward_code,
+                service_id = 0, 
+                service_type_id = 2,
+                to_district_id = ord.to_district_id,
+                to_ward_code = ord.to_ward_code,
+                height = maxHeight,
+                length = averageLength,
+                weight = totalWeight,
+                width = totalWidth,
+                insurance_value = insuranceValue,
+                cod_failed_amount = 0,
+                coupon = (string)null,
+                items = items
+            };
+
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}shiip/public-api/v2/shipping-order/fee");
+            request.Headers.Add("Token", _token);
+            request.Headers.Add("ShopId", _shopId);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var json = JsonConvert.SerializeObject(feeRequest);
+            Console.WriteLine("Fee Request: " + json);
+
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.SendAsync(request);
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"GHN Fee API Error: {result}");
+            }
+            var jsonResult = JObject.Parse(result);
+            var serviceFee = jsonResult["data"]?["service_fee"]?.Value<int>() ?? 0;
+            return serviceFee.ToString(); 
         }
         public async Task<string> ViewDeliveryStatuslAsync(string orderId)
         {
