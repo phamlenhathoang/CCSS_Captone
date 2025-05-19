@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CCSS_Repository.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,19 @@ namespace CCSS_Service.Model.Responses
         public double TotalRevenue { get; set; }
         public ICollection<PaymentResponse> PaymentResponse { get; set; } = new List<PaymentResponse>();
 
+    }
+    public class top5AccountDashboardResponse
+    {
+        public string AccountId { get; set; }
+        public string FullName { get; set; }
+        public int TotalContracts { get; set; }
+        public double? TotalPaymentAmount { get; set; }
+        public ICollection<AccountImageResponse> AccountImages { get; set; } = new List<AccountImageResponse>();
+    }
+    public class CosplayerPopularResponse
+    {
+        public AccountDashBoardResponse Account { get; set; }
+        public int CompletedTaskCount { get; set; }
     }
     public class DashBoardChartRevenueResponse
     {

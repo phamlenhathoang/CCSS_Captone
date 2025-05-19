@@ -18,7 +18,7 @@ namespace CCSS_Service.Model.Responses
 
         public string Address { get; set; }
         public string Phone { get; set; }
-        public string ShipStatus { get; set; }
+        public ShipStatus? ShipStatus { get; set; }
         public DateTime? CancelDate { get; set; }
         public DateTime? OrderDate { get; set; }
         public double? TotalPrice { get; set; }

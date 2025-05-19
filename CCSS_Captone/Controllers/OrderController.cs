@@ -1,7 +1,9 @@
-﻿using CCSS_Service.Model.Requests;
+﻿using CCSS_Repository.Entities;
+using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace CCSS_Captone.Controllers
 {
@@ -55,7 +57,26 @@ namespace CCSS_Captone.Controllers
             return Ok("Order updated successfully");
         }
 
+        [HttpPatch("{id}/shipstatus")]
+        [SwaggerOperation(Description = "ShipStatus<br>" +
+                                         "0 (WaitConfirm)<br>" +
+                                         "1 (WaitToPick)<br>" +
+                                         "2 (InTransit)<br>" +
+                                         "3 (Received)<br>" +
+                                         "4 (Cancel)<br>" +
+                                         "5 (Refund)")]
+        public async Task<IActionResult> UpdateShipStatus(string id, ShipStatus ShipStatus)
+        {
+            if (ShipStatus == null )
+                return BadRequest("ShipStatus is required");
 
+            var result = await _orderService.UpdateOrderStatus(id, ShipStatus);
+
+            if (!result)
+                return NotFound();
+
+            return Ok("ok");
+        }
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteOrder(string id)
         {

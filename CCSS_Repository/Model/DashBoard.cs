@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CCSS_Repository.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,13 @@ using System.Threading.Tasks;
 
 namespace CCSS_Repository.Model
 {
-    public class AccountDasboard
+    public class AccountDashboard
     {
-
+        public string AccountId { get; set; }
+        public string FullName { get; set; }
+        public int TotalContracts { get; set; }
+        public double? TotalPaymentAmount { get; set; }
+        public List<AccountImage> AccountImages { get; set; }
     }
     public enum DateFilterType
     {
@@ -31,5 +36,10 @@ namespace CCSS_Repository.Model
         public int Month { get; set; }   // 1 to 12
         public int Count { get; set; }
     }
-  
+    public class CosplayerPopular
+    {
+        public Account Account { get; set; }
+        public int CompletedTaskCount { get; set; }
+    }
+
 }

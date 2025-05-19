@@ -292,6 +292,7 @@ namespace CCSS_Service.Services
                     }
                     var order = await _orderRepository.GetOrderById(existingPayment.OrderId);
                     order.OrderStatus = OrderStatus.Completed;
+                    order.ShipStatus = ShipStatus.WaitConfirm;
 
                     var products = await _orderRepository.GetProductByOrderId(existingPayment.OrderId);
                     var cart = await _cartRepository.GetcartByAccount(response.AccountId);
@@ -301,7 +302,7 @@ namespace CCSS_Service.Services
                     await _orderRepository.UpdateProductQuantitiesAfterPayment(existingPayment.OrderId);
 
                     await _orderRepository.UpdateOrder(order);
-                    await _deliveryService.CreateDeliveryOrderAsync(order.OrderId);
+                    //await _deliveryService.CreateDeliveryOrderAsync(order.OrderId);
                     return "mua hàng thành công";
 
 

@@ -14,9 +14,9 @@ namespace CCSS_Service
         Task<DashBoardRevenueResponse> GetRevenueAsync(DateFilterType filterType, RevenueSource revenueSource);
         Task<DashBoardChartRevenueResponse> GetRevenueChartAsync(DateFilterType filterType, RevenueSource revenueSource);
         Task<List<Contract>> GetContractsByStatusAsync(ContractStatus? status, DateFilterType? filterType);
-        Task<List<AccountDashBoardResponse>> GetTop5AccountsWithMostPaymentsAsync();
+        Task<List<top5AccountDashboardResponse>> GetTop5AccountsWithMostPaymentsAsync();
         //Task<double> GetAverageStarByContractDescriptionAsync();
-        Task<List<AccountResponse>> Get5PopularCosplayers(DateFilterType filterType);
+        Task<List<CosplayerPopularResponse>> Get5PopularCosplayers(DateFilterType filterType);
         Task<List<AccountResponse>> Get5FavoriteCosplayer(DateFilterType filterType);
         Task<string> GetContractFilterSerivce(string serviceId);
         Task<string> GetAllContractFilterContractStatus(ContractStatus contractStatus);
@@ -110,10 +110,10 @@ namespace CCSS_Service
         #endregion
 
 
-        public async Task<List<AccountDashBoardResponse>> GetTop5AccountsWithMostPaymentsAsync()
+        public async Task<List<top5AccountDashboardResponse>> GetTop5AccountsWithMostPaymentsAsync()
         {
             //var accounts = await _dashBoardRepository.GetTop5AccountsWithMostPaymentsAsync();
-            return _mapper.Map<List<AccountDashBoardResponse>>(await _dashBoardRepository.GetTop5AccountsWithMostPaymentsAsync());
+            return _mapper.Map<List<top5AccountDashboardResponse>>(await _dashBoardRepository.GetTop5AccountsWithMostPaymentsAsync());
         }
         //public async Task<List<AccountResponse>> Get5PopularCosplayers(DateFilterType filterType)
         //{
@@ -131,9 +131,9 @@ namespace CCSS_Service
 
 
 
-        public async Task<List<AccountResponse>> Get5PopularCosplayers(DateFilterType filterType)
+        public async Task<List<CosplayerPopularResponse>> Get5PopularCosplayers(DateFilterType filterType)
         {
-            return _mapper.Map<List<AccountResponse>>(await _dashBoardRepository.Get5PopularCosplayers(filterType));
+            return _mapper.Map<List<CosplayerPopularResponse>>(await _dashBoardRepository.Get5PopularCosplayers(filterType));
         }
         public async Task<List<AccountResponse>> Get5FavoriteCosplayer(DateFilterType filterType)
         {

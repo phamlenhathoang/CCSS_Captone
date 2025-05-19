@@ -7,6 +7,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Task = CCSS_Repository.Entities.Task;
 using TaskStatus = CCSS_Repository.Entities.TaskStatus;
 
 namespace CCSS_Repository.Repositories
@@ -15,9 +16,9 @@ namespace CCSS_Repository.Repositories
     {
         Task<List<Payment>> GetRevenue(DateFilterType filterType, RevenueSource revenueSource);
         Task<List<Contract>> GetContractsByStatusAndDate(ContractStatus? status, DateFilterType? filterType);
-        Task<List<Account>> GetTop5AccountsWithMostPaymentsAsync();
+        Task<List<AccountDashboard>> GetTop5AccountsWithMostPaymentsAsync();
         //Task<List<Feedback>> GetFeedbacksByContractDescriptionAsync();
-        Task<List<Account>> Get5PopularCosplayers(DateFilterType filterType);
+        Task<List<CosplayerPopular>> Get5PopularCosplayers(DateFilterType filterType);
         Task<List<Account>> Get5FavoriteCosplayer(DateFilterType filterType);
         Task<List<Contract>> GetAllContractFilterServiceAndDate(string serviceId, DateTime startDate, DateTime endDate);
         Task<List<Contract>> GetAllContractFilterContractStatus(ContractStatus contractStatus);
@@ -162,29 +163,43 @@ namespace CCSS_Repository.Repositories
         #endregion
 
         #region GetTop5AccountsWithMostPaymentsAsync
-        public async Task<List<Account>> GetTop5AccountsWithMostPaymentsAsync()
+        public async Task<List<AccountDashboard>> GetTop5AccountsWithMostPaymentsAsync()
         {
             int currentYear = DateTime.UtcNow.Year;
 
-            return await _context.Accounts
-                .Where(a => a.AccountCoupons.Any(ac =>
-                    ac.Payment != null &&
-                    ac.Payment.Status == PaymentStatus.Complete &&
-                    ac.Payment.Purpose == PaymentPurpose.contractSettlement &&
-                    ac.Payment.CreatAt.HasValue && ac.Payment.CreatAt.Value.Year == currentYear &&
-                    ac.Payment.Contract != null && ac.Payment.Contract.ContractStatus == ContractStatus.Completed
+            var result = await _context.Accounts
+                .Where(a => a.Requests.Any(r =>
+                    r.Contract != null &&
+                    r.Contract.ContractStatus == ContractStatus.Completed &&
+                    r.Contract.Payments.Any(p =>
+                        p.Status == PaymentStatus.Complete &&
+                        p.Purpose == PaymentPurpose.contractSettlement &&
+                        p.CreatAt.HasValue &&
+                        p.CreatAt.Value.Year == currentYear
+                    )
                 ))
-                .OrderByDescending(a => a.AccountCoupons
-                    .Where(ac => ac.Payment != null)
-                    .Count(ac => ac.Payment.Status == PaymentStatus.Complete &&
-                                 ac.Payment.Purpose == PaymentPurpose.contractSettlement &&
-                                 ac.Payment.CreatAt.HasValue && ac.Payment.CreatAt.Value.Year == currentYear &&
-                                 ac.Payment.Contract != null && ac.Payment.Contract.ContractStatus == ContractStatus.Completed
-                    ))
+                .Select(a => new AccountDashboard
+                {
+                    AccountId = a.AccountId,
+                    FullName = a.Name,
+                    AccountImages = a.AccountImages.ToList(),
+
+                    // Tổng số contract completed của account
+                    TotalContracts = a.Requests
+                        .Count(r => r.Contract != null && r.Contract.ContractStatus == ContractStatus.Completed),
+
+                    // Tổng số tiền đã thanh toán cho hợp đồng trong năm
+                    TotalPaymentAmount = a.Requests
+                        .Where(r => r.Contract != null && r.Contract.ContractStatus == ContractStatus.Completed)
+                        .Sum(r => r.Contract.TotalPrice)
+                })
+                .OrderByDescending(x => x.TotalPaymentAmount)
                 .Take(5)
-                .Include(a => a.AccountImages) // Nạp thêm hình ảnh của Account
                 .ToListAsync();
+
+            return result;
         }
+
         #endregion
 
         //public async Task<List<Feedback>> GetFeedbacksByContractDescriptionAsync()
@@ -222,67 +237,68 @@ namespace CCSS_Repository.Repositories
         //}
 
         #region Get5PopularCosplayers
-        public async Task<List<Account>> Get5PopularCosplayers(DateFilterType filterType)
+        public async Task<List<CosplayerPopular>> Get5PopularCosplayers(DateFilterType filterType)
         {
             var now = DateTime.UtcNow;
-            IQueryable<Account> query = _context.Accounts
-                .Where(a => a.Role.RoleName == RoleName.Cosplayer);
+
+            // Lọc task đã hoàn thành theo filterType
+            IQueryable<Task> tasksQuery = _context.Tasks.Where(t => t.Status == TaskStatus.Completed &&
+                                                                    t.EventCharacterId == null &&
+                                                                    t.ContractCharacterId != null);
 
             switch (filterType)
             {
                 case DateFilterType.Today:
-                    query = query.Where(a => _context.Tasks
-                        .Any(t => t.AccountId == a.AccountId && t.StartDate.Value.Date == now.Date));
+                    tasksQuery = tasksQuery.Where(t => t.StartDate.Value.Date == now.Date);
                     break;
-
                 case DateFilterType.ThisWeek:
                     var dayOfWeek = (int)now.DayOfWeek;
                     var startOfWeek = now.Date.AddDays(dayOfWeek == 0 ? -6 : -dayOfWeek + 1);
                     var endOfWeek = startOfWeek.AddDays(6);
-                    query = query.Where(a => _context.Tasks
-                        .Any(t => t.AccountId == a.AccountId &&
-                                  t.StartDate.Value.Date >= startOfWeek &&
-                                  t.StartDate.Value.Date <= endOfWeek));
+                    tasksQuery = tasksQuery.Where(t => t.StartDate.Value.Date >= startOfWeek &&
+                                                       t.StartDate.Value.Date <= endOfWeek);
                     break;
-
                 case DateFilterType.ThisMonth:
-                    query = query.Where(a => _context.Tasks
-                        .Any(t => t.AccountId == a.AccountId &&
-                                  t.StartDate.Value.Year == now.Year &&
-                                  t.StartDate.Value.Month == now.Month));
+                    tasksQuery = tasksQuery.Where(t => t.StartDate.Value.Year == now.Year &&
+                                                       t.StartDate.Value.Month == now.Month);
                     break;
-
                 case DateFilterType.ThisYear:
-                    query = query.Where(a => _context.Tasks
-                        .Any(t => t.AccountId == a.AccountId &&
-                                  t.StartDate.Value.Year == now.Year));
+                    tasksQuery = tasksQuery.Where(t => t.StartDate.Value.Year == now.Year);
                     break;
             }
 
-            // Lấy số lượng nhiệm vụ đã hoàn thành cho từng cosplayer
-            var taskCounts = await _context.Tasks
-                .Where(t => t.Status == TaskStatus.Completed &&
-                            t.EventCharacterId == null &&
-                            t.ContractCharacterId != null)
+            // Nhóm task theo AccountId và đếm số task
+            var taskCounts = await tasksQuery
                 .GroupBy(t => t.AccountId)
                 .Select(g => new { AccountId = g.Key, TaskCount = g.Count() })
+                .OrderByDescending(x => x.TaskCount)
+                .Take(5)
                 .ToListAsync();
 
-            // Kết hợp danh sách cosplayer với số nhiệm vụ hoàn thành
-            var cosplayers = await query.ToListAsync();
-            var sortedCosplayers = cosplayers
-                .Select(a => new
+            if (taskCounts.Count == 0)
+                return new List<CosplayerPopular>();
+
+            // Lấy thông tin Account của các cosplayer đã có task hoàn thành
+            var accountIds = taskCounts.Select(tc => tc.AccountId).ToList();
+
+            var cosplayers = await _context.Accounts
+                .Where(a => accountIds.Contains(a.AccountId) && a.Role.RoleName == RoleName.Cosplayer)
+                .ToListAsync();
+
+            // Tạo danh sách response kết hợp Account và số task hoàn thành
+            var result = cosplayers
+                .Select(a => new CosplayerPopular
                 {
                     Account = a,
-                    TaskCount = taskCounts.FirstOrDefault(tc => tc.AccountId == a.AccountId)?.TaskCount ?? 0
+                    CompletedTaskCount = taskCounts.First(tc => tc.AccountId == a.AccountId).TaskCount
                 })
-                .OrderByDescending(a => a.TaskCount)
-                .Take(5)
-                .Select(a => a.Account)
+                .OrderByDescending(r => r.CompletedTaskCount)
                 .ToList();
 
-            return sortedCosplayers;
+            return result;
         }
+
+
         #endregion
 
         #region Get5FavoriteCosplayer

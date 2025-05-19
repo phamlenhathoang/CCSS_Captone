@@ -20,6 +20,12 @@ namespace CCSS_Captone.Controllers
             var result = await _deliveryService.CreateDeliveryOrderAsync(orderId);
             return Ok(result);
         }
+        [HttpPost("caculate-fee-delivery/{orderId}")]
+        public async Task<IActionResult> CaculateDelivery(string orderId)
+        {
+            var result = await _deliveryService.CalculateDeliveryFeeAsync(orderId);
+            return Ok(result);
+        }
 
         [HttpGet("status/{orderCode}")]
         public async Task<IActionResult> GetShippingStatus(string orderCode)
