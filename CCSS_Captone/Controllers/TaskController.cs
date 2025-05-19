@@ -119,5 +119,12 @@ namespace CCSS_Captone.Controllers
             var task = await taskService.GetAllTaskByRequestId(requestId);
             return Ok(task);
         }
+
+        [HttpGet("GetAllTaskByContractId")]
+        public async Task<ActionResult> GetAllTaskByContractId(string contractId)
+        {
+            var task = await taskService.GetAllTaskByContractId(contractId);
+            return Ok(task);
+        }
     }
 }
