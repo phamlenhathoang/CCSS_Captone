@@ -479,7 +479,8 @@ namespace CCSS_Service.Services
                         }
                         else
                         {
-                            string message = "There are some request was assigned, you need to review.";
+                            var services = await _serviceRepository.GetService(newRequest.ServiceId);
+                            string message = $"There are some request from {services.ServiceName} was assigned, you need to review.";
                             await _notificationService.SendNotification(account.AccountId, message);
                         }
                     }
@@ -657,7 +658,12 @@ namespace CCSS_Service.Services
                 await _repository.UpdateRequest(request);
 
                 await transaction.CommitAsync();
+
+                string messaage = $"Your request was change to {request.Status}";
+                await _notificationService.SendNotification(request.AccountId, messaage);
+
                 return "Status request update success";
+
             }
         }
         #endregion
@@ -1107,7 +1113,8 @@ namespace CCSS_Service.Services
                                         }
                                         else
                                         {
-                                            string message = "There are some request you need to review.";
+                                            var services = await _serviceRepository.GetService(newRequest.ServiceId);
+                                            string message = $"There are some request from {services.ServiceName}  was assigned, you need to review.";
                                             await _notificationService.SendNotification(accountCosplayer.AccountId, message);
                                         }
 
@@ -1137,7 +1144,8 @@ namespace CCSS_Service.Services
                         }
                         else
                         {
-                            string message = "There are some request you need to review.";
+                            var services = await _serviceRepository.GetService(newRequest.ServiceId);
+                            string message = $"There are some request from {services.ServiceName} was assigned, you need to review.";
                             await _notificationService.SendNotification(account.AccountId, message);
                         }
                     }
@@ -1286,7 +1294,8 @@ namespace CCSS_Service.Services
                         }
                         else
                         {
-                            string message = "There are some request you need to review.";
+                            var services = await _serviceRepository.GetService(newRequest.ServiceId);
+                            string message = $"There are some request from {services.ServiceName} was assigned, you need to review.";
                             await _notificationService.SendNotification(account.AccountId, message);
                         }
                     }
