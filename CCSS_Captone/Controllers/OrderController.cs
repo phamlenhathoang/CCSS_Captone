@@ -63,7 +63,7 @@ namespace CCSS_Captone.Controllers
                                          "1 (WaitToPick)<br>" +
                                          "2 (InTransit)<br>" +
                                          "3 (Received)<br>" +
-                                         "4 (Cancel)<br>" +
+                                         "4 (Cancel)<br>    " +
                                          "5 (Refund)")]
         public async Task<IActionResult> UpdateShipStatus(string id, ShipStatus ShipStatus)
         {
