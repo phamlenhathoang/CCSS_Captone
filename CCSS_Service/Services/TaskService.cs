@@ -414,6 +414,9 @@ namespace CCSS_Service.Services
                             {
                                 string message = "There are some request you need to review.";
                                 await _notificationService.SendNotification(accountCosplayer.AccountId, message);
+
+                                string messageForCustomer = "Manager have assign task for cosplayer already. Please check request";
+                                await _notificationService.SendNotification(request.AccountId, messageForCustomer);
                             }
                             //
 
