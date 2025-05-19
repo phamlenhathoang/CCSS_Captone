@@ -47,6 +47,7 @@ namespace CCSS_Service.Services
         Task<bool> UpdateStatusTaskByTaskId(string taskId, string status);
         Task<bool> DeleteAllTaskByEventId(string eventId);
         Task<List<TaskResponse>> GetAllTaskByRequestId(string requestId);
+        Task<List<TaskResponse>> GetAllTaskByContractId(string contractId);
     }
     public class TaskService : ITaskService
     {
@@ -974,5 +975,61 @@ namespace CCSS_Service.Services
             }
         }
 
+        public async Task<List<TaskResponse>> GetAllTaskByContractId(string contractId)
+        {
+            try
+            {
+                List<TaskResponse> taskResponses = new List<TaskResponse>();
+                Contract contract = await contractRespository.GetContractById(contractId);
+
+                if (contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
+
+
+                if (contract.ContractCharacters.Count > 0)
+                {
+                    foreach (var contractCharacter in contract.ContractCharacters)
+                    {
+                        List<Task> tasks = await taskRepository.GetTaskByContractCharacterId(contractCharacter.ContractCharacterId);
+
+                        if (tasks.Count > 0)
+                        {
+                            foreach (var task in tasks)
+                            {
+                                TaskResponse taskResponse = new TaskResponse()
+                                {
+                                    AccountId = task.AccountId,
+                                    ContractId = contractCharacter.ContractId,
+                                    CreateDate = task.CreateDate?.ToString("dd/MM/yyyy"),
+                                    Description = task.Description,
+                                    IsActive = task.IsActive,
+                                    StartDate = task.StartDate?.ToString("dd/MM/yyyy"),
+                                    EndDate = task.EndDate?.ToString("dd/MM/yyyy"),
+                                    Location = task.Location,
+                                    Status = task.Status.ToString(),
+                                    TaskId = task.TaskId,
+                                    TaskName = task.TaskName,
+                                    UpdateDate = task.UpdateDate?.ToString("dd/MM/yyyy")
+                                };
+                                
+                                taskResponses.Add(taskResponse);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("ContractCharacter does not exist");
+                        }
+                    }
+                }
+
+                return taskResponses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
