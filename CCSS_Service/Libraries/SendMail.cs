@@ -31,89 +31,91 @@ namespace CCSS_Service.Libraries
                 message.To.Add(new MailboxAddress("", toEmail));
                 message.Subject = purpose switch
                 {
-                    PaymentPurpose.BuyTicket => "Xác nhận đặt vé thành công",
-                    PaymentPurpose.ContractDeposit => "Xác nhận đặt cọc hợp đồng",
-                    PaymentPurpose.contractSettlement => "Xác nhận tất toán hợp đồng",
-                    PaymentPurpose.Order => "Xác nhận đơn hàng",
-                    _ => "Thông báo thanh toán"
+                    PaymentPurpose.BuyTicket => "Ticket booking confirmation",
+                    PaymentPurpose.ContractDeposit => "Contract deposit confirmation",
+                    PaymentPurpose.contractSettlement => "Contract settlement confirmation",
+                    PaymentPurpose.Order => "Order confirmation",
+                    _ => "Payment notification"
                 };
+
 
                 string emailBody = purpose switch
                 {
                     PaymentPurpose.BuyTicket => $@"
 <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
-    <h2 style='color: #5a189a; text-align: center;'>🎉 Chúc mừng, bạn đã đặt vé thành công! 🎉</h2>
+    <h2 style='color: #5a189a; text-align: center;'>🎉 Congratulations, your ticket has been booked successfully! 🎉</h2>
     <div style='background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); display: inline-block;'>
         <table style='margin: 0 auto; text-align: left;'>
             <tr>
-                <td style='padding: 5px;'><strong>🌟 Sự kiện:</strong></td>
+                <td style='padding: 5px;'><strong>🌟 Event:</strong></td>
                 <td style='padding: 5px;'>{eventOrContractName}</td>
             </tr>
             <tr>
-                <td style='padding: 5px;'><strong>📍 Địa điểm:</strong></td>
+                <td style='padding: 5px;'><strong>📍 Location:</strong></td>
                 <td style='padding: 5px;'>{location}</td>
             </tr>
             <tr>
-                <td style='padding: 5px;'><strong>📆 Ngày diễn ra:</strong></td>
+                <td style='padding: 5px;'><strong>📆 Date:</strong></td>
                 <td style='padding: 5px;'>{Date:HH:mm dd/M/yyyy}</td>
             </tr>
             <tr>
-                <td style='padding: 5px;'><strong>🎟 Mã vé:</strong></td>
+                <td style='padding: 5px;'><strong>🎟 Ticket code:</strong></td>
                 <td style='padding: 5px;'><span style='color: #d63384; font-size: 18px;'>{ticketCode}</span></td>
             </tr>
             <tr>
-                <td style='padding: 5px;'><strong>👥 Số lượng vé:</strong></td>
+                <td style='padding: 5px;'><strong>👥 Quantity:</strong></td>
                 <td style='padding: 5px;'>{quantity}</td>
             </tr>
         </table>
     </div>
 
     <div style='text-align: center; margin-top: 20px;'>
-        <p style='font-size: 16px; font-weight: bold'>📢 Vui lòng mang theo mã vé khi tham dự để check-in.</p>
-        <p style='margin-top: 15px;'>🥰 Cảm ơn Quý khách đã sử dụng dịch vụ của chúng tôi, hẹn gặp bạn tại sự kiện sắp tới!! 😘</p>
+        <p style='font-size: 16px; font-weight: bold'>📢 Please bring your ticket code for check-in at the event.</p>
+        <p style='margin-top: 15px;'>🥰 Thank you for using our service, see you at the event!! 😘</p>
     </div>
 </div>",
 
                     PaymentPurpose.ContractDeposit => $@"
-                <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
-    <h2 style='color: #007bff; text-align: center;'>📄 Xác nhận đặt cọc hợp đồng thành công!</h2>
+<div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
+    <h2 style='color: #007bff; text-align: center;'>📄 Contract deposit confirmed successfully!</h2>
     <div style='background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);'>
-        <p><strong>📝 Tên hợp đồng:</strong>{eventOrContractName}</p>
-        <p><strong>📌 Khách hàng:</strong>{accountname}</p>
-        <p><strong>💰 Số tiền đặt cọc:</strong>{price}VNĐ</p>
-        <p><strong>📆 Ngày đặt cọc:</strong>{Date:HH:mm dd/M/yyyy}</p>
+        <p><strong>📝 Contract name:</strong> {eventOrContractName}</p>
+        <p><strong>📌 Customer:</strong> {accountname}</p>
+        <p><strong>💰 Deposit amount:</strong> {price} VND</p>
+        <p><strong>📆 Deposit date:</strong> {Date:HH:mm dd/M/yyyy}</p>
     </div>
 
     <div style='text-align: center; margin-top: 20px;'>
-        <p style='font-size: 16px;'>✅ Khoản đặt cọc này sẽ được ghi nhận vào hợp đồng của bạn.</p>
-        <p style='color: #6c757d;'>Vui lòng giữ thông tin này để đối chiếu khi cần thiết.</p>
-        <p style='margin-top: 15px; font-weight: bold;'>🙏 Cảm ơn Quý khách đã sử dụng dịch vụ của chúng tôi! 🙌</p>
+        <p style='font-size: 16px;'>✅ This deposit will be recorded into your contract.</p>
+        <p style='color: #6c757d;'>Please keep this information for reference if needed.</p>
+        <p style='margin-top: 15px; font-weight: bold;'>🙏 Thank you for using our service! 🙌</p>
     </div>
 </div>",
 
                     PaymentPurpose.contractSettlement => $@"
-                <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
-    <h2 style='color: #28a745; text-align: center;'>🎉 Hợp đồng của bạn đã được tất toán thành công!</h2>
+<div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
+    <h2 style='color: #28a745; text-align: center;'>🎉 Your contract has been successfully settled!</h2>
     <div style='background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);'>
-        <p><strong>📑 Tên hợp đồng:</strong>{eventOrContractName}</p>
-        <p><strong>📌 Khách hàng:</strong>{accountname}</p>
-        <p><strong>💰 Số tiền còn lại đã thanh toán:</strong>{price}VNĐ</p>
-        <p><strong>📆 Ngày tất toán:</strong> {Date:HH:mm dd/M/yyyy}</p>
+        <p><strong>📑 Contract name:</strong> {eventOrContractName}</p>
+        <p><strong>📌 Customer:</strong> {accountname}</p>
+        <p><strong>💰 Remaining payment:</strong> {price} VND</p>
+        <p><strong>📆 Settlement date:</strong> {Date:HH:mm dd/M/yyyy}</p>
     </div>
 
     <div style='text-align: center; margin-top: 20px;'>
-        <p style='font-size: 16px;'>✅ Hợp đồng đã hoàn tất. Mọi nghĩa vụ thanh toán đều đã được thực hiện.</p>
-        <p style='color: #6c757d;'>Vui lòng liên hệ nếu cần hỗ trợ thêm.</p>
-        <p style='margin-top: 15px; font-weight: bold;'>🙏 Cảm ơn Quý khách đã sử dụng dịch vụ của chúng tôi! 🙌</p>
+        <p style='font-size: 16px;'>✅ The contract is now fully settled. All payment obligations have been fulfilled.</p>
+        <p style='color: #6c757d;'>Please contact us if you need further assistance.</p>
+        <p style='margin-top: 15px; font-weight: bold;'>🙏 Thank you for using our service! 🙌</p>
     </div>
 </div>",
 
                     PaymentPurpose.Order => $@"
-                <h2>Đơn hàng của bạn đã được xác nhận!</h2>
-                <p>Chúng tôi sẽ sớm giao hàng cho bạn.</p>",
+<h2>Your order has been confirmed!</h2>
+<p>We will deliver your items soon.</p>",
 
-                    _ => "<p>Cảm ơn bạn đã thực hiện thanh toán.</p>"
+                    _ => "<p>Thank you for your payment.</p>"
                 };
+
 
                 message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
 
@@ -146,22 +148,23 @@ namespace CCSS_Service.Libraries
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("CCSS", fromEmail));
                 message.To.Add(new MailboxAddress("", toEmail));
-                message.Subject = "⚠ Hợp đồng đã hết hạn thanh toán";
+                message.Subject = "⚠ Contract Payment Expired";
 
                 string emailBody = $@"
 <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
-    <h2 style='color: #dc3545; text-align: center;'>⏳ Hợp đồng đã hết hạn thanh toán!</h2>
+    <h2 style='color: #dc3545; text-align: center;'>⏳ Contract Payment Expired!</h2>
     <div style='background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);'>
-        <p><strong>📄 Tên hợp đồng:</strong> {contractName}</p>
-        <p><strong>📌 Khách hàng:</strong> {accountName}</p>
-        <p style='color: #dc3545; font-weight: bold;'>⚠ Vui lòng kiểm tra và thực hiện thanh toán sớm nhất có thể!</p>
+        <p><strong>📄 Contract Name:</strong> {contractName}</p>
+        <p><strong>📌 Customer:</strong> {accountName}</p>
+        <p style='color: #dc3545; font-weight: bold;'>⚠ Please check and make the payment as soon as possible!</p>
     </div>
 
     <div style='text-align: center; margin-top: 20px;'>
-        <p style='color: #6c757d;'>Nếu bạn đã thanh toán, vui lòng bỏ qua email này.</p>
-        <p style='margin-top: 15px; font-weight: bold;'>🙏 Cảm ơn Quý khách đã sử dụng dịch vụ của chúng tôi! 🙌</p>
+        <p style='color: #6c757d;'>If you have already made the payment, please disregard this email.</p>
+        <p style='margin-top: 15px; font-weight: bold;'>🙏 Thank you for using our service! 🙌</p>
     </div>
 </div>";
+
 
                 message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
 
@@ -194,16 +197,17 @@ namespace CCSS_Service.Libraries
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("CCSS", fromEmail));
                 message.To.Add(new MailboxAddress("", toEmail));
-                message.Subject = "🔐 Xác nhận đăng ký tài khoản";
+                message.Subject = "🔐 Account Registration Confirmation";
 
                 string emailBody = $@"
-        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
-            <h2 style='color: #007bff;'>Chào mừng bạn đến với hệ thống của chúng tôi! 🎉</h2>
-            <p>Vui lòng sử dụng mã xác nhận bên dưới để hoàn tất đăng ký tài khoản:</p>
-            <h3 style='color: #28a745; font-size: 24px; font-weight: bold;'>{verificationCode}</h3>
-            <p>Mã này có hiệu lực trong vòng 10 phút.</p>
-            <p>👉 Nếu bạn không yêu cầu đăng ký, vui lòng bỏ qua email này.</p>
-        </div>";
+<div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+    <h2 style='color: #007bff;'>Welcome to our system! 🎉</h2>
+    <p>Please use the verification code below to complete your account registration:</p>
+    <h3 style='color: #28a745; font-size: 24px; font-weight: bold;'>{verificationCode}</h3>
+    <p>This code is valid for 10 minutes.</p>
+    <p>👉 If you did not request this registration, please ignore this email.</p>
+</div>";
+
 
                 message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
 
@@ -237,13 +241,14 @@ namespace CCSS_Service.Libraries
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("CCSS", fromEmail));
                 message.To.Add(new MailboxAddress("", toEmail));
-                message.Subject = "📢 Có task mới";
+                message.Subject = "📢 New Task Assigned";
 
                 string emailBody = $@"
-        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
-            <h2 style='color: #007bff;'>Bạn có task mới! 🎉</h2>
-            <p>Vui lòng kiểm tra trên hệ thống để xem thông tin task mới.</p>
-        </div>";
+<div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+    <h2 style='color: #007bff;'>You have a new task! 🎉</h2>
+    <p>Please check the system for the task details.</p>
+</div>";
+
 
                 message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
 
@@ -277,13 +282,14 @@ namespace CCSS_Service.Libraries
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("CCSS", fromEmail));
                 message.To.Add(new MailboxAddress("", toEmail));
-                message.Subject = "📢 Task đã hủy";
+                message.Subject = "📢 Task Cancelled";
 
                 string emailBody = $@"
-        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
-            <h2 style='color: #007bff;'>Bạn có task mới! 🎉</h2>
-            <p>Vui lòng kiểm tra trên hệ thống để xem thông tin.</p>
-        </div>";
+<div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+    <h2 style='color: #007bff;'>A task has been cancelled! ⚠️</h2>
+    <p>Please check the system for more information.</p>
+</div>";
+
 
                 message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
 
@@ -409,13 +415,14 @@ namespace CCSS_Service.Libraries
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("CCSS", fromEmail));
                 message.To.Add(new MailboxAddress("", toEmail));
-                message.Subject = "📢 Có yêu cầu tạo mới trang phục";
+                message.Subject = "📢 New Costume Creation Request";
 
                 string emailBody = $@"
-        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
-            <h2 style='color: #007bff;'>Bạn có yêu cầu mới về tạo mới trang phục! 🎉</h2>
-            <p>Vui lòng kiểm tra trên hệ thống để xem thông tin trang phục.</p>
-        </div>";
+<div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+    <h2 style='color: #007bff;'>You have a new costume creation request! 🎉</h2>
+    <p>Please check the system for costume details.</p>
+</div>";
+
 
                 message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
 
@@ -449,13 +456,14 @@ namespace CCSS_Service.Libraries
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("CCSS", fromEmail));
                 message.To.Add(new MailboxAddress("", toEmail));
-                message.Subject = "📢 Quên mật khẩu";
+               message.Subject = "📢 Password Reset";
 
-                string emailBody = $@"
-        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
-            <h2 style='color: #007bff;'>Bạn đã quên mật khẩu! 🎉</h2>
-            <p>Hệ thống đã thay đổi mật khẩu của bạn là 123456. Vui lòng vào hệ thống đăng nhập và thay đổi mật khẩu</p>
-        </div>";
+string emailBody = $@"
+<div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+    <h2 style='color: #007bff;'>You have requested a password reset! 🔒</h2>
+    <p>Your password has been reset to <strong>123456</strong>. Please log in to the system and change your password immediately.</p>
+</div>";
+
 
                 message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
 
@@ -490,13 +498,14 @@ namespace CCSS_Service.Libraries
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("CCSS", fromEmail));
                 message.To.Add(new MailboxAddress("", toEmail));
-                message.Subject = "📢 Phản hồi về trang phục";
+                message.Subject = "📢 Feedback on Costume Creation";
 
                 string emailBody = $@"
-        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
-            <h2 style='color: #007bff;'>Yêu cầu về tạo trang phục của bạn đã được {status}! 🎉</h2>
-            <p>Vui lòng kiểm tra trên hệ thống để xem thông tin trang phục.</p>
-        </div>";
+<div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+    <h2 style='color: #007bff;'>Your costume creation request has been {status}! 🎉</h2>
+    <p>Please check the system for costume details.</p>
+</div>";
+
 
                 message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
 
@@ -530,13 +539,14 @@ namespace CCSS_Service.Libraries
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("CCSS", fromEmail));
                 message.To.Add(new MailboxAddress("", toEmail));
-                message.Subject = "📢 Phản hồi về task";
+                message.Subject = "📢 Task Update";
 
-                string emailBody = $@"
-        <div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
-            <h2 style='color: #007bff;'>Task của bạn đã được cập nhật! 🎉</h2>
-            <p>Vui lòng kiểm tra trên hệ thống để xem thông tin.</p>
-        </div>";
+string emailBody = $@"
+<div style='font-family: Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; border-radius: 8px; border: 1px solid #ddd; text-align: center;'>
+    <h2 style='color: #007bff;'>Your task has been updated! 🎉</h2>
+    <p>Please check the system for details.</p>
+</div>";
+
 
                 message.Body = new TextPart(TextFormat.Html) { Text = emailBody };
 

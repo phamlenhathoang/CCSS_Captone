@@ -274,7 +274,6 @@ namespace CCSS_Service.Services
 
                     Contract contract1 = await contractRespository.GetContractById(existingPayment.ContractId);
                     var customer1 = await _accountRepository.GetAccountByAccountId(response.AccountId);
-
                     bool rs = await _contractServices.UpdateStatusContract(contract1.ContractId, "Completed", existingPayment.Amount, null);
 
                     if (!rs)
