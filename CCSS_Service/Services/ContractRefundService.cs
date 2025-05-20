@@ -110,25 +110,6 @@ namespace CCSS_Service.Services
                     throw new Exception("Can not add ContractRefund");
                 }
 
-                foreach (ContractCharacter contractCharacter in contract.ContractCharacters)
-                {
-                    Character character = await characterRepository.GetCharacter(contractCharacter.CharacterId);
-                    if(character != null)
-                    {
-                        character.Quantity += contractCharacter.Quantity;
-
-                        bool checkUpdate = await characterRepository.UpdateCharacter(character);
-                        if (!checkUpdate)
-                        {
-                            throw new Exception("Can not update character");
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception("Character does not exist");
-                    }
-                }
-
                 return true;
             }
             catch (Exception ex)
