@@ -17,6 +17,8 @@ namespace CCSS_Service.Model.Requests
 
         public string Address { get; set; }
         public string Phone { get; set; }
+        public string? Description { get; set; }
+
         public string? to_district_id { get; set; }
         public string? to_ward_code { get; set; }
         public ICollection<OrderProductRequest> OrderProducts { get; set; } = new List<OrderProductRequest>();
