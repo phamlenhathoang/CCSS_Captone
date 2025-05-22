@@ -46,7 +46,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<RequestCharacter> GetRequestCharacterById(string id)
         {
-            return await _context.RequestsCharacters.Include(sc => sc.RequestDates).FirstOrDefaultAsync(sc => sc.RequestCharacterId.Equals(id));
+            return await _context.RequestsCharacters.Include(rc => rc.Request).ThenInclude(rc => rc.Package).Include(rc => rc.Request).ThenInclude(rc => rc.Contract).Include(sc => sc.RequestDates).FirstOrDefaultAsync(sc => sc.RequestCharacterId.Equals(id));
         }
 
         public async Task<List<RequestCharacter>> GetRequestCharacterByCosplayer(string cosplayerId)
