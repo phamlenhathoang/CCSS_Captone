@@ -132,6 +132,11 @@ namespace CCSS_Repository.Repositories
                         }
                     }
 
+                    if (currentTask.StartDate.Hour == startDate.Hour)
+                    {
+                        return false;
+                    }
+
                     if (i > 0)
                     {
                         var previousTask = sameDayRequests[i - 1];
@@ -174,8 +179,6 @@ namespace CCSS_Repository.Repositories
                             }
                         }
                     }
-
-
                 }    
             }
 
