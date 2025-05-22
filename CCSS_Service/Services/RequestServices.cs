@@ -595,6 +595,7 @@ namespace CCSS_Service.Services
                         requestCharacter.Description = r.Description;
                         requestCharacter.Quantity = quantity;
                         requestCharacter.TotalPrice = character.Price * r.Quantity;
+                        requestCharacter.Status = RequestCharacterStatus.Accept;
 
                         characterInRequest.Add(requestCharacter);
 
@@ -1015,7 +1016,7 @@ namespace CCSS_Service.Services
                                 RequestId = newRequest.RequestId,
                                 Description = r.Description,
                                 CharacterId = r.CharacterId,
-                                CreateDate = newRequest.StartDate,
+                                CreateDate = DateTime.Now,
                                 Status = RequestCharacterStatus.Accept,
                                 Quantity = 1,
                                 CosplayerId = r.CosplayerId,

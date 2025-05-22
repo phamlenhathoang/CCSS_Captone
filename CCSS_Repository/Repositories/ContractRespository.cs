@@ -36,7 +36,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Contract>> GetAllContract(ContractStatus contractStatus)
         {
-            return await _context.Contracts.Where(sc => sc.ContractStatus.Equals(contractStatus)).ToListAsync();
+            return await _context.Contracts.Where(sc => sc.ContractStatus.Equals(contractStatus)).OrderByDescending(sc => sc.CreateDate).ToListAsync();
         }
 
         public async Task<Contract> GetContractById(string id)

@@ -923,12 +923,6 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("Request does not exist");
                 }
-
-                if(request.ServiceId != "S003")
-                {
-                    throw new Exception("ServiceId of request must be S003");
-                }
-
                 if(request.Contract == null)
                 {
                     throw new Exception("Request has not created contract yet");
@@ -989,7 +983,11 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("Contract does not exist");
                 }
-
+                
+                if(contract.Request.ServiceId == "S001")
+                {
+                    throw new Exception("Request of this contract must be S002 or S003");
+                }
 
                 if (contract.ContractCharacters.Count > 0)
                 {

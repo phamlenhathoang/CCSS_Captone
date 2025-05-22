@@ -636,6 +636,22 @@ namespace CCSS_Service.Services
                         {
                             contract.ContractStatus = ContractStatus.Cancel;
                             contract.Reason = reason;
+
+                            List<RequestCharacter> requestCharacters = new List<RequestCharacter>();
+
+                            foreach(RequestCharacter requestCharacter in contract.Request.RequestCharacters)
+                            {
+                                requestCharacter.Status = RequestCharacterStatus.Cancel;
+                                requestCharacter.Reason = reason;
+
+                                requestCharacters.Add(requestCharacter);
+                            }
+                            bool updateRequestCharacter = await _requestCharacterRepository.UpdateListRequestCharacter(requestCharacters);
+
+                            if (!updateRequestCharacter)
+                            {
+                                throw new Exception("Can not update RequestCharacter");
+                            }
                         }
                         else
                         {
