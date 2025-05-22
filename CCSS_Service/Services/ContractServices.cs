@@ -43,6 +43,7 @@ namespace CCSS_Service.Services
         Task<List<ContractResponse>> GetContractByAccountId(string accountId);
         Task<List<RequestInContractResponse>> GetRequestInContractByAccountId(string accountId);
         Task<bool> UpdateDeliveryContract(DeliveryContractRequest deliveryContractRequest);
+        Task<ContractResponse> GetContractByRequestCharacterId(string requestCharacterId);
     }
     public class ContractServices : IContractServices
     {
@@ -1062,6 +1063,56 @@ namespace CCSS_Service.Services
                 return true;
             }
             catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<ContractResponse> GetContractByRequestCharacterId(string requestCharacterId)
+        {
+            try
+            {
+                RequestCharacter requestCharacter = await _requestCharacterRepository.GetRequestCharacterById(requestCharacterId);
+                if (requestCharacter == null)
+                {
+                    throw new Exception("RequestCharacter does not exist");
+                }
+
+                if (requestCharacter.Request == null)
+                {
+                    throw new Exception("Request does not exist");
+                }
+
+                if (requestCharacter.Request.Contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
+
+                ContractResponse contractCharacterResponse = new ContractResponse()
+                {
+                    Amount = requestCharacter.Request.Contract.Amount,
+                    ContractId = requestCharacter.Request.Contract.ContractId,
+                    ContractName = requestCharacter.Request.Contract.ContractName,
+                    CreateBy = requestCharacter.Request.Contract.CreateBy,
+                    CreateDate = requestCharacter.Request.Contract.CreateDate?.ToString("dd/MM/yyyy"),
+                    StartDate = requestCharacter.Request.StartDate.ToString("dd/MM/yyyy"),
+                    EndDate = requestCharacter.Request.EndDate.ToString("dd/MM/yyyy"),
+                    Deposit = requestCharacter.Request.Deposit,
+                    Price = requestCharacter.Request.Contract.TotalPrice,
+                    Reason = requestCharacter.Request.Contract.Reason,
+                    RequestId = requestCharacter.Request.RequestId,
+                    Status = requestCharacter.Request.Contract.ContractStatus.ToString(),
+                    UrlPdf = requestCharacter.Request.Contract.UrlPdf,
+                };
+
+                if(requestCharacter.Request.Package != null)
+                {
+                    contractCharacterResponse.PackageName = requestCharacter.Request.Package.PackageName;
+                }
+
+                return contractCharacterResponse;
+            }
+            catch(Exception ex)
             {
                 throw new Exception(ex.Message);
             }
