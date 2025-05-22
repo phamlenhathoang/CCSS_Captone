@@ -285,7 +285,7 @@ namespace CCSS_Service.Libraries
                     {
                         htmlContent += $"<p>Deposited: {request.Deposit}%</p>";
                         htmlContent += $"<p>Prepaid customer: {(request.Price * deposit) / 100} VND</p>";
-                        htmlContent += $"<p>The remaining amount to be paid at the end of the contrac: {request.Price - ((request.Price * deposit) / 100)} VND</p>";
+                        htmlContent += $"<p>The remaining amount to be paid at the end of the contract: {request.Price - ((request.Price * deposit) / 100)} VND</p>";
 
                         htmlContent += "<p>The rental contract is based on specific time slots.</p>";
 
@@ -297,11 +297,10 @@ namespace CCSS_Service.Libraries
                                 List<RequestDate> requestDates = await requestDatesRepository.GetListRequestDateByRequestCharacterId(requestCharacter.RequestCharacterId);
                                 foreach (RequestDate requestDate in requestDates)
                                 {
-                                    string formattedStartDate = requestDate.StartDate.ToString("hh:mm dd/MM/yyyy");
-                                    string formattedEndDate = requestDate.EndDate.ToString("hh:mm dd/MM/yyyy");
+                                    string formattedStartDate = requestDate.StartDate.ToString("HH:mm dd/MM/yyyy");
+                                    string formattedEndDate = requestDate.EndDate.ToString("HH:mm dd/MM/yyyy");
 
-                                    htmlContent += $"<p>{formattedStartDate}<p>";
-                                    htmlContent += $"<p>{formattedEndDate}<p>";
+                                    htmlContent += $"<p>{formattedStartDate} - {formattedEndDate}<p>";
                                 }
                                 c++;
                             }
