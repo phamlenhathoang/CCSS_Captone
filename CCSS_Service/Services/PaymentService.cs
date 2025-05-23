@@ -15,18 +15,22 @@ namespace CCSS_Service.Services
     {
         Task<List<PaymentResponse>> GetAllPayment();
         Task<List<PaymentResponse>> GetAllPaymentByContractId(string contracId);
-        Task<List<PaymentResponse>> GetAllPaymentByAccountIdAndPurpose(string accountId, string? purpose);
+        Task<List<PaymentResponse>> GetAllPaymentByAccountIdAndPurpose(string accountId, PaymentPurpose purpose);
         Task<PaymentResponse> GetPaymentByPaymentId(string paymentId);
     }
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentRepository paymentRepository;
         private readonly IContractRespository contractRespository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly ITicketAccountRepository _ticketAccountRepository;
 
-        public PaymentService(IPaymentRepository paymentRepository, IContractRespository contractRespository)
+        public PaymentService(IPaymentRepository paymentRepository, IContractRespository contractRespository, IOrderRepository orderRepository, ITicketAccountRepository ticketAccountRepository)
         {
             this.paymentRepository = paymentRepository;
             this.contractRespository = contractRespository;
+            _orderRepository = orderRepository;
+            _ticketAccountRepository = ticketAccountRepository;
         }
         public async Task<List<PaymentResponse>> GetAllPayment()
         {
@@ -61,42 +65,29 @@ namespace CCSS_Service.Services
             }
         }
 
-        public async Task<List<PaymentResponse>> GetAllPaymentByAccountIdAndPurpose(string accountId, string? purpose)
+        public async Task<List<PaymentResponse>> GetAllPaymentByAccountIdAndPurpose(string accountId, PaymentPurpose purpose)
         {
-            try
+          List<PaymentResponse> paymentResponses = new List<PaymentResponse>();
+            var Listpayment = await paymentRepository.GetAllPaymentByAccountIdAndPurpose(accountId, purpose);
+            foreach(var payment in Listpayment)
             {
-                List<PaymentResponse> paymentResponses = new List<PaymentResponse>();
-                List<Contract> contracts = await contractRespository.GetAllContractByAccountId(accountId);
-                if (contracts.Count > 0)
+                PaymentResponse response = new PaymentResponse()
                 {
-                    foreach(Contract contract in contracts)
-                    {
-                        List<Payment> payments = await paymentRepository.GetAllPaymentByAccountIdAndPurpose(contract.ContractId, purpose); 
-                        if(payments.Count > 0)
-                        {
-                            foreach (Payment payment in payments)
-                            {
-                                PaymentResponse paymentResponse = new PaymentResponse()
-                                {
-                                    Amount = payment.Amount,
-                                    CreatAt = payment.CreatAt?.ToString("dd/MM/yyyy"),
-                                    PaymentId = payment.PaymentId,
-                                    Purpose = payment.Purpose.ToString(),
-                                    Status = payment.Status.ToString(),
-                                    TransactionId = payment.TransactionId,
-                                    Type = payment.Type,
-                                };
-                                paymentResponses.Add(paymentResponse);
-                            }
-                        }
-                    }
-                }
-                return paymentResponses;
-            }
-            catch (Exception ex) 
-            {
-                throw new Exception(ex.Message);
-            }
+                    PaymentId = payment.PaymentId,
+                    Type = payment.Type,
+                    Status = payment.Status.ToString(),
+                    Purpose = purpose.ToString(),
+                    Amount = payment.Amount,
+                    TransactionId = payment.TransactionId,
+                    CreatAt = payment.CreatAt?.ToString("dd/MM/yyyy"),
+                    OrderId = payment.OrderId,
+                    ContractId = payment.ContractId,
+                    TicketAccountId = payment.TicketAccountId,
+                };
+                paymentResponses.Add(response);
+
+            } 
+            return paymentResponses;
         }
 
         public async Task<List<PaymentResponse>> GetAllPaymentByContractId(string contracId)

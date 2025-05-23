@@ -17,15 +17,8 @@ namespace CCSS_Service.Model.Responses
         public double? Amount { get; set; }
         public string? TransactionId { get; set; }
         public string? CreatAt { get; set; }
-
-        
-        //public string? OrderId { get; set; }
-        //public Order Order { get; set; }
-
-        //public string? TicketAccountId { get; set; }
-        //public TicketAccount TicketAccount { get; set; }
-
-        //public string? ContractId { get; set; }
-        //public Contract Contract { get; set; }
+        public string? OrderId { get; set; }     
+        public string? TicketAccountId { get; set; }
+        public string? ContractId { get; set; }    
     }
 }
