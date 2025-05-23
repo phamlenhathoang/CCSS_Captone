@@ -943,8 +943,6 @@ namespace CCSS_Service.Services
                         }
                         accountByCharacterAndDateResponses.Add(accountRespose);
                     }
-                    break;
-
                 }
 
                 return accountByCharacterAndDateResponses;
