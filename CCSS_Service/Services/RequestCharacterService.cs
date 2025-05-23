@@ -233,12 +233,12 @@ namespace CCSS_Service.Services
                         await transaction.RollbackAsync();
                         return "Cosplayer does not suitable.";
                     }
-                    bool checkTask = await _taskRepository.CheckTaskIsValid(account, request.StartDate, request.EndDate);
-                    if (!checkTask)
-                    {
-                        await transaction.RollbackAsync();
-                        return "This cosplayer is has another job. Please change datetime.";
-                    }
+                    //bool checkTask = await _taskRepository.CheckTaskIsValid(account, request.StartDate, request.EndDate);
+                    //if (!checkTask)
+                    //{
+                    //    await transaction.RollbackAsync();
+                    //    return "This cosplayer is has another job. Please change datetime.";
+                    //}
                     if (account.RoleId != "R004" || account == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
                     {
                         await transaction.RollbackAsync();
