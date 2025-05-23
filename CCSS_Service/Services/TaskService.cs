@@ -144,7 +144,7 @@ namespace CCSS_Service.Services
                             Description = eventCharacter.Description,
                             EndDate = eventCharacter.Event.EndDate,
                             StartDate = eventCharacter.Event.StartDate,
-                            TaskName = eventCharacter.Character.CharacterName,
+                            TaskName = eventCharacter.Character.CharacterId,
                             Location = eventCharacter.Event.Location,
                             IsActive = true,
                             Status = TaskStatus.Assignment,
