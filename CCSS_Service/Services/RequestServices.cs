@@ -559,12 +559,12 @@ namespace CCSS_Service.Services
                             await transaction.RollbackAsync();
                             return "Cosplayer does not suitable.";
                         }
-                        bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
-                        if (!checkTask)
-                        {
-                            await transaction.RollbackAsync();
-                            return "This cosplayer is has another job. Please change datetime.";
-                        }
+                        //bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
+                        //if (!checkTask)
+                        //{
+                        //    await transaction.RollbackAsync();
+                        //    return "This cosplayer is has another job. Please change datetime.";
+                        //}
                         var cosplayer = await _accountRepository.GetAccount(r.CosplayerId);
                         if (cosplayer.RoleId != "R004" || cosplayer == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
                         {
@@ -850,9 +850,9 @@ namespace CCSS_Service.Services
                     List<Account> accounts = await _accountRepository.GetAccountsByCharacter(character, checkAccountForCharacter1);
                     foreach (var account in accounts)
                     {
-                        bool checkTask = await taskRepository.CheckTaskIsValid(account, request.StartDate, request.EndDate);
-                        if (checkTask)
-                        {
+                        //bool checkTask = await taskRepository.CheckTaskIsValid(account, request.StartDate, request.EndDate);
+                        //if (checkTask)
+                        //{
                             checkAccountForCharacter.Add(account);
                             checkAccountForCharacter1.Add(account);
                             if (checkAccountForCharacter.Count == requestCharacter.Quantity)
@@ -864,7 +864,7 @@ namespace CCSS_Service.Services
                                 checkAccountForCharacter = new List<Account>();
                                 break;
                             }
-                        }
+                        //}
                     }
                 }
 
@@ -994,12 +994,12 @@ namespace CCSS_Service.Services
                                     await transaction.RollbackAsync();
                                     return "Cosplayer does not suitable.";
                                 }
-                                bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
-                                if (!checkTask)
-                                {
-                                    await transaction.RollbackAsync();
-                                    return "This cosplayer is has another job. Please change datetime.";
-                                }
+                                //bool checkTask = await taskRepository.CheckTaskIsValid(account, StartDate, EndDate);
+                                //if (!checkTask)
+                                //{
+                                //    await transaction.RollbackAsync();
+                                //    return "This cosplayer is has another job. Please change datetime.";
+                                //}
                                 if (account.RoleId != "R004" || account == null) // Kiểm tra cosplayerId có phải là cosplayer hay ko
                                 {
                                     await transaction.RollbackAsync();
