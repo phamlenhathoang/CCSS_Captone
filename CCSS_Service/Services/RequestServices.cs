@@ -653,6 +653,17 @@ namespace CCSS_Service.Services
                 if (requestStatus == RequestStatus.Cancel)
                 {
                     request.Reason = reason;
+                    
+                    foreach (var character in listRequestCharacters)
+                    {
+                        character.Status = RequestCharacterStatus.Cancel;
+                    }
+                   var result = await _requestCharacterRepository.UpdateListRequestCharacter(listRequestCharacters);
+                    if (!result)
+                    {
+                        await transaction.RollbackAsync();
+                        return "Update requestCharacter fail";
+                    }
                 }
 
                 request.Status = requestStatus;

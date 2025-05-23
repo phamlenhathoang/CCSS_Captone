@@ -20,7 +20,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> DeletePayment(Payment payment);
         Task<List<Payment>> GetAllPayment();
         Task<List<Payment>> GetAllPaymentByContractId(string contracId);
-        Task<List<Payment>> GetAllPaymentByAccountIdAndPurpose(string contracId, string? purpose);
+        Task<List<Payment>> GetAllPaymentByAccountIdAndPurpose(string accountId,PaymentPurpose purpose);
     }
 
     public class PaymentRepository : IPaymentRepository
@@ -73,18 +73,19 @@ namespace CCSS_Repository.Repositories
             return await _context.Payments.Where(c => c.ContractId.Equals(contracId)).ToListAsync();
         }
 
-        public async Task<List<Payment>> GetAllPaymentByAccountIdAndPurpose(string contractId, string? purpose)
+        public async Task<List<Payment>> GetAllPaymentByAccountIdAndPurpose(string accountId, PaymentPurpose purpose)
         {
-            IQueryable<Payment> query = _context.Payments
-                .Where(p => p.ContractId == contractId);
-
-            if (!string.IsNullOrWhiteSpace(purpose) &&
-                Enum.TryParse<PaymentPurpose>(purpose, true, out var parsedPurpose))
+            if(purpose == PaymentPurpose.Order)
             {
-                query = query.Where(p => p.Purpose == parsedPurpose);
+                return await _context.Payments.Include(sc => sc.Order).Where(o => o.Order.AccountId.Equals(accountId)).ToListAsync();
+            }else if(purpose == PaymentPurpose.BuyTicket)
+            {
+                return await _context.Payments.Include(sc => sc.TicketAccount).Where(t => t.TicketAccount.AccountId.Equals(accountId)).ToListAsync();
             }
-
-            return await query.OrderByDescending(p => p.CreatAt).ToListAsync();
+            else
+            {
+                return await _context.Payments.Include(sc => sc.Contract).Where(c => c.Contract.CreateBy.Equals(accountId)).ToListAsync();
+            }
         }
 
     }
