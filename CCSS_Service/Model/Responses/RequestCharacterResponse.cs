@@ -28,4 +28,19 @@ namespace CCSS_Service.Model.Responses
         public int? Quantity { get; set; }
         public List<RequestDateResponse> RequestDateInCharacterResponses { get; set; }
     }
+
+    public class RequestCharacterDateResponse
+    {
+        public string RequestCharacterId { get; set; } 
+        public string RequestId { get; set; }
+        public string CharacterId { get; set; }
+        public string? Status { get; set; }
+        public string? Reason { get; set; }
+        public double? TotalPrice { get; set; }
+        public string? CreateDate { get; set; }
+        public string? UpdateDate { get; set; }
+        public string? Description { get; set; }
+        public string? CosplayerId { get; set; }
+        public int? Quantity { get; set; }
+    }
 }

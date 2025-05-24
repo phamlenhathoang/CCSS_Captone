@@ -39,6 +39,18 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
+
+        [HttpPost("GetAllRequestCharacterByListDate")]
+        public async Task<IActionResult> GetAllRequestCharacterByListDate(List<Date> dates)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _characterServices.GetAllRequestCharacterByListDate(dates);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
         [HttpPut]
         public async Task<IActionResult> UpdateStatusRequestCharacter(string requestCharacterId, RequestCharacterStatus status)
         {
