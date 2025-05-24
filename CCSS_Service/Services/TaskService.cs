@@ -370,6 +370,7 @@ namespace CCSS_Service.Services
                             {
                                 CosplayerId = taskRequest.CosplayerId,
                                 CharacterId = requestCharacter.CharacterId,
+                                Status = RequestCharacterStatus.Accept,
                                 Description = null,
                                 CreateDate = DateTime.Now,
                                 Quantity = 1,
