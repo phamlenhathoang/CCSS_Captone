@@ -375,8 +375,8 @@ namespace CCSS_Service.Services
                             else
                             {
                                 double totalDate = (EndDate.Date - StartDate.Date).Days + 1;
-                                var Getcharacter = await _characterRepository.GetCharacter(r.CharacterId);
-                                var totalPrice = Getcharacter.Price * r.Quantity * totalDate;
+                                
+                                var totalPrice = character.Price * r.Quantity * totalDate;
                                 // Nếu CosplayerId hợp lệ, thêm vào danh sách
                                 characteInRequest.Add(new RequestCharacter
                                 {
@@ -389,6 +389,14 @@ namespace CCSS_Service.Services
                                     Quantity = r.Quantity,
                                     TotalPrice = totalPrice,
                                 });
+
+                                character.Quantity -= r.Quantity;
+                                var resultCharacter = await _characterRepository.UpdateCharacter(character);
+                                if (!resultCharacter)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "Can not update character quantity";
+                                }
                             }
                         }
                         var requestCharacterAdd = await _requestCharacterRepository.AddListRequestCharacter(characteInRequest);
@@ -573,7 +581,7 @@ namespace CCSS_Service.Services
                         }
                     }
                     var requestCharacter = await _requestCharacterRepository.GetRequestCharacterById(r.RequestCharacterId);
-                    var character = await _characterRepository.GetCharacter(r.CharacterId);
+                    var character = await _characterRepository.GetCharacter(requestCharacter.CharacterId);
                     if (requestCharacter == null)
                     {
                         await transaction.RollbackAsync();
@@ -587,6 +595,25 @@ namespace CCSS_Service.Services
                             await transaction.RollbackAsync();
                             return $"Not enough stock for character {character.CharacterName}.";
                         }
+                        if(requestCharacter.CharacterId != r.CharacterId)
+                        {
+                            var oldCharacter = await _characterRepository.GetCharacter(requestCharacter.CharacterId);
+                            if (oldCharacter != null)
+                            {
+                                oldCharacter.Quantity += requestCharacter.Quantity;
+                                await _characterRepository.UpdateCharacter(oldCharacter);
+                            }
+                            var newcharacter = await _characterRepository.GetCharacter(r.CharacterId);
+                            newcharacter.Quantity -= quantity;
+                            await _characterRepository.UpdateCharacter(newcharacter);
+
+                        }
+                        else
+                        {
+                            character.Quantity = character.Quantity + requestCharacter.Quantity - quantity;
+                            await _characterRepository.UpdateCharacter(character);
+                        }
+                       
 
                         requestCharacter.CreateDate = StartDate;
                         requestCharacter.UpdateDate = DateTime.Now;
@@ -599,6 +626,7 @@ namespace CCSS_Service.Services
 
                         characterInRequest.Add(requestCharacter);
 
+                        
                     }
                 }
                 if (characterInRequest.Any())
@@ -654,9 +682,17 @@ namespace CCSS_Service.Services
                 {
                     request.Reason = reason;
                     
-                    foreach (var character in listRequestCharacters)
+                    foreach (var requestcharacter in listRequestCharacters)
                     {
-                        character.Status = RequestCharacterStatus.Cancel;
+                        requestcharacter.Status = RequestCharacterStatus.Cancel;
+                        var character = await _characterRepository.GetCharacter(requestcharacter.CharacterId);
+                        if (character == null)
+                        {
+                            await transaction.RollbackAsync();
+                            return "Can not find character";
+                        }
+                        character.Quantity += requestcharacter.Quantity;
+                        await _characterRepository.UpdateCharacter(character);
                     }
                    var result = await _requestCharacterRepository.UpdateListRequestCharacter(listRequestCharacters);
                     if (!result)
@@ -703,6 +739,15 @@ namespace CCSS_Service.Services
                     request.Status = RequestStatus.Cancel;
                     request.Reason = reason;
                     await _repository.UpdateRequest(request);
+
+                    var listrequestCharacter = await _requestCharacterRepository.GetListRequestCharacterPending(id);
+                    foreach (var requestcharacter in listrequestCharacter)
+                    {
+                        var character = await _characterRepository.GetCharacter(requestcharacter.CharacterId);
+
+                        character.Quantity += requestcharacter.Quantity;
+                        await _characterRepository.UpdateCharacter(character);
+                    }
 
                     await transaction.CommitAsync();
                     return "Delete Request Success";
@@ -1033,6 +1078,14 @@ namespace CCSS_Service.Services
                                 CosplayerId = r.CosplayerId,
                                 TotalPrice = totalPrice,
                             });
+
+                            Getcharacter.Quantity -= 1;
+                            var resultCharacter = await _characterRepository.UpdateCharacter(Getcharacter);
+                            if (!resultCharacter)
+                            {
+                                await transaction.RollbackAsync();
+                                return "Can not update character quantity";
+                            }
                         }
                         var requestCharacterAdd = await _requestCharacterRepository.AddListRequestCharacter(characteInRequest);
                         if (!requestCharacterAdd)
@@ -1268,9 +1321,8 @@ namespace CCSS_Service.Services
                             }
                             else
                             {
-                                double totalDate = (EndDate.Date - StartDate.Date).Days + 1;
-                                var Getcharacter = await _characterRepository.GetCharacter(r.CharacterId);
-                                var totalPrice = Getcharacter.Price * r.Quantity * (totalDate);
+                                double totalDate = (EndDate.Date - StartDate.Date).Days + 1;                             
+                                var totalPrice = character.Price * r.Quantity * (totalDate);
                                 // Nếu CosplayerId hợp lệ, thêm vào danh sách
                                 characteInRequest.Add(new RequestCharacter
                                 {
@@ -1284,6 +1336,14 @@ namespace CCSS_Service.Services
                                     CosplayerId = null,
                                     TotalPrice = totalPrice,
                                 });
+
+                                character.Quantity -= r.Quantity;
+                                var resultCharacter = await _characterRepository.UpdateCharacter(character);
+                                if (!resultCharacter)
+                                {
+                                    await transaction.RollbackAsync();
+                                    return "Can not update character quantity";
+                                }
                             }
                         }
                         var requestCharacterAdd = await _requestCharacterRepository.AddListRequestCharacter(characteInRequest);
