@@ -646,7 +646,25 @@ namespace CCSS_Service.Services
                                 requestCharacter.Reason = reason;
 
                                 requestCharacters.Add(requestCharacter);
+
+                                Character character = await _characterRepository.GetCharacter(requestCharacter.CharacterId);
+
+                                if (character != null)
+                                {
+                                    character.Quantity += requestCharacter.Quantity;
+
+                                    bool checkUpdate = await _characterRepository.UpdateCharacter(character);
+                                    if (!checkUpdate)
+                                    {
+                                        throw new Exception("Can not update character");
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception("Character does not exist");
+                                }
                             }
+
                             bool updateRequestCharacter = await _requestCharacterRepository.UpdateListRequestCharacter(requestCharacters);
 
                             if (!updateRequestCharacter)
@@ -670,26 +688,6 @@ namespace CCSS_Service.Services
                     {
                         contract.ContractStatus = ContractStatus.Deposited;
                         contract.DeliveryStatus = DeliveryStatus.Preparing;
-
-
-                        foreach (RequestCharacter requestCharacter in contract.Request.RequestCharacters)
-                        {
-                            Character character = await _characterRepository.GetCharacter(requestCharacter.CharacterId);
-
-                            if (character == null)
-                            {
-                                throw new Exception("Character does not exist");
-                            }
-
-                            character.Quantity -= requestCharacter.Quantity;
-
-                            bool checkUpdate = await _characterRepository.UpdateCharacter(character);
-
-                            if (!checkUpdate)
-                            {
-                                throw new Exception("Can not update Character");
-                            }
-                        }
                     }
                     else
                     {
