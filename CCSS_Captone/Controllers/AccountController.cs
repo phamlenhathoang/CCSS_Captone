@@ -101,6 +101,13 @@ namespace CCSS_Captone.Controllers
             var account = await accountService.GetAllAccountByRoleId(roleId);
             return Ok(account);
         }
+        
+        [HttpGet("requestId")]
+        public async Task<IActionResult> GetAccountByRequestId(string requestId)
+        {
+            var account = await accountService.GetAccountByRequestId(requestId);
+            return Ok(account);
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddCosplayer(string username, string password)

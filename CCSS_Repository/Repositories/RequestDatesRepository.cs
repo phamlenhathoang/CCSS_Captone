@@ -17,15 +17,16 @@ namespace CCSS_Repository.Repositories
         Task<bool> AddListRequestDates(List<RequestDate> requestDate);
         Task<bool> AddRequestDate(RequestDate requestDate);
         Task<bool> UpdateListRequestDates(List<RequestDate> requestDate);
-        Task<List<RequestDate>> GetListRequestDateByRequestCharacterId(string requestCharacterId);    
+        Task<List<RequestDate>> GetListRequestDateByRequestCharacterId(string requestCharacterId);
         Task<bool> UpdateRequestDate(RequestDate requestDate);
         Task<bool> DeleteListRequestDateByRequestCharacterId(string requestCharacterId);
         Task<List<RequestDate>> GetListRequestDateByRequestCharacter(string requestCharacterId);
         Task<bool> CheckValidRequestDate(Account account, List<DateRepo> dates);
         Task<bool> CheckValidCharacterRequestDate(string requestCharacterId, DateTime startDate, DateTime endDate);
+        Task<List<RequestDate>> GetAllRequestDateByListDate(List<DateRepo> dateRepos);
     }
 
-    public class RequestDatesRepository: IRequestDatesRepository
+    public class RequestDatesRepository : IRequestDatesRepository
     {
         private readonly CCSSDbContext _context;
 
@@ -52,12 +53,12 @@ namespace CCSS_Repository.Repositories
 
         public async Task<RequestDate> GetRequestDateById(string id)
         {
-            return await _context.RequestDates.FirstOrDefaultAsync(sc => sc.RequestDateId.Equals(id));  
+            return await _context.RequestDates.FirstOrDefaultAsync(sc => sc.RequestDateId.Equals(id));
         }
         public async Task<bool> AddListRequestDates(List<RequestDate> requestDate)
         {
             _context.RequestDates.AddRange(requestDate);
-           return await _context.SaveChangesAsync() > 0;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> UpdateRequestDate(RequestDate requestDate)
@@ -145,7 +146,7 @@ namespace CCSS_Repository.Repositories
 
                                 if (date.EndDate.AddHours(2) > currentTask.StartDate)
                                 {
-                                    if(date.EndDate.AddHours(2) < currentTask.EndDate)
+                                    if (date.EndDate.AddHours(2) < currentTask.EndDate)
                                     {
                                         return false;
                                     }
@@ -165,7 +166,7 @@ namespace CCSS_Repository.Repositories
                                 }
                             }
 
-                            if(date.StartDate.Date == currentTask.EndDate.Date)
+                            if (date.StartDate.Date == currentTask.EndDate.Date)
                             {
                                 if (date.EndDate.AddHours(2) == currentTask.StartDate)
                                 {
@@ -194,14 +195,14 @@ namespace CCSS_Repository.Repositories
                                 }
                             }
 
-                            if(date.EndDate.Date == currentTask.StartDate.Date)
+                            if (date.EndDate.Date == currentTask.StartDate.Date)
                             {
-                                if(date.EndDate.AddHours(2) == currentTask.StartDate)
+                                if (date.EndDate.AddHours(2) == currentTask.StartDate)
                                 {
                                     return false;
                                 }
 
-                                if(date.EndDate.AddHours(2) > currentTask.StartDate)
+                                if (date.EndDate.AddHours(2) > currentTask.StartDate)
                                 {
                                     if (date.EndDate.AddHours(2) < currentTask.EndDate)
                                     {
@@ -211,7 +212,7 @@ namespace CCSS_Repository.Repositories
 
                                 if (currentTask.StartDate < date.EndDate.AddHours(2))
                                 {
-                                    if(currentTask.EndDate.AddHours(2) == date.StartDate)
+                                    if (currentTask.EndDate.AddHours(2) == date.StartDate)
                                     {
                                         return false;
                                     }
@@ -223,7 +224,7 @@ namespace CCSS_Repository.Repositories
                                 }
                             }
 
-                            if(date.EndDate.Date == currentTask.EndDate.Date) 
+                            if (date.EndDate.Date == currentTask.EndDate.Date)
                             {
                                 if (date.EndDate.AddHours(2) == currentTask.StartDate)
                                 {
@@ -327,23 +328,36 @@ namespace CCSS_Repository.Repositories
             List<RequestDate> requestDates = await _context.RequestDates.Where(rd => rd.RequestCharacterId.Equals(requestCharacterId)).ToListAsync();
             foreach (RequestDate requestDate in requestDates)
             {
-                if(startDate.Date == requestDate.StartDate.Date)
+                if (startDate.Date == requestDate.StartDate.Date)
                 {
                     return false;
                 }
 
-                if(startDate.Date < requestDate.StartDate.Date && requestDate.StartDate.Date < endDate.Date)
+                if (startDate.Date < requestDate.StartDate.Date && requestDate.StartDate.Date < endDate.Date)
                 {
                     return false;
                 }
 
-                if(requestDate.StartDate.Date == endDate.Date)
+                if (requestDate.StartDate.Date == endDate.Date)
                 {
                     return false;
                 }
             }
 
             return true;
+        }
+
+        public async Task<List<RequestDate>> GetAllRequestDateByListDate(List<DateRepo> dateRepos)
+        {
+            var requestDates = await _context.RequestDates
+                .Include(rd => rd.RequestCharacter)
+                .ToListAsync(); // lấy toàn bộ dữ liệu (có thể lọc trước bằng điều kiện khác nếu cần)
+
+            var result = requestDates
+                .Where(rd => dateRepos.Any(d => rd.StartDate == d.StartDate && rd.EndDate == d.EndDate))
+                .ToList();
+
+            return result;
         }
 
     }

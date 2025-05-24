@@ -1,11 +1,14 @@
 ﻿using CCSS_Repository.Entities;
+using CCSS_Repository.Model;
 using CCSS_Repository.Repositories;
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CCSS_Service.Services
@@ -21,6 +24,7 @@ namespace CCSS_Service.Services
         Task<List<RequestCharacterResponse>> GetRequestCharacterByCosplayer(string cosplayerId);
         Task<string> UpdateStatus(string requestcharacterId, RequestCharacterStatus status);
         Task<string> CheckRequestChracter(string requestId);
+        Task<List<RequestCharacterDateResponse>> GetAllRequestCharacterByListDate(List<Date> dates);
     }
 
     public class RequestCharacterService : IRequestCharacterService
@@ -406,5 +410,57 @@ namespace CCSS_Service.Services
             return await _requestCharacterRepository.GetRequestCharacter(requestId, characterId);
         }
         #endregion
+
+        public async Task<List<RequestCharacterDateResponse>> GetAllRequestCharacterByListDate(List<Date> dates)
+        {
+            List<RequestCharacterDateResponse> requestCharacterDateResponses = new List<RequestCharacterDateResponse>();
+            string format = "HH:mm dd/MM/yyyy";
+            CultureInfo culture = CultureInfo.InvariantCulture;
+
+            List<DateRepo> dateRepos = new List<DateRepo>();
+
+            foreach (var date in dates)
+            {
+                DateTime start = DateTime.ParseExact(date.StartDate, format, culture);
+                DateTime end = DateTime.ParseExact(date.EndDate, format, culture);
+
+                if (start > end)
+                {
+                    throw new Exception("Start can not greater than EndDate");
+                }
+
+                DateRepo dateRepo = new DateRepo()
+                {
+                    StartDate = start,
+                    EndDate = end,
+                };
+                dateRepos.Add(dateRepo);
+            }
+
+            List<RequestDate> requestDates = await _requestDatesRepository.GetAllRequestDateByListDate(dateRepos);
+
+            foreach (var requestDate in requestDates)
+            {
+                RequestCharacterDateResponse requestCharacterDateResponse = new RequestCharacterDateResponse()
+                {
+                    CharacterId = requestDate.RequestCharacter.CharacterId,
+                    RequestId = requestDate.RequestCharacter.RequestId,
+                    CosplayerId = requestDate.RequestCharacter.CosplayerId, 
+                    CreateDate = requestDate.RequestCharacter.CreateDate?.ToString("dd/MM/yyyy"),
+                    UpdateDate = requestDate.RequestCharacter.UpdateDate?.ToString("dd/MM/yyyy"),
+                    Description = requestDate.RequestCharacter.Description,
+                    Quantity = requestDate.RequestCharacter.Quantity,
+                    Reason = requestDate.RequestCharacter.Reason,
+                    RequestCharacterId = requestDate.RequestCharacter.RequestId,    
+                    Status = requestDate.RequestCharacter.Status?.ToString(),
+                    TotalPrice = requestDate.RequestCharacter.TotalPrice
+                };
+
+                requestCharacterDateResponses.Add(requestCharacterDateResponse);
+            }
+
+            return requestCharacterDateResponses.Distinct().ToList();
+        }
+        
     }
 }
