@@ -144,7 +144,7 @@ namespace CCSS_Service.Services
                             Description = eventCharacter.Description,
                             EndDate = eventCharacter.Event.EndDate,
                             StartDate = eventCharacter.Event.StartDate,
-                            TaskName = eventCharacter.Character.CharacterName,
+                            TaskName = eventCharacter.Character.CharacterId,
                             Location = eventCharacter.Event.Location,
                             IsActive = true,
                             Status = TaskStatus.Assignment,
@@ -370,6 +370,7 @@ namespace CCSS_Service.Services
                             {
                                 CosplayerId = taskRequest.CosplayerId,
                                 CharacterId = requestCharacter.CharacterId,
+                                Status = RequestCharacterStatus.Accept,
                                 Description = null,
                                 CreateDate = DateTime.Now,
                                 Quantity = 1,
@@ -923,12 +924,6 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("Request does not exist");
                 }
-
-                if(request.ServiceId != "S003")
-                {
-                    throw new Exception("ServiceId of request must be S003");
-                }
-
                 if(request.Contract == null)
                 {
                     throw new Exception("Request has not created contract yet");
@@ -989,7 +984,11 @@ namespace CCSS_Service.Services
                 {
                     throw new Exception("Contract does not exist");
                 }
-
+                
+                if(contract.Request.ServiceId == "S001")
+                {
+                    throw new Exception("Request of this contract must be S002 or S003");
+                }
 
                 if (contract.ContractCharacters.Count > 0)
                 {

@@ -41,17 +41,17 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<RequestCharacter>> GetAllRequestCharacter()
         {
-            return await _context.RequestsCharacters.Include(rd => rd.RequestDates).Include(sc => sc.Character).ThenInclude(i => i.CharacterImages).ToListAsync();
+            return await _context.RequestsCharacters.Include(rd => rd.RequestDates).Include(sc => sc.Character).ThenInclude(i => i.CharacterImages).OrderByDescending(rd => rd.CreateDate).ToListAsync();
         }
 
         public async Task<RequestCharacter> GetRequestCharacterById(string id)
         {
-            return await _context.RequestsCharacters.Include(sc => sc.RequestDates).FirstOrDefaultAsync(sc => sc.RequestCharacterId.Equals(id));
+            return await _context.RequestsCharacters.Include(rc => rc.Request).ThenInclude(rc => rc.Package).Include(rc => rc.Request).ThenInclude(rc => rc.Contract).Include(sc => sc.RequestDates).FirstOrDefaultAsync(sc => sc.RequestCharacterId.Equals(id));
         }
 
         public async Task<List<RequestCharacter>> GetRequestCharacterByCosplayer(string cosplayerId)
         {
-            return await _context.RequestsCharacters.Include(s => s.RequestDates).Where(sc => sc.CosplayerId.Equals(cosplayerId)).ToListAsync();
+            return await _context.RequestsCharacters.Include(s => s.RequestDates).Where(sc => sc.CosplayerId.Equals(cosplayerId)).OrderByDescending(rd => rd.CreateDate).ToListAsync();
         }
 
         public async Task<RequestCharacter> GetRequestCharacter(string requestId, string characterId)
@@ -66,7 +66,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<RequestCharacter>> GetListCharacterByRequest(string requestId)
         {
-            return await _context.RequestsCharacters.Where(sc => sc.RequestId.Equals(requestId)).ToListAsync();
+            return await _context.RequestsCharacters.Where(sc => sc.RequestId.Equals(requestId)).OrderByDescending(sc => sc.CreateDate).ToListAsync();
         }
 
         public async Task<List<RequestCharacter>> GetListRequestCharacterPending(string requestId)

@@ -42,6 +42,17 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
+        [HttpGet("GetContractByRequestCharacterId")]
+        public async Task<IActionResult> GetContractByRequestCharacterId(string requestCharacterId)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _services.GetContractByRequestCharacterId(requestCharacterId);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+        }
+
         [HttpGet("contractId/{contractId}")]
         public async Task<IActionResult> GetContractById(string contractId)
         {

@@ -1,4 +1,5 @@
-﻿using CCSS_Service.Services;
+﻿using CCSS_Repository.Entities;
+using CCSS_Service.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,7 +38,7 @@ namespace CCSS_Captone.Controllers
         }
 
         [HttpGet("GetAllPaymentByAccountIdAndPurpose")]
-        public async Task<IActionResult> GetAllPaymentByAccountIdAndPurpose(string accountId, string? purpose)
+        public async Task<IActionResult> GetAllPaymentByAccountIdAndPurpose(string accountId, PaymentPurpose purpose)
         {
             var account = await paymentService.GetAllPaymentByAccountIdAndPurpose(accountId, purpose);
             return Ok(account);

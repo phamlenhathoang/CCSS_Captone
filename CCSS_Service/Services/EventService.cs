@@ -125,11 +125,11 @@ namespace CCSS_Service.Services
                     foreach (var ec in eventRequest.EventCharacterRequest)
                     {
                         Account cosplayer = await _accountRepository.GetAccountByAccountId(ec.CosplayerId);
-                        bool checkTaskIsValid = await _taskRepository.CheckTaskIsValid(cosplayer, eventRequest.StartDate, eventRequest.EndDate);
-                        if (!checkTaskIsValid) 
-                        {
-                            return "Cosplayer "+ cosplayer.Name + " không phù hợp với thời gian sự kiện";
-                        }
+                        //bool checkTaskIsValid = await _taskRepository.CheckTaskIsValid(cosplayer, eventRequest.StartDate, eventRequest.EndDate);
+                        //if (!checkTaskIsValid) 
+                        //{
+                        //    return "Cosplayer "+ cosplayer.Name + " không phù hợp với thời gian sự kiện";
+                        //}
                         Character character = await _characterRepository.GetCharacter(ec.CharacterId);
                         if (character.Quantity <= 0)
                         {
@@ -425,11 +425,11 @@ namespace CCSS_Service.Services
                         var cosplayer = await _accountRepository.GetAccountByAccountId(ec.CosplayerId);
                         if (cosplayer == null) return "Cosplayer không tồn tại";
 
-                        bool checkTaskIsValid = await _taskRepository.CheckTaskIsValid(cosplayer, existingEvent.StartDate, existingEvent.EndDate);
-                        if (!checkTaskIsValid)
-                        {
-                            return $"Cosplayer {cosplayer.Name} không phù hợp với thời gian sự kiện";
-                        }
+                        //bool checkTaskIsValid = await _taskRepository.CheckTaskIsValid(cosplayer, existingEvent.StartDate, existingEvent.EndDate);
+                        //if (!checkTaskIsValid)
+                        //{
+                        //    return $"Cosplayer {cosplayer.Name} không phù hợp với thời gian sự kiện";
+                        //}
 
                         var character = await _characterRepository.GetCharacter(ec.CharacterId);
                         if (character == null) return "Nhân vật không tồn tại";

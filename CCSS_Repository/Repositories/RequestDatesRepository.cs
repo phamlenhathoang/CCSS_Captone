@@ -1,4 +1,5 @@
 ﻿using CCSS_Repository.Entities;
+using CCSS_Repository.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,15 +17,16 @@ namespace CCSS_Repository.Repositories
         Task<bool> AddListRequestDates(List<RequestDate> requestDate);
         Task<bool> AddRequestDate(RequestDate requestDate);
         Task<bool> UpdateListRequestDates(List<RequestDate> requestDate);
-        Task<List<RequestDate>> GetListRequestDateByRequestCharacterId(string requestCharacterId);    
+        Task<List<RequestDate>> GetListRequestDateByRequestCharacterId(string requestCharacterId);
         Task<bool> UpdateRequestDate(RequestDate requestDate);
         Task<bool> DeleteListRequestDateByRequestCharacterId(string requestCharacterId);
         Task<List<RequestDate>> GetListRequestDateByRequestCharacter(string requestCharacterId);
-        Task<bool> CheckValidRequestDate(Account account, DateTime startDate, DateTime endDate);
+        Task<bool> CheckValidRequestDate(Account account, List<DateRepo> dates);
         Task<bool> CheckValidCharacterRequestDate(string requestCharacterId, DateTime startDate, DateTime endDate);
+        Task<List<RequestDate>> GetAllRequestDateByListDate(List<DateRepo> dateRepos);
     }
 
-    public class RequestDatesRepository: IRequestDatesRepository
+    public class RequestDatesRepository : IRequestDatesRepository
     {
         private readonly CCSSDbContext _context;
 
@@ -51,12 +53,12 @@ namespace CCSS_Repository.Repositories
 
         public async Task<RequestDate> GetRequestDateById(string id)
         {
-            return await _context.RequestDates.FirstOrDefaultAsync(sc => sc.RequestDateId.Equals(id));  
+            return await _context.RequestDates.FirstOrDefaultAsync(sc => sc.RequestDateId.Equals(id));
         }
         public async Task<bool> AddListRequestDates(List<RequestDate> requestDate)
         {
             _context.RequestDates.AddRange(requestDate);
-           return await _context.SaveChangesAsync() > 0;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> UpdateRequestDate(RequestDate requestDate)
@@ -96,87 +98,226 @@ namespace CCSS_Repository.Repositories
             return await _context.SaveChangesAsync() > 0 ? true : false;
         }
 
-        public async Task<bool> CheckValidRequestDate(Account account, DateTime startDate, DateTime endDate)
+        public async Task<bool> CheckValidRequestDate(Account account, List<DateRepo> dates)
         {
-            RequestCharacter requestCharacter = await _context.RequestsCharacters
+            List<RequestCharacter> requestCharacters = await _context.RequestsCharacters
                 .Include(rq => rq.RequestDates)
-                .Where(rq => rq.CosplayerId == account.AccountId)
-                .FirstOrDefaultAsync();
+                .Where(rq => rq.CosplayerId == account.AccountId && rq.Status == RequestCharacterStatus.Accept)
+                .ToListAsync();
 
-            double totalHourTask = (endDate - startDate).TotalHours;
 
-            if (requestCharacter != null)
+            if (requestCharacters.Count > 0)
             {
-                // Lọc những requestDate có cùng ngày với startDate để giảm số vòng lặp
-                var sameDayRequests = requestCharacter.RequestDates
-                    .Where(rd => rd.StartDate.Date == startDate.Date)
-                    .ToList();
-
-                for (int i = 0; i < sameDayRequests.Count; i++)
+                foreach (DateRepo date in dates)
                 {
-                    var currentTask = sameDayRequests[i];
-
-                    if (currentTask.EndDate.Hour < startDate.Hour)
+                    foreach (RequestCharacter requestCharacter in requestCharacters)
                     {
-                        if(currentTask.EndDate.AddHours(2) > startDate)
-                        {
-                            return false;
-                        }
-                    }
+                        var sameDayRequests = await _context.RequestDates
+                        .Where(rd => rd.StartDate.Date == date.StartDate.Date && rd.RequestCharacterId.Equals(requestCharacter.RequestCharacterId))
+                        .ToListAsync();
 
-                    if (endDate.Hour < currentTask.StartDate.Hour)
-                    {
-                        if (endDate.AddHours(2) > currentTask.StartDate)
+                        for (int i = 0; i < sameDayRequests.Count; i++)
                         {
-                            return false;
-                        }
-                    }
+                            var currentTask = sameDayRequests[i];
 
-                    if (i > 0)
-                    {
-                        var previousTask = sameDayRequests[i - 1];
+                            //if (currentTask.EndDate.Hour < date.StartDate.Hour)
+                            //{
+                            //    if (currentTask.EndDate.AddHours(2) > date.StartDate)
+                            //    {
+                            //        return false;
+                            //    }
+                            //}
 
-                        if(previousTask.EndDate.Hour < startDate.Hour)
-                        {
-                            if (previousTask.EndDate.AddHours(2) > startDate)
+                            //if (date.EndDate.Hour < currentTask.StartDate.Hour)
+                            //{
+                            //    if (date.EndDate.AddHours(2) > currentTask.StartDate)
+                            //    {
+
+                            //        return false;
+                            //    }
+                            //}
+
+                            if (date.StartDate.Date == currentTask.StartDate.Date)
+                            {
+                                if (date.EndDate.AddHours(2) == currentTask.StartDate)
+                                {
+                                    return false;
+                                }
+
+                                if (date.EndDate.AddHours(2) > currentTask.StartDate)
+                                {
+                                    if (date.EndDate.AddHours(2) < currentTask.EndDate)
+                                    {
+                                        return false;
+                                    }
+                                }
+
+                                if (currentTask.StartDate < date.EndDate.AddHours(2))
+                                {
+                                    if (currentTask.EndDate.AddHours(2) == date.StartDate)
+                                    {
+                                        return false;
+                                    }
+
+                                    if (currentTask.EndDate.AddHours(2) > date.StartDate)
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            if (date.StartDate.Date == currentTask.EndDate.Date)
+                            {
+                                if (date.EndDate.AddHours(2) == currentTask.StartDate)
+                                {
+                                    return false;
+                                }
+
+                                if (date.EndDate.AddHours(2) > currentTask.StartDate)
+                                {
+                                    if (date.EndDate.AddHours(2) < currentTask.EndDate)
+                                    {
+                                        return false;
+                                    }
+                                }
+
+                                if (currentTask.StartDate < date.EndDate.AddHours(2))
+                                {
+                                    if (currentTask.EndDate.AddHours(2) == date.StartDate)
+                                    {
+                                        return false;
+                                    }
+
+                                    if (currentTask.EndDate.AddHours(2) > date.StartDate)
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            if (date.EndDate.Date == currentTask.StartDate.Date)
+                            {
+                                if (date.EndDate.AddHours(2) == currentTask.StartDate)
+                                {
+                                    return false;
+                                }
+
+                                if (date.EndDate.AddHours(2) > currentTask.StartDate)
+                                {
+                                    if (date.EndDate.AddHours(2) < currentTask.EndDate)
+                                    {
+                                        return false;
+                                    }
+                                }
+
+                                if (currentTask.StartDate < date.EndDate.AddHours(2))
+                                {
+                                    if (currentTask.EndDate.AddHours(2) == date.StartDate)
+                                    {
+                                        return false;
+                                    }
+
+                                    if (currentTask.EndDate.AddHours(2) > date.StartDate)
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            if (date.EndDate.Date == currentTask.EndDate.Date)
+                            {
+                                if (date.EndDate.AddHours(2) == currentTask.StartDate)
+                                {
+                                    return false;
+                                }
+
+                                if (date.EndDate.AddHours(2) > currentTask.StartDate)
+                                {
+                                    if (date.EndDate.AddHours(2) < currentTask.EndDate)
+                                    {
+                                        return false;
+                                    }
+                                }
+
+                                if (currentTask.StartDate < date.EndDate.AddHours(2))
+                                {
+                                    if (currentTask.EndDate.AddHours(2) == date.StartDate)
+                                    {
+                                        return false;
+                                    }
+
+                                    if (currentTask.EndDate.AddHours(2) > date.StartDate)
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            if (currentTask.StartDate.Hour == date.StartDate.Hour)
                             {
                                 return false;
                             }
-                        }
 
-                        if (endDate.Hour < previousTask.StartDate.Hour)
-                        {
-                            if (endDate.AddHours(2) > previousTask.EndDate)
+                            if (currentTask.EndDate.Hour == date.StartDate.Hour)
                             {
                                 return false;
                             }
-                        }
-                    }
 
-
-                    if (i < sameDayRequests.Count - 1)
-                    {
-                        var nextTask = sameDayRequests[i + 1];
-
-                        if (nextTask.StartDate.Hour < startDate.Hour)
-                        {
-                            if (nextTask.StartDate.AddHours(2) > endDate)
-                            {
-                                return false; // Task sau chưa chuẩn bị đủ 2 giờ
-                            }
-                        }
-
-                        if (endDate.Hour < nextTask.StartDate.Hour)
-                        {
-                            if (endDate.AddHours(2) > nextTask.StartDate)
+                            if (date.EndDate.Hour == currentTask.StartDate.Hour)
                             {
                                 return false;
                             }
+
+                            if (date.EndDate.Hour == currentTask.EndDate.Hour)
+                            {
+                                return false;
+                            }
+
+                            if (i > 0)
+                            {
+                                var previousTask = sameDayRequests[i - 1];
+
+                                if (previousTask.EndDate.Hour < date.StartDate.Hour)
+                                {
+                                    if (previousTask.EndDate.AddHours(2) > date.StartDate)
+                                    {
+                                        return false;
+                                    }
+                                }
+
+                                if (date.EndDate.Hour < previousTask.StartDate.Hour)
+                                {
+                                    if (date.EndDate.AddHours(2) > previousTask.EndDate)
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+
+
+                            if (i < sameDayRequests.Count - 1)
+                            {
+                                var nextTask = sameDayRequests[i + 1];
+
+                                if (nextTask.StartDate.Hour < date.StartDate.Hour)
+                                {
+                                    if (nextTask.StartDate.AddHours(2) > date.EndDate)
+                                    {
+                                        return false; // Task sau chưa chuẩn bị đủ 2 giờ
+                                    }
+                                }
+
+                                if (date.EndDate.Hour < nextTask.StartDate.Hour)
+                                {
+                                    if (date.EndDate.AddHours(2) > nextTask.StartDate)
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
                         }
                     }
-
-
-                }    
+                }
             }
 
             return true;
@@ -187,23 +328,196 @@ namespace CCSS_Repository.Repositories
             List<RequestDate> requestDates = await _context.RequestDates.Where(rd => rd.RequestCharacterId.Equals(requestCharacterId)).ToListAsync();
             foreach (RequestDate requestDate in requestDates)
             {
-                if(startDate.Date == requestDate.StartDate.Date)
+                if (startDate.Date == requestDate.StartDate.Date)
                 {
                     return false;
                 }
 
-                if(startDate.Date < requestDate.StartDate.Date && requestDate.StartDate.Date < endDate.Date)
+                if (startDate.Date < requestDate.StartDate.Date && requestDate.StartDate.Date < endDate.Date)
                 {
                     return false;
                 }
 
-                if(requestDate.StartDate.Date == endDate.Date)
+                if (requestDate.StartDate.Date == endDate.Date)
                 {
                     return false;
                 }
             }
 
             return true;
+        }
+
+        public async Task<List<RequestDate>> GetAllRequestDateByListDate(List<DateRepo> dateRepos)
+        {
+            var requestDates = await _context.RequestDates
+                .Include(rd => rd.RequestCharacter).Where(rd => rd.RequestCharacter.CosplayerId != null)
+                .ToListAsync();
+
+            List<RequestDate> requestDates1 = new List<RequestDate>();
+
+            foreach (var requestDate in requestDates)
+            {
+                foreach (var date in dateRepos)
+                {
+                    if (date.StartDate.Date == requestDate.StartDate.Date)
+                    {
+                        if (date.EndDate.AddHours(2) == requestDate.StartDate)
+                        {
+                            requestDates1.Add(requestDate);
+                            break;
+                        }
+
+                        if (date.EndDate.AddHours(2) > requestDate.StartDate)
+                        {
+                            if (date.EndDate.AddHours(2) < requestDate.EndDate)
+                            {
+                                requestDates1.Add(requestDate);
+                                break;
+                            }
+                        }
+
+                        if (requestDate.StartDate < date.EndDate.AddHours(2))
+                        {
+                            if (requestDate.EndDate.AddHours(2) == date.StartDate)
+                            {
+                                requestDates1.Add(requestDate);
+                                break;
+                            }
+
+                            if (requestDate.EndDate.AddHours(2) > date.StartDate)
+                            {
+                                requestDates1.Add(requestDate);
+                                break;
+                            }
+                        }
+
+                        if (date.StartDate.Date == requestDate.EndDate.Date)
+                        {
+                            if (date.EndDate.AddHours(2) == requestDate.StartDate)
+                            {
+                                requestDates1.Add(requestDate);
+                                break;
+                            }
+
+                            if (date.EndDate.AddHours(2) > requestDate.StartDate)
+                            {
+                                if (date.EndDate.AddHours(2) < requestDate.EndDate)
+                                {
+                                    requestDates1.Add(requestDate);
+                                    break;
+                                }
+                            }
+
+                            if (requestDate.StartDate < date.EndDate.AddHours(2))
+                            {
+                                if (requestDate.EndDate.AddHours(2) == date.StartDate)
+                                {
+                                    requestDates1.Add(requestDate);
+                                    break;
+                                }
+
+                                if (requestDate.EndDate.AddHours(2) > date.StartDate)
+                                {
+                                    requestDates1.Add(requestDate);
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (date.EndDate.Date == requestDate.StartDate.Date)
+                        {
+                            if (date.EndDate.AddHours(2) == requestDate.StartDate)
+                            {
+                                requestDates1.Add(requestDate);
+                                break;
+                            }
+
+                            if (date.EndDate.AddHours(2) > requestDate.StartDate)
+                            {
+                                if (date.EndDate.AddHours(2) < requestDate.EndDate)
+                                {
+                                    requestDates1.Add(requestDate);
+                                    break;
+                                }
+                            }
+
+                            if (requestDate.StartDate < date.EndDate.AddHours(2))
+                            {
+                                if (requestDate.EndDate.AddHours(2) == date.StartDate)
+                                {
+                                    requestDates1.Add(requestDate);
+                                    break;
+                                }
+
+                                if (requestDate.EndDate.AddHours(2) > date.StartDate)
+                                {
+                                    requestDates1.Add(requestDate);
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (date.EndDate.Date == requestDate.EndDate.Date)
+                        {
+                            if (date.EndDate.AddHours(2) == requestDate.StartDate)
+                            {
+                                requestDates1.Add(requestDate);
+                                break;
+                            }
+
+                            if (date.EndDate.AddHours(2) > requestDate.StartDate)
+                            {
+                                if (date.EndDate.AddHours(2) < requestDate.EndDate)
+                                {
+                                    requestDates1.Add(requestDate);
+                                    break;
+                                }
+                            }
+
+                            if (requestDate.StartDate < date.EndDate.AddHours(2))
+                            {
+                                if (requestDate.EndDate.AddHours(2) == date.StartDate)
+                                {
+                                    requestDates1.Add(requestDate);
+                                    break;
+                                }
+
+                                if (requestDate.EndDate.AddHours(2) > date.StartDate)
+                                {
+                                    requestDates1.Add(requestDate);
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (requestDate.StartDate.Hour == date.StartDate.Hour)
+                        {
+                            requestDates1.Add(requestDate);
+                            break;
+                        }
+
+                        if (requestDate.EndDate.Hour == date.StartDate.Hour)
+                        {
+                            requestDates1.Add(requestDate);
+                            break;
+                        }
+
+                        if (date.EndDate.Hour == requestDate.StartDate.Hour)
+                        {
+                            requestDates1.Add(requestDate);
+                            break;
+                        }
+
+                        if (date.EndDate.Hour == requestDate.EndDate.Hour)
+                        {
+                            requestDates1.Add(requestDate);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return requestDates1;
         }
 
     }

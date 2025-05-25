@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CCSS_Repository.Entities;
+using CCSS_Repository.Model;
 using CCSS_Repository.Repositories;
 using CCSS_Service.Libraries;
 using CCSS_Service.Model;
@@ -49,6 +50,7 @@ namespace CCSS_Service.Services
         Task<bool> ChangePassword(string email);
         Task<List<AccountResponse>> GetAllAccount(string searchterm, string role);
         Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDateAndRange(string characterId, List<Date> dates, string requestId);
+        Task<List<AccountByCharacterAndDateResponse>> GetAccountByRequestId(string requestId);
         Task<string> UpdateStatusAccount(string accountId, bool IsActive);
     }
     public class AccountService : IAccountService
@@ -68,8 +70,9 @@ namespace CCSS_Service.Services
         private readonly IAccountImageRepository accountImageRepository;
         private readonly IRequestDatesRepository requestDatesRepository;
         private readonly IRequestRepository requestRepository;
+        private readonly IRequestCharacterRepository requestCharacterRepository;
 
-        public AccountService(ICartRepository cartRepository, IBeginTransactionRepository beginTransactionRepository, ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService, Image image, IAccountImageRepository accountImageRepository, IRequestDatesRepository requestDatesRepository, IRequestRepository requestRepository)
+        public AccountService(ICartRepository cartRepository, IBeginTransactionRepository beginTransactionRepository, ITaskRepository taskRepository, IAccountRepository accountRepository, IMapper mapper, ICharacterRepository characterRepository, IContractRespository contractRepository, /*ICategoryRepository categoryRepository,*/ IConfiguration configuration, IRefreshTokenRepository refreshTokenRepository, IEmailService emailService, Image image, IAccountImageRepository accountImageRepository, IRequestDatesRepository requestDatesRepository, IRequestRepository requestRepository, IRequestCharacterRepository requestCharacterRepository)
         {
             this.taskRepository = taskRepository;
             _beginTransactionRepository = beginTransactionRepository;
@@ -86,6 +89,7 @@ namespace CCSS_Service.Services
             this.accountImageRepository = accountImageRepository;
             this.requestDatesRepository = requestDatesRepository;
             this.requestRepository = requestRepository;
+            this.requestCharacterRepository = requestCharacterRepository;
         }
 
         #region GetAccountByEventCharacterId
@@ -182,7 +186,7 @@ namespace CCSS_Service.Services
                 new Claim(ClaimTypes.Role, account.Role.RoleName.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, jti)
             }),
-                    Expires = DateTime.UtcNow.AddHours(2),
+                    Expires = DateTime.UtcNow.AddDays(7),
                     Issuer = issuer,
                     Audience = audience,
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
@@ -582,7 +586,7 @@ namespace CCSS_Service.Services
 
                 string format = "HH:mm dd/MM/yyyy";
                 CultureInfo culture = CultureInfo.InvariantCulture;
-
+                List<DateRepo> dateRepos = new List<DateRepo>();
                 foreach (var date in dates)
                 {
                     DateTime start = DateTime.ParseExact(date.StartDate, format, culture);
@@ -593,30 +597,37 @@ namespace CCSS_Service.Services
                         throw new Exception("Start can not greater than EndDate");
                     }
 
-                    foreach (Account account in accounts)
+                    DateRepo dateRepo = new DateRepo()
                     {
-                        bool result = await taskRepository.CheckTaskIsValid(account, start, end);
-                        if (result)
-                        {
-                            AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
-                            accountRespose.Images ??= new List<AccountImageResponse>();
+                        StartDate = start,
+                        EndDate = end,
+                    };
+                    dateRepos.Add(dateRepo);
+                }
 
-                            if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                foreach (Account account in accounts)
+                {
+                    bool result = await taskRepository.CheckTaskIsValid(account, dateRepos);
+                    if (result)
+                    {
+                        AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                        accountRespose.Images ??= new List<AccountImageResponse>();
+
+                        if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                        {
+                            foreach (var image in account.AccountImages)
                             {
-                                foreach (var image in account.AccountImages)
+                                accountRespose.Images.Add(new AccountImageResponse
                                 {
-                                    accountRespose.Images.Add(new AccountImageResponse
-                                    {
-                                        AccountImageId = image.AccountImageId,
-                                        UrlImage = image.UrlImage,
-                                        CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
-                                        UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
-                                        IsAvatar = image.IsAvatar
-                                    });
-                                }
+                                    AccountImageId = image.AccountImageId,
+                                    UrlImage = image.UrlImage,
+                                    CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    IsAvatar = image.IsAvatar
+                                });
                             }
-                            accountByCharacterAndDateResponses.Add(accountRespose);
                         }
+                        accountByCharacterAndDateResponses.Add(accountRespose);
                     }
                 }
 
@@ -656,32 +667,32 @@ namespace CCSS_Service.Services
                         throw new Exception("Start date cannot be greater than end date.");
                     }
 
-                    foreach (Account account in accounts)
-                    {
-                        bool result = await taskRepository.CheckTaskIsValid(account, startDate, endDate);
-                        if (result)
-                        {
-                            // Map và thêm vào danh sách kết quả
-                            AccountByCharacterAndDateResponse accountResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
-                            accountResponse.Images ??= new List<AccountImageResponse>();
+                    //foreach (Account account in accounts)
+                    //{
+                    //    bool result = await taskRepository.CheckTaskIsValid(account, startDate, endDate);
+                    //    if (result)
+                    //    {
+                    //        // Map và thêm vào danh sách kết quả
+                    //        AccountByCharacterAndDateResponse accountResponse = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                    //        accountResponse.Images ??= new List<AccountImageResponse>();
 
-                            if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
-                            {
-                                foreach (var image in account.AccountImages)
-                                {
-                                    accountResponse.Images.Add(new AccountImageResponse
-                                    {
-                                        AccountImageId = image.AccountImageId,
-                                        UrlImage = image.UrlImage,
-                                        CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
-                                        UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
-                                        IsAvatar = image.IsAvatar
-                                    });
-                                }
-                            }
-                            accountByCharacterAndDateResponses.Add(accountResponse);
-                        }
-                    }
+                    //        if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                    //        {
+                    //            foreach (var image in account.AccountImages)
+                    //            {
+                    //                accountResponse.Images.Add(new AccountImageResponse
+                    //                {
+                    //                    AccountImageId = image.AccountImageId,
+                    //                    UrlImage = image.UrlImage,
+                    //                    CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                    //                    UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                    //                    IsAvatar = image.IsAvatar
+                    //                });
+                    //            }
+                    //        }
+                    //        accountByCharacterAndDateResponses.Add(accountResponse);
+                    //    }
+                    //}
                 }
                 catch (FormatException)
                 {
@@ -889,6 +900,8 @@ namespace CCSS_Service.Services
                 string format = "HH:mm dd/MM/yyyy";
                 CultureInfo culture = CultureInfo.InvariantCulture;
 
+                List<DateRepo> dateRepos = new List<DateRepo>();
+
                 foreach (var date in dates)
                 {
                     DateTime start = DateTime.ParseExact(date.StartDate, format, culture);
@@ -899,32 +912,39 @@ namespace CCSS_Service.Services
                         throw new Exception("Start can not greater than EndDate");
                     }
 
-                    foreach (Account account in accounts)
+                    DateRepo dateRepo = new DateRepo()
                     {
-                        bool result = await taskRepository.CheckTaskIsValid(account, start, end);
-                        bool resultRequetDate = await requestDatesRepository.CheckValidRequestDate(account, start, end);
+                        StartDate = start,
+                        EndDate = end,
+                    };
+                    dateRepos.Add(dateRepo);
+                }
 
-                        if (result && resultRequetDate)
+                foreach (Account account in accounts)
+                {
+                    bool result = await taskRepository.CheckTaskIsValid(account, dateRepos);
+                    bool resultRequetDate = await requestDatesRepository.CheckValidRequestDate(account, dateRepos);
+
+                    if (result && resultRequetDate)
+                    {
+                        AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                        accountRespose.Images ??= new List<AccountImageResponse>();
+
+                        if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
                         {
-                            AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
-                            accountRespose.Images ??= new List<AccountImageResponse>();
-
-                            if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                            foreach (var image in account.AccountImages)
                             {
-                                foreach (var image in account.AccountImages)
+                                accountRespose.Images.Add(new AccountImageResponse
                                 {
-                                    accountRespose.Images.Add(new AccountImageResponse
-                                    {
-                                        AccountImageId = image.AccountImageId,
-                                        UrlImage = image.UrlImage,
-                                        CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
-                                        UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
-                                        IsAvatar = image.IsAvatar
-                                    });
-                                }
+                                    AccountImageId = image.AccountImageId,
+                                    UrlImage = image.UrlImage,
+                                    CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    IsAvatar = image.IsAvatar
+                                });
                             }
-                            accountByCharacterAndDateResponses.Add(accountRespose);
                         }
+                        accountByCharacterAndDateResponses.Add(accountRespose);
                     }
                 }
 
@@ -974,6 +994,8 @@ namespace CCSS_Service.Services
                 string format = "HH:mm dd/MM/yyyy";
                 CultureInfo culture = CultureInfo.InvariantCulture;
 
+                List<DateRepo> dateRepos = new List<DateRepo>();
+
                 foreach (var date in dates)
                 {
                     DateTime start = DateTime.ParseExact(date.StartDate, format, culture);
@@ -984,32 +1006,39 @@ namespace CCSS_Service.Services
                         throw new Exception("Start can not greater than EndDate");
                     }
 
-                    foreach (Account account in accounts)
+                    DateRepo dateRepo = new DateRepo()
                     {
-                        bool result = await taskRepository.CheckTaskIsValid(account, start, end);
-                        bool resultRequetDate = await requestDatesRepository.CheckValidRequestDate(account, start, end);
+                        StartDate = start,
+                        EndDate = end,
+                    };
+                    dateRepos.Add(dateRepo);
+                }
 
-                        if (result && resultRequetDate)
+                foreach (Account account in accounts)
+                {
+                    bool result = await taskRepository.CheckTaskIsValid(account, dateRepos);
+                    bool resultRequetDate = await requestDatesRepository.CheckValidRequestDate(account, dateRepos);
+
+                    if (result && resultRequetDate)
+                    {
+                        AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                        accountRespose.Images ??= new List<AccountImageResponse>();
+
+                        if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
                         {
-                            AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
-                            accountRespose.Images ??= new List<AccountImageResponse>();
-
-                            if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                            foreach (var image in account.AccountImages)
                             {
-                                foreach (var image in account.AccountImages)
+                                accountRespose.Images.Add(new AccountImageResponse
                                 {
-                                    accountRespose.Images.Add(new AccountImageResponse
-                                    {
-                                        AccountImageId = image.AccountImageId,
-                                        UrlImage = image.UrlImage,
-                                        CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
-                                        UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
-                                        IsAvatar = image.IsAvatar
-                                    });
-                                }
+                                    AccountImageId = image.AccountImageId,
+                                    UrlImage = image.UrlImage,
+                                    CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                    IsAvatar = image.IsAvatar
+                                });
                             }
-                            accountByCharacterAndDateResponses.Add(accountRespose);
                         }
+                        accountByCharacterAndDateResponses.Add(accountRespose);
                     }
                 }
 
@@ -1036,5 +1065,82 @@ namespace CCSS_Service.Services
             return result ? "Update Success" : "Update Failed";
         }
         #endregion
+
+        public async Task<List<AccountByCharacterAndDateResponse>> GetAccountByRequestId(string requestId)
+        {
+            try
+            {
+                List<AccountByCharacterAndDateResponse> accountByCharacterAndDateResponses = new List<AccountByCharacterAndDateResponse>();
+                Request request = await requestRepository.GetRequestById(requestId);
+                if (request == null)
+                {
+                    throw new Exception("Request does not exist");
+                }
+
+                string[] parts = request.Range.Split(' ')[0].Split('-');
+
+                int minSalary = int.Parse(parts[0]); // 15000
+                int maxSalary = int.Parse(parts[1]);
+
+                foreach (RequestCharacter requestCharacter in request.RequestCharacters)
+                {
+                    Character character = await characterRepository.GetCharacter(requestCharacter.CharacterId);
+                    if (character == null)
+                    {
+                        throw new Exception("Character does not exist");
+                    }
+
+                    List<DateRepo> dateRepos = new List<DateRepo>();
+
+                    foreach (RequestDate requestDate in requestCharacter.RequestDates)
+                    {
+                        DateRepo dateRepo = new DateRepo()
+                        {
+                            StartDate = requestDate.StartDate,
+                            EndDate = requestDate.EndDate,
+                        };
+                        dateRepos.Add(dateRepo);
+                    }
+
+                    List<Account> accounts = await accountRepository.GetAllAccountsByCharacter(character, minSalary, maxSalary);
+
+                    foreach (Account account in accounts)
+                    {
+                        bool result = await taskRepository.CheckTaskIsValid(account, dateRepos);
+                        bool resultRequetDate = await requestDatesRepository.CheckValidRequestDate(account, dateRepos);
+
+                        if (result && resultRequetDate)
+                        {
+                            AccountByCharacterAndDateResponse accountRespose = mapper.Map<AccountByCharacterAndDateResponse>(account);
+                            accountRespose.Images ??= new List<AccountImageResponse>();
+
+                            if (account.AccountImages?.Any() == true) // Kiểm tra danh sách có phần tử không
+                            {
+                                foreach (var image in account.AccountImages)
+                                {
+                                    accountRespose.Images.Add(new AccountImageResponse
+                                    {
+                                        AccountImageId = image.AccountImageId,
+                                        UrlImage = image.UrlImage,
+                                        CreateDate = image.CreateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                        UpdateDate = image.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                                        IsAvatar = image.IsAvatar
+                                    });
+                                }
+                            }
+                            accountByCharacterAndDateResponses.Add(accountRespose);
+                        }
+                    }
+
+                }
+
+                return accountByCharacterAndDateResponses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        
     }
 }
