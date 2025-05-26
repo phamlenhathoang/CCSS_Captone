@@ -51,12 +51,24 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpPut]
+        [HttpPut("Status")]
         public async Task<IActionResult> UpdateStatusRequestCharacter(string requestCharacterId, RequestCharacterStatus status)
         {
             if (ModelState.IsValid)
             {
                 var result = await _characterServices.UpdateStatus(requestCharacterId, status);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
+
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateRequestCharacter(string requestCharacterId, CharacterInRequest characterInRequest)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _characterServices.UpdateCharactetInRRequest(requestCharacterId, characterInRequest);
                 return Ok(result);
             }
             return BadRequest(ModelState);
