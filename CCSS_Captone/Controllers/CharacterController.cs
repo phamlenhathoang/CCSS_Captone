@@ -21,8 +21,8 @@ namespace CCSS_Captone.Controllers
             _characterService = characterService;
         }
 
-        [Authorize(Roles = "Customer")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Customer")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("{id}")]
         public async Task<ActionResult<CharacterResponse>> GetCharater(string id)
         {
