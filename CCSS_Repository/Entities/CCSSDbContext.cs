@@ -282,11 +282,11 @@ namespace CCSS_Repository.Entities
                .OnDelete(DeleteBehavior.NoAction);
             
             //Request - AccountCoupon
-            modelBuilder.Entity<Request>()
-               .HasOne(a => a.AccountCoupon)
-               .WithMany(r => r.Requests)
-               .HasForeignKey(a => a.AccountCouponId)
-               .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<Request>()
+            //   .HasOne(a => a.AccountCoupon)
+            //   .WithMany(r => r.Requests)
+            //   .HasForeignKey(a => a.AccountCouponId)
+            //   .OnDelete(DeleteBehavior.NoAction);
 
             //Coupon - AccountCoupon
             modelBuilder.Entity<Coupon>()
@@ -498,7 +498,8 @@ new Account { AccountId = "A042", Name = "Consultant", Email = "consultant@examp
                 new AccountImage { AccountImageId = "AI25", AccountId = "A012", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/ef/ba/25/efba25ef9c63e7294340de6f14048795.jpg" },
                 new AccountImage { AccountImageId = "AI26", AccountId = "A012", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/93/d2/55/93d2552c5c6a0f90d867c4617f33d0d1.jpg" },
                 new AccountImage { AccountImageId = "AI27", AccountId = "A012", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/7e/62/d7/7e62d70e323b92b166026ab145e1703e.jpg" },
-                new AccountImage { AccountImageId = "AI28", AccountId = "A012", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/42/de/11/42de11b557fe83b3040178671db20b73.jpg" },        
+                new AccountImage { AccountImageId = "AI28", AccountId = "A012", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/42/de/11/42de11b557fe83b3040178671db20b73.jpg" },  
+                
                 new AccountImage { AccountImageId = "AI29", AccountId = "A016", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/c6/49/e8/c649e8f88170ebf177e6910bfc518696.jpg" },
                 new AccountImage { AccountImageId = "AI30", AccountId = "A016", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/77/3d/e8/773de85e694e8f88ed08ff5509ae4355.jpg" },
                 new AccountImage { AccountImageId = "AI31", AccountId = "A016", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/26/94/bd/2694bd3519bcfd0cdf518d6b5ead8684.jpg" },
@@ -632,7 +633,12 @@ new Account { AccountId = "A042", Name = "Consultant", Email = "consultant@examp
                 new AccountImage { AccountImageId = "AI133", AccountId = "A015", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/94/c2/69/94c269ee90d0d8a5584a7a48207f50ca.jpg" },
                 new AccountImage { AccountImageId = "AI134", AccountId = "A015", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/2d/96/29/2d96299467843d2876516493ade1eea3.jpg" },
                 new AccountImage { AccountImageId = "AI135", AccountId = "A015", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/e4/df/f6/e4dff6f0e30260a73019f5d1a44cd8ec.jpg" },
-                new AccountImage { AccountImageId = "AI136", AccountId = "A015", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/9e/4f/2a/9e4f2ab84f5d8e3c4e36ad2c5c3962e2.jpg" }
+                new AccountImage { AccountImageId = "AI136", AccountId = "A015", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/9e/4f/2a/9e4f2ab84f5d8e3c4e36ad2c5c3962e2.jpg" },
+
+                new AccountImage { AccountImageId = "AI137", AccountId = "A011", CreateDate = DateTime.Now, IsAvatar = true, UrlImage = "https://i.pinimg.com/736x/fc/32/5f/fc325f1a000313529aaf6dd0653bfaca.jpg" },
+                new AccountImage { AccountImageId = "AI138", AccountId = "A011", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/a5/e2/55/a5e255b0fe8d64fd9178b912069c13c4.jpg" },
+                new AccountImage { AccountImageId = "AI139", AccountId = "A011", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/39/bc/ca/39bccadc5344e7e653c21c8b8722d0d7.jpg" },
+                new AccountImage { AccountImageId = "AI140", AccountId = "A011", CreateDate = DateTime.Now, IsAvatar = false, UrlImage = "https://i.pinimg.com/736x/13/12/c1/1312c16d2b1ad283e850918f0e7910b2.jpg" }
                 );
 
             #endregion
@@ -1083,18 +1089,67 @@ new EventCharacter { EventCharacterId = "EC012", EventId = "E012", CharacterId =
 
             #region EventImage
             modelBuilder.Entity<EventImage>().HasData(
-    new EventImage { ImageId = "EI001", ImageUrl = "https://example.com/event1.jpg", CreateDate = DateTime.UtcNow, EventId = "E001" },
-    new EventImage { ImageId = "EI002", ImageUrl = "https://example.com/event2.jpg", CreateDate = DateTime.UtcNow, EventId = "E002" },
-    new EventImage { ImageId = "EI003", ImageUrl = "https://example.com/event3.jpg", CreateDate = DateTime.UtcNow, EventId = "E003" },
-    new EventImage { ImageId = "EI004", ImageUrl = "https://example.com/event4.jpg", CreateDate = DateTime.UtcNow, EventId = "E004" },
-    new EventImage { ImageId = "EI005", ImageUrl = "https://example.com/event5.jpg", CreateDate = DateTime.UtcNow, EventId = "E005" },
-    new EventImage { ImageId = "EI006", ImageUrl = "https://example.com/event6.jpg", CreateDate = DateTime.UtcNow, EventId = "E006" },
-    new EventImage { ImageId = "EI007", ImageUrl = "https://example.com/event7.jpg", CreateDate = DateTime.UtcNow, EventId = "E007" },
-    new EventImage { ImageId = "EI008", ImageUrl = "https://example.com/event8.jpg", CreateDate = DateTime.UtcNow, EventId = "E008" },
-    new EventImage { ImageId = "EI009", ImageUrl = "https://example.com/event9.jpg", CreateDate = DateTime.UtcNow, EventId = "E009" },
-    new EventImage { ImageId = "EI010", ImageUrl = "https://example.com/event10.jpg", CreateDate = DateTime.UtcNow, EventId = "E010" },
-    new EventImage { ImageId = "EI011", ImageUrl = "https://example.com/event11.jpg", CreateDate = DateTime.UtcNow, EventId = "E011" },
-    new EventImage { ImageId = "EI012", ImageUrl = "https://example.com/event12.jpg", CreateDate = DateTime.UtcNow, EventId = "E012" }
+    new EventImage { ImageId = "EI001", ImageUrl = "https://cdn-i.vtcnews.vn/resize/th/upload/2020/01/20/1-08485735.jpg", CreateDate = DateTime.UtcNow, EventId = "E001", IsAvatar = true},
+    new EventImage { ImageId = "EI002", ImageUrl = "https://file.hstatic.net/200000833669/article/1_d82dc925795b42c29f8bd09558e1e0f9.png", CreateDate = DateTime.UtcNow, EventId = "E001", IsAvatar = false },
+    new EventImage { ImageId = "EI003", ImageUrl = "https://mcdn.coolmate.me/image/May2022/top-le-hoi-cosplay-festival-noi-tieng_735.jpg", CreateDate = DateTime.UtcNow, EventId = "E001", IsAvatar = false },
+    new EventImage { ImageId = "EI004", ImageUrl = "https://i.vietgiaitri.com/2011/7/0/chien-binh-king-of-fighters-giuong-oai-o-le-hoi-cosplay-26cc13.jpg", CreateDate = DateTime.UtcNow, EventId = "E001", IsAvatar = false },
+
+
+    new EventImage { ImageId = "EI005", ImageUrl = "https://media.wnyc.org/i/1500/996/l/80/1/BBG_SakuraMatsuri_CosplayFashions_Ratliff.jpg", CreateDate = DateTime.UtcNow, EventId = "E002", IsAvatar = true },
+    new EventImage { ImageId = "EI006", ImageUrl = "https://www.vice.com/wp-content/uploads/sites/2/2024/07/photos-of-cherry-blossoms-and-cosplay-costumes-at-a-kawaii-festival-592-1462476637.jpg", CreateDate = DateTime.UtcNow, EventId = "E002", IsAvatar = false },
+    new EventImage { ImageId = "EI007", ImageUrl = "https://www.vice.com/wp-content/uploads/sites/2/2016/05/photos-of-cherry-blossoms-and-cosplay-costumes-at-a-kawaii-festival-1462476813.jpg", CreateDate = DateTime.UtcNow, EventId = "E002", IsAvatar = false },
+    new EventImage { ImageId = "EI008", ImageUrl = "https://s.hdnux.com/photos/01/37/11/15/24941427/3/ratio3x2_960.jpg", CreateDate = DateTime.UtcNow, EventId = "E002", IsAvatar = false },
+
+
+    new EventImage { ImageId = "EI009", ImageUrl = "https://capetownguy.co.za/wp-content/uploads/2023/02/Comic-Con-Cape-Town-2023-Cosplay.png", CreateDate = DateTime.UtcNow, EventId = "E003",IsAvatar = true},
+    new EventImage { ImageId = "EI010", ImageUrl = "https://i.pinimg.com/736x/63/77/6f/63776facb73bf3f2ed8530a94cf592ca.jpg", CreateDate = DateTime.UtcNow, EventId = "E003", IsAvatar = false },
+    new EventImage { ImageId = "EI011", ImageUrl = "https://i.pinimg.com/736x/2f/94/3c/2f943c92510f7ad55e221289a9534a48.jpg", CreateDate = DateTime.UtcNow, EventId = "E003", IsAvatar = false },
+    new EventImage { ImageId = "EI012", ImageUrl = "https://i.pinimg.com/736x/5a/25/ce/5a25ce753b5fbcf92653809ca3325adb.jpg", CreateDate = DateTime.UtcNow, EventId = "E003", IsAvatar = false },
+
+    new EventImage { ImageId = "EI013", ImageUrl = "https://i.pinimg.com/736x/82/2e/55/822e554280de23126220adeeaf6a7631.jpg", CreateDate = DateTime.UtcNow, EventId = "E004", IsAvatar = true },
+    new EventImage { ImageId = "EI014", ImageUrl = "https://i.pinimg.com/736x/0a/73/7b/0a737b3f0f73fcf845a1311f73077bdf.jpg", CreateDate = DateTime.UtcNow, EventId = "E004", IsAvatar = false },
+    new EventImage { ImageId = "EI015", ImageUrl = "https://i.pinimg.com/736x/c1/e1/61/c1e161a1e6b1f27ab79100674ce715c2.jpg", CreateDate = DateTime.UtcNow, EventId = "E004", IsAvatar = false },
+    new EventImage { ImageId = "EI016", ImageUrl = "https://i.pinimg.com/736x/ff/29/f7/ff29f7e84980b8f649a0b655013e6afa.jpg", CreateDate = DateTime.UtcNow, EventId = "E004", IsAvatar = false },
+
+    new EventImage { ImageId = "EI017", ImageUrl = "https://i.pinimg.com/736x/64/91/68/649168c18bd7d4665c4bfe032a2e3cb1.jpg", CreateDate = DateTime.UtcNow, EventId = "E005", IsAvatar = true },
+    new EventImage { ImageId = "EI018", ImageUrl = "https://i.pinimg.com/736x/c3/ee/73/c3ee73dc1432a9aefe4bc23ca9205b49.jpg", CreateDate = DateTime.UtcNow, EventId = "E005", IsAvatar = false },
+    new EventImage { ImageId = "EI019", ImageUrl = "https://i.pinimg.com/736x/f4/2f/f0/f42ff0521385be118d2ed5ca19fa7416.jpg", CreateDate = DateTime.UtcNow, EventId = "E005", IsAvatar = false },
+    new EventImage { ImageId = "EI020", ImageUrl = "https://i.pinimg.com/736x/59/80/d6/5980d6150aff50f385f509c75d9b9cb5.jpg", CreateDate = DateTime.UtcNow, EventId = "E005", IsAvatar = false },
+
+    new EventImage { ImageId = "EI021", ImageUrl = "https://i.pinimg.com/736x/1f/b6/b4/1fb6b49b7e7b1faa3743a74d631f8ee0.jpg", CreateDate = DateTime.UtcNow, EventId = "E006", IsAvatar = true },
+    new EventImage { ImageId = "EI022", ImageUrl = "https://i.pinimg.com/736x/6f/2a/1c/6f2a1c31e1caab9245f4ee67bbff1a8a.jpg", CreateDate = DateTime.UtcNow, EventId = "E006", IsAvatar = false },
+    new EventImage { ImageId = "EI023", ImageUrl = "https://i.pinimg.com/736x/5e/2a/37/5e2a375a7bc3bc8f53a3bda093685afc.jpg", CreateDate = DateTime.UtcNow, EventId = "E006", IsAvatar = false },
+    new EventImage { ImageId = "EI024", ImageUrl = "https://i.pinimg.com/736x/1e/23/fc/1e23fcbdbe84a87de180f1214ab970df.jpg", CreateDate = DateTime.UtcNow, EventId = "E006", IsAvatar = false },
+
+    new EventImage { ImageId = "EI025", ImageUrl = "https://i.pinimg.com/736x/e0/52/52/e052529f9d0df8ca08e0bfd0d609ff33.jpg", CreateDate = DateTime.UtcNow, EventId = "E007", IsAvatar = true },
+    new EventImage { ImageId = "EI026", ImageUrl = "https://i.pinimg.com/736x/79/b5/6f/79b56f067960f2f8780c87d6d1be5f69.jpg", CreateDate = DateTime.UtcNow, EventId = "E007", IsAvatar = false },
+    new EventImage { ImageId = "EI027", ImageUrl = "https://i.pinimg.com/736x/89/a1/8f/89a18f6bfb85722c64bcfa4b687c4502.jpg", CreateDate = DateTime.UtcNow, EventId = "E007", IsAvatar = false },
+    new EventImage { ImageId = "EI028", ImageUrl = "https://i.pinimg.com/736x/7c/57/da/7c57dac7ca005402b824f56c44e4ac7b.jpg", CreateDate = DateTime.UtcNow, EventId = "E007", IsAvatar = false },
+
+    new EventImage { ImageId = "EI029", ImageUrl = "https://i.pinimg.com/736x/f3/4d/ca/f34dcaadcedb9848b6ac6419f65c3b9d.jpg", CreateDate = DateTime.UtcNow, EventId = "E008", IsAvatar = true },
+    new EventImage { ImageId = "EI030", ImageUrl = "https://i.pinimg.com/736x/98/a0/ed/98a0ed924ea799cd3612a3bb5e3aee61.jpg", CreateDate = DateTime.UtcNow, EventId = "E008", IsAvatar = false },
+    new EventImage { ImageId = "EI031", ImageUrl = "https://i.pinimg.com/736x/73/1c/f4/731cf48f181b3bf7fc71d80baa3656f1.jpg", CreateDate = DateTime.UtcNow, EventId = "E008", IsAvatar = false },
+    new EventImage { ImageId = "EI032", ImageUrl = "https://i.pinimg.com/736x/a3/50/52/a35052bc18722657ab0db440e4f8a8e5.jpg", CreateDate = DateTime.UtcNow, EventId = "E008", IsAvatar = false },
+
+    new EventImage { ImageId = "EI033", ImageUrl = "https://i.pinimg.com/736x/7f/bd/72/7fbd72289fecd220453a16d062273ee5.jpg", CreateDate = DateTime.UtcNow, EventId = "E009", IsAvatar = true },
+    new EventImage { ImageId = "EI034", ImageUrl = "https://i.pinimg.com/736x/34/d1/4a/34d14a51253bb4e9ff3ae3134ec76b68.jpg", CreateDate = DateTime.UtcNow, EventId = "E009", IsAvatar = false },
+    new EventImage { ImageId = "EI035", ImageUrl = "https://i.pinimg.com/736x/b0/34/df/b034df343ed32c11f2d62e07420e1998.jpg", CreateDate = DateTime.UtcNow, EventId = "E009", IsAvatar = false },
+    new EventImage { ImageId = "EI036", ImageUrl = "https://i.pinimg.com/736x/ec/0e/36/ec0e363bf99880faa216b6152819ee83.jpg", CreateDate = DateTime.UtcNow, EventId = "E009", IsAvatar = false },
+
+    new EventImage { ImageId = "EI037", ImageUrl = "https://i.pinimg.com/736x/a2/7b/b5/a27bb57604f07d1346d91d5fbd15f4a3.jpg", CreateDate = DateTime.UtcNow, EventId = "E010", IsAvatar = true },
+    new EventImage { ImageId = "EI038", ImageUrl = "https://i.pinimg.com/736x/6d/be/09/6dbe0978d8e5cc1c3a471588b38249aa.jpg", CreateDate = DateTime.UtcNow, EventId = "E010", IsAvatar = false },
+    new EventImage { ImageId = "EI039", ImageUrl = "https://i.pinimg.com/736x/dd/66/1b/dd661b664fe68d74c187f35a5246e36a.jpg", CreateDate = DateTime.UtcNow, EventId = "E010", IsAvatar = false },
+    new EventImage { ImageId = "EI040", ImageUrl = "https://i.pinimg.com/736x/8f/30/f3/8f30f3582ba3ad998c74ee5e771eb364.jpg", CreateDate = DateTime.UtcNow, EventId = "E010", IsAvatar = false },
+
+    new EventImage { ImageId = "EI041", ImageUrl = "https://i.pinimg.com/736x/20/3e/88/203e883cc5ac82f26e2bf8a1d4eefe36.jpg", CreateDate = DateTime.UtcNow, EventId = "E011", IsAvatar = true },
+    new EventImage { ImageId = "EI042", ImageUrl = "https://i.pinimg.com/736x/60/fc/fd/60fcfd76e8b418743b04d4347459cb37.jpg", CreateDate = DateTime.UtcNow, EventId = "E011", IsAvatar = false },
+    new EventImage { ImageId = "EI043", ImageUrl = "https://i.pinimg.com/736x/e2/48/6d/e2486ddc382f7b87edfb422e46de3aca.jpg", CreateDate = DateTime.UtcNow, EventId = "E011", IsAvatar = false },
+    new EventImage { ImageId = "EI044", ImageUrl = "https://i.pinimg.com/736x/ce/2a/c5/ce2ac53f28e0dccf609b835418cdff89.jpg", CreateDate = DateTime.UtcNow, EventId = "E011", IsAvatar = false },
+
+    new EventImage { ImageId = "EI045", ImageUrl = "https://i.pinimg.com/736x/5b/17/a0/5b17a0593a7e9b7d69d9b6cceef06897.jpg", CreateDate = DateTime.UtcNow, EventId = "E012", IsAvatar = true },
+    new EventImage { ImageId = "EI046", ImageUrl = "https://i.pinimg.com/736x/09/68/8b/09688bd8893f39a83e0e9e6b3073f2de.jpg", CreateDate = DateTime.UtcNow, EventId = "E012", IsAvatar = false },
+    new EventImage { ImageId = "EI047", ImageUrl = "https://i.pinimg.com/736x/73/9f/ad/739fad57ea629dc30f5bfc5a2ae0052b.jpg", CreateDate = DateTime.UtcNow, EventId = "E012", IsAvatar = false },
+    new EventImage { ImageId = "EI048", ImageUrl = "https://i.pinimg.com/736x/d1/a9/d5/d1a9d54239ffab7c036f7b5b6853f204.jpg", CreateDate = DateTime.UtcNow, EventId = "E012", IsAvatar = false }
 
 );
             #endregion
@@ -1174,21 +1229,82 @@ new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015",
 
             #region ProductImage
             modelBuilder.Entity<ProductImage>().HasData(
-    new ProductImage { ProductImageId = "IMG001", ProductId = "P001", UrlImage = "https://example.com/images/naruto_wig.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG002", ProductId = "P002", UrlImage = "https://example.com/images/mario_hat.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG003", ProductId = "P003", UrlImage = "https://example.com/images/sasuke_costume.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG004", ProductId = "P004", UrlImage = "https://example.com/images/zelda_sword.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG005", ProductId = "P005", UrlImage = "https://example.com/images/one_piece_hat.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG006", ProductId = "P006", UrlImage = "https://example.com/images/miku_wig.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG007", ProductId = "P007", UrlImage = "https://example.com/images/demon_slayer_earrings.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG008", ProductId = "P008", UrlImage = "https://example.com/images/aot_jacket.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG009", ProductId = "P009", UrlImage = "https://example.com/images/pikachu_onesie.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG010", ProductId = "P010", UrlImage = "https://example.com/images/buster_sword.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG011", ProductId = "P011", UrlImage = "https://example.com/images/genshin_vision.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG012", ProductId = "P012", UrlImage = "https://example.com/images/jinx_wig.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG013", ProductId = "P013", UrlImage = "https://example.com/images/sailor_moon_tiara.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG014", ProductId = "P014", UrlImage = "https://example.com/images/spiderman_suit.jpg", CreateDate = DateTime.UtcNow },
-    new ProductImage { ProductImageId = "IMG015", ProductId = "P015", UrlImage = "https://example.com/images/harry_potter_wand.jpg", CreateDate = DateTime.UtcNow }
+    new ProductImage { ProductImageId = "IMG001", ProductId = "P001", UrlImage = "https://i.pinimg.com/736x/5b/d5/22/5bd522817214385b4673af094a9ddb25.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG002", ProductId = "P001", UrlImage = "https://i.pinimg.com/736x/6e/22/65/6e22657c7a91292b46fb727671e2e3f2.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG003", ProductId = "P001", UrlImage = "https://i.pinimg.com/736x/7d/c0/97/7dc09783c0757b5761a327e0f1908b8a.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG004", ProductId = "P001", UrlImage = "https://i.pinimg.com/736x/c3/9b/87/c39b87b5994c805893e36939ea71f4d8.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+
+    new ProductImage { ProductImageId = "IMG005", ProductId = "P002", UrlImage = "https://i.pinimg.com/736x/c2/83/bd/c283bd289da144479eba982d37a21023.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG006", ProductId = "P002", UrlImage = "https://i.pinimg.com/736x/da/6e/9c/da6e9c955676f70ee5ea549866f68b8e.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG007", ProductId = "P002", UrlImage = "https://i.pinimg.com/736x/17/33/0a/17330a9c865ea4116ea4f4531bbaaaa3.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG008", ProductId = "P002", UrlImage = "https://i.pinimg.com/736x/87/5f/2c/875f2c6e0ddc5fa194c072be3f0a620f.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+    new ProductImage { ProductImageId = "IMG009", ProductId = "P003", UrlImage = "https://i.pinimg.com/736x/6d/e7/eb/6de7eb00ca29991cc8c01f24ef66ee01.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG0010", ProductId = "P003", UrlImage = "https://i.pinimg.com/736x/d4/ce/c3/d4cec31b0cadfc10a6a10fa560260b65.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG011", ProductId = "P003", UrlImage = "https://i.pinimg.com/736x/78/97/12/78971296728a3b39b8de627a6993e110.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG012", ProductId = "P003", UrlImage = "https://i.pinimg.com/736x/c7/77/37/c77737d95e245f66d50cd681705d6d94.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+    new ProductImage { ProductImageId = "IMG013", ProductId = "P004", UrlImage = "https://i.pinimg.com/736x/6d/ff/62/6dff62b556d097a31cacb345051b6a51.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG014", ProductId = "P004", UrlImage = "https://i.pinimg.com/736x/cf/1c/63/cf1c63218c1c3b6b0c3133c9d18eeb65.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG015", ProductId = "P004", UrlImage = "https://i.pinimg.com/736x/fd/62/37/fd62370a4e5c8487aa7375a94b1a1cd4.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG016", ProductId = "P004", UrlImage = "https://i.pinimg.com/736x/d9/f4/65/d9f4652af418f7f08e9c0dd20cd48e38.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+    new ProductImage { ProductImageId = "IMG017", ProductId = "P005", UrlImage = "https://i.pinimg.com/736x/0f/a9/75/0fa9756da968f296b0652351c88359bb.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG018", ProductId = "P005", UrlImage = "https://i.pinimg.com/736x/a1/89/af/a189af181a4b9368d3a07281077446e5.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG019", ProductId = "P005", UrlImage = "https://i.pinimg.com/736x/59/98/2d/59982d1537b336ab322e6d4e0177cf97.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG020", ProductId = "P005", UrlImage = "https://i.pinimg.com/736x/2c/65/70/2c65702a200aec274b0ada18203b2711.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+
+    new ProductImage { ProductImageId = "IMG021", ProductId = "P006", UrlImage = "https://i.pinimg.com/736x/b0/39/73/b039737d55a68818f0ac547fdbaf7815.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG022", ProductId = "P006", UrlImage = "https://i.pinimg.com/736x/a3/31/81/a331810d4d85ae1fa1df5fe83b53b74c.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG023", ProductId = "P006", UrlImage = "https://i.pinimg.com/736x/13/1e/f5/131ef5b06ee95d29011cb76aff94ef63.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG024", ProductId = "P006", UrlImage = "https://i.pinimg.com/736x/16/49/09/164909996c0e0c6dc1d68e278efbc04c.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+    new ProductImage { ProductImageId = "IMG025", ProductId = "P007", UrlImage = "https://i.pinimg.com/736x/f6/b4/2b/f6b42bd8c809edc47c8095776c22a283.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG026", ProductId = "P007", UrlImage = "https://i.pinimg.com/736x/db/f9/d9/dbf9d9ed33a32f4c71f68f9c1b578104.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG027", ProductId = "P007", UrlImage = "https://i.pinimg.com/736x/ca/70/a3/ca70a3442377fad4cc2cd1be7648dcba.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG028", ProductId = "P007", UrlImage = "https://i.pinimg.com/736x/1d/34/a9/1d34a9e9bc035715cfd19023287ea85f.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+    new ProductImage { ProductImageId = "IMG029", ProductId = "P008", UrlImage = "https://i.pinimg.com/736x/b1/da/b9/b1dab9d33e6d035bdde006a105eeadef.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG030", ProductId = "P008", UrlImage = "https://i.pinimg.com/736x/62/ac/61/62ac610d8bc2584d633d1814fb6b18b7.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG031", ProductId = "P008", UrlImage = "https://i.pinimg.com/736x/75/26/76/752676ee949f782d4cadc0d999195ce6.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG032", ProductId = "P008", UrlImage = "https://i.pinimg.com/736x/01/1d/61/011d614a9a40efeb72f96008ed501e24.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+    new ProductImage { ProductImageId = "IMG033", ProductId = "P009", UrlImage = "https://i.pinimg.com/736x/65/d7/2e/65d72ed8d39d3b65d1c13e621ad12dff.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG034", ProductId = "P009", UrlImage = "https://i.pinimg.com/736x/9e/9a/7e/9e9a7eb75a0f0f438cdaa417d9ed598d.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG035", ProductId = "P009", UrlImage = "https://i.pinimg.com/736x/fa/c1/6d/fac16d229965d9e35ad9e15d7f8737bc.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG036", ProductId = "P009", UrlImage = "https://i.pinimg.com/736x/41/64/bc/4164bcd05287c90a6ba3452f3c0620dd.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+    new ProductImage { ProductImageId = "IMG037", ProductId = "P010", UrlImage = "https://i.pinimg.com/736x/76/b5/f4/76b5f4bce572053343da266875956ee7.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG038", ProductId = "P010", UrlImage = "https://i.pinimg.com/736x/6e/80/32/6e8032f27f8eadd8be17bf84f0d3eb1d.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG039", ProductId = "P010", UrlImage = "https://i.pinimg.com/736x/ad/97/ed/ad97ed1142ab1af8a4f2aa72bc9929df.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG040", ProductId = "P010", UrlImage = "https://i.pinimg.com/736x/29/39/80/293980992371bec074c437a122cf50a6.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+    new ProductImage { ProductImageId = "IMG041", ProductId = "P011", UrlImage = "https://i.pinimg.com/736x/c2/78/46/c2784664ee92b7b68d13636a1bb225ba.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG042", ProductId = "P011", UrlImage = "https://i.pinimg.com/736x/7b/79/8b/7b798b0b6f554f39fc3c627896d10505.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG043", ProductId = "P011", UrlImage = "https://i.pinimg.com/736x/48/a2/39/48a23998808e6bc0cebedda709b1bc09.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG044", ProductId = "P011", UrlImage = "https://i.pinimg.com/736x/82/af/d0/82afd0193f6db6964ed98f70377907aa.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+    new ProductImage { ProductImageId = "IMG045", ProductId = "P012", UrlImage = "https://i.pinimg.com/736x/75/5b/05/755b05d7e05e3fddf7ce40087954c291.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG046", ProductId = "P012", UrlImage = "https://i.pinimg.com/736x/c0/00/22/c000227c9f4552613b74e05abb01ff39.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG047", ProductId = "P012", UrlImage = "https://i.pinimg.com/736x/1f/46/00/1f4600b358bd2c80841a8de451c8d9e8.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG048", ProductId = "P012", UrlImage = "https://i.pinimg.com/736x/3d/82/2f/3d822ffe72bc0e042e05d880cff43b80.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+    new ProductImage { ProductImageId = "IMG049", ProductId = "P013", UrlImage = "https://i.pinimg.com/736x/53/aa/1d/53aa1d016627f6aa7a93dd5ac0eaa6d6.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG050", ProductId = "P013", UrlImage = "https://i.pinimg.com/736x/b6/f5/4d/b6f54d32184f0180a19ede274b2ef3e8.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG051", ProductId = "P013", UrlImage = "https://i.pinimg.com/736x/4d/3c/92/4d3c92588e4300ff2f078018f12932a6.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG052", ProductId = "P013", UrlImage = "https://i.pinimg.com/736x/bb/d5/38/bbd53811a73fdeee8a1beb431ad98dec.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+    new ProductImage { ProductImageId = "IMG053", ProductId = "P014", UrlImage = "https://i.pinimg.com/736x/01/7e/88/017e8893693250c62ee4dc8a059fc28f.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG054", ProductId = "P014", UrlImage = "https://i.pinimg.com/736x/bf/f9/8c/bff98c45138233055df0518b98ba1c8a.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG055", ProductId = "P014", UrlImage = "https://i.pinimg.com/736x/62/c1/6a/62c16adfe9d21528e4fbda326c7f9c4e.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG056", ProductId = "P014", UrlImage = "https://i.pinimg.com/736x/41/dc/84/41dc846bb27211bf1ee05868b3d9d913.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+
+    new ProductImage { ProductImageId = "IMG057", ProductId = "P015", UrlImage = "https://i.pinimg.com/736x/2b/fc/86/2bfc86cdf9e672dd654eccc1b39e2aa2.jpg", CreateDate = DateTime.UtcNow, IsAvatar = true },
+    new ProductImage { ProductImageId = "IMG058", ProductId = "P015", UrlImage = "https://i.pinimg.com/736x/b4/9a/fb/b49afbd899c56e9ea9cd4b7b157766e5.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG059", ProductId = "P015", UrlImage = "https://i.pinimg.com/736x/d0/6c/1b/d06c1b7556183644da554ba5c9bafddc.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false },
+    new ProductImage { ProductImageId = "IMG060", ProductId = "P015", UrlImage = "https://i.pinimg.com/736x/33/1d/1b/331d1bbe075950dce9c99b6736fba3ae.jpg", CreateDate = DateTime.UtcNow, IsAvatar = false }
 );
             #endregion
 

@@ -47,7 +47,7 @@ namespace CCSS_Repository.Repositories
         }
         public async Task<Request> GetRequestById(string id)
         {
-            return await _context.Requests.Include(r => r.RequestCharacters).ThenInclude(r => r.RequestDates).Include(r => r.Contract).ThenInclude(r => r.ContractCharacters).Include(r => r.Package).Include(r => r.AccountCoupon).ThenInclude(r => r.Coupon).FirstOrDefaultAsync(sc => sc.RequestId.Equals(id));  
+            return await _context.Requests.Include(r => r.RequestCharacters).ThenInclude(r => r.RequestDates).Include(r => r.Contract).ThenInclude(r => r.ContractCharacters).Include(r => r.Package).FirstOrDefaultAsync(sc => sc.RequestId.Equals(id));  
         }
 
         public async Task<bool> AddRequest( Request request)
