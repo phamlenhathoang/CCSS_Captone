@@ -46,14 +46,14 @@ namespace CCSS_Service.Libraries
 
                 AccountCoupon accountCoupon = null;
 
-                if (request.AccountCouponId != null)
-                {
-                    accountCoupon = await accountCouponRepository.GetAccountCoupon(request.AccountCouponId);
-                    if (accountCoupon == null)
-                    {
-                        throw new Exception("AccountCoupon does not exist");
-                    }
-                }
+                //if (request.AccountCouponId != null)
+                //{
+                //    accountCoupon = await accountCouponRepository.GetAccountCoupon(request.AccountCouponId);
+                //    if (accountCoupon == null)
+                //    {
+                //        throw new Exception("AccountCoupon does not exist");
+                //    }
+                //}
 
                 Package package = null;
 

@@ -288,23 +288,23 @@ namespace CCSS_Service.Services
                         crsItem.PackageName = null;
                     }
 
-                    if (contract.Request.AccountCouponId != null)
-                    {
-                        AccountCoupon accountCoupon = await accountCouponRepository.GetAccountCoupon(contract.Request.AccountCouponId);
-                        if (accountCoupon == null)
-                        {
-                            throw new Exception("AccountCoupon does not exist");
-                        }
-                        if (accountCoupon.Coupon == null)
-                        {
-                            throw new Exception("Coupont does not exist");
-                        }
-                        crsItem.AccountCoupon = accountCoupon.Coupon.Amount;
-                    }
-                    else
-                    {
-                        crsItem.AccountCoupon = 0;
-                    }
+                    //if (contract.Request.AccountCouponId != null)
+                    //{
+                    //    AccountCoupon accountCoupon = await accountCouponRepository.GetAccountCoupon(contract.Request.AccountCouponId);
+                    //    if (accountCoupon == null)
+                    //    {
+                    //        throw new Exception("AccountCoupon does not exist");
+                    //    }
+                    //    if (accountCoupon.Coupon == null)
+                    //    {
+                    //        throw new Exception("Coupont does not exist");
+                    //    }
+                    //    crsItem.AccountCoupon = accountCoupon.Coupon.Amount;
+                    //}
+                    //else
+                    //{
+                    //    crsItem.AccountCoupon = 0;
+                    //}
 
                     if (contract.ContractCharacters != null)
                     {
@@ -414,23 +414,23 @@ namespace CCSS_Service.Services
                         crsItem.PackageName = null;
                     }
 
-                    if (contract.Request.AccountCouponId != null)
-                    {
-                        AccountCoupon accountCoupon = await accountCouponRepository.GetAccountCoupon(contract.Request.AccountCouponId);
-                        if (accountCoupon == null)
-                        {
-                            throw new Exception("AccountCoupon does not exist");
-                        }
-                        if (accountCoupon.Coupon == null)
-                        {
-                            throw new Exception("Coupont does not exist");
-                        }
-                        crsItem.AccountCoupon = accountCoupon.Coupon.Amount;
-                    }
-                    else
-                    {
-                        crsItem.AccountCoupon = 0;
-                    }
+                    //if (contract.Request.AccountCouponId != null)
+                    //{
+                    //    AccountCoupon accountCoupon = await accountCouponRepository.GetAccountCoupon(contract.Request.AccountCouponId);
+                    //    if (accountCoupon == null)
+                    //    {
+                    //        throw new Exception("AccountCoupon does not exist");
+                    //    }
+                    //    if (accountCoupon.Coupon == null)
+                    //    {
+                    //        throw new Exception("Coupont does not exist");
+                    //    }
+                    //    crsItem.AccountCoupon = accountCoupon.Coupon.Amount;
+                    //}
+                    //else
+                    //{
+                    //    crsItem.AccountCoupon = 0;
+                    //}
 
                     if (contract.ContractCharacters != null)
                     {
@@ -538,23 +538,23 @@ namespace CCSS_Service.Services
                     crsItem.PackageName = null;
                 }
 
-                if (contract.Request.AccountCouponId != null)
-                {
-                    AccountCoupon accountCoupon = await accountCouponRepository.GetAccountCoupon(contract.Request.AccountCouponId);
-                    if (accountCoupon == null)
-                    {
-                        throw new Exception("AccountCoupon does not exist");
-                    }
-                    if (accountCoupon.Coupon == null)
-                    {
-                        throw new Exception("Coupont does not exist");
-                    }
-                    crsItem.AccountCoupon = accountCoupon.Coupon.Amount;
-                }
-                else
-                {
-                    crsItem.AccountCoupon = 0;
-                }
+                //if (contract.Request.AccountCouponId != null)
+                //{
+                //    AccountCoupon accountCoupon = await accountCouponRepository.GetAccountCoupon(contract.Request.AccountCouponId);
+                //    if (accountCoupon == null)
+                //    {
+                //        throw new Exception("AccountCoupon does not exist");
+                //    }
+                //    if (accountCoupon.Coupon == null)
+                //    {
+                //        throw new Exception("Coupont does not exist");
+                //    }
+                //    crsItem.AccountCoupon = accountCoupon.Coupon.Amount;
+                //}
+                //else
+                //{
+                //    crsItem.AccountCoupon = 0;
+                //}
 
                 if (contract.ContractCharacters != null)
                 {

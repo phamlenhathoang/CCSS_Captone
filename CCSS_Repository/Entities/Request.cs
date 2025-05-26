@@ -41,9 +41,9 @@ namespace CCSS_Repository.Entities
         public string? PackageId { get; set; }
         public Package Package { get; set; }
 
-        [ForeignKey("AccountCouponId")]
-        public string? AccountCouponId { get; set; }
-        public AccountCoupon AccountCoupon { get; set; }
+        //[ForeignKey("AccountCouponId")]
+        //public string? AccountCouponId { get; set; }
+        //public AccountCoupon AccountCoupon { get; set; }
         public Contract Contract { get; set; }
         public ICollection<RequestCharacter> RequestCharacters { get; set; } = new List<RequestCharacter>();
     }
