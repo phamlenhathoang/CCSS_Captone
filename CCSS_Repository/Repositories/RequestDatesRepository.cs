@@ -350,7 +350,7 @@ namespace CCSS_Repository.Repositories
         public async Task<List<RequestDate>> GetAllRequestDateByListDate(List<DateRepo> dateRepos)
         {
             var requestDates = await _context.RequestDates
-                .Include(rd => rd.RequestCharacter).Where(rd => rd.RequestCharacter.CosplayerId != null)
+                .Include(rd => rd.RequestCharacter).Where(rd => rd.RequestCharacter.CosplayerId != null && rd.RequestCharacter.Status == RequestCharacterStatus.Accept)
                 .ToListAsync();
 
             List<RequestDate> requestDates1 = new List<RequestDate>();
