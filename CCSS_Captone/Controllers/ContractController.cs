@@ -2,6 +2,7 @@
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -86,6 +87,8 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
+        [Authorize(Roles = "Consultant")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         public async Task<IActionResult> AddContract(string requestId, int deposit)
         {
@@ -93,6 +96,8 @@ namespace CCSS_Captone.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Consultant")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
         public async Task<IActionResult> UpdateStatusContract(string contracId, string status, string? reason)
         {

@@ -2,6 +2,8 @@
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -19,6 +21,8 @@ namespace CCSS_Captone.Controllers
             this.accountService = accountService;
         }
 
+        [Authorize(Roles = "Customer, Admin, Manager, Consultant")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("GetAllAccount")]
         public async Task<ActionResult> GetAllAccount(string? searchterm, [Required] string roleId)
         {

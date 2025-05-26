@@ -2,6 +2,8 @@
 using CCSS_Service.Model.Requests;
 using CCSS_Service.Model.Responses;
 using CCSS_Service.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Writers;
@@ -19,6 +21,8 @@ namespace CCSS_Captone.Controllers
             _characterService = characterService;
         }
 
+        [Authorize(Roles = "Customer")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("{id}")]
         public async Task<ActionResult<CharacterResponse>> GetCharater(string id)
         {
