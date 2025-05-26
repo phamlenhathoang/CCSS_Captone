@@ -53,8 +53,8 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [Authorize(Roles = "Customer")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Customer")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("CreateRentCostume")]
         public async Task<IActionResult> CreateRentCostumeRequest([FromBody] RequestDtos requestDtos)
         {
@@ -66,8 +66,8 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [Authorize(Roles = "Customer")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Customer")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("CreateRentCosplayer")]
         public async Task<IActionResult> CreateRentCosplayerRequest([FromBody] RequestRentCosplayer requestDtos)
         {
@@ -79,8 +79,8 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [Authorize(Roles = "Customer")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Customer")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("CreateCreateEvent")]
         public async Task<IActionResult> CreateCreateEventRequest([FromBody] RequestCreateEvent requestDtos)
         {
@@ -92,8 +92,8 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [Authorize(Roles = "Customer")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Customer")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
         public async Task<IActionResult> UpdateRequest([FromQuery] string RequestId, [FromBody] UpdateRequestDtos updateRequestDtos)
         {
@@ -112,8 +112,8 @@ namespace CCSS_Captone.Controllers
             }
         }
 
-        [Authorize(Roles = "Customer, Manager")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Customer, Manager")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("Status")]
         public async Task<IActionResult> UpdateStatusRequest(string requestId, RequestStatus requestStatus, string? reason)
         {
@@ -186,8 +186,8 @@ namespace CCSS_Captone.Controllers
             }
         }
 
-        [Authorize(Roles = "Customer")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Customer")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPatch("UpdateDepositRequest")]
         public async Task<IActionResult> UpdateDeposit(string requestId,[FromBody] UpdateDepositDtos dtos)
         {
