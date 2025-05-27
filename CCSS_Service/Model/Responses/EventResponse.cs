@@ -20,7 +20,7 @@ namespace CCSS_Service.Model.Responses
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
         public int participantQuantity { get; set; }
-
+        public EventStatus? Status { get; set; }
         public string? CreateBy { get; set; }
         public ICollection<TicketResponse> Ticket { get; set; }
         public ICollection<EventImageResponse> EventImageResponses { get; set; } = new List<EventImageResponse>();
