@@ -84,7 +84,14 @@ namespace CCSS_Service.Services
                     model.Amount -= (model.Amount * accountCoupon.Coupon.Percent) / 100;
                 }
             }
-
+            if (model.TicketId != null)
+            {
+                var events = await _eventrepository.GetEventByTicketId(int.Parse(model.TicketId));
+                if (events.Status != EventStatus.Pending)
+                {
+                    throw new Exception("Tickets are sold out");
+                }
+            }
 
             string orderId = DateTime.UtcNow.Ticks.ToString();
             model.OrderInfo = "Khách hàng: " + model.FullName + ". Nội dung: " + model.OrderInfo;

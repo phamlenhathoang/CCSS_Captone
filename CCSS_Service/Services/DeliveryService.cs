@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SixLabors.ImageSharp;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace CCSS_Service.Services
 {
     public interface IDeliveryService
     {
-        Task<string> CreateDeliveryOrderAsync(string orderId);
+        //Task<string> CreateDeliveryOrderAsync(string orderId);
         Task<string> CalculateDeliveryFeeAsync(string orderId);
         Task<ApiProvinceResponse> GetProvincesAsync();
         Task<ApiDistrictResponse> GetDistrictsAsync(int provinceId);
@@ -46,154 +47,155 @@ namespace CCSS_Service.Services
             _accountRepository = accountRepository;
         }
 
-        public async Task<string> CreateDeliveryOrderAsync(string orderId)
-        {
-            var senderConfig = _config.GetSection("GhnConfig:Sender").Get<SenderConfig>();
-            var orderResult = await _orderRepository.GetProductsByOrderId(orderId);
-            var ord = await _orderRepository.GetOrderById(orderId);
-            var acc = await _accountRepository.GetAccount(ord.AccountId);
-            var items = orderResult.Select(op => new ItemRequest
-            {
-                name = op.ProductName,
-                code = op.ProductName, // Gán ProductName cho code luôn
-                quantity = op.Quantity ?? 0,
-                price = (int)Math.Ceiling(op.Price ?? 0),
-                length = op.length,
-                width = op.width,
-                height = op.height,
-                weight = op.weight
-            }).ToList();
+        //public async Task<string> CreateDeliveryOrderAsync(string orderId)
+        //{
+        //    var senderConfig = _config.GetSection("GhnConfig:Sender").Get<SenderConfig>();
+        //    var orderResult = await _orderRepository.GetProductsByOrderId(orderId);
+        //    var ord = await _orderRepository.GetOrderById(orderId);
+        //    var acc = await _accountRepository.GetAccount(ord.AccountId);
+        //    var items = orderResult.Select(op => new ItemRequest
+        //    {
+        //        name = op.ProductName,
+        //        code = op.ProductName, // Gán ProductName cho code luôn
+        //        quantity = op.Quantity ?? 0,
+        //        price = (int)Math.Ceiling(op.Price ?? 0),
+        //        length = op.length,
+        //        width = op.width,
+        //        height = op.height,
+        //        weight = op.weight
+        //    }).ToList();
 
-            var totalInsuranceValue = Math.Min(items.Sum(i => i.price), 5000000);
-            var totalWeight = items.Sum(i => i.weight);
-            var averageLength = items.Any() ? (int)Math.Ceiling(items.Average(i => i.length)) : 0;
-            var totalWidth = items.Sum(i => i.width);
-            var maxHeight = items.Any() ? items.Max(i => i.height) : 0;
-            var fullOrder = new
-            {
-                payment_type_id = 1,
-                note = "CCSS Product",
-                required_note = "KHONGCHOXEMHANG",
+        //    var totalInsuranceValue = Math.Min(items.Sum(i => i.price), 5000000);
+        //    var totalWeight = items.Sum(i => i.weight);
+        //    var averageLength = items.Any() ? (int)Math.Ceiling(items.Average(i => i.length)) : 0;
+        //    var totalWidth = items.Sum(i => i.width);
+        //    var maxHeight = items.Any() ? items.Max(i => i.height) : 0;
+        //    var fullOrder = new
+        //    {
+        //        payment_type_id = 1,
+        //        note = "CCSS Product",
+        //        required_note = "KHONGCHOXEMHANG",
 
-                from_name = senderConfig.from_name,
-                from_phone = senderConfig.from_phone,
-                from_address = senderConfig.from_address,
-                from_ward_name = senderConfig.from_ward_name,
-                from_district_name = senderConfig.from_district_name,
-                from_province_name = senderConfig.from_province_name,
-                return_phone = senderConfig.return_phone,
-                return_address = senderConfig.return_address,
+        //        from_name = senderConfig.from_name,
+        //        from_phone = senderConfig.from_phone,
+        //        from_address = senderConfig.from_address,
+        //        from_ward_name = senderConfig.from_ward_name,
+        //        from_district_name = senderConfig.from_district_name,
+        //        from_province_name = senderConfig.from_province_name,
+        //        return_phone = senderConfig.return_phone,
+        //        return_address = senderConfig.return_address,
 
-                to_name = acc.Name,
-                to_phone = ord.Phone,
-                to_address = ord.Address,
-                to_ward_code = ord.to_ward_code,
-                to_district_id = ord.to_district_id,
+        //        to_name = acc.Name,
+        //        to_phone = ord.Phone,
+        //        to_address = ord.Address,
+        //        to_ward_code = ord.to_ward_code,
+        //        to_district_id = ord.to_district_id,
 
-                cod_amount = 0,
-                content = "CCSS Product",
-                weight = totalWeight,
-                length = averageLength,
-                width = totalWidth,
-                height = maxHeight,
+        //        cod_amount = 0,
+        //        content = "CCSS Product",
+        //        weight = totalWeight,
+        //        length = averageLength,
+        //        width = totalWidth,
+        //        height = maxHeight,
 
-                //cod_failed_amount = order.cod_failed_amount,
-                pick_station_id = 0,
-                deliver_station_id = 0,
-                insurance_value = totalInsuranceValue,
-                service_id = 0,
-                service_type_id = 2,
-                coupon = (string)null,
-                pick_shift = new List<int> { 2 },
-                items = items
-            };
+        //        //cod_failed_amount = order.cod_failed_amount,
+        //        pick_station_id = 0,
+        //        deliver_station_id = 0,
+        //        insurance_value = totalInsuranceValue,
+        //        service_id = 0,
+        //        service_type_id = 2,
+        //        coupon = (string)null,
+        //        pick_shift = new List<int> { 2 },
+        //        items = items
+        //    };
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}shiip/public-api/v2/shipping-order/create");
-            request.Headers.Add("Token", _token);
-            request.Headers.Add("ShopId", _shopId);
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        //    var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}shiip/public-api/v2/shipping-order/create");
+        //    request.Headers.Add("Token", _token);
+        //    request.Headers.Add("ShopId", _shopId);
+        //    request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var json = JsonConvert.SerializeObject(fullOrder);
-            Console.WriteLine("aaaaaaaaaaaa"+json);
-            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+        //    var json = JsonConvert.SerializeObject(fullOrder);
+        //    Console.WriteLine("aaaaaaaaaaaa"+json);
+        //    request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.SendAsync(request);
-            var result = await response.Content.ReadAsStringAsync();
+        //    var response = await _httpClient.SendAsync(request);
+        //    var result = await response.Content.ReadAsStringAsync();
             
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"GHN API Error: {result}");
-            }
-            var responseObject = JObject.Parse(result);  // Parse JSON string thành JObject
-            var orderCode = responseObject["data"]["order_code"].ToString();  // Lấy order_code
+        //    if (!response.IsSuccessStatusCode)
+        //    {
+        //        throw new Exception($"GHN API Error: {result}");
+        //    }
+        //    var responseObject = JObject.Parse(result);  // Parse JSON string thành JObject
+        //    var orderCode = responseObject["data"]["order_code"].ToString();  // Lấy order_code
 
-            ord.ShipCode = orderCode;
-            var status = await ViewDeliveryStatuslAsync(orderId);
-            ord.ShipCode = orderCode;
-            ord.ShipStatus = ShipStatus.WaitConfirm ;
-            await _orderRepository.UpdateOrder(ord);
-            return result;
-        }
+        //    ord.ShipCode = orderCode;
+        //    var status = await ViewDeliveryStatuslAsync(orderId);
+        //    ord.ShipCode = orderCode;
+        //    ord.ShipStatus = ShipStatus.WaitConfirm ;
+        //    await _orderRepository.UpdateOrder(ord);
+        //    return result;
+        //}
         public async Task<string> CalculateDeliveryFeeAsync(string orderId)
         {
-            var senderConfig = _config.GetSection("GhnConfig:Sender").Get<SenderConfig>();
-            var orderResult = await _orderRepository.GetProductsByOrderId(orderId);
-            var ord = await _orderRepository.GetOrderById(orderId);
+            //var senderConfig = _config.GetSection("GhnConfig:Sender").Get<SenderConfig>();
+            //var orderResult = await _orderRepository.GetProductsByOrderId(orderId);
+            //var ord = await _orderRepository.GetOrderById(orderId);
 
-            var items = orderResult.Select(op => new
-            {
-                name = op.ProductName,
-                quantity = op.Quantity ?? 0,
-                height = op.height,
-                weight = op.weight,
-                length = op.length,
-                width = op.width
-            }).ToList();
+            //var items = orderResult.Select(op => new
+            //{
+            //    name = op.ProductName,
+            //    quantity = op.Quantity ?? 0,
+            //    height = op.height,
+            //    weight = op.weight,
+            //    length = op.length,
+            //    width = op.width
+            //}).ToList();
 
-            var totalWeight = items.Sum(i => i.weight);
-            var averageLength = items.Any() ? (int)Math.Ceiling(items.Average(i => i.length)) : 0;
-            var totalWidth = items.Sum(i => i.width);
-            var maxHeight = items.Any() ? items.Max(i => i.height) : 0;
-            var insuranceValue = Math.Min(orderResult.Sum(op => (int)Math.Ceiling(op.Price ?? 0)), 5000000);
+            //var totalWeight = items.Sum(i => i.weight);
+            //var averageLength = items.Any() ? (int)Math.Ceiling(items.Average(i => i.length)) : 0;
+            //var totalWidth = items.Sum(i => i.width);
+            //var maxHeight = items.Any() ? items.Max(i => i.height) : 0;
+            //var insuranceValue = Math.Min(orderResult.Sum(op => (int)Math.Ceiling(op.Price ?? 0)), 5000000);
 
-            var feeRequest = new
-            {
-                from_district_id = senderConfig.from_district_id,   
-                from_ward_code = senderConfig.from_ward_code,
-                service_id = 0, 
-                service_type_id = 2,
-                to_district_id = ord.to_district_id,
-                to_ward_code = ord.to_ward_code,
-                height = maxHeight,
-                length = averageLength,
-                weight = totalWeight,
-                width = totalWidth,
-                insurance_value = insuranceValue,
-                cod_failed_amount = 0,
-                coupon = (string)null,
-                items = items
-            };
+            //var feeRequest = new
+            //{
+            //    from_district_id = senderConfig.from_district_id,   
+            //    from_ward_code = senderConfig.from_ward_code,
+            //    service_id = 0, 
+            //    service_type_id = 2,
+            //    to_district_id = ord.to_district_id,
+            //    to_ward_code = ord.to_ward_code,
+            //    height = maxHeight,
+            //    length = averageLength,
+            //    weight = totalWeight,
+            //    width = totalWidth,
+            //    insurance_value = insuranceValue,
+            //    cod_failed_amount = 0,
+            //    coupon = (string)null,
+            //    items = items
+            //};
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}shiip/public-api/v2/shipping-order/fee");
-            request.Headers.Add("Token", _token);
-            request.Headers.Add("ShopId", _shopId);
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}shiip/public-api/v2/shipping-order/fee");
+            //request.Headers.Add("Token", _token);
+            //request.Headers.Add("ShopId", _shopId);
+            //request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var json = JsonConvert.SerializeObject(feeRequest);
-            Console.WriteLine("Fee Request: " + json);
+            //var json = JsonConvert.SerializeObject(feeRequest);
+            //Console.WriteLine("Fee Request: " + json);
 
-            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            //request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.SendAsync(request);
-            var result = await response.Content.ReadAsStringAsync();
+            //var response = await _httpClient.SendAsync(request);
+            //var result = await response.Content.ReadAsStringAsync();
 
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"GHN Fee API Error: {result}");
-            }
-            var jsonResult = JObject.Parse(result);
-            var serviceFee = jsonResult["data"]?["service_fee"]?.Value<int>() ?? 0;
-            return serviceFee.ToString(); 
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    throw new Exception($"GHN Fee API Error: {result}");
+            //}
+            //var jsonResult = JObject.Parse(result);
+            //var serviceFee = jsonResult["data"]?["service_fee"]?.Value<int>() ?? 0;
+            //return serviceFee.ToString(); 
+            return _config.GetValue<string>("ShipPrice");
         }
         public async Task<string> ViewDeliveryStatuslAsync(string orderId)
         {

@@ -25,7 +25,12 @@ namespace CCSS_Repository.Entities
         public string? CreateBy { get; set; }
         public EventStatus? Status { get; set; }
 
-        public ICollection<Ticket> Ticket { get; set; } 
+        [ForeignKey("LocationId")]
+        public string? LocationId { get; set; }
+        public Location LocationEvent { get; set; }
+        public ICollection<Ticket> Ticket { get; set; }
+
+        
         public ICollection<EventImage> EventImages { get; set; } = new List<EventImage>();
         public ICollection<EventCharacter> EventCharacters { get; set; } = new List<EventCharacter>();  
         public ICollection<EventActivity> EventActivities { get; set; } = new List<EventActivity>();    
@@ -34,6 +39,7 @@ namespace CCSS_Repository.Entities
     public enum EventStatus
     {
         Pending,
+        StopSell,
         Progressing,
         Completed,
     }
