@@ -75,17 +75,46 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Payment>> GetAllPaymentByAccountIdAndPurpose(string accountId, PaymentPurpose purpose)
         {
+            //if(purpose == PaymentPurpose.Order)
+            //{
+            //    return await _context.Payments.Include(sc => sc.Order).Where(o => o.Order.AccountId.Equals(accountId)).ToListAsync();
+            //}else if(purpose == PaymentPurpose.BuyTicket)
+            //{
+            //    return await _context.Payments.Include(sc => sc.TicketAccount).Where(t => t.TicketAccount.AccountId.Equals(accountId)).ToListAsync();
+            //}
+            //else
+            //{
+            //    return await _context.Payments.Include(sc => sc.Contract).Where(c => c.Contract.CreateBy.Equals(accountId)).ToListAsync();
+            //}
+
+            IQueryable<Payment> query = _context.Payments;
+
             if(purpose == PaymentPurpose.Order)
             {
-                return await _context.Payments.Include(sc => sc.Order).Where(o => o.Order.AccountId.Equals(accountId)).ToListAsync();
-            }else if(purpose == PaymentPurpose.BuyTicket)
-            {
-                return await _context.Payments.Include(sc => sc.TicketAccount).Where(t => t.TicketAccount.AccountId.Equals(accountId)).ToListAsync();
+                query = query.Include(p => p.Order).Where(o => o.Order.AccountId.Equals(accountId) && o.Purpose == purpose);
             }
-            else
+
+            if (purpose == PaymentPurpose.BuyTicket)
             {
-                return await _context.Payments.Include(sc => sc.Contract).Where(c => c.Contract.CreateBy.Equals(accountId)).ToListAsync();
+                query = query.Include(p => p.TicketAccount).Where(o => o.TicketAccount.AccountId.Equals(accountId) && o.Purpose == purpose);
             }
+
+            if (purpose == PaymentPurpose.ContractDeposit)
+            {
+                query = query.Include(p => p.Contract).Where(o => o.Contract.CreateBy.Equals(accountId) && o.Purpose == purpose);
+            }
+
+            if (purpose == PaymentPurpose.contractSettlement)
+            {
+                query = query.Include(p => p.Contract).Where(o => o.Contract.CreateBy.Equals(accountId) && o.Purpose == purpose);
+            }
+
+            if (purpose == PaymentPurpose.Refund)
+            {
+                query = query.Include(p => p.Contract).Where(o => o.Contract.CreateBy.Equals(accountId) && o.Purpose == purpose);
+            }
+
+            return await query.OrderByDescending(p => p.CreatAt).ToListAsync();
         }
 
     }
