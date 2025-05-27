@@ -48,6 +48,7 @@ namespace CCSS_Service.Services
         Task<bool> DeleteAllTaskByEventId(string eventId);
         Task<List<TaskResponse>> GetAllTaskByRequestId(string requestId);
         Task<List<TaskResponse>> GetAllTaskByContractId(string contractId);
+        Task<List<TaskResponse>> GetAllTaskByCoslayerIDAndContractId(string cosplayerId, string contractId);
     }
     public class TaskService : ITaskService
     {
@@ -1029,6 +1030,73 @@ namespace CCSS_Service.Services
                 return taskResponses;
             }
             catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<TaskResponse>> GetAllTaskByCoslayerIDAndContractId(string cosplayerId, string contractId)
+        {
+            try
+            {
+                List<TaskResponse> taskResponses = new List<TaskResponse>();
+                Contract contract = await contractRespository.GetContractById(contractId);
+                Account account = await accountRepository.GetAccount(cosplayerId);
+
+                if (contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
+
+                if (account == null)
+                {
+                    throw new Exception("Account does not exist");
+                }
+
+                if (account.Role.RoleName != RoleName.Cosplayer)
+                {
+                    throw new Exception("Account must be cosplayer");
+                }
+
+                if (contract.ContractCharacters.Count > 0)
+                {
+                    foreach (var contractCharacter in contract.ContractCharacters)
+                    {
+                        List<Task> tasks = await taskRepository.GetTaskByContractCharacterIdAndCosplayerId(contractCharacter.ContractCharacterId, account.AccountId);
+
+                        if (tasks.Count > 0)
+                        {
+                            foreach (var task in tasks)
+                            {
+                                TaskResponse taskResponse = new TaskResponse()
+                                {
+                                    AccountId = task.AccountId,
+                                    ContractId = contractCharacter.ContractId,
+                                    CreateDate = task.CreateDate?.ToString("dd/MM/yyyy"),
+                                    Description = task.Description,
+                                    IsActive = task.IsActive,
+                                    StartDate = task.StartDate?.ToString("dd/MM/yyyy"),
+                                    EndDate = task.EndDate?.ToString("dd/MM/yyyy"),
+                                    Location = task.Location,
+                                    Status = task.Status.ToString(),
+                                    TaskId = task.TaskId,
+                                    TaskName = task.TaskName,
+                                    UpdateDate = task.UpdateDate?.ToString("dd/MM/yyyy")
+                                };
+
+                                taskResponses.Add(taskResponse);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("ContractCharacter does not exist");
+                        }
+                    }
+                }
+
+                return taskResponses;
+            }
+            catch(Exception ex) 
             {
                 throw new Exception(ex.Message);
             }

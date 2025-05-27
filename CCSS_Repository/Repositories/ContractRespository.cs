@@ -41,7 +41,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Contract> GetContractById(string id)
         {
-            return await _context.Contracts.Include(c => c.ContractCharacters).Include(c => c.Request).ThenInclude(rc => rc.RequestCharacters).ThenInclude(rc => rc.RequestDates).Include(c => c.ContractRefund).Include(c => c.ContractImages).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
+            return await _context.Contracts.Include(c => c.ContractCharacters).ThenInclude(c => c.Tasks).Include(c => c.Request).ThenInclude(rc => rc.RequestCharacters).ThenInclude(rc => rc.RequestDates).Include(c => c.ContractRefund).Include(c => c.ContractImages).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
         }
 
         public async Task<bool> AddContract(Contract contract)
@@ -75,7 +75,7 @@ namespace CCSS_Repository.Repositories
             return await _context.Contracts.Include(c => c.ContractCharacters).ThenInclude(f => f.Feedback).FirstOrDefaultAsync(sc => sc.ContractId.Equals(id));
         }
 
-        public Task<List<Contract>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId)
+        public async Task<List<Contract>> GetContract(string? contractName, string? contractStatus, string? startDate, string? endDate, string? accountId, string? contractId)
         {
             IQueryable<Contract> query = _context.Contracts.Include(r => r.Request).Include(cc => cc.ContractCharacters);
 
@@ -111,7 +111,7 @@ namespace CCSS_Repository.Repositories
                 query = query.Where(c => c.ContractId.Equals(contractId));
             }
 
-            return query.OrderByDescending(c => c.CreateDate).ToListAsync();
+            return await query.OrderByDescending(c => c.CreateDate).ToListAsync();
         }
 
         public Task<Contract> GetContractByAccountIdAndContractId(string accountId, string contractid)

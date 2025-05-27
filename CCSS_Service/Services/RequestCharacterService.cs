@@ -217,7 +217,7 @@ namespace CCSS_Service.Services
                     await transaction.RollbackAsync();
                     return "Character is not found";
                 }
-                if (character.Quantity > 0)
+                if (character.Quantity <= 0)
                 {
                     await transaction.RollbackAsync();
                     return "Character is out of stock";
@@ -382,6 +382,18 @@ namespace CCSS_Service.Services
             {
                 return "Character in request is not found";
             }
+
+            Account cosplayer = await _accountRepository.GetAccountByAccountId(characterInRequest.CosplayerId);
+            if (cosplayer == null)
+            {
+                return "Account does not exist";
+            }
+
+            if (cosplayer.Role.RoleName != RoleName.Cosplayer)
+            {
+                return "Account must be cosplayer";
+            }
+
             if (character.CharacterId == characterInRequest.CharacterId)
             {
                 character.Quantity = character.Quantity + requestCharacter.Quantity - characterInRequest.Quantity;
@@ -396,17 +408,34 @@ namespace CCSS_Service.Services
                 await _characterRepository.UpdateCharacter(character);
             }
 
+            double totalHour = 0;
+
+            foreach(RequestDate requestDate in requestCharacter.RequestDates)
+            {
+                totalHour += (requestDate.EndDate - requestDate.StartDate).Hours;
+            }
+
             double totalDate = (request.EndDate - request.StartDate).TotalDays + 1;
-            var totalPrice = newCharacter.Price * totalDate * characterInRequest.Quantity;
+            var totalPrice = (newCharacter.Price * totalDate * characterInRequest.Quantity) + (cosplayer.SalaryIndex + totalHour);
 
             requestCharacter.CharacterId = characterInRequest.CharacterId;
             requestCharacter.CosplayerId = characterInRequest.CosplayerId;
             requestCharacter.Quantity = characterInRequest.Quantity;
-            requestCharacter.TotalPrice = characterInRequest.Quantity * character.Price;
+            requestCharacter.TotalPrice = totalPrice;
             requestCharacter.UpdateDate = DateTime.Now;
             requestCharacter.Description = characterInRequest.Description;
 
             var result = await _requestCharacterRepository.UpdateRequestCharacter(requestCharacter);
+
+            double totalPriceRequest = 0;
+
+            foreach(RequestCharacter requestCharacter1 in request.RequestCharacters)
+            {
+                totalPriceRequest += (double)requestCharacter1.TotalPrice;
+            }
+
+            await _requestRepository.UpdateRequest(request);
+
             return result ? "Update Success" : "Update Failed";
 
         }
