@@ -47,7 +47,36 @@ namespace CCSS_Service.BackgroundServices
                                 {
                                     if (DateTime.Now.Date == e.EndDate)
                                     {
-                                        e.Status = EventStatus.Completed;
+                                        if(DateTime.Now.Hour == e.EndDate.Hour)
+                                        {
+                                            e.Status = EventStatus.Completed;
+                                            bool result = await eventRepository.UpdateEvent(e);
+                                            if (!result)
+                                            {
+                                                throw new Exception($"Can not update status of {e.EventId}");
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if(e.Status == EventStatus.Pending)
+                                {
+                                    if (DateTime.Now.Date == e.StartDate.AddDays(-1))
+                                    {
+                                        e.Status = EventStatus.StopSell;
+                                        bool result = await eventRepository.UpdateEvent(e);
+                                        if (!result)
+                                        {
+                                            throw new Exception($"Can not update status of {e.EventId}");
+                                        }
+                                    }
+                                }
+
+                                if(e.StartDate.Date == DateTime.Now.Date)
+                                {
+                                    if(e.StartDate.Hour == DateTime.Now.Hour)
+                                    {
+                                        e.Status = EventStatus.Progressing;
                                         bool result = await eventRepository.UpdateEvent(e);
                                         if (!result)
                                         {

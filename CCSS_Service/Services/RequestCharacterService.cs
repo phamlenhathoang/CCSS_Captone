@@ -383,7 +383,7 @@ namespace CCSS_Service.Services
                 return "Character in request is not found";
             }
 
-            Account cosplayer = await _accountRepository.GetAccountByAccountId(characterInRequest.CosplayerId);
+            Account cosplayer = await _accountRepository.GetAccount(characterInRequest.CosplayerId);
             if (cosplayer == null)
             {
                 return "Account does not exist";
