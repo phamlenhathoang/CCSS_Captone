@@ -87,8 +87,8 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [Authorize(Roles = "Consultant")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Consultant")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         public async Task<IActionResult> AddContract(string requestId, int deposit)
         {
@@ -96,8 +96,8 @@ namespace CCSS_Captone.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Consultant, Customer")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(Roles = "Consultant, Customer")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut]
         public async Task<IActionResult> UpdateStatusContract(string contracId, string status, string? reason)
         {
@@ -109,7 +109,7 @@ namespace CCSS_Captone.Controllers
             return BadRequest(ModelState);
         }
 
-        [Authorize(Roles = "Consultant, Customer")]
+        //[Authorize(Roles = "Consultant, Customer")]
         [HttpPut("UpdateDeliveryContract")]
         public async Task<IActionResult> UpdateDeliveryContract(DeliveryContractRequest deliveryContractRequest)
         {
