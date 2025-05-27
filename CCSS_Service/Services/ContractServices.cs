@@ -248,6 +248,7 @@ namespace CCSS_Service.Services
                 {
                     return crs;
                 }
+
                 Package package = null;
                 foreach (var contract in contracts)
                 {
