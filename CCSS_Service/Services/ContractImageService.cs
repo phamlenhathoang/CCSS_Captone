@@ -9,12 +9,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace CCSS_Service.Services
 {
     public interface IContractImageService
     {
         Task<List<ContractImgeResponse>>  GetContractImageByContractIdAndStatus(string contractId, string status);
+        Task<List<ContractImgeResponse>> GetContractImageByContractId(string contractId);
         Task<ContractImgeResponse>  GetContractImageByContractImageId(string contractImageId);
         Task<bool>  UpdateContractImage(string contractImageId, ContractImageRequest contractImageRequest);
         Task<bool>  AddContractImage(string contractImageId, List<IFormFile>? UrlImage, string status);
@@ -90,6 +92,49 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<List<ContractImgeResponse>> GetContractImageByContractId(string contractId)
+        {
+            try
+            {
+                List<ContractImgeResponse> contractImgeResponses = new List<ContractImgeResponse>();
+                Contract contract = await contractRespository.GetContractById(contractId);
+                if (contract == null)
+                {
+                    throw new Exception("Contract does not exist");
+                }
+
+                if (contract.ContractImages.Count > 0)
+                {
+                    // Sắp xếp ContractImages theo CreateDate giảm dần (mới nhất trước)
+                    var sortedImages = contract.ContractImages
+                                                .OrderByDescending(img => img.CreateDate);
+
+                    foreach (var contractImage in sortedImages)
+                    {
+                        var contractImageResponse = new ContractImgeResponse()
+                        {
+                            ContractId = contractImage.ContractId,
+                            ContractImageId = contractImage.ContractImageId,
+                            CreateDate = contractImage.CreateDate.ToString("dd/MM/yyyy"),
+                            UpdateDate = contractImage.UpdateDate?.ToString("dd/MM/yyyy"),
+                            Status = contractImage.Status.ToString(),
+                            UrlImage = contractImage.UrlImage,
+                            Reason = contractImage.Reason,
+                        };
+
+                        contractImgeResponses.Add(contractImageResponse);
+                    }
+                }
+
+                return contractImgeResponses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
         public async Task<List<ContractImgeResponse>> GetContractImageByContractIdAndStatus(string contractId, string status)
         {
