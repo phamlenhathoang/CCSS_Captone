@@ -26,6 +26,7 @@ namespace CCSS_Service.Services
     public class EventService : IEventService
     {
         private readonly IEventRepository _repository;
+        private readonly ILocationRepository _locationRepository;
        
         private readonly IMapper _mapper;
         private readonly ITaskService _taskService;
@@ -35,7 +36,7 @@ namespace CCSS_Service.Services
         private readonly Image _image;
         //private readonly IImageService _imageService;
 
-        public EventService(IEventRepository repository, IMapper mapper, ITaskService taskService, ITaskRepository taskRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, Image image)
+        public EventService(IEventRepository repository, IMapper mapper, ITaskService taskService, ITaskRepository taskRepository, IAccountRepository accountRepository, ICharacterRepository characterRepository, Image image, ILocationRepository locationRepository)
         {
             _repository = repository;
             _mapper = mapper;
@@ -45,6 +46,7 @@ namespace CCSS_Service.Services
             _accountRepository = accountRepository;
             _characterRepository = characterRepository;
             _image = image;
+            _locationRepository = locationRepository;
         }
 
         public async Task<List<EventResponse>> GetAllEvents(string searchTerm)
@@ -95,15 +97,32 @@ namespace CCSS_Service.Services
 
             try
             {
-                
+                var eventList = await _repository.GetAllEvents(null);
+                var conflictingEvent = eventList.FirstOrDefault(e =>
+    e.LocationId == eventRequest.Location &&
+    (
+        (eventRequest.StartDate >= e.StartDate && eventRequest.StartDate <= e.EndDate) ||
+        (eventRequest.EndDate >= e.StartDate && eventRequest.EndDate <= e.EndDate) ||
+        (eventRequest.StartDate <= e.StartDate && eventRequest.EndDate >= e.EndDate)
+    )
+);
+
+                if (conflictingEvent != null)
+                {
+                    return $"There was another event at this location during that time period: {conflictingEvent.EventName}";
+                }
+
+                var location = await _locationRepository.GetLocationById(eventRequest.Location);
 
                 var newEvent = _mapper.Map<Event>(eventRequest);
 
                 newEvent.EventId = Guid.NewGuid().ToString();
                 newEvent.CreateDate = DateTime.Now;
                 newEvent.IsActive = true;
+                newEvent.Status = EventStatus.Pending;
                 newEvent.UpdateDate = null;
-
+                newEvent.Location = location.Address;
+                newEvent.LocationId = location.LocationId;
 
                 if (eventRequest.Ticket != null && eventRequest.Ticket.Any())
                 {

@@ -39,6 +39,7 @@ namespace CCSS_Repository.Entities
         public virtual DbSet<RequestCharacter> RequestsCharacters { get; set; }
         public virtual DbSet<Coupon> Coupons { get; set; }
         public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<EventActivity> EventActivities { get; set; }
         public virtual DbSet<EventCharacter> EventCharacters { get; set; }
         public virtual DbSet<EventImage> EventImages { get; set; }
@@ -196,6 +197,14 @@ namespace CCSS_Repository.Entities
                .WithOne(r => r.Event)
                .HasForeignKey(a => a.EventId)
                .OnDelete(DeleteBehavior.NoAction);
+
+            //Location - Event
+            modelBuilder.Entity<Location>()
+                .HasMany(l => l.Event)
+                .WithOne(e => e.LocationEvent)
+                .HasForeignKey(e => e.LocationId)
+                .OnDelete(DeleteBehavior.NoAction);
+
 
             //Ticket - TicketAccount
             modelBuilder.Entity<Ticket>()
@@ -704,21 +713,21 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Product
             modelBuilder.Entity<Product>().HasData(
-     new Product { ProductId = "P001", ProductName = "Naruto Wig", Description = "A wig for Naruto cosplay", Price = 30000, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true, weight = 200, length = 30, width = 20, height = 10 },
-     new Product { ProductId = "P002", ProductName = "Mario Hat", Description = "A hat for Mario cosplay", Price = 20000, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true, weight = 100, length = 25, width = 25, height = 15 },
-     new Product { ProductId = "P003", ProductName = "Sasuke Costume", Description = "Complete costume for Sasuke cosplay", Price = 80000, Quantity = 5, CreateDate = DateTime.UtcNow, IsActive = true, weight = 800, length = 50, width = 40, height = 15 },
-     new Product { ProductId = "P004", ProductName = "Zelda Sword", Description = "Replica sword from The Legend of Zelda", Price = 100000, Quantity = 7, CreateDate = DateTime.UtcNow, IsActive = true, weight = 1500, length = 120, width = 15, height = 5 },
-     new Product { ProductId = "P005", ProductName = "One Piece Straw Hat", Description = "Iconic straw hat from One Piece", Price = 25000, Quantity = 20, CreateDate = DateTime.UtcNow, IsActive = true, weight = 300, length = 35, width = 35, height = 10 },
-     new Product { ProductId = "P006", ProductName = "Miku Wig", Description = "Hatsune Miku blue twin-tail wig", Price = 40000, Quantity = 12, CreateDate = DateTime.UtcNow, IsActive = true, weight = 150, length = 40, width = 25, height = 5 },
-     new Product { ProductId = "P007", ProductName = "Demon Slayer Earrings", Description = "Tanjiro's iconic hanafuda earrings", Price = 15000, Quantity = 30, CreateDate = DateTime.UtcNow, IsActive = true, weight = 50, length = 5, width = 5, height = 3 },
-     new Product { ProductId = "P008", ProductName = "Attack on Titan Jacket", Description = "Survey Corps uniform jacket", Price = 50000, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true, weight = 800, length = 50, width = 40, height = 5 },
-     new Product { ProductId = "P009", ProductName = "Pikachu Onesie", Description = "Cozy Pikachu-themed onesie", Price = 60000, Quantity = 8, CreateDate = DateTime.UtcNow, IsActive = true, weight = 700, length = 60, width = 50, height = 10 },
-     new Product { ProductId = "P010", ProductName = "Cloud's Buster Sword", Description = "Final Fantasy VII replica sword", Price = 120000, Quantity = 4, CreateDate = DateTime.UtcNow, IsActive = true, weight = 2000, length = 160, width = 25, height = 10 },
-     new Product { ProductId = "P011", ProductName = "Genshin Impact Vision", Description = "LED Vision accessory from Genshin Impact", Price = 35000, Quantity = 25, CreateDate = DateTime.UtcNow, IsActive = true, weight = 100, length = 10, width = 10, height = 5 },
-     new Product { ProductId = "P012", ProductName = "Jinx Wig", Description = "Jinx cosplay wig from Arcane", Price = 45000, Quantity = 6, CreateDate = DateTime.UtcNow, IsActive = true, weight = 250, length = 40, width = 25, height = 10 },
-     new Product { ProductId = "P013", ProductName = "Sailor Moon Tiara", Description = "Golden tiara from Sailor Moon", Price = 18000, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true, weight = 50, length = 15, width = 15, height = 5 },
-     new Product { ProductId = "P014", ProductName = "Spider-Man Suit", Description = "High-quality Spider-Man suit", Price = 90000, Quantity = 3, CreateDate = DateTime.UtcNow, IsActive = true, weight = 1500, length = 70, width = 40, height = 5 },
-     new Product { ProductId = "P015", ProductName = "Harry Potter Wand", Description = "Replica wand from Harry Potter series", Price = 22000, Quantity = 50, CreateDate = DateTime.UtcNow, IsActive = true, weight = 200, length = 35, width = 5, height = 5 }
+     new Product { ProductId = "P001", ProductName = "Naruto Wig", Description = "A wig for Naruto cosplay", Price = 30000, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true },
+     new Product { ProductId = "P002", ProductName = "Mario Hat", Description = "A hat for Mario cosplay", Price = 20000, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true},
+     new Product { ProductId = "P003", ProductName = "Sasuke Costume", Description = "Complete costume for Sasuke cosplay", Price = 80000, Quantity = 5, CreateDate = DateTime.UtcNow, IsActive = true},
+     new Product { ProductId = "P004", ProductName = "Zelda Sword", Description = "Replica sword from The Legend of Zelda", Price = 100000, Quantity = 7, CreateDate = DateTime.UtcNow, IsActive = true},
+     new Product { ProductId = "P005", ProductName = "One Piece Straw Hat", Description = "Iconic straw hat from One Piece", Price = 25000, Quantity = 20, CreateDate = DateTime.UtcNow, IsActive = true},
+     new Product { ProductId = "P006", ProductName = "Miku Wig", Description = "Hatsune Miku blue twin-tail wig", Price = 40000, Quantity = 12, CreateDate = DateTime.UtcNow, IsActive = true},
+     new Product { ProductId = "P007", ProductName = "Demon Slayer Earrings", Description = "Tanjiro's iconic hanafuda earrings", Price = 15000, Quantity = 30, CreateDate = DateTime.UtcNow, IsActive = true},
+     new Product { ProductId = "P008", ProductName = "Attack on Titan Jacket", Description = "Survey Corps uniform jacket", Price = 50000, Quantity = 10, CreateDate = DateTime.UtcNow, IsActive = true },
+     new Product { ProductId = "P009", ProductName = "Pikachu Onesie", Description = "Cozy Pikachu-themed onesie", Price = 60000, Quantity = 8, CreateDate = DateTime.UtcNow, IsActive = true},
+     new Product { ProductId = "P010", ProductName = "Cloud's Buster Sword", Description = "Final Fantasy VII replica sword", Price = 120000, Quantity = 4, CreateDate = DateTime.UtcNow, IsActive = true },
+     new Product { ProductId = "P011", ProductName = "Genshin Impact Vision", Description = "LED Vision accessory from Genshin Impact", Price = 35000, Quantity = 25, CreateDate = DateTime.UtcNow, IsActive = true },
+     new Product { ProductId = "P012", ProductName = "Jinx Wig", Description = "Jinx cosplay wig from Arcane", Price = 45000, Quantity = 6, CreateDate = DateTime.UtcNow, IsActive = true },
+     new Product { ProductId = "P013", ProductName = "Sailor Moon Tiara", Description = "Golden tiara from Sailor Moon", Price = 18000, Quantity = 15, CreateDate = DateTime.UtcNow, IsActive = true},
+     new Product { ProductId = "P014", ProductName = "Spider-Man Suit", Description = "High-quality Spider-Man suit", Price = 90000, Quantity = 3, CreateDate = DateTime.UtcNow, IsActive = true},
+     new Product { ProductId = "P015", ProductName = "Harry Potter Wand", Description = "Replica wand from Harry Potter series", Price = 22000, Quantity = 50, CreateDate = DateTime.UtcNow, IsActive = true}
  );
 
             #endregion
@@ -726,21 +735,36 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Event
             modelBuilder.Entity<Event>().HasData(
-    new Event { EventId = "E001", EventName = "New Year Festival", Description = "A grand celebration to welcome the new year", Location = "Times Square, New York", IsActive = true, StartDate = new DateTime(2025, 1, 1), EndDate = new DateTime(2025, 1, 2), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
-    new Event { EventId = "E002", EventName = "Spring Blossom Fest", Description = "Experience the beauty of cherry blossoms", Location = "Kyoto, Japan", IsActive = true, StartDate = new DateTime(2025, 2, 10), EndDate = new DateTime(2025, 2, 12), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
-    new Event { EventId = "E003", EventName = "Tech Innovation Summit", Description = "Showcasing the latest in technology and AI", Location = "Silicon Valley", IsActive = true, StartDate = new DateTime(2025, 3, 5), EndDate = new DateTime(2025, 3, 7), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
-    new Event { EventId = "E004", EventName = "Music Fest", Description = "Live performances from top artists", Location = "Coachella, California", IsActive = true, StartDate = new DateTime(2025, 4, 15), EndDate = new DateTime(2025, 4, 17), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
-    new Event { EventId = "E005", EventName = "Comic-Con International", Description = "A must-attend event for comic book fans", Location = "San Diego Convention Center", IsActive = true, StartDate = new DateTime(2025, 5, 22), EndDate = new DateTime(2025, 5, 24), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
-    new Event { EventId = "E006", EventName = "Anime Expo", Description = "Largest anime convention in the world", Location = "Los Angeles Convention Center", IsActive = true, StartDate = new DateTime(2025, 6, 10), EndDate = new DateTime(2025, 6, 12), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
-    new Event { EventId = "E007", EventName = "Gaming Expo", Description = "Latest trends and releases in gaming", Location = "Las Vegas Convention Center", IsActive = true, StartDate = new DateTime(2025, 7, 18), EndDate = new DateTime(2025, 7, 20), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
-    new Event { EventId = "E008", EventName = "Summer Festival", Description = "A fun-filled summer celebration", Location = "Miami Beach, Florida", IsActive = true, StartDate = new DateTime(2025, 8, 8), EndDate = new DateTime(2025, 8, 10), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
-    new Event { EventId = "E009", EventName = "Cosplay Festival", Description = "A paradise for cosplayers", Location = "Tokyo Big Sight", IsActive = true, StartDate = new DateTime(2025, 9, 12), EndDate = new DateTime(2025, 9, 14), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
-    new Event { EventId = "E010", EventName = "Film Festival", Description = "Showcasing the best movies of the year", Location = "Cannes, France", IsActive = true, StartDate = new DateTime(2025, 10, 3), EndDate = new DateTime(2025, 10, 5), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
-    new Event { EventId = "E011", EventName = "Halloween Night", Description = "Spooky celebrations and costume parties", Location = "Salem, Massachusetts", IsActive = true, StartDate = new DateTime(2025, 11, 1), EndDate = new DateTime(2025, 11, 2), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
-    new Event { EventId = "E012", EventName = "Christmas Market", Description = "Festive shopping and holiday cheer", Location = "Nuremberg, Germany", IsActive = true, StartDate = new DateTime(2025, 12, 20), EndDate = new DateTime(2025, 12, 24), CreateDate = DateTime.UtcNow, CreateBy = "Admin" }
+    new Event { EventId = "E001", EventName = "New Year Festival", Description = "A grand celebration to welcome the new year", Location = "Times Square, New York",LocationId = "L001", IsActive = true, StartDate = new DateTime(2025, 1, 1), EndDate = new DateTime(2025, 1, 2), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new Event { EventId = "E002", EventName = "Spring Blossom Fest", Description = "Experience the beauty of cherry blossoms", Location = "Kyoto, Japan", LocationId = "L002", IsActive = true, StartDate = new DateTime(2025, 2, 10), EndDate = new DateTime(2025, 2, 12), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new Event { EventId = "E003", EventName = "Tech Innovation Summit", Description = "Showcasing the latest in technology and AI", Location = "Silicon Valley", LocationId = "L003", IsActive = true, StartDate = new DateTime(2025, 3, 5), EndDate = new DateTime(2025, 3, 7), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new Event { EventId = "E004", EventName = "Music Fest", Description = "Live performances from top artists", Location = "Coachella, California", LocationId = "L004", IsActive = true, StartDate = new DateTime(2025, 4, 15), EndDate = new DateTime(2025, 4, 17), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new Event { EventId = "E005", EventName = "Comic-Con International", Description = "A must-attend event for comic book fans", Location = "San Diego Convention Center", LocationId = "L005", IsActive = true, StartDate = new DateTime(2025, 5, 22), EndDate = new DateTime(2025, 5, 24), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new Event { EventId = "E006", EventName = "Anime Expo", Description = "Largest anime convention in the world", Location = "Los Angeles Convention Center", LocationId = "L006", IsActive = true, StartDate = new DateTime(2025, 6, 10), EndDate = new DateTime(2025, 6, 12), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new Event { EventId = "E007", EventName = "Gaming Expo", Description = "Latest trends and releases in gaming", Location = "Las Vegas Convention Center", LocationId = "L007", IsActive = true, StartDate = new DateTime(2025, 7, 18), EndDate = new DateTime(2025, 7, 20), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new Event { EventId = "E008", EventName = "Summer Festival", Description = "A fun-filled summer celebration", Location = "Miami Beach, Florida", LocationId = "L008", IsActive = true, StartDate = new DateTime(2025, 8, 8), EndDate = new DateTime(2025, 8, 10), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new Event { EventId = "E009", EventName = "Cosplay Festival", Description = "A paradise for cosplayers", Location = "Tokyo Big Sight", LocationId = "L009", IsActive = true, StartDate = new DateTime(2025, 9, 12), EndDate = new DateTime(2025, 9, 14), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new Event { EventId = "E010", EventName = "Film Festival", Description = "Showcasing the best movies of the year", Location = "Cannes, France", LocationId = "L010", IsActive = true, StartDate = new DateTime(2025, 10, 3), EndDate = new DateTime(2025, 10, 5), CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
+    new Event { EventId = "E011", EventName = "Halloween Night", Description = "Spooky celebrations and costume parties", Location = "Salem, Massachusetts", LocationId = "L010", IsActive = true, StartDate = new DateTime(2025, 11, 1), EndDate = new DateTime(2025, 11, 2), CreateDate = DateTime.UtcNow, CreateBy = "Manager" },
+    new Event { EventId = "E012", EventName = "Christmas Market", Description = "Festive shopping and holiday cheer", Location = "Nuremberg, Germany", LocationId = "L007", IsActive = true, StartDate = new DateTime(2025, 12, 20), EndDate = new DateTime(2025, 12, 24), CreateDate = DateTime.UtcNow, CreateBy = "Admin" }
 );
             #endregion
 
+            #region Location
+            modelBuilder.Entity<Location>().HasData(
+    new Location { LocationId = "L001", Address = "76 Lê Lai, P. Bến Thành, Quận 1", CapacityMin = 50, CapacityMax = 2000 },
+    new Location { LocationId = "L002", Address = "Góc Hai Bà Trưng & Lê Duẩn, Quận 1", CapacityMin = 600, CapacityMax = 600 },
+    new Location { LocationId = "L003", Address = "6 Thái Văn Lung, P. Bến Nghé, Quận 1", CapacityMin = 100, CapacityMax = 500 },
+    new Location { LocationId = "L004", Address = "102 Lê Thị Hồng Gấm, Quận 1", CapacityMin = 100, CapacityMax = 300 },
+    new Location { LocationId = "L005", Address = "33 Cao Thắng, P. 2, Quận 3", CapacityMin = 80, CapacityMax = 250 },
+    new Location { LocationId = "L006", Address = "39 Trần Quốc Thảo, P. 6, Quận 3", CapacityMin = 20, CapacityMax = 160 },
+    new Location { LocationId = "L007", Address = "24 Đường 3/2, Quận 10", CapacityMin = 0, CapacityMax = 500 },
+    new Location { LocationId = "L008", Address = "280 Tô Hiến Thành, P. 15, Quận 10", CapacityMin = 0, CapacityMax = 250 },
+    new Location { LocationId = "L009", Address = "03 Nguyễn Cơ Thạch, Khu đô thị Sala, P. An Lợi Đông, Quận 2", CapacityMin = 0, CapacityMax = 30 },
+    new Location { LocationId = "L010", Address = "Neo đậu tại Cảng Sài Gòn, Quận 4", CapacityMin = 900, CapacityMax = 900 }
+);
+
+            #endregion
             #region Order
             modelBuilder.Entity<Order>().HasData(
    new Order { OrderId = "O001", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-01"), TotalPrice = 250000.0, OrderStatus = OrderStatus.Completed, Address = "123 Main St", Phone = "0901234567", ShipStatus = ShipStatus.WaitToPick, ShipCode = "S001", to_ward_code = "90767", to_district_id = 3695, CancelDate = null },

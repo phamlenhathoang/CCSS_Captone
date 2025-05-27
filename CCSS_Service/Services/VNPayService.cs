@@ -87,6 +87,14 @@ namespace CCSS_Service.Services
                     model.Amount -= (model.Amount * accountCoupon.Coupon.Percent) / 100;
                 }
             }
+            if(model.TicketId != null)
+            {
+                var events = await _eventrepository.GetEventByTicketId(int.Parse(model.TicketId));
+                if (events.Status != EventStatus.Pending)
+                {
+                    throw new Exception("Tickets are sold out");
+                }
+            }
             Console.WriteLine("hihi");
             var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById(_configuration["TimeZoneId"]);
             var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);

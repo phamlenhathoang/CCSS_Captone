@@ -14,12 +14,12 @@ namespace CCSS_Captone.Controllers
         {
             _deliveryService = IDeliveryService;
         }
-        [HttpPost("create-delivery/{orderId}")]
-        public async Task<IActionResult> CreateDelivery(string orderId)
-        {
-            var result = await _deliveryService.CreateDeliveryOrderAsync(orderId);
-            return Ok(result);
-        }
+        //[HttpPost("create-delivery/{orderId}")]
+        //public async Task<IActionResult> CreateDelivery(string orderId)
+        //{
+        //    var result = await _deliveryService.CreateDeliveryOrderAsync(orderId);
+        //    return Ok(result);
+        //}
         [HttpPost("caculate-fee-delivery/{orderId}")]
         public async Task<IActionResult> CaculateDelivery(string orderId)
         {
