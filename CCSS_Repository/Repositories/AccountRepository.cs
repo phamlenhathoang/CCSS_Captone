@@ -86,7 +86,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<Account> GetAccount(string accountId)
         {
-            return await dbContext.Accounts.Include(r => r.Role).Include(a => a.AccountImages).FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsActive == true);
+            return await dbContext.Accounts.Include(r => r.Role).Include(a => a.AccountImages).Include(a => a.Tasks).FirstOrDefaultAsync(x => x.AccountId == accountId && x.IsActive == true);
         }
 
         public async Task<Account> GetAccountByAccountId(string accountId)

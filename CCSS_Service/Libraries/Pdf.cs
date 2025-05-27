@@ -274,7 +274,7 @@ namespace CCSS_Service.Libraries
                         double totalAmount = await CalculateTotalAmount(request, formattedAmount, packagePrice);
 
                         htmlContent += $@"<tr>
-                    <td colspan='5' class='right-align'>Total deposit</td>
+                    <td colspan='5' class='right-align'>Total price</td>
                     <td>{totalAmount}</td>
                 </tr>";
 
