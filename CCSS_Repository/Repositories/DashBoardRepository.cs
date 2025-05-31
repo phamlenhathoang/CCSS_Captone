@@ -170,10 +170,10 @@ namespace CCSS_Repository.Repositories
             var result = await _context.Accounts
                 .Where(a => a.Requests.Any(r =>
                     r.Contract != null &&
-                    r.Contract.ContractStatus == ContractStatus.Completed &&
+                    (r.Contract.ContractStatus == ContractStatus.Completed || r.Contract.ContractStatus == ContractStatus.Feedbacked) &&
                     r.Contract.Payments.Any(p =>
                         p.Status == PaymentStatus.Complete &&
-                        p.Purpose == PaymentPurpose.contractSettlement &&
+                        (p.Purpose == PaymentPurpose.contractSettlement || p.Purpose == PaymentPurpose.Refund) &&
                         p.CreatAt.HasValue &&
                         p.CreatAt.Value.Year == currentYear
                     )
@@ -186,11 +186,11 @@ namespace CCSS_Repository.Repositories
 
                     // Tổng số contract completed của account
                     TotalContracts = a.Requests
-                        .Count(r => r.Contract != null && r.Contract.ContractStatus == ContractStatus.Completed),
+                        .Count(r => r.Contract != null && (r.Contract.ContractStatus == ContractStatus.Completed || r.Contract.ContractStatus == ContractStatus.Feedbacked)),
 
                     // Tổng số tiền đã thanh toán cho hợp đồng trong năm
                     TotalPaymentAmount = a.Requests
-                        .Where(r => r.Contract != null && r.Contract.ContractStatus == ContractStatus.Completed)
+                        .Where(r => r.Contract != null && (r.Contract.ContractStatus == ContractStatus.Completed || r.Contract.ContractStatus == ContractStatus.Feedbacked))
                         .Sum(r => r.Contract.TotalPrice)
                 })
                 .OrderByDescending(x => x.TotalPaymentAmount)
