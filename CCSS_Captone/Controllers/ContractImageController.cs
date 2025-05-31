@@ -21,6 +21,13 @@ namespace CCSS_Captone.Controllers
         {
             var account = await _contractImageService.GetContractImageByContractIdAndStatus(contractId, status);
             return Ok(account);
+        } 
+        
+        [HttpGet("GetContractImageByContractId")]
+        public async Task<IActionResult> GetContractImageByContractId(string contractId)
+        {
+            var account = await _contractImageService.GetContractImageByContractId(contractId);
+            return Ok(account);
         }
         
         [HttpGet("{contractImageId}")]
