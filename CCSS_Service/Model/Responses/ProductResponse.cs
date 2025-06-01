@@ -23,6 +23,7 @@ namespace CCSS_Service.Model.Responses
 
     public class ProductImageResponse
     {
+        public string ProductImageId { get; set; }
         public bool? IsAvatar { get; set; }
         public string UrlImage { get; set; }
         public DateTime? CreateDate { get; set; }
