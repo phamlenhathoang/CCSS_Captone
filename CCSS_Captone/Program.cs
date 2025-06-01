@@ -155,6 +155,7 @@ builder.Services.AddHostedService<RequestBackgroundService>();
 builder.Services.AddHostedService<PaymentBackgroundService>();
 builder.Services.AddHostedService<ContractRefundBackgroundService>();
 builder.Services.AddHostedService<RequestCharacterBackgroundService>();
+builder.Services.AddHostedService<TaskBackgroundService>();
 
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];
