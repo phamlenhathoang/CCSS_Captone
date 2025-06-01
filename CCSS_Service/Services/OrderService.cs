@@ -17,7 +17,7 @@ namespace CCSS_Service.Services
         Task<OrderResponse> GetOrderById(string id); 
         Task<string> CreateOrder(OrderRequest orderRequest);
         Task<bool> UpdateOrder(string id, OrderRequest orderRequest);
-        Task<bool> UpdateOrderStatus(string id, ShipStatus status);
+        Task<bool> UpdateOrderStatus(string id, ShipStatus status, string? CancelReason);
         Task<bool> DeleteOrder(string id);
         Task<List<OrderResponse>> GetAllOrdersByAccountId(string accountId);
     }
@@ -104,9 +104,9 @@ namespace CCSS_Service.Services
             order.OrderId = id;
             return await _orderRepository.UpdateOrder(order);
         } 
-        public async Task<bool> UpdateOrderStatus(string id, ShipStatus status)
+        public async Task<bool> UpdateOrderStatus(string id, ShipStatus status, string? CancelReason)
         {
-            return await _orderRepository.UpdateOrderShipStatus(id, status);
+            return await _orderRepository.UpdateOrderShipStatus(id, status, CancelReason);
         }
 
 

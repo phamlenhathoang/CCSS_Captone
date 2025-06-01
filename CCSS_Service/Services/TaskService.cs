@@ -886,10 +886,10 @@ namespace CCSS_Service.Services
                         throw new Exception("EventCharacter does not exist");
                     }
 
-                    if(eventCharacter.Task.Status != TaskStatus.Assignment)
-                    {
-                        throw new Exception("Can not update task becaue this task inprogressing");
-                    }
+                    //if(eventCharacter.Task.Status != TaskStatus.Assignment)
+                    //{
+                    //    throw new Exception("Can not update task becaue this task inprogressing");
+                    //}
 
                     eventCharacter.Task.IsActive = false;
 
