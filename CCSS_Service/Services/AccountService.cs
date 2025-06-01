@@ -123,7 +123,7 @@ namespace CCSS_Service.Services
                     AverageStar = item.AverageStar,
                     Description = item.Description,
                     Birthday = item.Birthday?.ToString("dd/MM/yyyy"),
-                    Phone = string.IsNullOrEmpty(item.Phone) ? null : long.Parse(item.Phone),
+                    Phone = item.Phone,
                     IsActive = item.IsActive,
                     OnTask = item.OnTask,
                     Leader = item.Leader,
