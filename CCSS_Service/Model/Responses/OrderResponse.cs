@@ -20,6 +20,7 @@ namespace CCSS_Service.Model.Responses
         public string Phone { get; set; }
         public ShipStatus? ShipStatus { get; set; }
         public string? Description { get; set; }
+        public string? CancelReason { get; set; }
 
         public DateTime? CancelDate { get; set; }
         public DateTime? OrderDate { get; set; }
