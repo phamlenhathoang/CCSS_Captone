@@ -26,6 +26,7 @@ namespace CCSS_Repository.Entities
         public OrderStatus OrderStatus { get; set; }
         public string Address { get; set; }
         public string? Description { get; set; }
+        public string? CancelReason { get; set; }
         public string Phone { get; set; }   
         public ShipStatus? ShipStatus { get; set; }   
         public string? ShipCode { get; set; }   

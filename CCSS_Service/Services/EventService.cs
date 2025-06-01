@@ -381,37 +381,37 @@ namespace CCSS_Service.Services
             {
                 return "Sự kiện không tồn tại";
             }
-            if (eventRequest.Ticket != null && eventRequest.Ticket.Any())
-            {
-                foreach (var ticketRequest in eventRequest.Ticket)
-                {
-                    var existingTicket = existingEvent.Ticket.FirstOrDefault(t => t.TicketId == ticketRequest.TicketId);
-                    if (existingTicket != null)
-                    {
-                        // Update ticket cũ
-                        existingTicket.Quantity = ticketRequest.Quantity;
-                        existingTicket.Price = ticketRequest.Price;
-                        existingTicket.Description = ticketRequest.Description;
-                        existingTicket.ticketStatus = ticketStatus.valid;
-                    }
-                    else
-                    {
-                        // Add ticket mới nếu chưa có
-                        if (ticketRequest.Quantity > 0 && ticketRequest.Price > 0)
-                        {
-                            var newTicket = new Ticket
-                            {
-                                EventId = existingEvent.EventId,
-                                Quantity = ticketRequest.Quantity,
-                                Price = ticketRequest.Price,
-                                Description = ticketRequest.Description,
-                                ticketStatus = ticketStatus.valid,
-                            };
-                            existingEvent.Ticket.Add(newTicket);
-                        }
-                    }
-                }
-            }
+            //if (eventRequest.Ticket != null && eventRequest.Ticket.Any())
+            //{
+            //    foreach (var ticketRequest in eventRequest.Ticket)
+            //    {
+            //        var existingTicket = existingEvent.Ticket.FirstOrDefault(t => t.TicketId == ticketRequest.TicketId);
+            //        if (existingTicket != null)
+            //        {
+            //            // Update ticket cũ
+            //            existingTicket.Quantity = ticketRequest.Quantity;
+            //            existingTicket.Price = ticketRequest.Price;
+            //            existingTicket.Description = ticketRequest.Description;
+            //            existingTicket.ticketStatus = ticketStatus.valid;
+            //        }
+            //        else
+            //        {
+            //            // Add ticket mới nếu chưa có
+            //            if (ticketRequest.Quantity > 0 && ticketRequest.Price > 0)
+            //            {
+            //                var newTicket = new Ticket
+            //                {
+            //                    EventId = existingEvent.EventId,
+            //                    Quantity = ticketRequest.Quantity,
+            //                    Price = ticketRequest.Price,
+            //                    Description = ticketRequest.Description,
+            //                    ticketStatus = ticketStatus.valid,
+            //                };
+            //                existingEvent.Ticket.Add(newTicket);
+            //            }
+            //        }
+            //    }
+            //}
             bool isCharacterUpdated = eventRequest.EventCharacterRequests != null && eventRequest.EventCharacterRequests.Any();
 
             // Nếu đổi ngày hoặc đổi EventCharacter thì xóa T~ask và EventCharacter cũ
@@ -491,7 +491,7 @@ namespace CCSS_Service.Services
                     //await _taskService.AddTask(taskRequests, null);
                 }
             }
-            if (eventRequest.EventActivityRequests != null)
+            if (eventRequest.EventActivityRequests != null && eventRequest.EventActivityRequests.Any())
             {
                 var createDate = existingEvent.EventActivities.FirstOrDefault()?.CreateDate;
 
@@ -518,11 +518,11 @@ namespace CCSS_Service.Services
                     var imageToDelete = existingEvent.EventImages.FirstOrDefault(i => i.ImageId == imageDeletedId.ImageId);
                     if (imageToDelete != null)
                     {
-                        _repository.DeleteEventImageById(imageToDelete.ImageId);
+                        await _repository.DeleteEventImageById(imageToDelete.ImageId);
                     }
                 }
             }
-            if (ImageUrl != null)
+            if (ImageUrl != null && ImageUrl.Any())
             {
                 var imageTasks = ImageUrl.Select(async file => new EventImage
                 {
@@ -548,7 +548,7 @@ namespace CCSS_Service.Services
             existingEvent.EventName = eventRequest.EventName;
             //existingEvent.StartDate = eventRequest.StartDate;
             //existingEvent.EndDate = eventRequest.EndDate;
-            existingEvent.Location = eventRequest.Location;
+            //existingEvent.Location = eventRequest.Location;
             existingEvent.Description = eventRequest.Description;
             existingEvent.UpdateDate = DateTime.Now;
 
