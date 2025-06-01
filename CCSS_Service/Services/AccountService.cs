@@ -1173,7 +1173,7 @@ namespace CCSS_Service.Services
                     }
                 }
                 Account account = new Account()
-                {
+                {  
                     AccountId = Guid.NewGuid().ToString(),
                     Name = request.Name,
                     Email = request.Email,
@@ -1182,7 +1182,7 @@ namespace CCSS_Service.Services
                     Birthday = BirthDay,
                     Phone = request.Phone,
                     IsActive = true,
-                    RoleId = "R004",
+                    RoleId = request.RoleId,
                     Height = request.Height,
                     Weight = request.Weight,
                 };
