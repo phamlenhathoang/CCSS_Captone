@@ -52,6 +52,7 @@ namespace CCSS_Service.Services
         Task<List<AccountByCharacterAndDateResponse>> GetAccountByCharacterAndDateAndRange(string characterId, List<Date> dates, string requestId);
         Task<List<AccountByCharacterAndDateResponse>> GetAccountByRequestId(string requestId);
         Task<string> UpdateStatusAccount(string accountId, bool IsActive);
+        Task<bool> CreateAccountByAdmin(CreateAccountRequest request);
     }
     public class AccountService : IAccountService
     {
@@ -1141,6 +1142,61 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
         }
-        
+
+        public async Task<bool> CreateAccountByAdmin(CreateAccountRequest request)
+        {
+            try
+            {
+                if (request == null)
+                {
+                    throw new Exception("need entry field");
+                }
+
+                DateTime BirthDay = DateTime.Now;
+
+                if (!string.IsNullOrEmpty(request.Birthday))
+                {
+                    string[] dateFormats = { "dd/MM/yyyy", "d/MM/yyyy", "dd/M/yyyy", "d/M/yyyy" };
+
+                    bool isValidDate = DateTime.TryParseExact(request.Birthday, dateFormats,
+                                                              System.Globalization.CultureInfo.InvariantCulture,
+                                                              System.Globalization.DateTimeStyles.None,
+                                                              out BirthDay);
+
+                    if (BirthDay.Year > DateTime.Now.Year)
+                    {
+                        throw new Exception("BirthDay wrong");
+                    }
+                    if ((DateTime.Now.Year - BirthDay.Year) < 18)
+                    {
+                        throw new Exception("This employer is need over 18");
+                    }
+                }
+                Account account = new Account()
+                {
+                    AccountId = Guid.NewGuid().ToString(),
+                    Name = request.Name,
+                    Email = request.Email,
+                    UserName = request.UserName,
+                    Password = PasswordHash.ConvertToEncrypt(request.Password),
+                    Birthday = BirthDay,
+                    Phone = request.Phone,
+                    IsActive = true,
+                    RoleId = "R004",
+                    Height = request.Height,
+                    Weight = request.Weight,
+                };
+
+                var result = await accountRepository.AddAccount(account);
+                if (!result)
+                {
+                    throw new Exception("Create account failed");
+                }
+                return result;
+            }catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
     }
 }

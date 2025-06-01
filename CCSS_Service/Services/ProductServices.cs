@@ -56,6 +56,7 @@ namespace CCSS_Service.Services
                     IsActive = r.IsActive,
                     ProductImages = listImage.Select(img => new ProductImageResponse
                     {
+                        ProductImageId = img.ProductImageId,
                         UrlImage = img.UrlImage,
                         IsAvatar = img.IsAvatar,
                         CreateDate = img.CreateDate,
@@ -84,6 +85,7 @@ namespace CCSS_Service.Services
                 IsActive = product.IsActive,
                 ProductImages = image.Select(img => new ProductImageResponse
                 {
+                    ProductImageId = img.ProductImageId,
                     UrlImage = img.UrlImage,
                     IsAvatar = img.IsAvatar,
                     CreateDate = img.CreateDate,
