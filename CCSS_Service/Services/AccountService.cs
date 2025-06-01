@@ -1185,6 +1185,7 @@ namespace CCSS_Service.Services
                     RoleId = request.RoleId,
                     Height = request.Height,
                     Weight = request.Weight,
+                    SalaryIndex = request.SalaryIndex,
                 };
 
                 var result = await accountRepository.AddAccount(account);
