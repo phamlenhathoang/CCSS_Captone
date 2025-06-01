@@ -129,6 +129,24 @@ namespace CCSS_Captone.Controllers
                 return Ok(result);
             }
             return BadRequest(ModelState);
-        }   
+        }
+
+        [HttpPost("CreateAccountByAdmin")]
+        public async Task<IActionResult> CreateAccountByAdmin(CreateAccountRequest request)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await accountService.CreateAccountByAdmin(request);
+                    return Ok(result);
+                }
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
     }
 }
