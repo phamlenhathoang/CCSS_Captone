@@ -65,12 +65,12 @@ namespace CCSS_Captone.Controllers
                                          "3 (Received)<br>" +
                                          "4 (Cancel)<br>    " +
                                          "5 (Refund)")]
-        public async Task<IActionResult> UpdateShipStatus(string id, ShipStatus ShipStatus)
+        public async Task<IActionResult> UpdateShipStatus(string id, ShipStatus ShipStatus, string? CancelReason)
         {
             if (ShipStatus == null )
                 return BadRequest("ShipStatus is required");
 
-            var result = await _orderService.UpdateOrderStatus(id, ShipStatus);
+            var result = await _orderService.UpdateOrderStatus(id, ShipStatus, CancelReason);
 
             if (!result)
                 return NotFound();
