@@ -5,6 +5,7 @@ using CCSS_Repository.Repositories;
 using CCSS_Service.Model.Responses;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CCSS_Service
@@ -51,10 +52,11 @@ namespace CCSS_Service
         public async Task<DashBoardRevenueResponse> GetRevenueAsync(DateFilterType filterType, RevenueSource revenueSource)
         {
             var ticketAndPayment = await _dashBoardRepository.GetRevenue(filterType, revenueSource);
-
+           
             var response = new DashBoardRevenueResponse
             {
-                TotalRevenue = ticketAndPayment.Sum(p => p.Amount ?? 0),
+                TotalRevenue = ticketAndPayment.Sum(p => p.Purpose != PaymentPurpose.Refund ? p.Amount ?? 0 : 0) + 
+                               ticketAndPayment.Sum(p => p.Purpose == PaymentPurpose.Refund && p.Contract != null ? p.Contract.TotalPrice ?? 0 : 0),
                 PaymentResponse = ticketAndPayment.Select(p => new PaymentResponse
                 {
                     PaymentId = p.PaymentId,
@@ -75,7 +77,8 @@ namespace CCSS_Service
             var ticketAndPayment = await _dashBoardRepository.GetRevenue(filterType, revenueSource);
 
             var response = new DashBoardChartRevenueResponse();
-            response.TotalRevenue = ticketAndPayment.Sum(p => (p.Amount ?? 0));
+            response.TotalRevenue = ticketAndPayment.Sum(p => p.Purpose != PaymentPurpose.Refund ? p.Amount ?? 0 : 0) +
+                                    ticketAndPayment.Sum(p => p.Purpose == PaymentPurpose.Refund && p.Contract != null ? p.Contract.TotalPrice ?? 0 : 0);
 
             if (filterType == DateFilterType.ThisWeek || filterType == DateFilterType.ThisMonth)
             {

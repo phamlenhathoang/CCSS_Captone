@@ -770,6 +770,7 @@ namespace CCSS_Service.Services
                             Status = PaymentStatus.Complete,
                             Amount = contract.ContractRefund.Amount,
                             Type = "Online",
+                            TransactionId = GenerateCode(),
                         };
 
                         bool addPayment = await paymentRepository.AddPayment(payment);
@@ -822,6 +823,17 @@ namespace CCSS_Service.Services
                 throw new Exception(ex.Message);
             }
 
+        }
+
+        private string GenerateCode(int length = 8)
+        {
+            const string chars = "0123456789";
+            Random random = new Random();
+
+            string code = new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+
+            return code;
         }
 
         private async Task<bool> NortificationCustomer(Contract contract)

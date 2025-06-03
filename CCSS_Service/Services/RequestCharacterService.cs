@@ -311,7 +311,7 @@ namespace CCSS_Service.Services
                                 {
                                     return "Valid Time is wrong";
                                 }
-                                if (StartTime >= EndTime)
+                                if (StartTime > EndTime)
                                 {
                                     await transaction.RollbackAsync();
                                     return "End date must be greater than start date.";
