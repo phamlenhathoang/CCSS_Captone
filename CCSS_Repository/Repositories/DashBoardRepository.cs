@@ -46,7 +46,7 @@ namespace CCSS_Repository.Repositories
         public async Task<List<Payment>> GetRevenue(DateFilterType filterType, RevenueSource revenueSource)
         {
             var now = DateTime.UtcNow;
-            var query = _context.Payments
+            var query = _context.Payments.Include(sc => sc.Contract)
                 .Where(p => p.Status == PaymentStatus.Complete) // PaymentStatus = 1
                 .AsQueryable();
 
@@ -60,11 +60,12 @@ namespace CCSS_Repository.Repositories
                     query = query.Where(p => p.Purpose == PaymentPurpose.BuyTicket);
                     break;
                 case RevenueSource.Service:
-                    query = query.Where(p => p.Purpose == PaymentPurpose.contractSettlement);
+                    query = query.Where(p => p.Purpose == PaymentPurpose.contractSettlement || p.Purpose == PaymentPurpose.Refund);
                     break;
                 case RevenueSource.Total:
                     query = query.Where(p => p.Purpose == PaymentPurpose.BuyTicket ||
                                              p.Purpose == PaymentPurpose.contractSettlement ||
+                                             p.Purpose == PaymentPurpose.Refund ||                   
                                              p.Purpose == PaymentPurpose.Order);
                     break;
             }
