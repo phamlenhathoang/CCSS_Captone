@@ -425,48 +425,48 @@ namespace CCSS_Repository.Entities
             #region Account
 
             modelBuilder.Entity<Account>().HasData(
-new Account { AccountId = "A001", Name = "John Doe", Email = "john@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 45000, IsActive = true, Height = 180, Weight = 75, AverageStar = 4.5, IsLock = false },
-new Account { AccountId = "A002", Name = "Jane Smith", Email = "jane@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R001", SalaryIndex = null, IsActive = true, IsLock = false },
+new Account { AccountId = "A001", Name = "John Doe", Email = "john@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 45000, IsActive = true, Height = 180, Weight = 75, AverageStar = 4.5, IsLock = false },
+new Account { AccountId = "A002", Name = "Jane Smith", Email = "jane@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R001", SalaryIndex = null, IsActive = true, IsLock = false },
 new Account { AccountId = "A003", Name = "Nammmmmmmm", Email = "phuongnam26012002@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true, IsLock = false },
-new Account { AccountId = "A004", Name = "Bob Brown", Email = "bob@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 42000, IsActive = true, Height = 175, Weight = 80, AverageStar = 4.2, IsLock = false },
-new Account { AccountId = "A005", Name = "Charlie White", Email = "charlie@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 35000, IsActive = true, Height = 182, Weight = 78, AverageStar = 3.5, IsLock = false },
-new Account { AccountId = "A006", Name = "David Black", Email = "david@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true, IsLock = false },
-new Account { AccountId = "A007", Name = "Emma Green", Email = "emma@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 41000, IsActive = true, Height = 168, Weight = 60, AverageStar = 4.1, IsLock = false },
-new Account { AccountId = "A008", Name = "Frank Blue", Email = "frank@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 46000, IsActive = true, Height = 185, Weight = 85, AverageStar = 4.6, IsLock = false },
-new Account { AccountId = "A009", Name = "Grace Pink", Email = "grace@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R001", SalaryIndex = null, IsActive = true, IsLock = false },
-new Account { AccountId = "A010", Name = "Henry Purple", Email = "henry@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 25000, IsActive = true, Height = 178, Weight = 77, AverageStar = 2.5, IsLock = false },
-new Account { AccountId = "A011", Name = "Isla Red", Email = "isla@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = null, IsActive = true, IsLock = false },
-new Account { AccountId = "A012", Name = "Jack Yellow", Email = "jack@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 38000, IsActive = true, Height = 172, Weight = 70, AverageStar = 3.8, IsLock = false },
-new Account { AccountId = "A013", Name = "Katie Orange", Email = "katie@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 25000, IsActive = true, Height = 165, Weight = 55, AverageStar = 2.5, IsLock = false },
-new Account { AccountId = "A014", Name = "Liam Gray", Email = "liam@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true, IsLock = false },
-new Account { AccountId = "A015", Name = "Mia Cyan", Email = "mia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 15000, IsActive = true, Height = 170, Weight = 65, AverageStar = 1.5, IsLock = false },
-new Account { AccountId = "A016", Name = "Noah Silver", Email = "noah@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 37000, IsActive = true, Height = 175, Weight = 70, AverageStar = 3.7, IsLock = false },
-new Account { AccountId = "A017", Name = "Olivia Gold", Email = "olivia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 48000, IsActive = true, Height = 168, Weight = 55 , AverageStar = 4.8 },
-new Account { AccountId = "A018", Name = "William Amber", Email = "william@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 32000, IsActive = true, Height = 180, Weight = 75, AverageStar = 3.2, IsLock = false },
-new Account { AccountId = "A019", Name = "Sophia Ivory", Email = "sophia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 33000, IsActive = true, Height = 165, Weight = 50, AverageStar = 3.3, IsLock = false },
-new Account { AccountId = "A020", Name = "James Navy", Email = "james@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 34000, IsActive = true, Height = 178, Weight = 72, AverageStar = 3.4, IsLock = false },
-new Account { AccountId = "A021", Name = "Ava Teal", Email = "ava@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 35000, IsActive = true, Height = 162, Weight = 48, AverageStar = 3.5, IsLock = false },
-new Account { AccountId = "A022", Name = "Benjamin Lime", Email = "benjamin@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 36000, IsActive = true, Height = 177, Weight = 70, AverageStar = 3.6, IsLock = false },
-new Account { AccountId = "A023", Name = "Charlotte Beige", Email = "charlotte@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 37000, IsActive = true, Height = 164, Weight = 52, AverageStar = 3.7, IsLock = false },
-new Account { AccountId = "A024", Name = "Lucas Maroon", Email = "lucas@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 38000, IsActive = true, Height = 180, Weight = 74, AverageStar = 3.8, IsLock = false },
-new Account { AccountId = "A025", Name = "Mia Pearl", Email = "mia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 39000, IsActive = true, Height = 159, Weight = 47, AverageStar = 3.9, IsLock = false },
-new Account { AccountId = "A026", Name = "Ethan Olive", Email = "ethan@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 25000, IsActive = true, Height = 176, Weight = 71, AverageStar = 2.5, IsLock = false },
-new Account { AccountId = "A027", Name = "Amelia Ruby", Email = "amelia@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 26000, IsActive = true, Height = 167, Weight = 53, AverageStar = 2.6, IsLock = false },
-new Account { AccountId = "A028", Name = "Henry Saffron", Email = "henry@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 27000, IsActive = true, Height = 182, Weight = 76, AverageStar = 2.7, IsLock = false },
-new Account { AccountId = "A029", Name = "Ella Coral", Email = "ella@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 28000, IsActive = true, Height = 160, Weight = 49, AverageStar = 2.8, IsLock = false },
-new Account { AccountId = "A030", Name = "Daniel Cyan", Email = "daniel@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 29000, IsActive = true, Height = 175, Weight = 72, AverageStar = 2.9, IsLock = false },
-new Account { AccountId = "A031", Name = "Logan Indigo", Email = "logan@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 30000, IsActive = true, Height = 180, Weight = 73, AverageStar = 3.0, IsLock = false },
-new Account { AccountId = "A032", Name = "Lily Violet", Email = "lily@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 40000, IsActive = true, Height = 165, Weight = 52, AverageStar = 4.0, IsLock = false },
-new Account { AccountId = "A033", Name = "Mason Turquoise", Email = "mason@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 41000, IsActive = true, Height = 178, Weight = 74, AverageStar = 4.1, IsLock = false },
-new Account { AccountId = "A034", Name = "Zoe Lavender", Email = "zoe@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 42000, IsActive = true, Height = 160, Weight = 48, AverageStar = 4.2, IsLock = false },
-new Account { AccountId = "A035", Name = "Elijah Crimson", Email = "elijah@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 43000, IsActive = true, Height = 182, Weight = 77, AverageStar = 4.3, IsLock = false },
-new Account { AccountId = "A036", Name = "Aria Mint", Email = "aria@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 44000, IsActive = true, Height = 164, Weight = 50, AverageStar = 4.4, IsLock = false },
-new Account { AccountId = "A037", Name = "Sebastian Bronze", Email = "sebastian@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 45000, IsActive = true, Height = 179, Weight = 72, AverageStar = 4.5, IsLock = false },
-new Account { AccountId = "A038", Name = "Harper Rose", Email = "harper@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 46000, IsActive = true, Height = 168, Weight = 53, AverageStar = 4.6, IsLock = false },
-new Account { AccountId = "A039", Name = "Caleb Onyx", Email = "caleb@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 47000, IsActive = true, Height = 181, Weight = 75, AverageStar = 4.7, IsLock = false },
-new Account { AccountId = "A040", Name = "Scarlett Magenta", Email = "scarlett@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 48000, IsActive = true, Height = 162, Weight = 51, AverageStar = 4.8, IsLock = false },
-new Account { AccountId = "A041", Name = "Manager", Email = "manager@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R002", IsActive = true, IsLock = false },
-new Account { AccountId = "A042", Name = "Consultant", Email = "consultant@example.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R003", IsActive = true, IsLock = false }
+new Account { AccountId = "A004", Name = "Bob Brown", Email = "bob@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 42000, IsActive = true, Height = 175, Weight = 80, AverageStar = 4.2, IsLock = false },
+new Account { AccountId = "A005", Name = "Charlie White", Email = "charlie@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 35000, IsActive = true, Height = 182, Weight = 78, AverageStar = 3.5, IsLock = false },
+new Account { AccountId = "A006", Name = "David Black", Email = "david@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true, IsLock = false },
+new Account { AccountId = "A007", Name = "Emma Green", Email = "emma@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 41000, IsActive = true, Height = 168, Weight = 60, AverageStar = 4.1, IsLock = false },
+new Account { AccountId = "A008", Name = "Frank Blue", Email = "frank@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 46000, IsActive = true, Height = 185, Weight = 85, AverageStar = 4.6, IsLock = false },
+new Account { AccountId = "A009", Name = "Grace Pink", Email = "grace@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R001", SalaryIndex = null, IsActive = true, IsLock = false },
+new Account { AccountId = "A010", Name = "Henry Purple", Email = "henry@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 25000, IsActive = true, Height = 178, Weight = 77, AverageStar = 2.5, IsLock = false },
+new Account { AccountId = "A011", Name = "Isla Red", Email = "isla@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = null, IsActive = true, IsLock = false },
+new Account { AccountId = "A012", Name = "Jack Yellow", Email = "jack@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 38000, IsActive = true, Height = 172, Weight = 70, AverageStar = 3.8, IsLock = false },
+new Account { AccountId = "A013", Name = "Katie Orange", Email = "katie@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 25000, IsActive = true, Height = 165, Weight = 55, AverageStar = 2.5, IsLock = false },
+new Account { AccountId = "A014", Name = "Liam Gray", Email = "liam@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true, IsLock = false },
+new Account { AccountId = "A015", Name = "Mia Cyan", Email = "mia@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 15000, IsActive = true, Height = 170, Weight = 65, AverageStar = 1.5, IsLock = false },
+new Account { AccountId = "A016", Name = "Noah Silver", Email = "noah@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 37000, IsActive = true, Height = 175, Weight = 70, AverageStar = 3.7, IsLock = false },
+new Account { AccountId = "A017", Name = "Olivia Gold", Email = "olivia@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 48000, IsActive = true, Height = 168, Weight = 55 , AverageStar = 4.8 },
+new Account { AccountId = "A018", Name = "William Amber", Email = "william@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 32000, IsActive = true, Height = 180, Weight = 75, AverageStar = 3.2, IsLock = false },
+new Account { AccountId = "A019", Name = "Sophia Ivory", Email = "sophia@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 33000, IsActive = true, Height = 165, Weight = 50, AverageStar = 3.3, IsLock = false },
+new Account { AccountId = "A020", Name = "James Navy", Email = "james@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 34000, IsActive = true, Height = 178, Weight = 72, AverageStar = 3.4, IsLock = false },
+new Account { AccountId = "A021", Name = "Ava Teal", Email = "ava@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 35000, IsActive = true, Height = 162, Weight = 48, AverageStar = 3.5, IsLock = false },
+new Account { AccountId = "A022", Name = "Benjamin Lime", Email = "benjamin@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 36000, IsActive = true, Height = 177, Weight = 70, AverageStar = 3.6, IsLock = false },
+new Account { AccountId = "A023", Name = "Charlotte Beige", Email = "charlotte@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 37000, IsActive = true, Height = 164, Weight = 52, AverageStar = 3.7, IsLock = false },
+new Account { AccountId = "A024", Name = "Lucas Maroon", Email = "lucas@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 38000, IsActive = true, Height = 180, Weight = 74, AverageStar = 3.8, IsLock = false },
+new Account { AccountId = "A025", Name = "Mia Pearl", Email = "mia@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 39000, IsActive = true, Height = 159, Weight = 47, AverageStar = 3.9, IsLock = false },
+new Account { AccountId = "A026", Name = "Ethan Olive", Email = "ethan@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 25000, IsActive = true, Height = 176, Weight = 71, AverageStar = 2.5, IsLock = false },
+new Account { AccountId = "A027", Name = "Amelia Ruby", Email = "amelia@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 26000, IsActive = true, Height = 167, Weight = 53, AverageStar = 2.6, IsLock = false },
+new Account { AccountId = "A028", Name = "Henry Saffron", Email = "henry@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 27000, IsActive = true, Height = 182, Weight = 76, AverageStar = 2.7, IsLock = false },
+new Account { AccountId = "A029", Name = "Ella Coral", Email = "ella@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 28000, IsActive = true, Height = 160, Weight = 49, AverageStar = 2.8, IsLock = false },
+new Account { AccountId = "A030", Name = "Daniel Cyan", Email = "daniel@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 29000, IsActive = true, Height = 175, Weight = 72, AverageStar = 2.9, IsLock = false },
+new Account { AccountId = "A031", Name = "Logan Indigo", Email = "logan@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 30000, IsActive = true, Height = 180, Weight = 73, AverageStar = 3.0, IsLock = false },
+new Account { AccountId = "A032", Name = "Lily Violet", Email = "lily@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 40000, IsActive = true, Height = 165, Weight = 52, AverageStar = 4.0, IsLock = false },
+new Account { AccountId = "A033", Name = "Mason Turquoise", Email = "mason@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 41000, IsActive = true, Height = 178, Weight = 74, AverageStar = 4.1, IsLock = false },
+new Account { AccountId = "A034", Name = "Zoe Lavender", Email = "zoe@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 42000, IsActive = true, Height = 160, Weight = 48, AverageStar = 4.2, IsLock = false },
+new Account { AccountId = "A035", Name = "Elijah Crimson", Email = "elijah@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 43000, IsActive = true, Height = 182, Weight = 77, AverageStar = 4.3, IsLock = false },
+new Account { AccountId = "A036", Name = "Aria Mint", Email = "aria@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 44000, IsActive = true, Height = 164, Weight = 50, AverageStar = 4.4, IsLock = false },
+new Account { AccountId = "A037", Name = "Sebastian Bronze", Email = "sebastian@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 45000, IsActive = true, Height = 179, Weight = 72, AverageStar = 4.5, IsLock = false },
+new Account { AccountId = "A038", Name = "Harper Rose", Email = "harper@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 46000, IsActive = true, Height = 168, Weight = 53, AverageStar = 4.6, IsLock = false },
+new Account { AccountId = "A039", Name = "Caleb Onyx", Email = "caleb@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 47000, IsActive = true, Height = 181, Weight = 75, AverageStar = 4.7, IsLock = false },
+new Account { AccountId = "A040", Name = "Scarlett Magenta", Email = "scarlett@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 48000, IsActive = true, Height = 162, Weight = 51, AverageStar = 4.8, IsLock = false },
+new Account { AccountId = "A041", Name = "Manager", Email = "manager@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R002", IsActive = true, IsLock = false },
+new Account { AccountId = "A042", Name = "Consultant", Email = "consultant@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R003", IsActive = true, IsLock = false }
 );
 
             #endregion
@@ -679,29 +679,27 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #endregion
 
-
             #region Character
             modelBuilder.Entity<Character>().HasData(
-     new Character { CharacterId = "CH001", CharacterName = "Naruto", CategoryId = "C3", Description = "Ninja from Konoha", Price = 100000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 50, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH002", CharacterName = "Sasuke", CategoryId = "C3", Description = "Naruto’s rival", Price = 120000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH003", CharacterName = "Goku", CategoryId = "C3", Description = "Saiyan warrior", Price = 150000, IsActive = true, MaxHeight = 190, MinHeight = 170, MaxWeight = 90, MinWeight = 60, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH004", CharacterName = "Luffy", CategoryId = "C4", Description = "Pirate King", Price = 110000, IsActive = true, MaxHeight = 175, MinHeight = 155, MaxWeight = 70, MinWeight = 45, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH005", CharacterName = "Ichigo", CategoryId = "C4", Description = "Soul Reaper", Price = 130000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 100, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH001", CharacterName = "Naruto", CategoryId = "C3", Description = "The energetic and determined ninja from Hidden Leaf Village who dreams of becoming Hokage. Known for his signature jutsu, Nine-Tails chakra, and never-give-up attitude.", Price = 100000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 50, Quantity = 15, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH002", CharacterName = "Sasuke", CategoryId = "C3", Description = "The last surviving member of the Uchiha clan and Naruto's eternal rival. A skilled ninja wielding the Sharingan and seeking to restore his clan's honor.", Price = 120000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 11, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH003", CharacterName = "Goku", CategoryId = "C3", Description = "The pure-hearted Saiyan warrior from Planet Vegeta who protects Earth. Master of martial arts with incredible transformations including Super Saiyan forms.", Price = 150000, IsActive = true, MaxHeight = 190, MinHeight = 170, MaxWeight = 90, MinWeight = 60, Quantity = 23, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH004", CharacterName = "Luffy", CategoryId = "C4", Description = "The rubber-powered captain of the Straw Hat Pirates on a quest to become the Pirate King. Possesses the Gum-Gum Devil Fruit powers and boundless optimism.", Price = 110000, IsActive = true, MaxHeight = 175, MinHeight = 155, MaxWeight = 70, MinWeight = 45, Quantity = 34, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH005", CharacterName = "Ichigo", CategoryId = "C4", Description = "The orange-haired Soul Reaper with the power to see spirits. Wields the massive Zangetsu sword and protects both the living and spirit worlds.", Price = 130000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 73, CreateDate = DateTime.UtcNow },
 
-     new Character { CharacterId = "CH006", CharacterName = "Mario", CategoryId = "C14", Description = "Plumber hero", Price = 80000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 60, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH007", CharacterName = "Luigi", CategoryId = "C14", Description = "Mario’s brother", Price = 85000, IsActive = true, MaxHeight = 170, MinHeight = 150, MaxWeight = 75, MinWeight = 55, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH008", CharacterName = "Link", CategoryId = "C14", Description = "Hero of Hyrule", Price = 140000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 50, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH009", CharacterName = "Zelda", CategoryId = "C16", Description = "Hyrule princess", Price = 135000, IsActive = true, MaxHeight = 175, MinHeight = 155, MaxWeight = 70, MinWeight = 50, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH010", CharacterName = "Samus", CategoryId = "C16", Description = "Bounty hunter", Price = 145000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 100, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH006", CharacterName = "Mario", CategoryId = "C14", Description = "The heroic Italian plumber who saves Princess Peach from Bowser. Famous for jumping on enemies, collecting coins, and navigating through pipes in the Mushroom Kingdom.", Price = 80000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 60, Quantity = 45, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH007", CharacterName = "Luigi", CategoryId = "C14", Description = "Mario's younger twin brother, the green-clad plumber known for his higher jumps and slightly nervous personality. Often the hero of Luigi's Mansion adventures.", Price = 85000, IsActive = true, MaxHeight = 170, MinHeight = 150, MaxWeight = 75, MinWeight = 55, Quantity = 13, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH008", CharacterName = "Link", CategoryId = "C14", Description = "The legendary Hero of Hyrule who wields the Master Sword. Silent protagonist on epic quests to save Princess Zelda and defeat the evil Ganon across multiple timelines.", Price = 140000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 50, Quantity = 15, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH009", CharacterName = "Zelda", CategoryId = "C16", Description = "The wise and powerful Princess of Hyrule who possesses the Triforce of Wisdom. Often aids Link in his quests while protecting her kingdom from dark forces.", Price = 135000, IsActive = true, MaxHeight = 175, MinHeight = 155, MaxWeight = 70, MinWeight = 50, Quantity = 9, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH010", CharacterName = "Samus", CategoryId = "C16", Description = "The intergalactic bounty hunter in her iconic Power Suit. Expert in combat and exploration, known for battling Space Pirates and the dangerous Metroids.", Price = 145000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 24, CreateDate = DateTime.UtcNow },
 
-     new Character { CharacterId = "CH011", CharacterName = "Cloud", CategoryId = "C13", Description = "Ex-SOLDIER", Price = 125000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH012", CharacterName = "Sephiroth", CategoryId = "C13", Description = "One-Winged Angel", Price = 155000, IsActive = true, MaxHeight = 190, MinHeight = 170, MaxWeight = 90, MinWeight = 60, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH013", CharacterName = "Kratos", CategoryId = "C8", Description = "God of War", Price = 160000, IsActive = true, MaxHeight = 195, MinHeight = 175, MaxWeight = 100, MinWeight = 70, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH014", CharacterName = "Pikachu", CategoryId = "C8", Description = "Electric Pokemon", Price = 90000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 60, Quantity = 100, CreateDate = DateTime.UtcNow },
-     new Character { CharacterId = "CH015", CharacterName = "Kirby", CategoryId = "C8", Description = "Pink puffball", Price = 95000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 60, Quantity = 100, CreateDate = DateTime.UtcNow }
+     new Character { CharacterId = "CH011", CharacterName = "Cloud", CategoryId = "C13", Description = "The spiky-haired ex-SOLDIER mercenary wielding the massive Buster Sword. Former member of AVALANCHE fighting against the Shinra Corporation to save the planet.", Price = 125000, IsActive = true, MaxHeight = 185, MinHeight = 165, MaxWeight = 85, MinWeight = 55, Quantity = 26, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH012", CharacterName = "Sephiroth", CategoryId = "C13", Description = "The legendary SOLDIER First Class known as the One-Winged Angel. Cloud's nemesis with silver hair, wielding the long Masamune katana and possessing god-like powers.", Price = 155000, IsActive = true, MaxHeight = 190, MinHeight = 170, MaxWeight = 90, MinWeight = 60, Quantity = 45, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH013", CharacterName = "Kratos", CategoryId = "C8", Description = "The Ghost of Sparta, former God of War seeking redemption. A fierce warrior with the Blades of Chaos, now living in Norse mythology with his son Atreus.", Price = 160000, IsActive = true, MaxHeight = 195, MinHeight = 175, MaxWeight = 100, MinWeight = 70, Quantity = 38, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH014", CharacterName = "Pikachu", CategoryId = "C8", Description = "The beloved Electric-type Pokémon and franchise mascot. Known for storing electricity in its cheek pouches and being Ash Ketchum's loyal partner.", Price = 90000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 60, Quantity = 11, CreateDate = DateTime.UtcNow },
+     new Character { CharacterId = "CH015", CharacterName = "Kirby", CategoryId = "C8", Description = "The pink puffball hero of Dream Land with the ability to inhale enemies and copy their powers. Known for his cheerful personality and incredible appetite.", Price = 95000, IsActive = true, MaxHeight = 180, MinHeight = 160, MaxWeight = 80, MinWeight = 60, Quantity = 34, CreateDate = DateTime.UtcNow }
  );
             #endregion
-
 
             #region Service
             modelBuilder.Entity<Service>().HasData(
@@ -732,7 +730,6 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #endregion
 
-
             #region Event
             modelBuilder.Entity<Event>().HasData(
     new Event { EventId = "E001", EventName = "New Year Festival", Description = "A grand celebration to welcome the new year", Location = "Times Square, New York",LocationId = "L001", IsActive = true, StartDate = new DateTime(2025, 1, 1), EndDate = new DateTime(2025, 1, 2), CreateDate = DateTime.UtcNow, CreateBy = "Admin", Status = EventStatus.Pending },
@@ -752,19 +749,20 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
             #region Location
             modelBuilder.Entity<Location>().HasData(
-    new Location { LocationId = "L001", Address = "76 Lê Lai, P. Bến Thành, Quận 1", CapacityMin = 50, CapacityMax = 2000 },
-    new Location { LocationId = "L002", Address = "Góc Hai Bà Trưng & Lê Duẩn, Quận 1", CapacityMin = 600, CapacityMax = 600 },
-    new Location { LocationId = "L003", Address = "6 Thái Văn Lung, P. Bến Nghé, Quận 1", CapacityMin = 100, CapacityMax = 500 },
-    new Location { LocationId = "L004", Address = "102 Lê Thị Hồng Gấm, Quận 1", CapacityMin = 100, CapacityMax = 300 },
-    new Location { LocationId = "L005", Address = "33 Cao Thắng, P. 2, Quận 3", CapacityMin = 80, CapacityMax = 250 },
-    new Location { LocationId = "L006", Address = "39 Trần Quốc Thảo, P. 6, Quận 3", CapacityMin = 20, CapacityMax = 160 },
+    new Location { LocationId = "L001", Address = "76 Lê Lai, P. Bến Thành, Quận 1", CapacityMin = 0, CapacityMax = 2000 },
+    new Location { LocationId = "L002", Address = "Góc Hai Bà Trưng & Lê Duẩn, Quận 1", CapacityMin = 0, CapacityMax = 600 },
+    new Location { LocationId = "L003", Address = "6 Thái Văn Lung, P. Bến Nghé, Quận 1", CapacityMin = 0, CapacityMax = 500 },
+    new Location { LocationId = "L004", Address = "102 Lê Thị Hồng Gấm, Quận 1", CapacityMin = 0, CapacityMax = 300 },
+    new Location { LocationId = "L005", Address = "33 Cao Thắng, P. 2, Quận 3", CapacityMin = 0, CapacityMax = 250 },
+    new Location { LocationId = "L006", Address = "39 Trần Quốc Thảo, P. 6, Quận 3", CapacityMin = 0, CapacityMax = 160 },
     new Location { LocationId = "L007", Address = "24 Đường 3/2, Quận 10", CapacityMin = 0, CapacityMax = 500 },
     new Location { LocationId = "L008", Address = "280 Tô Hiến Thành, P. 15, Quận 10", CapacityMin = 0, CapacityMax = 250 },
     new Location { LocationId = "L009", Address = "03 Nguyễn Cơ Thạch, Khu đô thị Sala, P. An Lợi Đông, Quận 2", CapacityMin = 0, CapacityMax = 30 },
-    new Location { LocationId = "L010", Address = "Neo đậu tại Cảng Sài Gòn, Quận 4", CapacityMin = 900, CapacityMax = 900 }
+    new Location { LocationId = "L010", Address = "Neo đậu tại Cảng Sài Gòn, Quận 4", CapacityMin = 0, CapacityMax = 900 }
 );
 
             #endregion
+
             #region Order
             modelBuilder.Entity<Order>().HasData(
    new Order { OrderId = "O001", AccountId = "A003", OrderDate = DateTime.Parse("2024-03-01"), TotalPrice = 250000.0, OrderStatus = OrderStatus.Completed, Address = "123 Main St", Phone = "0901234567", ShipStatus = ShipStatus.WaitToPick, ShipCode = "S001", to_ward_code = "90767", to_district_id = 3695, CancelDate = null },
@@ -808,7 +806,6 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 );
             #endregion
 
-
             #region Ticket
             modelBuilder.Entity<Ticket>().HasData(
     new Ticket { TicketId = 1, Quantity = 500, Price = 50000.0, EventId = "E001", ticketType = ticketType.Nomal, Description="Được giao lưu với các idol cosplayer ", ticketStatus = ticketStatus.valid },
@@ -831,7 +828,6 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 
 );
             #endregion
-
 
             #region Contract
             modelBuilder.Entity<Contract>().HasData(
@@ -856,8 +852,6 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
     new Feedback { FeedbackId = Guid.NewGuid().ToString(), Description = "Amazing experience!", CreateDate = new DateTime(2025, 11, 20), CreateBy = "A015", AccountId = "A015", ContractCharacterId = "CC0083", Star = 5 }
 );
             #endregion
-
-
 
             #region Notication
             modelBuilder.Entity<Notification>().HasData(
@@ -933,7 +927,6 @@ new Category { CategoryId = "C17", CategoryName = "Slice of Life", Description =
 );
             #endregion
 
-
             #region TicketAccount
             modelBuilder.Entity<TicketAccount>().HasData(
    new TicketAccount { TicketAccountId = "TA001", AccountId = "A003", TicketCode = "TC001", TicketId = 1, Quantity = 2, TotalPrice = 100000.0, participantQuantity = 0 },
@@ -1001,7 +994,6 @@ new EventCharacter { EventCharacterId = "EC012", EventId = "E012", CharacterId =
 );
             #endregion
 
-
             #region EventActivity
             modelBuilder.Entity<EventActivity>().HasData(
     new EventActivity { EventActivityId = "EA001", EventId = "E001", ActivityId = "ACT001", Description = "Yoga for a fresh start", CreateDate = DateTime.UtcNow, CreateBy = "Admin" },
@@ -1024,8 +1016,6 @@ new EventCharacter { EventCharacterId = "EC012", EventId = "E012", CharacterId =
 );
             #endregion
 
-
-
             #region AccountCoupon
             modelBuilder.Entity<AccountCoupon>().HasData(
     new AccountCoupon { AccountCouponId = "AC001", AccountId = "A001", CouponId = "CP001", IsActive = true, StartDate = new DateTime(2024, 3, 1), EndDate = new DateTime(2024, 3, 31) },
@@ -1047,7 +1037,6 @@ new EventCharacter { EventCharacterId = "EC012", EventId = "E012", CharacterId =
     new AccountCoupon { AccountCouponId = "AC015", AccountId = "A010", CouponId = "CP015", IsActive = true, StartDate = new DateTime(2024, 3, 1), EndDate = new DateTime(2024, 12, 31) }
 );
             #endregion
-
 
             #region Activity
             modelBuilder.Entity<Activity>().HasData(
@@ -1114,7 +1103,6 @@ new EventCharacter { EventCharacterId = "EC012", EventId = "E012", CharacterId =
     new CharacterImage { CharacterImageId = "CI015", UrlImage = "https://thatparkplace.com/wp-content/uploads/2023/04/kirby-e1681312791814.jpg", CreateDate = DateTime.UtcNow, CharacterId = "CH015" }
 );
             #endregion
-
 
             #region EventImage
             modelBuilder.Entity<EventImage>().HasData(
@@ -1234,25 +1222,21 @@ new OrderProduct { OrderProductId = Guid.NewGuid().ToString(), OrderId = "O015",
 
             #region Package
             modelBuilder.Entity<Package>().HasData(
-    new Package { PackageId = "PKG001", PackageName = "Basic Character Rental", Description = "Rent a single character for an event", Price = 100000.0 },
-    new Package { PackageId = "PKG002", PackageName = "Deluxe Character Rental", Description = "Rent multiple characters with costumes", Price = 250000.0 },
-    new Package { PackageId = "PKG003", PackageName = "Ultimate Character Rental", Description = "Full-day character rental service", Price = 500000.0 },
-
-    new Package { PackageId = "PKG004", PackageName = "Standard Cosplay Performance", Description = "Basic cosplay performance at an event", Price = 150000.0 },
-    new Package { PackageId = "PKG005", PackageName = "Premium Cosplay Performance", Description = "Advanced performance with choreography", Price = 300000.0 },
-    new Package { PackageId = "PKG006", PackageName = "VIP Cosplay Performance", Description = "Exclusive show with audience interaction", Price = 500000.0 },
-
-    new Package { PackageId = "PKG007", PackageName = "Mini Photography Session", Description = "30-minute photoshoot with cosplayers", Price = 80000.0 },
-    new Package { PackageId = "PKG008", PackageName = "Standard Photography Session", Description = "1-hour professional photoshoot", Price = 150000.0 },
-    new Package { PackageId = "PKG009", PackageName = "Full Photography Package", Description = "Complete photoshoot with editing", Price = 300000.0 },
-
-    new Package { PackageId = "PKG010", PackageName = "Basic Merchandise Pack", Description = "Includes exclusive cosplay merchandise", Price = 50000.0 },
-    new Package { PackageId = "PKG011", PackageName = "Deluxe Merchandise Pack", Description = "Premium cosplay collectibles", Price = 150000.0 },
-    new Package { PackageId = "PKG012", PackageName = "Ultimate Merchandise Pack", Description = "Limited edition cosplay items", Price = 300000.0 },
-
-    new Package { PackageId = "PKG013", PackageName = "Cosplay Basics Workshop", Description = "Beginner-friendly cosplay training", Price = 100000.0 },
-    new Package { PackageId = "PKG014", PackageName = "Advanced Cosplay Training", Description = "In-depth cosplay and makeup course", Price = 2500000 },
-    new Package { PackageId = "PKG015", PackageName = "Master Cosplay Workshop", Description = "Professional-level training for cosplayers", Price = 500000.0 }
+    new Package { PackageId = "PKG001", PackageName = "Basic Character Rental", Description = "Perfect starter package for single character rental. Includes authentic costume, basic props, and 2-hour rental duration. Ideal for birthday parties, small events, or personal celebrations.", Price = 100000.0 },
+    new Package { PackageId = "PKG002", PackageName = "Deluxe Character Rental", Description = "Premium multi-character experience featuring up to 3 characters with high-quality costumes, interactive props, and professional makeup. Perfect for corporate events, festivals, or medium-scale celebrations.", Price = 250000.0 },
+    new Package { PackageId = "PKG003", PackageName = "Ultimate Character Rental", Description = "All-day character rental service with unlimited character changes, premium costumes, full prop set, professional photography, and dedicated event coordinator. Perfect for conventions, large events, or special occasions.", Price = 500000.0 },
+    new Package { PackageId = "PKG004", PackageName = "Standard Cosplay Performance", Description = "Engaging 30-minute cosplay performance featuring character-specific acts, basic choreography, and audience interaction. Includes simple props and music coordination for small to medium events.", Price = 150000.0 },
+    new Package { PackageId = "PKG005", PackageName = "Premium Cosplay Performance", Description = "Professional 60-minute performance with advanced choreography, special effects, custom music arrangements, and interactive storytelling. Features multiple costume changes and audience participation segments.", Price = 300000.0 },
+    new Package { PackageId = "PKG006", PackageName = "VIP Cosplay Performance", Description = "Exclusive 90-minute theatrical experience with elaborate stage production, special lighting effects, live music accompaniment, meet-and-greet sessions, and personalized character interactions for VIP guests.", Price = 500000.0 },
+    new Package { PackageId = "PKG007", PackageName = "Mini Photography Session", Description = "Quick 30-minute photoshoot perfect for social media content. Includes basic lighting setup, 3 costume changes, and 15 edited high-resolution photos delivered within 48 hours.", Price = 80000.0 },
+    new Package { PackageId = "PKG008", PackageName = "Standard Photography Session", Description = "Professional 1-hour photoshoot with studio-quality lighting, multiple backdrop options, unlimited costume changes, and 50 professionally edited photos with creative effects and color grading.", Price = 150000.0 },
+    new Package { PackageId = "PKG009", PackageName = "Full Photography Package", Description = "Complete 3-hour photography experience with multiple locations, professional lighting equipment, makeup artist, unlimited outfit changes, 100+ edited photos, and exclusive behind-the-scenes video content.", Price = 300000.0 },
+    new Package { PackageId = "PKG010", PackageName = "Basic Merchandise Pack", Description = "Starter collection featuring exclusive keychains, stickers, mini figures, character cards, and limited edition badges. Perfect introduction to cosplay merchandise collecting with authentic licensed products.", Price = 50000.0 },
+    new Package { PackageId = "PKG011", PackageName = "Deluxe Merchandise Pack", Description = "Premium collectible bundle including high-quality figures, exclusive artwork prints, custom pins, character accessories, special edition posters, and signed memorabilia from featured cosplayers.", Price = 150000.0 },
+    new Package { PackageId = "PKG012", PackageName = "Ultimate Merchandise Pack", Description = "Rare collector's edition featuring limited production items, exclusive sculptures, custom-made accessories, signed artwork, special packaging, and unique items not available anywhere else.", Price = 300000.0 },
+    new Package { PackageId = "PKG013", PackageName = "Cosplay Basics Workshop", Description = "4-hour beginner workshop covering costume basics, makeup fundamentals, character study, posing techniques, and prop creation. Includes starter kit with essential tools and materials for new cosplayers.", Price = 100000.0 },
+    new Package { PackageId = "PKG014", PackageName = "Advanced Cosplay Training", Description = "Intensive 2-day masterclass covering advanced sewing techniques, professional makeup artistry, wig styling, armor crafting, photography skills, and performance coaching with industry experts.", Price = 2500000 },
+    new Package { PackageId = "PKG015", PackageName = "Master Cosplay Workshop", Description = "Comprehensive 5-day professional certification program including advanced craftsmanship, business skills for cosplay careers, competition preparation, portfolio development, and mentorship from award-winning cosplayers.", Price = 500000.0 }
 );
             #endregion
 
