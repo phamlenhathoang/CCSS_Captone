@@ -134,7 +134,7 @@ namespace CCSS_Service.Services
                 var payment = new Payment
                 {
                     PaymentId = Guid.NewGuid().ToString(),
-                    Type = "Refund",
+                    Type = "Online",
                     Status = PaymentStatus.Complete,
                     Purpose = PaymentPurpose.Refund,
                     CreatAt = DateTime.UtcNow,
