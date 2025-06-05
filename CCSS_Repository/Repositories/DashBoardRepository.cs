@@ -60,7 +60,8 @@ namespace CCSS_Repository.Repositories
                     query = query.Where(p => p.Purpose == PaymentPurpose.BuyTicket);
                     break;
                 case RevenueSource.Service:
-                    query = query.Where(p => p.Purpose == PaymentPurpose.contractSettlement || p.Purpose == PaymentPurpose.Refund);
+                    query = query.Where(p =>(p.Purpose == PaymentPurpose.contractSettlement || p.Purpose == PaymentPurpose.Refund)
+                                            && p.Purpose != PaymentPurpose.Order);
                     break;
                 case RevenueSource.Total:
                     query = query.Where(p => p.Purpose == PaymentPurpose.BuyTicket ||

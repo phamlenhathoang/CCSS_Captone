@@ -13,6 +13,7 @@ namespace CCSS_Repository.Repositories
         Task<bool> DeleteOrder(string id);
         Task<List<Order>> GetAllOrdersByAccountId(string accountId);
         Task<List<Product>> GetProductByOrderId(string id);
+        Task<List<OrderProduct>> GetOrderProductsByOrderId(string orderId);
         Task<bool> UpdateProductQuantitiesAfterPayment(string orderId);
         Task<List<Product>> GetProductsByOrderId(string orderId);
     }
@@ -46,6 +47,14 @@ namespace CCSS_Repository.Repositories
                 .ToListAsync();
 
             return products;
+        }
+        public async Task<List<OrderProduct>> GetOrderProductsByOrderId(string orderId)
+        {
+            var orderProducts = await _dbContext.OrderProducts
+                .Where(op => op.OrderId == orderId)
+                .ToListAsync();
+
+            return orderProducts;
         }
         public async Task<List<Order>> GetAllOrdersByAccountId(string accountId)
         {
