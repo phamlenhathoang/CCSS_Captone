@@ -18,6 +18,8 @@ namespace CCSS_Service.Model.Responses
         public string Status { get; set; }
         public string? StartDate { get; set; }
         public string? EndDate { get; set; }
+        public string? CreatedDate { get; set; }
+        public string? UpdateDate { get; set; }
         public string? Location { get; set; }     
         public string? ServiceId { get; set; }
         public string? PackageId { get; set; }
