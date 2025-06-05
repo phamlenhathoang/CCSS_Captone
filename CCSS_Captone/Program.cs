@@ -105,6 +105,7 @@ builder.Services.AddScoped<IContractRefundService, ContractRefundService>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<IValidateService, ValidateService>();
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
@@ -155,6 +156,7 @@ builder.Services.AddHostedService<RequestBackgroundService>();
 builder.Services.AddHostedService<PaymentBackgroundService>();
 builder.Services.AddHostedService<ContractRefundBackgroundService>();
 builder.Services.AddHostedService<RequestCharacterBackgroundService>();
+builder.Services.AddHostedService<TaskBackgroundService>();
 
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSettings"));
 var secretKey = builder.Configuration["AppSettings:SecretKey"];
