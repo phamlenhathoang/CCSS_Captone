@@ -27,12 +27,15 @@ namespace CCSS_Service.Services
         private readonly IOrderRepository _orderRepository; 
         private readonly IMapper _mapper;
         private IProductRepository _productRepository;
+        private readonly IPaymentRepository _paymentRepository;
 
-        public OrderService(IOrderRepository orderRepository, IMapper mapper, IProductRepository productRepository)
+
+        public OrderService(IOrderRepository orderRepository, IMapper mapper, IProductRepository productRepository, IPaymentRepository paymentRepository)
         {
             _orderRepository = orderRepository; 
             _mapper = mapper; 
             _productRepository = productRepository;
+            _paymentRepository = paymentRepository;
         }
 
         public async Task<List<OrderResponse>> GetAllOrders()
@@ -106,7 +109,42 @@ namespace CCSS_Service.Services
         } 
         public async Task<bool> UpdateOrderStatus(string id, ShipStatus status, string? CancelReason)
         {
-            return await _orderRepository.UpdateOrderShipStatus(id, status, CancelReason);
+            var order = await _orderRepository.GetOrderById(id);
+            if (status == ShipStatus.Cancel)
+            { 
+                var products = await _orderRepository.GetProductsByOrderId(id);
+                var orderproducts = await _orderRepository.GetOrderProductsByOrderId(id);
+
+                foreach (var orderProduct in orderproducts)
+                {
+                    var product = products.FirstOrDefault(p => p.ProductId == orderProduct.ProductId);
+                    if (product != null)
+                    {
+                        product.Quantity += orderProduct.Quantity;
+                        await _productRepository.UpdateProduct(product);
+                    }
+                }
+            }
+            if (status == ShipStatus.Refund)
+            {
+                if (order.ShipStatus == status) 
+                {
+                    throw new Exception("order đã refund");
+                }
+                var payment = new Payment
+                {
+                    PaymentId = Guid.NewGuid().ToString(),
+                    Type = "Refund",
+                    Status = PaymentStatus.Complete,
+                    Purpose = PaymentPurpose.Refund,
+                    CreatAt = DateTime.UtcNow,
+                    Amount = order.TotalPrice,
+                    ContractId = null,
+                    OrderId = id
+                };
+                await _paymentRepository.AddPayment(payment);
+            }
+                return await _orderRepository.UpdateOrderShipStatus(id, status, CancelReason);
         }
 
 

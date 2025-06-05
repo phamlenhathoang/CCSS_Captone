@@ -217,12 +217,26 @@ namespace CCSS_Service.Services
                 {
                     return "Failed to add event to database";
                 }
-                foreach (var ec in eventRequest.EventCharacterRequest)
+                var characterCounts = eventRequest.EventCharacterRequest
+                    .GroupBy(ec => ec.CharacterId)
+                    .Select(g => new { CharacterId = g.Key, Count = g.Count() });
+
+                foreach (var item in characterCounts)
                 {
-                    Character character = await _characterRepository.GetCharacter(ec.CharacterId);
-                    character.Quantity -= 1;
+                    Character character = await _characterRepository.GetCharacter(item.CharacterId);
+                    if (character.Quantity < item.Count)
+                    {
+                        return $"Nhân vật {character.CharacterName} không đủ số lượng khả dụng";
+                    }
+                    character.Quantity -= item.Count;
                     await _characterRepository.UpdateCharacter(character);
                 }
+                //foreach (var ec in eventRequest.EventCharacterRequest)
+                //{
+                //    Character character = await _characterRepository.GetCharacter(ec.CharacterId);
+                //    character.Quantity -= 1;
+                //    await _characterRepository.UpdateCharacter(character);
+                //}
 
                 //ImageRequest image = new ImageRequest();
                 //image.ImageUrl = eventRequest.ImageUrl;
