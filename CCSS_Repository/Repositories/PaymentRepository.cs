@@ -65,7 +65,7 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Payment>> GetAllPayment()
         {
-            return await _context.Payments.ToListAsync();
+            return await _context.Payments.Where(p => p.Amount > 0).ToListAsync();
         }
 
         public async Task<List<Payment>> GetAllPaymentByContractId(string contracId)
@@ -87,7 +87,7 @@ namespace CCSS_Repository.Repositories
             //    return await _context.Payments.Include(sc => sc.Contract).Where(c => c.Contract.CreateBy.Equals(accountId)).ToListAsync();
             //}
 
-            IQueryable<Payment> query = _context.Payments;
+            IQueryable<Payment> query = _context.Payments.Where(p => p.Amount > 0);
 
             if(purpose == PaymentPurpose.Order)
             {
