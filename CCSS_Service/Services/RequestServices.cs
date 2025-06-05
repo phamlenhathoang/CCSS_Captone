@@ -284,8 +284,8 @@ namespace CCSS_Service.Services
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                DateTime StartDate = DateTime.Now;
-                DateTime EndDate = DateTime.Now;
+                DateTime StartDate = DateTime.UtcNow.AddHours(7);
+                DateTime EndDate = DateTime.UtcNow.AddHours(7);
 
                 if (!string.IsNullOrEmpty(requestDtos.StartDate) || !string.IsNullOrEmpty(requestDtos.EndDate))
                 {
@@ -305,7 +305,7 @@ namespace CCSS_Service.Services
                     {
                         return "Date format is incorrect. Please enter the right format DateTime.";
                     }
-                    if (StartDate < DateTime.Now)
+                    if (StartDate < DateTime.UtcNow.AddHours(7))
                     {
                         return "Start date cannot be in the past.";
                     }
@@ -313,7 +313,7 @@ namespace CCSS_Service.Services
                     {
                         return "The gap between StartDate and EndDate max 5 days.Please try again";
                     }
-                    if (EndDate < DateTime.Now)
+                    if (EndDate < DateTime.UtcNow.AddHours(7))
                     {
                         return "End date cannot be in the past.";
                     }
@@ -321,7 +321,7 @@ namespace CCSS_Service.Services
                     {
                         return "End date must be greater than event date.";
                     }
-                    if ((StartDate - DateTime.Now).TotalDays < 3)
+                    if ((StartDate - DateTime.UtcNow.AddHours(7)).TotalDays < 3)
                     {
                         return "Start Date must be 3 days from today";
                     }
@@ -390,7 +390,7 @@ namespace CCSS_Service.Services
                                     RequestId = newRequest.RequestId,
                                     Description = r.Description,
                                     CharacterId = r.CharacterId,
-                                    CreateDate = DateTime.Now,
+                                    CreateDate = DateTime.UtcNow.AddHours(7),
                                     Status = RequestCharacterStatus.Accept,
                                     Quantity = r.Quantity,
                                     TotalPrice = totalPrice,
@@ -424,8 +424,8 @@ namespace CCSS_Service.Services
 
                                         foreach (var dateDtos in d.ListRequestDates)
                                         {
-                                            DateTime StartTime = DateTime.Now;
-                                            DateTime EndTime = DateTime.Now;
+                                            DateTime StartTime = DateTime.UtcNow.AddHours(7);
+                                            DateTime EndTime = DateTime.UtcNow.AddHours(7);
 
                                             if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
                                             {
@@ -511,8 +511,8 @@ namespace CCSS_Service.Services
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                DateTime StartDate = DateTime.Now;
-                DateTime EndDate = DateTime.Now;
+                DateTime StartDate = DateTime.UtcNow.AddHours(7);
+                DateTime EndDate = DateTime.UtcNow.AddHours(7);
 
                 if (!string.IsNullOrEmpty(UpdateRequestDtos.StartDate) || !string.IsNullOrEmpty(UpdateRequestDtos.EndDate))
                 {
@@ -532,11 +532,11 @@ namespace CCSS_Service.Services
                     {
                         return ("Date format is incorrect. Please enter the right format DateTime.");
                     }
-                    if (StartDate < DateTime.Now)
+                    if (StartDate < DateTime.UtcNow.AddHours(7))
                     {
                         return ("Start date cannot be in the past.");
                     }
-                    if (EndDate < DateTime.Now)
+                    if (EndDate < DateTime.UtcNow.AddHours(7))
                     {
                         return ("End date cannot be in the past.");
                     }
@@ -544,7 +544,7 @@ namespace CCSS_Service.Services
                     {
                         return ("End date must be greater than event date.");
                     }
-                    if ((StartDate - DateTime.Now).TotalDays < 3)
+                    if ((StartDate - DateTime.UtcNow.AddHours(7)).TotalDays < 3)
                     {
                         return "Start Date must be 3 days from today";
                     }
@@ -622,7 +622,7 @@ namespace CCSS_Service.Services
                        
 
                         requestCharacter.CreateDate = StartDate;
-                        requestCharacter.UpdateDate = DateTime.Now;
+                        requestCharacter.UpdateDate = DateTime.UtcNow.AddHours(7);
                         requestCharacter.CharacterId = r.CharacterId;
                         requestCharacter.CosplayerId = r.CosplayerId;
                         requestCharacter.Description = r.Description;
@@ -659,7 +659,7 @@ namespace CCSS_Service.Services
                 requestExisting.PackageId = requestExisting.ServiceId == "S003" ? UpdateRequestDtos.PackageId : null;
                 requestExisting.Range = requestExisting.ServiceId == "S003" ? UpdateRequestDtos.Range : null;
                 requestExisting.Price = UpdateRequestDtos.Price;
-                requestExisting.UpdateDate = DateTime.Now;
+                requestExisting.UpdateDate = DateTime.UtcNow.AddHours(7);
 
 
                 await _repository.UpdateRequest(requestExisting);
@@ -767,8 +767,8 @@ namespace CCSS_Service.Services
         {
             try
             {
-                DateTime StartDate = DateTime.Now;
-                DateTime EndDate = DateTime.Now;
+                DateTime StartDate = DateTime.UtcNow.AddHours(7);
+                DateTime EndDate = DateTime.UtcNow.AddHours(7);
 
                 if (!string.IsNullOrEmpty(startDate) || !string.IsNullOrEmpty(endDate))
                 {
@@ -788,11 +788,11 @@ namespace CCSS_Service.Services
                     {
                         throw new Exception("Date format is incorrect. Please enter the right format DateTime.");
                     }
-                    if (StartDate < DateTime.Now)
+                    if (StartDate < DateTime.UtcNow.AddHours(7))
                     {
                         throw new Exception("Start date cannot be in the past.");
                     }
-                    if (EndDate < DateTime.Now)
+                    if (EndDate < DateTime.UtcNow.AddHours(7))
                     {
                         throw new Exception("End date cannot be in the past.");
                     }
@@ -949,8 +949,8 @@ namespace CCSS_Service.Services
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                DateTime StartDate = DateTime.Now;
-                DateTime EndDate = DateTime.Now;
+                DateTime StartDate = DateTime.UtcNow.AddHours(7);
+                DateTime EndDate = DateTime.UtcNow.AddHours(7);
 
                 if (!string.IsNullOrEmpty(requestDtos.StartDate) || !string.IsNullOrEmpty(requestDtos.EndDate))
                 {
@@ -970,7 +970,7 @@ namespace CCSS_Service.Services
                     {
                         return "Date format is incorrect. Please enter the right format DateTime.";
                     }
-                    if (StartDate < DateTime.Now)
+                    if (StartDate < DateTime.UtcNow.AddHours(7))
                     {
                         return "Start date cannot be in the past.";
                     }
@@ -978,7 +978,7 @@ namespace CCSS_Service.Services
                     {
                         return "The gap between StartDate and EndDate max 5 days.Please try again";
                     }
-                    if (EndDate < DateTime.Now)
+                    if (EndDate < DateTime.UtcNow.AddHours(7))
                     {
                         return "End date cannot be in the past.";
                     }
@@ -986,7 +986,7 @@ namespace CCSS_Service.Services
                     {
                         return "End date must be greater than event date.";
                     }
-                    if ((StartDate - DateTime.Now).TotalDays < 3)
+                    if ((StartDate - DateTime.UtcNow.AddHours(7)).TotalDays < 3)
                     {
                         return "Start Date must be 3 days from today";
                     }
@@ -1078,7 +1078,7 @@ namespace CCSS_Service.Services
                                 RequestId = newRequest.RequestId,
                                 Description = r.Description,
                                 CharacterId = r.CharacterId,
-                                CreateDate = DateTime.Now,
+                                CreateDate = DateTime.UtcNow.AddHours(7),
                                 Status = RequestCharacterStatus.Accept,
                                 Quantity = 1,
                                 CosplayerId = r.CosplayerId,
@@ -1113,8 +1113,8 @@ namespace CCSS_Service.Services
 
                                         foreach (var dateDtos in d.ListRequestDates)
                                         {
-                                            DateTime StartTime = DateTime.Now;
-                                            DateTime EndTime = DateTime.Now;
+                                            DateTime StartTime = DateTime.UtcNow.AddHours(7);
+                                            DateTime EndTime = DateTime.UtcNow.AddHours(7);
 
                                             if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
                                             {
@@ -1233,8 +1233,8 @@ namespace CCSS_Service.Services
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                DateTime StartDate = DateTime.Now;
-                DateTime EndDate = DateTime.Now;
+                DateTime StartDate = DateTime.UtcNow.AddHours(7);
+                DateTime EndDate = DateTime.UtcNow.AddHours(7);
 
                 if (!string.IsNullOrEmpty(requestDtos.StartDate) || !string.IsNullOrEmpty(requestDtos.EndDate))
                 {
@@ -1254,7 +1254,7 @@ namespace CCSS_Service.Services
                     {
                         return "Date format is incorrect. Please enter the right format DateTime.";
                     }
-                    if (StartDate < DateTime.Now)
+                    if (StartDate < DateTime.UtcNow.AddHours(7))
                     {
                         return "Start date cannot be in the past.";
                     }
@@ -1262,7 +1262,7 @@ namespace CCSS_Service.Services
                     {
                         return "The gap between StartDate and EndDate max 5 days.Please try again";
                     }
-                    if (EndDate < DateTime.Now)
+                    if (EndDate < DateTime.UtcNow.AddHours(7))
                     {
                         return "End date cannot be in the past.";
                     }
@@ -1270,7 +1270,7 @@ namespace CCSS_Service.Services
                     {
                         return "End date must be greater than event date.";
                     }
-                    if ((StartDate - DateTime.Now).TotalDays < 3)
+                    if ((StartDate - DateTime.UtcNow.AddHours(7)).TotalDays < 3)
                     {
                         return "Start Date must be 3 days from today";
                     }
@@ -1336,7 +1336,7 @@ namespace CCSS_Service.Services
                                     RequestId = newRequest.RequestId,
                                     Description = r.Description,
                                     CharacterId = r.CharacterId,
-                                    CreateDate = DateTime.Now,
+                                    CreateDate = DateTime.UtcNow.AddHours(7),
                                     Status = RequestCharacterStatus.Accept,
                                     Quantity = r.Quantity,
                                     CosplayerId = null,
