@@ -248,17 +248,17 @@ namespace CCSS_Repository.Repositories
 
         public async Task<List<Task>> GetTasksByAccountId(string accountId)
         {
-            return await _dbContext.Tasks.Where(t => t.AccountId.Equals(accountId)).Include(t => t.ContractCharacter).Include(t => t.EventCharacter).OrderBy(t => t.StartDate).ToListAsync();
+            return await _dbContext.Tasks.Where(t => t.AccountId.Equals(accountId)).Include(t => t.ContractCharacter).Include(t => t.EventCharacter).OrderBy(t => t.StartDate).OrderByDescending(t => t.CreateDate).ToListAsync();
         }
 
         public async Task<List<Task>> GetTaskByContractCharacterId(string contractCharacterId)
         {
-            return await _dbContext.Tasks.Where(c => c.ContractCharacterId.Equals(contractCharacterId)).ToListAsync();
+            return await _dbContext.Tasks.Where(c => c.ContractCharacterId.Equals(contractCharacterId)).OrderByDescending(t => t.CreateDate).ToListAsync();
         }
 
         public async Task<List<Task>> GetTaskByContractCharacterIdAndCosplayerId(string contractCharacterId, string cosplayerId)
         {
-            return await _dbContext.Tasks.Where(c => c.ContractCharacterId.Equals(contractCharacterId) && c.AccountId.Equals(cosplayerId)).ToListAsync();
+            return await _dbContext.Tasks.Where(c => c.ContractCharacterId.Equals(contractCharacterId) && c.AccountId.Equals(cosplayerId)).OrderByDescending(t => t.CreateDate).ToListAsync();
         }
 
         //public async Task<bool> DeleteTask(CCSS_Repository.Entities.Task task)

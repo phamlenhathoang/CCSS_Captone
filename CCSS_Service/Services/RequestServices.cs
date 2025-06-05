@@ -684,6 +684,16 @@ namespace CCSS_Service.Services
                     await transaction.RollbackAsync();
                     return "Request not found";
                 }
+
+                if (request.IsValidate == true)
+                {
+                    DateTime check = DateTime.UtcNow.AddDays(1).AddHours(7);
+                    if (request.CreatedDate > check)
+                    {
+                        return "The task cannot be updated at this time as the appropriate time has not yet arrived.";
+                    }
+                }
+
                 if (requestStatus == RequestStatus.Cancel)
                 {
                     request.Reason = reason;

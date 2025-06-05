@@ -105,6 +105,7 @@ builder.Services.AddScoped<IContractRefundService, ContractRefundService>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<IValidateService, ValidateService>();
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 

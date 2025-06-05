@@ -27,6 +27,7 @@ namespace CCSS_Repository.Entities
         public DateTime? UpdateDate { get; set; }
         public TaskStatus? Status { get; set; }
         public string? Type { get; set; }
+        public bool IsValidate { get; set; } = true;
 
         [ForeignKey("AccountId")]
         public string AccountId { get; set; }

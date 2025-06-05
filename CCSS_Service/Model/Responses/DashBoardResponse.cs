@@ -31,11 +31,18 @@ namespace CCSS_Service.Model.Responses
         public double TotalRevenue { get; set; }
         public List<DailyRevenueResponse> DailyRevenue { get; set; } = new();
         public List<MonthlyRevenueResponse> MonthlyRevenue { get; set; } = new();
+        public List<HourlyRevenueResponse> HourlyRevenue { get; set; } = new();
     }
 
     public class DailyRevenueResponse
     {
         public DateTime Date { get; set; }
+        public double TotalRevenue { get; set; }
+    }
+    
+    public class HourlyRevenueResponse
+    {
+        public string Hour { get; set; }
         public double TotalRevenue { get; set; }
     }
 
