@@ -54,7 +54,7 @@ namespace CCSS_Repository.Repositories
             switch (revenueSource)
             {
                 case RevenueSource.Order:
-                    query = query.Where(p => p.Purpose == PaymentPurpose.Order);
+                    query = query.Where(p => p.Purpose == PaymentPurpose.Order || (p.Purpose == PaymentPurpose.Refund && p.OrderId != null));
                     break;
                 case RevenueSource.festival:
                     query = query.Where(p => p.Purpose == PaymentPurpose.BuyTicket);
