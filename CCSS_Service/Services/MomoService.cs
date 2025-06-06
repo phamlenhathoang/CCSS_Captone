@@ -153,7 +153,7 @@ namespace CCSS_Service.Services
                 Type = "Momo",
                 Status = PaymentStatus.Pending,
                 Purpose = model.Purpose,
-                CreatAt = DateTime.UtcNow,
+                CreatAt = DateTime.UtcNow.AddHours(7),
                 TransactionId = orderId,
                 Amount = model.Amount,
                 AccountCouponID = model.AccountCouponId
