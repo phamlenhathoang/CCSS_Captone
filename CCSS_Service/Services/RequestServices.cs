@@ -284,8 +284,8 @@ namespace CCSS_Service.Services
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                DateTime StartDate = DateTime.UtcNow.AddHours(7);
-                DateTime EndDate = DateTime.UtcNow.AddHours(7);
+                DateTime StartDate = DateTime.UtcNow;
+                DateTime EndDate = DateTime.UtcNow;
 
                 if (!string.IsNullOrEmpty(requestDtos.StartDate) || !string.IsNullOrEmpty(requestDtos.EndDate))
                 {
@@ -354,6 +354,7 @@ namespace CCSS_Service.Services
                     Deposit = requestDtos.Deposit,
                     Range = requestDtos.Range,
                     PackageId = requestDtos.PackageId,
+                    CreatedDate = DateTime.UtcNow.AddHours(7)
                 };
                 var result = await _repository.AddRequest(newRequest);
                 if (!result)
@@ -511,8 +512,8 @@ namespace CCSS_Service.Services
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                DateTime StartDate = DateTime.UtcNow.AddHours(7);
-                DateTime EndDate = DateTime.UtcNow.AddHours(7);
+                DateTime StartDate = DateTime.UtcNow;
+                DateTime EndDate = DateTime.UtcNow;
 
                 if (!string.IsNullOrEmpty(UpdateRequestDtos.StartDate) || !string.IsNullOrEmpty(UpdateRequestDtos.EndDate))
                 {
@@ -777,8 +778,8 @@ namespace CCSS_Service.Services
         {
             try
             {
-                DateTime StartDate = DateTime.UtcNow.AddHours(7);
-                DateTime EndDate = DateTime.UtcNow.AddHours(7);
+                DateTime StartDate = DateTime.UtcNow;
+                DateTime EndDate = DateTime.UtcNow;
 
                 if (!string.IsNullOrEmpty(startDate) || !string.IsNullOrEmpty(endDate))
                 {
@@ -959,8 +960,8 @@ namespace CCSS_Service.Services
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                DateTime StartDate = DateTime.UtcNow.AddHours(7);
-                DateTime EndDate = DateTime.UtcNow.AddHours(7);
+                DateTime StartDate = DateTime.UtcNow;
+                DateTime EndDate = DateTime.UtcNow;
 
                 if (!string.IsNullOrEmpty(requestDtos.StartDate) || !string.IsNullOrEmpty(requestDtos.EndDate))
                 {
@@ -1027,6 +1028,7 @@ namespace CCSS_Service.Services
                     EndDate = EndDate,
                     Location = requestDtos.Location,
                     Deposit = requestDtos.Deposit,
+                    CreatedDate = DateTime.UtcNow.AddHours(7)
                 };
                 var result = await _repository.AddRequest(newRequest);
                 if (!result)
@@ -1123,8 +1125,8 @@ namespace CCSS_Service.Services
 
                                         foreach (var dateDtos in d.ListRequestDates)
                                         {
-                                            DateTime StartTime = DateTime.UtcNow.AddHours(7);
-                                            DateTime EndTime = DateTime.UtcNow.AddHours(7);
+                                            DateTime StartTime = DateTime.UtcNow;
+                                            DateTime EndTime = DateTime.UtcNow;
 
                                             if (!string.IsNullOrEmpty(dateDtos.StartDate) || !string.IsNullOrEmpty(dateDtos.EndDate))
                                             {
@@ -1243,8 +1245,8 @@ namespace CCSS_Service.Services
         {
             using (var transaction = await _beginTransactionRepository.BeginTransaction())
             {
-                DateTime StartDate = DateTime.UtcNow.AddHours(7);
-                DateTime EndDate = DateTime.UtcNow.AddHours(7);
+                DateTime StartDate = DateTime.UtcNow;
+                DateTime EndDate = DateTime.UtcNow;
 
                 if (!string.IsNullOrEmpty(requestDtos.StartDate) || !string.IsNullOrEmpty(requestDtos.EndDate))
                 {
@@ -1311,6 +1313,7 @@ namespace CCSS_Service.Services
                     EndDate = EndDate,
                     Location = requestDtos.Location,
                     Deposit = requestDtos.Deposit,
+                    CreatedDate = DateTime.UtcNow.AddHours(7)
                 };
                 var result = await _repository.AddRequest(newRequest);
                 if (!result)
