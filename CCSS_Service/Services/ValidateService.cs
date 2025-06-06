@@ -12,6 +12,7 @@ namespace CCSS_Service.Services
     public interface IValidateService
     {
         Task<bool> UpdateValidate(bool validate);
+        Task<bool> GetValidate();
     }
     public class ValidateService : IValidateService
     {
@@ -23,6 +24,20 @@ namespace CCSS_Service.Services
             this.taskRepository = taskRepository;
             this.requestRepository = requestRepository;
         }
+
+        public async Task<bool> GetValidate()
+        {
+            try
+            {
+                List<Task> tasks = await taskRepository.GetAllTask();
+                return tasks[0].IsValidate;
+            }
+            catch (Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<bool> UpdateValidate(bool validate)
         {
             try

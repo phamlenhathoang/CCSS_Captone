@@ -27,6 +27,7 @@ namespace CCSS_Service.Model.Responses
         public string? Range { get; set; }
         public string? Reason { get; set; }
         public int? TotalDate { get; set; }
+        public bool IsValidate { get; set; }
         public List<CharacterRequestResponse> CharactersListResponse { get; set; } 
     }
 

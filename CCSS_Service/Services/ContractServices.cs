@@ -179,7 +179,7 @@ namespace CCSS_Service.Services
                     RequestId = requestId,
                     CreateBy = request.AccountId,
                     ContractId = Guid.NewGuid().ToString(),
-                    CreateDate = DateTime.Now,
+                    CreateDate = DateTime.UtcNow.AddHours(7),
                     ContractStatus = ContractStatus.Created,
                     ContractName = request.Service.ServiceName,
                     UrlPdf = await Image.UploadImageToFirebase(await pdfService.ConvertBytesToIFormFile(request, deposit)),
