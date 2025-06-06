@@ -122,7 +122,7 @@ namespace CCSS_Service.Services
                 Type = "VNPay",
                 Status = PaymentStatus.Pending,
                 Purpose = model.Purpose,
-                CreatAt = DateTime.UtcNow,
+                CreatAt = DateTime.UtcNow.AddHours(7),
                 Amount = model.Amount,
                 ContractId = model.ContractId ?? null,
                 OrderId = model.OrderPaymentId ?? null

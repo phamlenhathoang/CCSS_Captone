@@ -769,7 +769,7 @@ namespace CCSS_Service.Services
                             CreatAt = DateTime.UtcNow,
                             Status = PaymentStatus.Complete,
                             Amount = contract.ContractRefund.Amount,
-                            Type = "Online",
+                            Type = "Refund",
                             TransactionId = GenerateCode(),
                         };
 

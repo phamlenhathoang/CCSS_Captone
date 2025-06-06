@@ -55,8 +55,8 @@ namespace CCSS_Service
            
             var response = new DashBoardRevenueResponse
             {
-                TotalRevenue = ticketAndPayment.Sum(p => p.Purpose != PaymentPurpose.Refund ? p.Amount ?? 0 : 0) + 
-                               ticketAndPayment.Sum(p => p.Purpose == PaymentPurpose.Refund && p.Contract != null ? p.Contract.TotalPrice ?? 0 : 0),
+                TotalRevenue = ticketAndPayment.Sum(p => (p.Purpose != PaymentPurpose.Refund && p.OrderId !=null )|| p.Purpose != PaymentPurpose.contractSettlement ? p.Amount ?? 0 : 0) + 
+                               ticketAndPayment.Sum(p => p.Purpose == PaymentPurpose.Refund && p.Contract != null || p.Purpose == PaymentPurpose.contractSettlement ? p.Contract.TotalPrice ?? 0 : 0),
                 PaymentResponse = ticketAndPayment.Select(p => new PaymentResponse
                 {
                     PaymentId = p.PaymentId,
