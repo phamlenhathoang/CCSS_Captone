@@ -353,6 +353,23 @@ namespace CCSS_Service.Libraries
 
                     htmlContent += "<p>In any case, if Party B unilaterally terminates the contract, whether intentionally or unintentionally, Party B will lose the entire deposit paid to Party A.</p>";
 
+
+                    htmlContent += "<br/><br/>";
+                    htmlContent += "<div style='display: flex; justify-content: space-between; margin-top: 30px;'>";
+
+                    htmlContent += "<div style='width:45%; text-align:center;'>";
+                    htmlContent += "<strong>Party A</strong><br/>Signature & Full Name";
+                    htmlContent += "</div>";
+
+                    htmlContent += "<div style='width:45%; text-align:center;'>";
+                    htmlContent += "<strong>Party B</strong><br/>Signature & Full Name";
+                    htmlContent += "</div>";
+
+                    htmlContent += "</div>";
+
+
+
+
                     PdfGenerator.AddPdfPages(document, htmlContent, PageSize.A4);
 
                     using (var ms = new MemoryStream())
