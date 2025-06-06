@@ -137,9 +137,9 @@ namespace CCSS_Service.Services
                     Type = "Refund",
                     Status = PaymentStatus.Complete,
                     Purpose = PaymentPurpose.Refund,
-                    CreatAt = DateTime.UtcNow,
+                    CreatAt = DateTime.UtcNow.AddHours(7),
                     Amount = order.TotalPrice,
-                    ContractId = GenerateCode(),
+                    TransactionId = GenerateCode(),
                     OrderId = id
                 };
                 await _paymentRepository.AddPayment(payment);
