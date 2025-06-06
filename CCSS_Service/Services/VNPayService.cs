@@ -116,6 +116,7 @@ namespace CCSS_Service.Services
             pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
             pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
             pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
+            var amount = model.Purpose == PaymentPurpose.Order ? model.Amount - 30000 : model.Amount;
             var payment = new Payment
             {
                 PaymentId = Guid.NewGuid().ToString(),
@@ -123,7 +124,7 @@ namespace CCSS_Service.Services
                 Status = PaymentStatus.Pending,
                 Purpose = model.Purpose,
                 CreatAt = DateTime.UtcNow.AddHours(7),
-                Amount = model.Amount,
+                Amount = amount,
                 ContractId = model.ContractId ?? null,
                 OrderId = model.OrderPaymentId ?? null
             };

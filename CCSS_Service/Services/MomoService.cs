@@ -145,7 +145,7 @@ namespace CCSS_Service.Services
 
             var response = await client.ExecuteAsync(request);
             var momoResponse = JsonConvert.DeserializeObject<MomoCreatePaymentResponse>(response.Content);
-
+            var amount = model.Purpose == PaymentPurpose.Order ? model.Amount - 30000 : model.Amount;
 
             Payment payment = new Payment
             {
@@ -155,7 +155,7 @@ namespace CCSS_Service.Services
                 Purpose = model.Purpose,
                 CreatAt = DateTime.UtcNow.AddHours(7),
                 TransactionId = orderId,
-                Amount = model.Amount,
+                Amount = amount,
                 AccountCouponID = model.AccountCouponId
                 //TicketAccountId = addTicketResult.TicketAccountId
             };
