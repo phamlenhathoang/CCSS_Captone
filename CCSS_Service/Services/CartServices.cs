@@ -129,7 +129,7 @@ namespace CCSS_Service.Services
                     CartId = Guid.NewGuid().ToString(),
                     AccountId = cartRequest.AccountId,
                     TotalPrice = 0,
-                    CreateDate = DateTime.Now,
+                    CreateDate = DateTime.UtcNow.AddHours(7),
                     UpdateDate = null,
                 };
 

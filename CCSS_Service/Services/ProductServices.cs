@@ -122,7 +122,7 @@ namespace CCSS_Service.Services
                         Description = productRequest.Description,
                         Quantity = productRequest.Quantity,
                         Price = productRequest.Price,
-                        CreateDate = DateTime.Now,
+                        CreateDate = DateTime.UtcNow.AddHours(7),
                         UpdateDate = null,
                         IsActive = true,
                     };
@@ -140,7 +140,7 @@ namespace CCSS_Service.Services
                             ProductImageId = Guid.NewGuid().ToString(),
                             ProductId = newProduct.ProductId,
                             UrlImage = await _image.UploadImageToFirebase(file),
-                            CreateDate = DateTime.Now,
+                            CreateDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                         };
                         if (count == 0)
@@ -193,7 +193,7 @@ namespace CCSS_Service.Services
                 productExisting.Description = productRequest.Description;
                 productExisting.Quantity = productRequest.Quantity;
                 productExisting.Price = productRequest.Price;
-                productExisting.UpdateDate = DateTime.Now;
+                productExisting.UpdateDate = DateTime.UtcNow.AddHours(7);
                 productExisting.IsActive = productRequest.IsActive;
 
                 var result = await _repository.UpdateProduct(productExisting);

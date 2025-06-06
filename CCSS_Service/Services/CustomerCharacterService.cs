@@ -88,7 +88,7 @@ namespace CCSS_Service.Services
                 {
                     Status = CustomerCharacterStatus.Pending,
                     CategoryId = customerCharacterRequest.CategoryId,
-                    CreateDate = DateTime.Now,
+                    CreateDate = DateTime.UtcNow.AddHours(7),
                     Description = customerCharacterRequest.Description,
                     MaxHeight = customerCharacterRequest.MaxHeight,
                     MaxWeight = customerCharacterRequest.MaxWeight,
@@ -108,7 +108,7 @@ namespace CCSS_Service.Services
                     string urlImage = await image.UploadImageToFirebase(imageCusCha);
                     CustomerCharacterImage customerCharacterImage = new CustomerCharacterImage()
                     {
-                        CreateDate = DateTime.Now,
+                        CreateDate = DateTime.UtcNow.AddHours(7),
                         CustomerCharacterImageId = Guid.NewGuid().ToString(),
                         CustomerCharacterId = customerCharacter.CustomerCharacterId,
                         UpdateDate = null,
@@ -303,7 +303,7 @@ namespace CCSS_Service.Services
                             {
                                 CategoryId = customerCharacter.CategoryId,
                                 CharacterName = customerCharacter.Name,
-                                CreateDate = DateTime.Now,
+                                CreateDate = DateTime.UtcNow.AddHours(7),
                                 Description = customerCharacter.Description,
                                 IsActive = true,
                                 MaxHeight = customerCharacter.MaxHeight,
@@ -451,7 +451,7 @@ namespace CCSS_Service.Services
                 customerCharacter.MaxWeight = updateCustomerCharacterRequest.MaxWeight;
                 customerCharacter.MaxHeight = updateCustomerCharacterRequest.MaxHeight;
                 customerCharacter.MinHeight = updateCustomerCharacterRequest.MinHeight;
-                customerCharacter.UpdateDate = DateTime.UtcNow; 
+                customerCharacter.UpdateDate = DateTime.UtcNow.AddHours(7); 
                 customerCharacter.CategoryId = updateCustomerCharacterRequest.CategoryId;
                 customerCharacter.Description = updateCustomerCharacterRequest.Description;
                 

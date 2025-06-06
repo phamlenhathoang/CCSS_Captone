@@ -45,9 +45,9 @@ namespace CCSS_Service.BackgroundServices
                             {
                                 if (e.Status == EventStatus.Progressing)
                                 {
-                                    if (DateTime.Now.Date == e.EndDate)
+                                    if (DateTime.UtcNow.AddHours(7).Date == e.EndDate)
                                     {
-                                        if(DateTime.Now.Hour == e.EndDate.Hour)
+                                        if(DateTime.UtcNow.AddHours(7).Hour == e.EndDate.Hour)
                                         {
                                             e.Status = EventStatus.Completed;
                                             bool result = await eventRepository.UpdateEvent(e);

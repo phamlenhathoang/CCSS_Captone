@@ -93,7 +93,7 @@ namespace CCSS_Service.Services
                             CartId = cartId,
                             Quantity = cp.Quantity ?? 1,
                             Price = product.Price * cp.Quantity,
-                            CreatedDate = DateTime.Now,
+                            CreatedDate = DateTime.UtcNow.AddHours(7),
                         };
 
                         var result = await _repository.AddCartProduct(cartProduct);
@@ -105,7 +105,7 @@ namespace CCSS_Service.Services
                     }
 
                     cart.TotalPrice += addedPrice;
-                    cart.UpdateDate = DateTime.Now;
+                    cart.UpdateDate = DateTime.UtcNow.AddHours(7);
                     var result1 = await _cartRepository.UpdateCart(cart);
                     if (!result1)
                     {
@@ -224,7 +224,7 @@ namespace CCSS_Service.Services
                     double priceDifference = (double)cartproduct.Price - oldPrice;
 
                     cart.TotalPrice += priceDifference;
-                    cart.UpdateDate = DateTime.Now;
+                    cart.UpdateDate = DateTime.UtcNow.AddHours(7);
                     var result2 = await _cartRepository.UpdateCart(cart);
                     if (!result2)
                     {

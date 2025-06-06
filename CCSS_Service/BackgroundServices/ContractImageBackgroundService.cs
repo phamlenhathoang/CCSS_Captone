@@ -45,7 +45,7 @@ namespace CCSS_Service.BackgroundServices
                         {
                             foreach (var contractImage in contractImages)
                             {
-                                if (contractImage.CreateDate.AddDays(1) == DateTime.Now)
+                                if (contractImage.CreateDate.AddDays(1) == DateTime.UtcNow.AddHours(7))
                                 {
                                     Contract contract = await _contractRepository.GetContractById(contractImage.ContractId);
 

@@ -86,7 +86,7 @@ namespace CCSS_Service.Services
                     ProductId = op.ProductId,
                     Price = product.Price ?? 0.0, 
                     Quantity = op.Quantity,
-                    CreateDate = DateTime.UtcNow
+                    CreateDate = DateTime.UtcNow.AddHours(7)
                 };
 
                 order.OrderProducts.Add(orderProduct);
