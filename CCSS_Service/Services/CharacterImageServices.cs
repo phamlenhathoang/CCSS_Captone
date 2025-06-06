@@ -78,7 +78,7 @@ namespace CCSS_Service.Services
                             CharacterId = character.CharacterId,
                             CharacterImageId = Guid.NewGuid().ToString(),
                             UrlImage = downloadUrl,
-                            CreateDate = DateTime.Now,
+                            CreateDate = DateTime.UtcNow.AddHours(7),
                             IsAvatar = false,
                         });
                     }

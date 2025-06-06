@@ -265,7 +265,7 @@ namespace CCSS_Service.Services
                     Quantity = characterInRequest.Quantity,
                     Status = RequestCharacterStatus.Accept,
                     TotalPrice = totalPrice,
-                    CreateDate = DateTime.Now,
+                    CreateDate = DateTime.UtcNow.AddHours(7),
                     UpdateDate = null,
                     CosplayerId = characterInRequest.CosplayerId,
                 };
@@ -422,7 +422,7 @@ namespace CCSS_Service.Services
             requestCharacter.CosplayerId = characterInRequest.CosplayerId;
             requestCharacter.Quantity = characterInRequest.Quantity;
             requestCharacter.TotalPrice = totalPrice;
-            requestCharacter.UpdateDate = DateTime.Now;
+            requestCharacter.UpdateDate = DateTime.UtcNow.AddHours(7);
             requestCharacter.Description = characterInRequest.Description;
 
             var result = await _requestCharacterRepository.UpdateRequestCharacter(requestCharacter);

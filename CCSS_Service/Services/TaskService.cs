@@ -796,7 +796,7 @@ namespace CCSS_Service.Services
                             foreach (var task in tasks)
                             {
                                 task.Status = TaskStatus.Completed;
-                                task.UpdateDate = DateTime.Now;
+                                task.UpdateDate = DateTime.UtcNow.AddHours(7);
                                 bool result = await taskRepository.UpdateTask(task);
                                 if (!result)
                                 {
@@ -838,7 +838,7 @@ namespace CCSS_Service.Services
                     if (task.Status.ToString().ToLower().Equals(TaskStatus.Assignment.ToString().ToLower()))
                     {
                         task.Status = TaskStatus.Progressing;
-                        task.UpdateDate = DateTime.Now;
+                        task.UpdateDate = DateTime.UtcNow.AddHours(7);
                     }
                     else
                     {
@@ -850,7 +850,7 @@ namespace CCSS_Service.Services
                     if (task.Status.ToString().ToLower().Equals(TaskStatus.Progressing.ToString().ToLower()))
                     {
                         task.Status = TaskStatus.Completed;
-                        task.UpdateDate = DateTime.Now;
+                        task.UpdateDate = DateTime.UtcNow.AddHours(7);
                     }
                     else
                     {

@@ -46,7 +46,7 @@ namespace CCSS_Service.BackgroundServices
                             {
                                 if (requestCharacter.Status == RequestCharacterStatus.Pending)
                                 {
-                                    if (DateTime.Now.Date >= requestCharacter.CreateDate.GetValueOrDefault().Date)
+                                    if (DateTime.UtcNow.AddHours(7).Date >= requestCharacter.CreateDate.GetValueOrDefault().Date)
                                     {
                                         requestCharacter.Status = RequestCharacterStatus.Busy;
                                         bool result = await requestCharacterRepository.UpdateRequestCharacter(requestCharacter);

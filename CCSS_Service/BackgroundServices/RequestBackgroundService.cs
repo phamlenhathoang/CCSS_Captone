@@ -47,7 +47,7 @@ namespace CCSS_Service.BackgroundServices
                             {
                                 if (request.Status == RequestStatus.Cancel)
                                 {
-                                    if (DateTime.Now.Date >= request.CreatedDate.GetValueOrDefault().Date.AddDays(3))
+                                    if (DateTime.UtcNow.AddHours(7).Date >= request.CreatedDate.GetValueOrDefault().Date.AddDays(3))
                                     {
                                         var listRequestCharacter = await _requestCharacterRepository.GetListCharacterByRequest(request.RequestId);
                                         foreach (var character in listRequestCharacter)

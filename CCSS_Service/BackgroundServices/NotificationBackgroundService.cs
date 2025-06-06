@@ -55,7 +55,7 @@ namespace CCSS_Service.BackgroundServices
                             {
                                 if(!notification.IsSentMail)
                                 {
-                                    if (DateTime.Now.Date >= notification.CreatedAt.Date)
+                                    if (DateTime.UtcNow.AddHours(7).Date >= notification.CreatedAt.Date)
                                     {
                                         await _sendMail.SendAccountNewTaskEmail(notification.Account.Email);
                                         _logger.LogInformation($"Notification {notification.Account.Email}");

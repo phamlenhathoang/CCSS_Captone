@@ -117,7 +117,7 @@ namespace CCSS_Service.Services
                 var newEvent = _mapper.Map<Event>(eventRequest);
 
                 newEvent.EventId = Guid.NewGuid().ToString();
-                newEvent.CreateDate = DateTime.Now;
+                newEvent.CreateDate = DateTime.UtcNow.AddHours(7);
                 newEvent.IsActive = true;
                 newEvent.Status = EventStatus.Pending;
                 newEvent.UpdateDate = null;
@@ -163,7 +163,7 @@ namespace CCSS_Service.Services
                             EventCharacterId = Guid.NewGuid().ToString(),
                             EventId = newEvent.EventId,
                             CharacterId = ec.CharacterId,
-                            CreateDate = DateTime.Now,
+                            CreateDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Description = ec.Description,
                             IsAssign = false
@@ -181,7 +181,7 @@ namespace CCSS_Service.Services
                         EventId = newEvent.EventId, 
                         ActivityId = ea.ActivityId, 
                         CreateBy = ea.CreateBy, 
-                        CreateDate = DateTime.Now, 
+                        CreateDate = DateTime.UtcNow.AddHours(7), 
                         
                     }).ToList();
                     newEvent.EventActivities = eventActivities;
@@ -193,7 +193,7 @@ namespace CCSS_Service.Services
                     {
                         ImageId = Guid.NewGuid().ToString(),
                         ImageUrl = await _image.UploadImageToFirebase(file),
-                        CreateDate = DateTime.Now,
+                        CreateDate = DateTime.UtcNow.AddHours(7),
                         EventId = newEvent.EventId,
 
                     }).ToList();
@@ -480,7 +480,7 @@ namespace CCSS_Service.Services
                             EventCharacterId = Guid.NewGuid().ToString(),
                             EventId = existingEvent.EventId,
                             CharacterId = ec.CharacterId,
-                            CreateDate = DateTime.Now,
+                            CreateDate = DateTime.UtcNow.AddHours(7),
                             UpdateDate = null,
                             Description = ec.Description,
                             IsAssign = false
@@ -517,7 +517,7 @@ namespace CCSS_Service.Services
                     EventId = existingEvent.EventId,
                     ActivityId = ec.ActivityId,
                     CreateDate = createDate,
-                    UpdateDate = DateTime.UtcNow,
+                    UpdateDate = DateTime.UtcNow.AddHours(7),
                     Description = ec.Description,
                     CreateBy = ec.CreateBy
                 }).ToList();
@@ -542,7 +542,7 @@ namespace CCSS_Service.Services
                 {
                     ImageId = Guid.NewGuid().ToString(),
                     ImageUrl = await _image.UploadImageToFirebase(file),
-                    CreateDate = DateTime.Now,
+                    CreateDate = DateTime.UtcNow.AddHours(7),
                     EventId = existingEvent.EventId,
                 }).ToList();
 
@@ -564,7 +564,7 @@ namespace CCSS_Service.Services
             //existingEvent.EndDate = eventRequest.EndDate;
             //existingEvent.Location = eventRequest.Location;
             existingEvent.Description = eventRequest.Description;
-            existingEvent.UpdateDate = DateTime.Now;
+            existingEvent.UpdateDate = DateTime.UtcNow.AddHours(7);
 
             bool isUpdated = await _repository.UpdateEvent(existingEvent);
             if (!isUpdated)

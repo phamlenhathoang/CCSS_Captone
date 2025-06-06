@@ -49,7 +49,7 @@ namespace CCSS_Service.BackgroundServices
                             {
                                 if(contract.ContractStatus == ContractStatus.Created)
                                 {
-                                    if (DateTime.Now.Date >= contract.CreateDate.GetValueOrDefault().Date.AddDays(3))
+                                    if (DateTime.UtcNow.AddHours(7).Date >= contract.CreateDate.GetValueOrDefault().Date.AddDays(3))
                                     {
                                         contract.ContractStatus = ContractStatus.Expired;
                                         bool result = await _contractRepository.UpdateContract(contract);

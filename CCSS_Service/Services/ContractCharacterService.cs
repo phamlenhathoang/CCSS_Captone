@@ -57,7 +57,7 @@ namespace CCSS_Service.Services
                     {
                         CharacterId = requestCharacter.CharacterId,
                         ContractId = contract.ContractId,
-                        CreateDate = DateTime.UtcNow,
+                        CreateDate = DateTime.UtcNow.AddHours(7),
                         ContractCharacterId = Guid.NewGuid().ToString(),
                         Description = requestCharacter.Description,
                         TotalPrice = requestCharacter.TotalPrice,   

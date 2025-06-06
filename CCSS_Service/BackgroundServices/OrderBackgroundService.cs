@@ -45,7 +45,7 @@ namespace CCSS_Service.BackgroundServices
                             {
                                 if (order.OrderStatus == OrderStatus.Pending)
                                 {
-                                    if (DateTime.Now.Date >= order.OrderDate.GetValueOrDefault().Date.AddDays(3))
+                                    if (DateTime.UtcNow.AddHours(7).Date >= order.OrderDate.GetValueOrDefault().Date.AddDays(3))
                                     {
                                         bool result = await _orderRepository.DeleteOrder(order.OrderId);
                                         if (!result)

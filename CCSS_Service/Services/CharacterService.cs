@@ -197,7 +197,7 @@ namespace CCSS_Service.Services
                     Price = characterResponse.Price,
                     Description = characterResponse.Description,
                     IsActive = true,
-                    CreateDate = DateTime.Now,
+                    CreateDate = DateTime.UtcNow.AddHours(7),
                     UpdateDate = null,
                     Quantity = characterResponse.Quantity,
                     MaxHeight = characterResponse.MaxHeight,
@@ -219,7 +219,7 @@ namespace CCSS_Service.Services
                     CharacterImage characterImage = new CharacterImage()
                     {
                         CharacterId = newCharacter.CharacterId,
-                        CreateDate = DateTime.Now,
+                        CreateDate = DateTime.UtcNow.AddHours(7),
                         UrlImage = await image.UploadImageToFirebase(file),
                     };
 
@@ -282,7 +282,7 @@ namespace CCSS_Service.Services
             character.CharacterName = newCharacter.CharacterName;
             character.Price = newCharacter.Price;
             character.Description = newCharacter.Description;
-            character.UpdateDate = DateTime.Now;
+            character.UpdateDate = DateTime.UtcNow.AddHours(7);
             character.Description = newCharacter.Description;
             character.Price = character.Price;
             character.CategoryId = category.CategoryId;

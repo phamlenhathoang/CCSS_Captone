@@ -47,7 +47,7 @@ namespace CCSS_Service.BackgroundServices
                             {
                                 if (contract.DeliveryStatus == DeliveryStatus.Received)
                                 {
-                                    if (DateTime.Now.Date == contract.Request.EndDate.Date.AddDays(1))
+                                    if (DateTime.UtcNow.AddHours(7).Date == contract.Request.EndDate.Date.AddDays(1))
                                     {
                                         contract.ContractStatus = ContractStatus.RefundOverdue;
                                         contract.Amount = 0;

@@ -42,7 +42,7 @@ namespace CCSS_Service.BackgroundServices
                             {
                                 if (payment.Status == PaymentStatus.Pending)
                                 {
-                                    if (DateTime.Now.Date >= payment.CreatAt.GetValueOrDefault().Date.AddDays(3))
+                                    if (DateTime.UtcNow.AddHours(7).Date >= payment.CreatAt.GetValueOrDefault().Date.AddDays(3))
                                     {
                                         bool result = await _paymentRepository.DeletePayment(payment);
                                         if (!result)

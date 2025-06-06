@@ -46,14 +46,14 @@ namespace CCSS_Service.BackgroundServices
                             {
                                 if (task.Status == TaskStatus.Assignment)
                                 {
-                                    if (DateTime.Now == task.StartDate.GetValueOrDefault())
+                                    if (DateTime.UtcNow.AddHours(7) == task.StartDate.GetValueOrDefault())
                                     {
                                         task.Status = TaskStatus.Progressing;
                                     }
                                 }
                                 if (task.Status == TaskStatus.Progressing)
                                 {
-                                    if (DateTime.Now == task.EndDate.GetValueOrDefault())
+                                    if (DateTime.UtcNow.AddHours(7) == task.EndDate.GetValueOrDefault())
                                     {
                                         task.Status = TaskStatus.Completed;
                                     }
