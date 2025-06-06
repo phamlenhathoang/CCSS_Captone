@@ -3,6 +3,7 @@ using CCSS_Repository.Entities;
 using CCSS_Repository.Model;
 using CCSS_Repository.Repositories;
 using CCSS_Service.Model.Responses;
+using Humanizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,15 +56,20 @@ namespace CCSS_Service
            
             var response = new DashBoardRevenueResponse
             {
-                TotalRevenue = ticketAndPayment.Sum(p => (p.Purpose != PaymentPurpose.Refund && p.OrderId !=null )|| p.Purpose != PaymentPurpose.contractSettlement ? p.Amount ?? 0 : 0) + 
-                               ticketAndPayment.Sum(p => p.Purpose == PaymentPurpose.Refund && p.Contract != null || p.Purpose == PaymentPurpose.contractSettlement ? p.Contract.TotalPrice ?? 0 : 0),
+
+                TotalRevenue = ticketAndPayment.Sum(p => p.ContractId == null ? p.Amount ?? 0 : 0) +
+                                    ticketAndPayment.Sum(p => p.ContractId != null && (p.Purpose == PaymentPurpose.Refund || p.Purpose == PaymentPurpose.contractSettlement && p.Contract != null) ? p.Contract.TotalPrice ?? 0 : 0),
+
                 PaymentResponse = ticketAndPayment.Select(p => new PaymentResponse
                 {
                     PaymentId = p.PaymentId,
                     Amount = p.Amount,
                     Status = p.Status.ToString(),
                     Purpose = p.Purpose.ToString(),
-                    CreatAt = p.CreatAt?.ToString("dd/MM/yyyy")
+                    CreatAt = p.CreatAt?.ToString("dd/MM/yyyy"),
+                    ContractId = p.ContractId,
+                    OrderId = p.OrderId,
+                    TicketAccountId = p.TicketAccountId,
                 }).ToList()
             };
 
@@ -77,39 +83,72 @@ namespace CCSS_Service
             var ticketAndPayment = await _dashBoardRepository.GetRevenue(filterType, revenueSource);
 
             var response = new DashBoardChartRevenueResponse();
-            response.TotalRevenue = ticketAndPayment.Sum(p => p.Purpose != PaymentPurpose.Refund ? p.Amount ?? 0 : 0) +
-                                    ticketAndPayment.Sum(p => p.Purpose == PaymentPurpose.Refund && p.Contract != null ? p.Contract.TotalPrice ?? 0 : 0);
+
+            // Tổng doanh thu
+            response.TotalRevenue = ticketAndPayment.Sum(p =>
+                p.ContractId == null ? p.Amount ?? 0 :
+                p.ContractId != null && (p.Purpose == PaymentPurpose.Refund || p.Purpose == PaymentPurpose.contractSettlement) && p.Contract != null
+                    ? p.Contract.TotalPrice ?? 0
+                    : 0);
 
             if (filterType == DateFilterType.ThisWeek || filterType == DateFilterType.ThisMonth)
             {
                 response.DailyRevenue = ticketAndPayment
                     .Where(p => p.CreatAt.HasValue)
-                    .GroupBy(p => p.CreatAt.Value.Date) // Nhóm theo ngày
+                    .GroupBy(p => p.CreatAt.Value.Date)
                     .Select(g => new DailyRevenueResponse
                     {
                         Date = g.Key,
-                        TotalRevenue = g.Sum(p => p.Amount ?? 0)
+                        TotalRevenue = g.Sum(p =>
+                            p.ContractId == null ? p.Amount ?? 0 :
+                            p.ContractId != null && (p.Purpose == PaymentPurpose.Refund || p.Purpose == PaymentPurpose.contractSettlement) && p.Contract != null
+                                ? p.Contract.TotalPrice ?? 0
+                                : 0)
                     }).OrderBy(r => r.Date).ToList();
             }
             else if (filterType == DateFilterType.ThisYear)
             {
                 response.MonthlyRevenue = ticketAndPayment
                     .Where(p => p.CreatAt.HasValue)
-                    .GroupBy(p => new { p.CreatAt.Value.Year, p.CreatAt.Value.Month }) // Nhóm theo tháng
+                    .GroupBy(p => new { p.CreatAt.Value.Year, p.CreatAt.Value.Month })
                     .Select(g => new MonthlyRevenueResponse
                     {
                         Year = g.Key.Year,
                         Month = g.Key.Month,
-                        TotalRevenue = g.Sum(p => p.Amount ?? 0)
+                        TotalRevenue = g.Sum(p =>
+                            p.ContractId == null ? p.Amount ?? 0 :
+                            p.ContractId != null && (p.Purpose == PaymentPurpose.Refund || p.Purpose == PaymentPurpose.contractSettlement) && p.Contract != null
+                                ? p.Contract.TotalPrice ?? 0
+                                : 0)
                     }).OrderBy(r => r.Year).ThenBy(r => r.Month).ToList();
+            }
+            else if (filterType == DateFilterType.Today)
+            {
+                response.HourlyRevenue = ticketAndPayment
+                    .Where(p => p.CreatAt.HasValue && p.CreatAt.Value.Date == DateTime.Today)
+                    .GroupBy(p => p.CreatAt.Value.Hour)
+                    .Select(g => new HourlyRevenueResponse
+                    {
+                        Hour = g.Key.ToString(),
+                        TotalRevenue = g.Sum(p =>
+                            p.ContractId == null ? p.Amount ?? 0 :
+                            p.ContractId != null && (p.Purpose == PaymentPurpose.Refund || p.Purpose == PaymentPurpose.contractSettlement) && p.Contract != null
+                                ? p.Contract.TotalPrice ?? 0
+                                : 0)
+                    }).OrderBy(r => r.Hour).ToList();
             }
             else
             {
-                response.TotalRevenue = ticketAndPayment.Sum(p => p.Amount ?? 0);
+                response.TotalRevenue = ticketAndPayment.Sum(p =>
+                    p.ContractId == null ? p.Amount ?? 0 :
+                    p.ContractId != null && (p.Purpose == PaymentPurpose.Refund || p.Purpose == PaymentPurpose.contractSettlement) && p.Contract != null
+                        ? p.Contract.TotalPrice ?? 0
+                        : 0);
             }
 
             return response;
         }
+
         #endregion
 
 

@@ -61,12 +61,12 @@ namespace CCSS_Repository.Repositories
                     break;
                 case RevenueSource.Service:
                     query = query.Where(p =>(p.Purpose == PaymentPurpose.contractSettlement || p.Purpose == PaymentPurpose.Refund)
-                                            && p.Purpose != PaymentPurpose.Order);
+                                            && p.OrderId == null);
                     break;
                 case RevenueSource.Total:
                     query = query.Where(p => p.Purpose == PaymentPurpose.BuyTicket ||
-                                             p.Purpose == PaymentPurpose.contractSettlement ||
-                                             p.Purpose == PaymentPurpose.Refund ||                   
+                                             p.Purpose == PaymentPurpose.contractSettlement || 
+                                             (p.Purpose == PaymentPurpose.Refund && p.OrderId == null) ||                   
                                              p.Purpose == PaymentPurpose.Order);
                     break;
             }

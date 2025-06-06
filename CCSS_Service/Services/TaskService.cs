@@ -821,6 +821,14 @@ namespace CCSS_Service.Services
                     throw new Exception("Task does not exist");
                 }
 
+                if (task.IsValidate == true)
+                {
+                    if(DateTime.UtcNow.AddHours(7) < task.StartDate)
+                    {
+                        throw new Exception("The task cannot be updated at this time as the appropriate time has not yet arrived.");
+                    }
+                }
+
                 if (status.ToLower().Equals(TaskStatus.Progressing.ToString().ToLower()))
                 {
                     if (task.Status.ToString().ToLower().Equals(TaskStatus.Assignment.ToString().ToLower()))

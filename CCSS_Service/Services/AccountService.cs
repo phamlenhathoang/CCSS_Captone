@@ -124,7 +124,7 @@ namespace CCSS_Service.Services
                     AverageStar = item.AverageStar,
                     Description = item.Description,
                     Birthday = item.Birthday?.ToString("dd/MM/yyyy"),
-                    Phone = string.IsNullOrEmpty(item.Phone) ? null : long.Parse(item.Phone),
+                    Phone = item.Phone,
                     IsActive = item.IsActive,
                     OnTask = item.OnTask,
                     Leader = item.Leader,
@@ -342,16 +342,16 @@ namespace CCSS_Service.Services
             }
         }
 
-        private string GenerateCode(int length = 6)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            Random random = new Random();
+            private string GenerateCode(int length = 6)
+            {
+                const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                Random random = new Random();
 
-            string code = new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+                string code = new string(Enumerable.Repeat(chars, length)
+                    .Select(s => s[random.Next(s.Length)]).ToArray());
 
-            return code;
-        }
+                return code;
+            }
         #endregion
 
         #region Register

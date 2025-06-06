@@ -87,7 +87,7 @@ namespace CCSS_Repository.Repositories
             //    return await _context.Payments.Include(sc => sc.Contract).Where(c => c.Contract.CreateBy.Equals(accountId)).ToListAsync();
             //}
 
-            IQueryable<Payment> query = _context.Payments.Where(p => p.Amount > 0);
+            IQueryable<Payment> query = _context.Payments.Where(p => p.Amount > 0 && p.Status == PaymentStatus.Complete);
 
             if(purpose == PaymentPurpose.Order)
             {

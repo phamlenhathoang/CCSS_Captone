@@ -46,7 +46,7 @@ namespace CCSS_Service.Services
                         PaymentResponse paymentResponse = new PaymentResponse()
                         {
                             Amount = payment.Amount,
-                            CreatAt = payment.CreatAt?.ToString("dd/MM/yyyy"),
+                            CreatAt = payment.CreatAt?.ToString("HH:mm dd/MM/yyyy"),
                             PaymentId = payment.PaymentId,
                             Purpose = payment.Purpose.ToString(),
                             Status = payment.Status.ToString(),
@@ -79,7 +79,7 @@ namespace CCSS_Service.Services
                     Purpose = purpose.ToString(),
                     Amount = payment.Amount,
                     TransactionId = payment.TransactionId,
-                    CreatAt = payment.CreatAt?.ToString("dd/MM/yyyy"),
+                    CreatAt = payment.CreatAt?.ToString("HH:mm dd/MM/yyyy"),
                     OrderId = payment.OrderId,
                     ContractId = payment.ContractId,
                     TicketAccountId = payment.TicketAccountId,

@@ -31,6 +31,7 @@ namespace CCSS_Repository.Entities
         public string? Range { get; set; }
         public string? Deposit { get; set; }
         public string? Reason { get; set; }
+        public bool IsValidate { get; set; } = true;
 
         [ForeignKey("ServiceId")]
         public string? ServiceId { get; set; }
