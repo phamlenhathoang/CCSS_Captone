@@ -58,9 +58,11 @@ namespace CCSS_Service
             {
 
                 TotalRevenue = ticketAndPayment.Sum(p => p.ContractId == null && p.Purpose != PaymentPurpose.Refund ? p.Amount ?? 0 : 0) +
+
                                     ticketAndPayment.Sum(p => p.ContractId != null && (p.Purpose == PaymentPurpose.Refund || p.Purpose == PaymentPurpose.contractSettlement && p.Contract != null) ? p.Contract.TotalPrice ?? 0 : 0)
                                     -
                                     ticketAndPayment.Sum(p => p.OrderId != null && p.Purpose == PaymentPurpose.Refund ? p.Amount ?? 0 : 0),
+
 
                 PaymentResponse = ticketAndPayment.Select(p => new PaymentResponse
                 {
