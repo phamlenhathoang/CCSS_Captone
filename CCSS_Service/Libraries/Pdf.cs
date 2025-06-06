@@ -354,17 +354,20 @@ namespace CCSS_Service.Libraries
                     htmlContent += "<p>In any case, if Party B unilaterally terminates the contract, whether intentionally or unintentionally, Party B will lose the entire deposit paid to Party A.</p>";
 
                     htmlContent += "<br/><br/>";
-                    htmlContent += "<div style='display: flex; justify-content: space-between; margin-top: 30px;'>";
+                    htmlContent += "<table style='width:100%; margin-top: 0; font-size: 16px; border-collapse: collapse;'>";
 
-                    htmlContent += "<div style='width:45%; text-align:center;'>";
+                    htmlContent += "<tr>";
+                    htmlContent += "<td style='width:50%; text-align:center; vertical-align: top; padding: 5px 0 0 0; height: 150px;'>";
                     htmlContent += "<strong>Party A</strong><br/>Signature & Full Name";
-                    htmlContent += "</div>";
+                    htmlContent += "</td>";
 
-                    htmlContent += "<div style='width:45%; text-align:center;'>";
+                    htmlContent += "<td style='width:50%; text-align:center; vertical-align: top; padding: 5px 0 0 0; height: 150px;'>";
                     htmlContent += "<strong>Party B</strong><br/>Signature & Full Name";
-                    htmlContent += "</div>";
+                    htmlContent += "</td>";
+                    htmlContent += "</tr>";
 
-                    htmlContent += "</div>";
+                    htmlContent += "</table>";
+
 
 
 

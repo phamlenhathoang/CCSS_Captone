@@ -427,7 +427,7 @@ namespace CCSS_Repository.Entities
             modelBuilder.Entity<Account>().HasData(
 new Account { AccountId = "A001", Name = "John Doe", Email = "john@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 45000, IsActive = true, Height = 180, Weight = 75, AverageStar = 4.5, IsLock = false },
 new Account { AccountId = "A002", Name = "Jane Smith", Email = "jane@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R001", SalaryIndex = null, IsActive = true, IsLock = false },
-new Account { AccountId = "A003", Name = "Nammmmmmmm", Email = "phuongnam26012002@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true, IsLock = false },
+new Account { AccountId = "A003", Name = "Nam", Email = "phuongnam26012002@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true, IsLock = false },
 new Account { AccountId = "A004", Name = "Bob Brown", Email = "bob@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 42000, IsActive = true, Height = 175, Weight = 80, AverageStar = 4.2, IsLock = false },
 new Account { AccountId = "A005", Name = "Charlie White", Email = "charlie@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R004", SalaryIndex = 35000, IsActive = true, Height = 182, Weight = 78, AverageStar = 3.5, IsLock = false },
 new Account { AccountId = "A006", Name = "David Black", Email = "david@gmail.com", Password = "ZkmcwLVZC7B06TE7qd/qoA==", RoleId = "R005", SalaryIndex = null, IsActive = true, IsLock = false },
@@ -1345,7 +1345,7 @@ new Package { PackageId = "PKG015", PackageName = "Master Cosplay Workshop", Des
             #region Payment
             modelBuilder.Entity<Payment>().HasData(
     new Payment { PaymentId = "P001", Type = "Online", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.BuyTicket, Amount = 250000.0, TransactionId = "TXN001", CreatAt = new DateTime(2025, 3, 2), TicketAccountId = "TA001", AccountCouponID = "AC001" },
-    new Payment { PaymentId = "P002", Type = "Online", Status = PaymentStatus.Pending, Purpose = PaymentPurpose.BuyTicket, Amount = 150000.5, TransactionId = "TXN002", CreatAt = new DateTime(2025, 3, 6), TicketAccountId = "TA002" },
+    new Payment { PaymentId = "P002", Type = "Online", Status = PaymentStatus.Pending, Purpose = PaymentPurpose.BuyTicket, Amount = 150000, TransactionId = "TXN002", CreatAt = new DateTime(2025, 3, 6), TicketAccountId = "TA002" },
     new Payment { PaymentId = "P003", Type = "Online", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.BuyTicket, Amount = 90000.0, TransactionId = "TXN003", CreatAt = new DateTime(2025, 3, 11), TicketAccountId = "TA003" },
     new Payment { PaymentId = "P004", Type = "Online", Status = PaymentStatus.Complete, Purpose = PaymentPurpose.BuyTicket, Amount = 400000.0, TransactionId = "TXN004", CreatAt = new DateTime(2025, 3, 13), TicketAccountId = "TA004", AccountCouponID = "AC012" },
     new Payment { PaymentId = "P005", Type = "Online", Status = PaymentStatus.Cancel, Purpose = PaymentPurpose.BuyTicket, Amount = 175000.0, TransactionId = "TXN005", CreatAt = new DateTime(2025, 3, 16), TicketAccountId = "TA005" },
