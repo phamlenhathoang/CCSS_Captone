@@ -75,7 +75,7 @@ namespace CCSS_Service.Libraries
                     DateTime now = DateTime.Now;
                     string formattedDate = now.ToString("dd/MM/yyyy");
                     htmlContent += $"<p style='text-align: right; margin-right: 10px;'>Ho Chi Minh City, {formattedDate}</p>";
-                    htmlContent += $"<h1>{request.Service.ServiceName.ToUpper()}</h1>";
+                    htmlContent += $"<h1>{request.Service.ServiceName.ToUpper()} CONTRACT</h1>";
                     htmlContent += "<p><b>PARTY A:</b> THE LESSOR</p>";
                     htmlContent += "<p>Organization name: Cosplayer Rental and Event Organization System</p>";
                     htmlContent += "<p>Address: Ho Chi Minh City</p>";
@@ -352,7 +352,6 @@ namespace CCSS_Service.Libraries
                     htmlContent += "<p>Full payment must be made before the event begins. The remaining balance shall be paid after the event concludes.</p>";
 
                     htmlContent += "<p>In any case, if Party B unilaterally terminates the contract, whether intentionally or unintentionally, Party B will lose the entire deposit paid to Party A.</p>";
-
 
                     htmlContent += "<br/><br/>";
                     htmlContent += "<div style='display: flex; justify-content: space-between; margin-top: 30px;'>";
