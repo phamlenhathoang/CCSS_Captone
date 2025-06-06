@@ -106,7 +106,7 @@ namespace CCSS_Service.Services
                         {
                             AccountId = contractCharacter.CosplayerId,
                             ContractCharacterId = feedbackRequest.ContractCharacterId,
-                            CreateDate = DateTime.UtcNow,
+                            CreateDate = DateTime.UtcNow.AddHours(7),
                             CreateBy = account.AccountId,
                             Description = feedbackRequest.Description,
                             FeedbackId = Guid.NewGuid().ToString(),
@@ -244,6 +244,7 @@ namespace CCSS_Service.Services
 
                     feedback.Star = feedbackRequest.Star;
                     feedback.Description = feedbackRequest.Description;
+                    feedback.UpdateDate = DateTime.UtcNow.AddHours(7);
 
                     bool checkUpdate = await _feedbackRepository.UpdateFeedback(feedback);
 

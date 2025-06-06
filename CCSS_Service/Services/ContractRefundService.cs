@@ -67,7 +67,7 @@ namespace CCSS_Service.Services
                     ContractId = contractRefundRequest.ContractId,
                     Amount = contract.Amount - contractRefundRequest.Price,
                     Description = contractRefundRequest.Description,   
-                    CreateDate = DateTime.Now,
+                    CreateDate = DateTime.UtcNow.AddHours(7),
                     Status = ContractRefundStatus.Pending,
                 };
 
@@ -318,7 +318,7 @@ namespace CCSS_Service.Services
                     throw new Exception("Contract does not exist");
                 }
 
-                contractRefund.UpdateDate = DateTime.Now;
+                contractRefund.UpdateDate = DateTime.UtcNow.AddHours(7);
                 contractRefund.ContractId = contract.ContractId;
                 contractRefund.AccountBankName = contractRefundRequest.AccountBankName;
                 contractRefund.BankName = contractRefundRequest.BankName;

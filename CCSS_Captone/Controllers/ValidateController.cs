@@ -22,5 +22,12 @@ namespace CCSS_Captone.Controllers
             var account = await validateService.UpdateValidate(validate);
             return Ok(account);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetValidate()
+        {
+            var account = await validateService.GetValidate();
+            return Ok(account);
+        }
     }
 }

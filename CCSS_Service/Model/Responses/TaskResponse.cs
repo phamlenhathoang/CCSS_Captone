@@ -23,5 +23,6 @@ namespace CCSS_Service.Model.Responses
         public string? Status { get; set; }
         public string? EventId { get; set; }
         public string? ContractId { get; set; }
+        public bool IsValidate { get; set; }
     }
 }

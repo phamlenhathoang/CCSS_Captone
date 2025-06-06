@@ -141,7 +141,7 @@ namespace CCSS_Service.Services
                         {
                             EventCharacterId = taskRequest.EventCharacterId,
                             AccountId = taskRequest.AccountId,
-                            CreateDate = DateTime.Now,
+                            CreateDate = DateTime.UtcNow.AddHours(7),
                             Description = eventCharacter.Description,
                             EndDate = eventCharacter.Event.EndDate,
                             StartDate = eventCharacter.Event.StartDate,
@@ -241,7 +241,7 @@ namespace CCSS_Service.Services
 
                             task.ContractCharacterId = taskRequest.ContractCharacterId;
                             task.AccountId = taskRequest.CosplayerId;
-                            task.CreateDate = DateTime.Now;
+                            task.CreateDate = DateTime.UtcNow.AddHours(7);
                             task.Description = contractCharacter.Description;
                             task.EndDate = item.EndDate;
                             task.StartDate = item.StartDate;
@@ -541,6 +541,7 @@ namespace CCSS_Service.Services
                         Status = task.Status.ToString(),
                         TaskId = task.TaskId,
                         UpdateDate = task.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
+                        IsValidate = task.IsValidate,
                     };
                      
                     if(task.ContractCharacterId != null)
@@ -595,7 +596,7 @@ namespace CCSS_Service.Services
                     if (task.Status.ToString().ToLower().Equals(TaskStatus.Assignment.ToString().ToLower()))
                     {
                         task.Status = TaskStatus.Progressing;
-                        task.UpdateDate = DateTime.Now; 
+                        task.UpdateDate = DateTime.UtcNow.AddHours(7); 
                     }
                     else
                     {
@@ -607,7 +608,7 @@ namespace CCSS_Service.Services
                     if (task.Status.ToString().ToLower().Equals(TaskStatus.Progressing.ToString().ToLower()))
                     {
                         task.Status = TaskStatus.Completed;
-                        task.UpdateDate = DateTime.Now;
+                        task.UpdateDate = DateTime.UtcNow.AddHours(7);
                     }
                     else
                     {
@@ -673,6 +674,8 @@ namespace CCSS_Service.Services
                         TaskId = task.TaskId,
                         TaskName = character.CharacterName,
                         UpdateDate = task.UpdateDate?.ToString("HH:mm dd/MM/yyyy") ?? null,
+                        IsValidate = task.IsValidate,
+                        
                     };
 
                     if (task.ContractCharacterId != null)
@@ -762,6 +765,7 @@ namespace CCSS_Service.Services
                     TaskId = task.TaskId,
                     TaskName = character.CharacterName,
                     UpdateDate = task.UpdateDate?.ToString("HH:mm dd/MM/yyyy") ?? null,
+                    IsValidate = task.IsValidate,
                 };
 
                 return taskResponse;
@@ -968,6 +972,7 @@ namespace CCSS_Service.Services
                             TaskId = task.TaskId,
                             UpdateDate = task.UpdateDate?.ToString("HH:mm dd/MM/yyyy"),
                             ContractId = request.Contract.ContractId,
+                            IsValidate = task.IsValidate,
                         };
 
                         taskResponses.Add(taskResponse);
@@ -1022,7 +1027,8 @@ namespace CCSS_Service.Services
                                     Status = task.Status.ToString(),
                                     TaskId = task.TaskId,
                                     TaskName = task.TaskName,
-                                    UpdateDate = task.UpdateDate?.ToString("dd/MM/yyyy")
+                                    UpdateDate = task.UpdateDate?.ToString("dd/MM/yyyy"),
+                                    IsValidate = task.IsValidate,
                                 };
                                 
                                 taskResponses.Add(taskResponse);
@@ -1089,7 +1095,8 @@ namespace CCSS_Service.Services
                                     Status = task.Status.ToString(),
                                     TaskId = task.TaskId,
                                     TaskName = task.TaskName,
-                                    UpdateDate = task.UpdateDate?.ToString("dd/MM/yyyy")
+                                    UpdateDate = task.UpdateDate?.ToString("dd/MM/yyyy"),
+                                    IsValidate = task.IsValidate,
                                 };
 
                                 taskResponses.Add(taskResponse);

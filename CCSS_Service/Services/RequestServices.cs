@@ -122,6 +122,7 @@ namespace CCSS_Service.Services
                     Range = item.Range,
                     Reason = item.Reason,
                     TotalDate = totalDate,
+                    IsValidate = item.IsValidate,
                     CharactersListResponse = characterResponses
                 };
                 listRequest.Add(response); ;
@@ -192,7 +193,7 @@ namespace CCSS_Service.Services
                 Range = request.Range,
                 Reason = request.Reason,
                 TotalDate = totalDate,
-
+                IsValidate = request.IsValidate,
 
                 CharactersListResponse = characterResponses
             };
@@ -271,6 +272,7 @@ namespace CCSS_Service.Services
                     Range = item.Range,
                     TotalDate = totalDate,
                     Reason = item.Reason,
+                    IsValidate = item.IsValidate,
                     CharactersListResponse = characterResponses
                 };
                 listRequest.Add(response); ;
