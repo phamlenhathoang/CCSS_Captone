@@ -62,7 +62,7 @@ namespace CCSS_Service.Services
                         ContractImage contractImage = new ContractImage()
                         {
                             ContractId = contractId,
-                            CreateDate = DateTime.Now,
+                            CreateDate = DateTime.UtcNow.AddHours(7),
                             UrlImage = await image.UploadImageToFirebase(file),
                         };
 

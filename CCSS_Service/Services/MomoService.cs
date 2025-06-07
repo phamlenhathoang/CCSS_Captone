@@ -294,7 +294,7 @@ namespace CCSS_Service.Services
                         throw new Exception("Can not update status contract");
                     }
                     
-                    await sendMail.SendEmailNotification(purpose, account.Email, null, contract.ContractName, null, DateTime.Now, null, amount, account.Name);
+                    await sendMail.SendEmailNotification(purpose, account.Email, null, contract.ContractName, null, DateTime.UtcNow.AddHours(7), null, amount, account.Name);
 
                     return new MomoExecuteResult
                     {
@@ -312,7 +312,7 @@ namespace CCSS_Service.Services
                     {
                         throw new Exception("Can not update status contract");
                     }
-                    await sendMail.SendEmailNotification(purpose, account.Email, null, contract.ContractName, null, DateTime.Now, null, amount, account.Name);
+                    await sendMail.SendEmailNotification(purpose, account.Email, null, contract.ContractName, null, DateTime.UtcNow.AddHours(7), null, amount, account.Name);
                     
                     return new MomoExecuteResult
                     {

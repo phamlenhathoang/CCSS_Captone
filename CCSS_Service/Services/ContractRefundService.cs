@@ -89,7 +89,7 @@ namespace CCSS_Service.Services
                         var contractImage = new ContractImage()
                         {
                             ContractId = contractRefundRequest.ContractId,
-                            CreateDate = DateTime.Now,
+                            CreateDate = DateTime.UtcNow.AddHours(7),
                             Status = ContractImageStatus.Check,
                             UrlImage = await image.UploadImageToFirebase(imageContract),
 
@@ -346,7 +346,7 @@ namespace CCSS_Service.Services
                     ContractImage contractImage = new ContractImage()
                     {
                         ContractId = contract.ContractId,
-                        CreateDate = DateTime.Now,
+                        CreateDate = DateTime.UtcNow.AddHours(7),
                         Status = ContractImageStatus.RefundMoney,
                         UrlImage = await image.UploadImageToFirebase(contractRefundRequest.Image)
                     };

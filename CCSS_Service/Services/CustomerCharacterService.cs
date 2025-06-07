@@ -327,8 +327,8 @@ namespace CCSS_Service.Services
                                 CharacterImage characterImage = new CharacterImage()
                                 {
                                     CharacterId = character.CharacterId,
-                                    CreateDate = DateTime.Now,
-                                    UrlImage = cci.UrlImage,
+                                    CreateDate = DateTime.UtcNow.AddHours(7),
+                                    UrlImage = cci.UrlImage,    
                                 };
                                 if(count == 0)
                                 {

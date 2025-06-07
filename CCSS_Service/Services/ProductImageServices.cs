@@ -109,7 +109,7 @@ namespace CCSS_Service.Services
                 return "Image not found";
             }
             productImage.UrlImage = await _image.UploadImageToFirebase(formFile);
-            productImage.UpdateDate = DateTime.Now;
+            productImage.UpdateDate = DateTime.UtcNow.AddHours(7);
 
             await _productImageRepository.UpdateProduct(productImage);
 

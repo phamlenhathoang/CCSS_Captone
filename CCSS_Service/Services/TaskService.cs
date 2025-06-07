@@ -373,7 +373,7 @@ namespace CCSS_Service.Services
                                 CharacterId = requestCharacter.CharacterId,
                                 Status = RequestCharacterStatus.Accept,
                                 Description = null,
-                                CreateDate = DateTime.Now,
+                                CreateDate = DateTime.UtcNow.AddHours(7),
                                 Quantity = 1,
                                 RequestId = requestId,
                                 UpdateDate = null,

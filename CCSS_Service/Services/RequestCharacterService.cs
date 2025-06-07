@@ -191,7 +191,7 @@ namespace CCSS_Service.Services
             }
 
             requestCharacter.Status = status;
-            requestCharacter.UpdateDate = DateTime.Now;
+            requestCharacter.UpdateDate = DateTime.UtcNow.AddHours(7);
 
             var result = await _requestCharacterRepository.UpdateRequestCharacter(requestCharacter);
             return result ? "Update Successfull" : "Update Failed";
