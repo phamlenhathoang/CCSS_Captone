@@ -766,7 +766,7 @@ namespace CCSS_Service.Services
                         {
                             ContractId = contract.ContractId,
                             Purpose = PaymentPurpose.Refund,
-                            CreatAt = DateTime.UtcNow,
+                            CreatAt = DateTime.UtcNow.AddHours(7),
                             Status = PaymentStatus.Complete,
                             Amount = contract.ContractRefund.Amount,
                             Type = "Refund",
