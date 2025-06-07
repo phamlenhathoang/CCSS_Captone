@@ -201,7 +201,7 @@ namespace CCSS_Service.Services
                 {
                     RefreshTokenId = Guid.NewGuid().ToString(),
                     AccountId = account.AccountId,
-                    CreateAt = DateTime.UtcNow,
+                    CreateAt = DateTime.UtcNow.AddHours(7),
                     ExpiresAt = DateTime.UtcNow.AddDays(7),
                     IsUsed = false,
                     RefreshTokenValue = refreshTokenValue,
@@ -297,7 +297,7 @@ namespace CCSS_Service.Services
                     {
                         RefreshTokenId = Guid.NewGuid().ToString(),
                         AccountId = googleAccount.AccountId,
-                        CreateAt = DateTime.UtcNow,
+                        CreateAt = DateTime.UtcNow.AddHours(7),
                         ExpiresAt = DateTime.UtcNow.AddDays(7),
                         IsUsed = false,
                         RefreshTokenValue = refreshTokenValue,
@@ -409,7 +409,7 @@ namespace CCSS_Service.Services
                         CartId = Guid.NewGuid().ToString(),
                         AccountId = account.AccountId,
                         TotalPrice = 0,
-                        CreateDate = DateTime.Now,
+                        CreateDate = DateTime.UtcNow.AddHours(7),
                         UpdateDate = null,
                     };
                     var result1 = await _cartRepository.AddCart(cart);
@@ -532,7 +532,7 @@ namespace CCSS_Service.Services
                 AccountImage avatar = new AccountImage()
                 {
                     AccountId = checkAccount.AccountId,
-                    CreateDate = DateTime.Now,
+                    CreateDate = DateTime.UtcNow.AddHours(7),
                     IsAvatar = true,
                     UrlImage = await image.UploadImageToFirebase(updateAccountRequest.Avatar),
                 };
@@ -546,8 +546,8 @@ namespace CCSS_Service.Services
                         AccountImage accountImage = new AccountImage()
                         {
                             AccountId = checkAccount.AccountId,
-                            CreateDate = DateTime.Now,
-                            IsAvatar = false,
+                            CreateDate = DateTime.UtcNow.AddHours(7),
+                            IsAvatar = false,   
                             UrlImage = await image.UploadImageToFirebase(im),
                         };
 
@@ -1163,11 +1163,11 @@ namespace CCSS_Service.Services
                                                               System.Globalization.DateTimeStyles.None,
                                                               out BirthDay);
 
-                    if (BirthDay.Year > DateTime.Now.Year)
+                    if (BirthDay.Year > DateTime.UtcNow.AddHours(7).Year)
                     {
                         throw new Exception("BirthDay wrong");
                     }
-                    if ((DateTime.Now.Year - BirthDay.Year) < 18)
+                    if ((DateTime.UtcNow.AddHours(7).Year - BirthDay.Year) < 18)
                     {
                         throw new Exception("This employer is need over 18");
                     }

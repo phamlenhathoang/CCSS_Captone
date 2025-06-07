@@ -153,7 +153,7 @@ namespace CCSS_Service.Services
                     }
 
                     cart.TotalPrice -= (double)cartProduct.Price;
-                    cart.UpdateDate = DateTime.Now;
+                    cart.UpdateDate = DateTime.UtcNow.AddHours(7);
                     var result2 = await _cartRepository.UpdateCart(cart);
                     if (!result2)
                     {
@@ -274,7 +274,7 @@ namespace CCSS_Service.Services
                     }
 
                     cart.TotalPrice -= (double)cartProduct.Price;
-                    cart.UpdateDate = DateTime.Now;
+                    cart.UpdateDate = DateTime.UtcNow.AddHours(7);
                     var result2 = await _cartRepository.UpdateCart(cart);
                     if (!result2)
                     {

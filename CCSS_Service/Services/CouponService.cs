@@ -100,7 +100,7 @@ namespace CCSS_Service.Services
                         return "Valid Time is wrong";
                     }
                 }
-                if (StartDate < DateTime.Now && EndDate < DateTime.Now)
+                if (StartDate < DateTime.UtcNow.AddHours(7).AddHours(7) && EndDate < DateTime.UtcNow.AddHours(7).AddHours(7))
                 {
                     await transaction.RollbackAsync();
                     return "Start date and End Date cannot be in the past.";
@@ -164,7 +164,7 @@ namespace CCSS_Service.Services
                         return "Valid Time is wrong";
                     }
                 }
-                if (StartDate < DateTime.Now && EndDate < DateTime.Now)
+                if (StartDate < DateTime.UtcNow.AddHours(7) && EndDate < DateTime.UtcNow.AddHours(7))
                 {
                     await transaction.RollbackAsync();
                     return "Start date and End Date cannot be in the past.";

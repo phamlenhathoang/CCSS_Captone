@@ -276,7 +276,7 @@ namespace CCSS_Service.Services
                         throw new Exception("Can not update status contract");
                     }
 
-                    await sendMail.SendEmailNotification(existingPayment.Purpose, customer.Email, null, contract.ContractName, null, DateTime.Now, null, existingPayment.Amount, customer.Name);
+                    await sendMail.SendEmailNotification(existingPayment.Purpose, customer.Email, null, contract.ContractName, null, DateTime.UtcNow.AddHours(7), null, existingPayment.Amount, customer.Name);
                     return "Đặt cọc thành công ";
 
                 case PaymentPurpose.contractSettlement:  // tất toán hợp đồng
@@ -289,7 +289,7 @@ namespace CCSS_Service.Services
                     {
                         throw new Exception("Can not update status contract");
                     }
-                    await sendMail.SendEmailNotification(existingPayment.Purpose, customer1.Email, null, contract1.ContractName, null, DateTime.Now, null, existingPayment.Amount, customer1.Name);
+                    await sendMail.SendEmailNotification(existingPayment.Purpose, customer1.Email, null, contract1.ContractName, null, DateTime.UtcNow.AddHours(7), null, existingPayment.Amount, customer1.Name);
                     return "Thanh toán thành công ";
 
                 case PaymentPurpose.Order:      // mua hàng
