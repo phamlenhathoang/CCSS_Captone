@@ -624,7 +624,7 @@ namespace CCSS_Service.Services
                         }
                        
 
-                        requestCharacter.CreateDate = StartDate;
+                        //requestCharacter.CreateDate = StartDate;
                         requestCharacter.UpdateDate = DateTime.UtcNow.AddHours(7);
                         requestCharacter.CharacterId = r.CharacterId;
                         requestCharacter.CosplayerId = r.CosplayerId;
